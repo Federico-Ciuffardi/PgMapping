@@ -1,0 +1,349 @@
+\section{Simuladores}
+Para el simulador se consideraron 4 candidatos, gazebo, CopeliaSim (antes conocido como V-Rep), ARGos y webots.
+
+\subsection{Características}
+Las características de cada uno se describen a continuación.
+\begin{itemize}
+  \item \href{http://gazebosim.org/}{gazebo}
+  \begin{itemize}
+    \item multirobot:                     SI
+    \item Open source:                    SI (apache 2.0)
+    \item Ampliamente utilizado:          SI
+    \item integración con ROS:            SI, muy buena "has since become one the primary tools used in the ROS community" (sitio de gazebo)
+    \item lenguajes:                      Plugins compilados en C++, programas ROS y una api externa también en C++. 
+    \item headless sim:                   SI
+    \item eficaz/eficiente:               SI, aunque hace un uso intensivo de recursos, logra un rendimiento mejor que argos en casi todos los casos y cuando es peor lo es por muy poco. Ver 2. 
+    \item simulación física:              Bullet, ODE, Sim-body y DART  
+    \item modelos de robots predefinidos: Incluye PR2, Pioneer2 DX, iRobot Create, and TurtleBot. O construir uno personalizado usando SDF. 
+                                      Modelos simples apropiados para simulaciones complejas.
+    \item sensores:                       Generate sensor data, optionally with noise, from laser range finders, 2D/3D cameras, Kinect
+                                      style sensors, contact sensors, force-torque, and more. 
+    \item waypoints (alto nivel):         Aparentemente no 
+    \begin{itemize}
+      \item Menciona crear un controlador propio \href{https://www.theconstructsim.com/ros-qa-053-how-to-move-a-robot-to-a-certain-point-using-twist/}{link}
+      \item Usar un modulo de navegación de el robot utilizado (turtlebot3) \href{https://newscrewdriver.com/2018/08/12/turtlebot3-demo-navigating-gazebo-simulation-world/}{link}  
+    \end{itemize}
+    \item aceleración de tiempo:          SI
+    \item otros
+    \begin{itemize}
+      \item editor de entrono y de código
+      \item Se pueden mover/agregar objetos durante la simulación
+      \item Outputs log files
+      \item Meshes se pueden importar
+      \item XML para guardar escenas
+      \item en (2) experimentaron bugs (crashes) pero solo lo probaron en su equipo
+      \item URDF:
+      \begin{itemize}
+        \item importa:                       SI
+        \item exporta:                      NO 
+      \end{itemize}
+      \item SDF
+      \begin{itemize}
+        \item importa:                       SI
+        \item exporta:                      SI
+      \end{itemize}
+      \item artículos que lo utilizan:
+      \begin{itemize}
+        \item Distributed Multirobot Exploration Based on Scene Partitioning and Frontier Selection
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+
+  \item \href{https://www.coppeliarobotics.com}{CoppeliaSim} (antes conocido como v-rep) 
+  \begin{itemize}
+    \item multirobot:                     SI
+    \item Open source:                    No (Permite su uso no comercial de forma gratuita con propósitos educacionales)
+    \item Ampliamente utilizado:          SI
+    \item integración con ROS:            SI
+    \item lenguaje:                       scripts asociados a robots, ROS nodes otros programas que se conecten con la API. 
+    \item eficaz/eficiente:               NO, especialmente cuando se simula una cantidad grande de robots el rendimiento es malo según el paper (2).
+    \item simulación física:              Bullet, ODE, Vortex y Newton 
+    \item modelos de robots predefinidos: Gran variedad incluyendo bi-pedal, hexapod, wheeled, flying and snake-like robots. También tiene un gran numero de actuadores y sensores.  Modelos detallados apropiados para simulaciones precisas (alto uso de recursos)
+    \item sensores:                       ?
+    \item waypoints (alto nivel):         Aparentemente no 
+    \item aceleración de tiempo:          SI
+    \item otros
+    \begin{itemize}
+      \item editor de entrono y de código
+      \item Meshes can be manipulated(e.g., cut) by robots in real time.
+      \item Se pueden mover/agregar objetos durante la simulación
+      \item Salida de gráficas de datos
+      \item Tiene sistema de partículas. 
+      \item Meshes se pueden importar y editar
+      \item Formato especial para guardar escenas
+      \item Muy User friendly según (2)
+      \item URDF:
+      \begin{itemize}
+        \item importa:                      SI
+        \item exporta:                      NO 
+      \end{itemize}
+      \item SDF
+      \begin{itemize}
+        \item importa:                       SI
+        \item exporta:                      NO 
+      \end{itemize}
+    \end{itemize}
+  \end{itemize}
+  
+  \item \href{https://www.argos-sim.info/index.php}{ARGos}
+  \begin{itemize}
+    \item multirobot:                     SI
+    \item Open source:                    SI (MIT license)
+    \item Ampliamente utilizado:          NO
+    \item integración con ROS:            SI (es una extension, puede causar problemas) \url{https://github.com/BOTSlab/argos_bridge}
+    \item lenguajes:                      Lua o C++
+    \item eficiente/eficaz:               SI, logra un rendimiento similar a gazebo (un poco peor cuando son muchos robots o el entorno es muy grande) utilizando una
+                                      cantidad de recursos mucho menor. Ver (2)
+    \item simulación física:              personalizada, con capacidades muy limitadas 
+    \item modelos de robots predefinidos: Pocos, solo e-puck, eye-bot, Kilobot, marXbot and Spiri (otros robots tienen que programarse con opengl)
+                                      Modelos simples apropiados para simulaciones complejas.
+    \item sensores:                       ?
+    \item waypoints (alto nivel):         Aparentemente no 
+    \item aceleración de tiempo:          SI
+    \item otros
+    \begin{itemize}
+      \item editor de código
+      \item Se pueden mover objetos durante la simulación
+      \item Meshes no se pueden importar las representaciones de los objetos tiene que ser programadas con opengl
+      \item XML para guardar escenas
+      \item la feature principal es que soporta flotas muy grandes aunque (2) muestra que esto como ventaja es cuestionable
+    \end{itemize}
+  \end{itemize}
+
+  \item \href{https://cyberbotics.com/}{webots}
+  \begin{itemize}
+    \item parecido a gazebo en todos los atributos mostrados en \url{https://en.wikipedia.org/wiki/Robotics_simulator}
+    \item no encontré datos de rendimiento
+
+    \item multirobot:                     SI
+    \item Open source:                    SI (previamente propietario)
+    \item Ampliamente utilizado:          ?
+    \item integración con ROS:            SI
+    \item lenguajes:                      C, C++, Python, Java, MATLAB or ROS with a simple API
+    \item eficiente/eficaz:               ?
+    \item simulación física:              ODE fork (\href{https://www.reddit.com/r/robotics/comments/hhz5nn/how_does_the_accuracy_of_the_dynamics_of_webots/}{link})
+    \item modelos de robots predefinidos: two-wheeled table robots, industrial arms, bipeds, multi-legs robots, modular robots, automobiles, flying drones, autonomous underwater vehicles, t
+                                      racked robots, aerospace vehicles, etc.  
+    \item sensores:                       ?
+    \item waypoints (alto nivel):         Aparentemente no 
+    \item aceleración de tiempo:          SI
+  \end{itemize}
+\end{itemize}
+
+\subsection{Algunos artículos que comparan simuladores}
+\subsubsection{Analysis and Comparison of Robotics 3D Simulators}
+
+Del 2019, compara Gazebo y V-Rep.
+
+Según este paper gazebo y v-rep son dos de las opciones mas usadas por la comunidad robótica.
+
+Tanto gazebo como v-rep son considerados buenos y con una amplia gama de features.
+
+Los dos se integran bien con ros.
+
+Según los autores gazebo puede ser mas complicado de utilizar que v-rep. 
+
+Pero gazebo es open-source (licencia apache), mientras que v-rep es propietario (Permite su uso no comercial de forma gratuita con propósitos educacionales)
+
+V-Rep  presents  more  native  features  while  Gazebo needs plugins to achieve equivalent features
+
+\subsubsection{Feature and Performance Comparison of the V-REP, Gazebo and ARGoS Robot Simulators (2)}
+Del 2018, compara Gazebo, V-rep y ARGos.
+
+Disclaimer: This article and the research paper have been written with the use of V-REP 3.5.0, Gazebo 8.1.1. and ARGoS 3.0.0-beta48.
+
+V-REP is the most complex and the most resource-hungry of the three simulators. However, it offers a number of useful features, such as multiple physics engines, a comprehensive model library, the ability of a user to interact with the  world  during  simulation  and,  most  importantly,  mesh  manipulation  and optimisation. It is therefore suitable for high-precision modelling of robotic applications such as object transportation or area surveillance, as well as of various industrial applications, where only a few robots are required to operate at the same time. 
+
+ARGoS a suitable choice for simulations of swarm robotics tasks, such as collective foraging, flocking, or area coverage. Trades-off robot, environment and physics complexity for superior performance. An XML-based simulation settings file is also very convenient, especially when a large variety of simulations need to be generated automatically. However, there are multiple important features missing from ARGoS, most notably the ability to import 3D meshes into the simulator. Currently, users that are not willing to spend time and effort on programming new robot models in OpenGL, have fairly limited choices.
+
+Gazebo occupies the space between V-REP and ARGoS. While it is much closer to V-REP in terms of features, its interface and default robot models are much simpler and resemble those found in ARGoS. It is notable that Gazebo outperformed ARGoS in the larger simulation environments studied here, which suggests that it is a more suitable choice for large swarm robotics experiments. However, our experiments showed that the usability of Gazebo is relatively poor. Firstly, while it can import 3D meshes, there are no editing options, making it difficult to alter and optimise models. Another problem is the interface that has a number of issues and fails to follow established conventions. Finally, difficulties were noted when installing dependencies for Gazebo and for many of its third-party models. While not necessarily severe by themselves, these issues together could have a negative impact on a research project.
+
+\subsubsection{Comparative Analysis Between Gazebo and V-REP Robotic Simulators}
+Del 2014, compara Gazebo y V-REP.
+
+The conclusion reached was that V-REP is a more intuitive and user-friendly simulator, and packs more features. Gazebo is more integrated into ROS framework and is an open-source solution  which  means  it  allows  for  complete  control over the simulator. But it needs a number of external tools to match  up  with  V-REP  functionalities. 
+
+\subsubsection{An Overview of Simulation Software for Non-Experts to Perform Multi-Robot Experiments (4)}
+
+Furthermore, the simulation in Webots can run faster even in  a  complex environment and large worlds by using virtualtime
+
+Se dan indicios de que webots es rápido, pero no dan pruebas que permitan verificar esto.
+
+\subsubsection{Comparando engines de físicas}
+\url{https://leggedrobotics.github.io/SimBenchmark/}
+
+ODE y Bullet parecen ser buenos
+
+DART's simulation pipeline is not suitable for simulation scenes with many objects.
+
+\subsection{Conclusiones parciales}
+Por lo visto V-Rep es fácil de usar y completo pero muy lento para un equipo grande. (personalmente también me desanima que sea propietario)
+
+ARGoS parece ser el mas limitado de todos, tanto en variedad de robots como de sensores, simulaciones físicas simples (en uno de los paper comentaba que era 2D para robots con ruedas) y con respecto a su rendimiento el principal pro es que es muy ligero en recursos, pero en velocidad según (2) es similar a gazebo. La integración con ROS es una extension.
+
+Gazebo parece ser perforate para la simulación multirobot, es completo y esta fuertemente relacionado con ROS.
+
+De estos 3 simuladores gazebo parece ser la mejor opción:
+  - utilizado
+  - Altamente integrable con ros
+  - Físicas realistas
+  - performance en la simulación multirobot
+  - gran cantidad de robots y sensores
+  - Utilizado por la comunidad
+
+El 4 simulador considerado, webots, fue del que menos encontré información, parece ser completo y según (4) es performance pero no da comparación alguna ni prueba de porque lo dice. 
+
+Por lo que faltaría obtener mas datos de webots, principalmente de su rendimiento. Pero seria conveniente analizar aspectos de la facilidad de uso, integración con ros y precision de simulación.
+
+Para esto la idea es hacer un bechmark consistente de n robots iguales a los usados en TSCF que puedan, a partir de un paquete de ros, completar una tarea sencilla que permita cumplir con los objetivos propuestos.
+
+\subsection{Benchmark}
+Dado un mapa con las siguientes características:
+\begin{itemize}
+  \item Piso sin textura
+  \item 2 paredes sin textura de 20m de largo, paralelas entre si con 10m entre medio de ellas
+  \item 3 robots pionieer 3dx con un sensor lidar de 360 grados, que:
+  \begin{itemize}
+      \item se encontraran equidistantes a las paredes (a 5m de ambas)
+      \item las orientaciones de las ruedas de los robots serán perpendiculares a la pared
+      \item el robot p3dx\_2 se encuentra en el $(0,0,0)$ y los demás estarán separados 5m entre si, habiendo un robot a cada lado de p3dx\_2  
+  \end{itemize}
+\end{itemize}
+
+Los robots entonces deberán avanzar hasta estar a 1 metro de la pared, para luego cambiar el sentido de su movimiento hasta estar nuevamente a 1 metro de una pared, repitiendo este comportamiento hasta pasar cierto tiempo u otra condición (por ejemplo cierto desviamiento de la linea de movimiento ideal).
+
+Los objetivos que pensé para el benchmark son probar:
+\begin{itemize}
+  \item la aceleración del tiempo 
+  \begin{itemize}
+    \item que tanto acelera (valor que puedo mirar a ojo o buscar si se puede obtener el valor de forma programática y promediar o algo así)
+    \begin{itemize}
+      \item Maxima velocidad (sin degradar)
+      \begin{itemize}
+        \item para ver resultados grabar el tiempo de simulación total para un tiempo real fijo
+      \end{itemize}
+      \item ver si se puede forzar a una velocidad (degradando)
+      \begin{itemize}
+        \item concentrarse en la evaluación la precision
+      \end{itemize}
+    \end{itemize}
+    \item la precision, algunas posibilidades:
+    \begin{itemize}
+      \item mirar el desviamiento de los robots de la linea de movimiento ideal
+      \item reducir la distancia de cambio de movimiento de forma de dar poco margen de cambio de dirección y forzar a que si la simulación 
+           es imprecisa los robots se choquen, contar estos choques con perturbaciones de la altura o de la rotación
+      \item distancia recorrida (mas distancia peor precision)
+      \item grabar todo con un bag para luego hacer un estudio posterior
+    \end{itemize}
+  \end{itemize}
+
+  \item Simular usando robots iguales (mismos tipos de sensores y características de los mismos) y trabajar con ros para poder predecir que problemas que se pueden tener al adaptar
+    
+  \item Lograr tener la misma información que se tenia en el trabajo anterior:
+  \begin{itemize}
+    \item la Pose del robot
+    \item la misma info provista por los sensores en el mismo formato
+  \end{itemize}
+
+  \item poder visualizar todo en rviz 
+
+  \item considerar que tan automatizarle es la simulación, se puede correr con un comando? Se puede parametrize para por ejemplo indicar el numero de robots a simular? 
+  \begin{itemize}
+    \item ver de poder reiniciar la simulación dentro de la misma  
+  \end{itemize}
+\end{itemize}
+
+
+\subsubsection{Proceso}
+\paragraph{Gazebo}
+\begin{enumerate}
+  \item Instalar ros desktop full (incluye a gazebo)
+    
+     En mi distro (arch): yay -S ros-noetic-desktop-full
+
+  \item descargar modelo pionieer 3dx: \href{https://github.com/mario-serna/pioneer_p3dx_model}{link}
+  \item modificar características de lidar en
+
+        $p3dx\_description/urdf/pioneer3dx.gazebo$
+  \begin{itemize}
+       \item rango  
+       \item min\_angle y max\_angle  
+       \item ver bien en git 
+  \end{itemize}
+  \item Como levantar el entorno a simular con los robots
+  \begin{enumerate}
+    \item hacer paquete gazebo\_benchmark con launch que permite indicar:
+    \begin{itemize}
+       \item Que se utilizara gazebo, algunos parámetros para este y el mundo que debe cargar
+       \item Los robots a utilizar y sus posiciones
+    \end{itemize}
+    \item también es posible correr el launch correspondiente a un mundo de gazebo sin robots y de forma independiente correr los launch de los robots a utilizar
+    \item NOTA: Esto hace fácil hacer un script que posicione un numero arbitrario de robots en un mapa
+  \end{enumerate}
+  \item El mundo correspondiente al benchmark fue generado a partir de el mundo vació por defecto, siendo las paredes posicionadas con la herramienta `building editor` que permite generar las paredes como si se tratara de un plano (también permite puertas, ventanas y hasta escaleras que llevan a distintas plantas)
+\end{enumerate}
+
+\paragraph{Webots}
+\begin{enumerate}
+  \item Instalar webots
+     en mi distro (arch): yay -S webots
+
+  \item Modelo del robot ya incluido
+  \item Al modelo le falta lidar pioneer3dx en este simulador por defecto viene con 16 sonares como se indica en \href{https://cyberbotics.com/doc/guide/pioneer-3dx}{link} por lo tanto el lidar debió ser agregado a mano:
+  \begin{itemize}
+    \item Descomponer el nodo que correspondiente al robot 
+    \item agregando un sensor lidar de los incluidos
+    \item Descomponer el nodo correspondiente al sensor
+    \item Cambiar el nombre (se utiliza para la integración con ros)
+  \end{itemize}
+  \item compatibilidad con ros:
+  \begin{enumerate}
+    \item Cambiar el controlador del robot al controlador estándar de ROS, que esta disponible para todos los modelos robots y levanta un nodo que actúa como una capa de compatibilidad entre ros y webots. (provee servicios y tópicos para interacción webots-ros)
+    \item establecer  el argumento name de este controlador para indicar el identificador del robot dentro del namespace de ros
+    \item Instalar el paquete $webots\_ros$
+  \end{enumerate}
+  \item Como levantar el entorno a simular con los robots
+  \begin{enumerate}
+    \item Es necesario configurar cada robot a mano en la interfaz lo mas rápido es:
+    \begin{itemize}
+      \item hacer uno y luego copiar lo las veces que se requiera
+      \item cambiando el argumento name del controlador y su posición
+    \end{itemize}
+    \item dado que el formato en el que se guarda un mundo es de texto plano existe la posibilidad de hacer un script que genere a partir de un mapa vació un mapa con n robots copiando descripciones bas del robot (texto plano) en las cuales se permita establecer el argumento name el controlador y posición en un mundo. 
+    \item NOTA: la scriptiablidad es cuestionable habría que indagar que tan factible es lo descripto en 5.b 
+  \end{enumerate}
+  \item El mundo correspondiente al benchmark fue generado a partir de el mundo vació por defecto, las paredes se agregan de igual manera que se agrega el robot, luego su posición y dimensiones se modifican dentro del programa, se debe agregar el piso, y también modificar sus dimensiones.
+\end{enumerate}
+
+\subsubsection{Juicio sobre implementación}
+\paragraph{webots} La integración con ros parece ser buena pero la documentación no es es muy buena, a pesar de esto a partir de los ejemplos que se encuentran en el paquete de ros $webots\_ros$ (que es necesario instalar para poder crear un nodo de ros que se integre con ros), se puede lograr llegar deducir ciertos aspectos que no son incluidos en la documentación:
+\begin{itemize}
+  \item Por ejemplo cada sensor debe ser encendido a partir de un servicio con le formato $[robot]/[sensor]/enable$ y esto no esta indicado en la documentación de como integrar con ROS (en esta se especifica el estándar a partir del cual se nombran los tópicos y servicios) y a partir de este enable se activan los tópicos que dan la información pertinente de los sensores. (esto se encuentra en la referencia que explica cada función de los sensores que también incluye los servicio y tópicos de cada sensor)
+  \item En el código no se explica ciertas cosas que se hacen. Por ejemplo el control del tiempo.
+\end{itemize}
+
+
+Después de leer la documentación mas a fondo (cosas que no son de ros) comencé a ver una correspondencia entre el código de $webots\_ros$ y los ejemplos/conceptos que se documentan para las librerías "nativas" de we bots. Que me facilito la búsqueda de información, esto es porque puede buscar conceptos genéricos de webots para luego relacionarlos con los de webots-ro así solucione las dudas anteriores (enable de los sensores/actuadores y el control de tiempo).
+
+Algunos errores en $webots\_ros$ por ejemplo
+\begin{itemize}
+  \item usan names relativos para cosas que son globales
+  \item si se ejecutaba la llamada de un servicio muy ripio este falla, esto no se contemplaba matando a los nodos incorrectamente
+\end{itemize}
+
+Funcionamiento de la integración con ros:
+
+$NODOS\_ROS$
+
+$<->$ (tópicos/servicios)
+
+$CONTROLADOR\_WEBOTS\_ROS$
+
+$<->$ (librería de webots en c++)
+
+$WEBOTS$ 
+
+TODO: explicar como es maso el flujo
+
+
+\paragraph{Gazebo}
