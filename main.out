@@ -1,0 +1,23 @@
+\BOOKMARK [1][-]{section.1}{Estado del arte}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Distributed Multirobot Exploration Based on Scene Partitioning and Frontier Selection}{section.1}% 2
+\BOOKMARK [3][-]{subsubsection.1.1.1}{Resumen}{subsection.1.1}% 3
+\BOOKMARK [3][-]{subsubsection.1.1.2}{Notas generales}{subsection.1.1}% 4
+\BOOKMARK [3][-]{subsubsection.1.1.3}{Notas por secci\363n}{subsection.1.1}% 5
+\BOOKMARK [3][-]{subsubsection.1.1.4}{Ideas}{subsection.1.1}% 6
+\BOOKMARK [2][-]{subsection.1.2}{Incremental contour-based topological segmentation for robot exploration}{section.1}% 7
+\BOOKMARK [3][-]{subsubsection.1.2.1}{Resumen}{subsection.1.2}% 8
+\BOOKMARK [3][-]{subsubsection.1.2.2}{Notas generales}{subsection.1.2}% 9
+\BOOKMARK [2][-]{subsection.1.3}{Coordinated Multi-Robot Exploration:Out of the Box Packages for ROS}{section.1}% 10
+\BOOKMARK [3][-]{subsubsection.1.3.1}{Resumen}{subsection.1.3}% 11
+\BOOKMARK [3][-]{subsubsection.1.3.2}{Notas}{subsection.1.3}% 12
+\BOOKMARK [3][-]{subsubsection.1.3.3}{Definiciones}{subsection.1.3}% 13
+\BOOKMARK [3][-]{subsubsection.1.3.4}{Ideas}{subsection.1.3}% 14
+\BOOKMARK [2][-]{subsection.1.4}{Distributed matroid - constrained submodular maximization for multi - robot exploration: theory and practice}{section.1}% 15
+\BOOKMARK [3][-]{subsubsection.1.4.1}{Resumen}{subsection.1.4}% 16
+\BOOKMARK [3][-]{subsubsection.1.4.2}{Notas}{subsection.1.4}% 17
+\BOOKMARK [2][-]{subsection.1.5}{Communication - Efficient Planning and Mapping for Multi - Robot Exploration in Large Environments}{section.1}% 18
+\BOOKMARK [3][-]{subsubsection.1.5.1}{Resumen}{subsection.1.5}% 19
+\BOOKMARK [3][-]{subsubsection.1.5.2}{Notas}{subsection.1.5}% 20
+\BOOKMARK [2][-]{subsection.1.6}{Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration}{section.1}% 21
+\BOOKMARK [3][-]{subsubsection.1.6.1}{Resumen}{subsection.1.6}% 22
+\BOOKMARK [3][-]{subsubsection.1.6.2}{Notas}{subsection.1.6}% 23

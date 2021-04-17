@@ -1,13 +1,18 @@
 \section{Estado del arte}
 
 \subsection{Distributed Multirobot Exploration Based on Scene Partitioning and Frontier Selection}
-\subsubsection{Notas generales}
 
-Interesante el trabajo relacionado, Su parte de trabajos relacionados es muy amplia y diversa citando artículos que refieren a distintos desafíos de la exploración multirobot (asignación, fusión de información, funciones de costo relacionadas a la teoría de información )
+\subsubsection{Resumen}
+Describen una solución al problema de exploración multirobot. Haciendo énfasis en el método para explorar zonas desconocidas, el cual se basa en la segmentación del espacio.
+
+\subsubsection{Notas generales}
+Parece fácil de implementar, seria interesante por lo tanto entenderlo bien, para poder considerar su implementación para comparar contra otro método de exploración mutirobot.
+
+El trabajo relacionado esta interesante, es amplio y diverso citando artículos que refieren a distintos desafíos de la exploración multirobot (asignación, fusión de información, funciones de costo relacionadas a la teoría de información )
 
 La técnica de coordinación utilizada no permite que un robot ocioso ayude a robots cuya región asignada tiene muchos posibles objetivos. ( ver vídeo de la demo )
 
-la técnica se resume en:
+La técnica se resume en:
 \begin{enumerate}
   \item Compartir la información entre el equipo robótico
   \item Utilizar esa información para asignar región a robots
@@ -17,7 +22,7 @@ la técnica se resume en:
 
 La definición de regiones no es tan sofisticada como la de segmentación con grafos de voronoi, simplemente separan en regiones diciendo que una celda C esta en la región de un robot $R_i$ si la distancia de C a $R_i$ es la menor de todas las distancias entre $C$ y $R_j$ (los demás robots)
 
-No tengo claro como se asegura la sincronización de las regiones, esto es como aseguran que las regiones de los robots no se solapan. La frase "If $E_i$ is empty, robot $R_i$ will request a new zone assignment." me hace pesar que cuando un robot pide para reasingar regiones todos los robots asignan a la vez regiones a la vez y si cuando lo hacen todos comparten la misma información sobre sus posiciones la asignación seria la misma.
+No tengo claro como se asegura la sincronización de las regiones, esto es como aseguran que las regiones de los robots no se solapan. La frase "If $E_i$ is empty, robot $R_i$ will request a new zone assignment." me hace pesar que cuando un robot pide para reasignar regiones todos los robots asignan a la vez regiones a la vez y si cuando lo hacen todos comparten la misma información sobre sus posiciones la asignación seria la misma.
 
 La solución es completamente distribuida y supera los métodos mas simples de la frontera mas cercana y de frontera random ( descentralizado compartiendo mapas y sin coordinación que pueden llevar a dos robots a explorar la misma frontera ), y a el de Bhattacharya que aunque sus objetivos no son fronteras si no que son centroides de regiones de voronoi computadas sobre sus mapas locales con entropy-weighted Voronoi (no leí como es) y Then, each robot takes a step along the shortest-path route towards the nearest entropy-weighted Voronoi region centroid. Y este ultimo también parece que puede llevar a interferencias entre los robots.
 
@@ -28,7 +33,7 @@ http://downloads.hindawi.com/journals/mpe/2018/2373642.f1.mp4
 \subsubsection{Notas por sección}
 2.5:
 \begin{itemize}
-  \item que es k? sera para todo k distinto de i
+  \item que es k? Será para todo k distinto de i
   \item  Asumo que d esta tomando en cuenta obstáculos, de lo contrario habría problemas en la asignación de zonas
   \item  $U_i$ serian entonces las celdas desconocidas según el conocimiento de $R_i$ (me confunde el termino asociadas)
 \end{itemize}
@@ -36,7 +41,7 @@ http://downloads.hindawi.com/journals/mpe/2018/2373642.f1.mp4
 2.6:
 \begin{itemize}
   \item safety radius of the mobile robot = 1.5 (según la figura 3)
-  \item DUDA: cuando f1 es 1 f2 es 0, es esto una regla extra o es una deducción de las ficciones, no lo estaría entendiendo si es una deducción, ver figura 4, ahí no hay celdas que están dentro del polígono que son obstáculos (pero no se marcan como exploradas por lo que se refuerza la idea de que es una regla extra )
+  \item DUDA: cuando $f1$ es 1 $f2$ es 0, es esto una regla extra o es una deducción de las ficciones, no lo estaría entendiendo si es una deducción, ver figura 4, ahí no hay celdas que están dentro del polígono que son obstáculos (pero no se marcan como exploradas por lo que se refuerza la idea de que es una regla extra )
 \end{itemize}
 
 2.7.1:
@@ -61,7 +66,7 @@ http://downloads.hindawi.com/journals/mpe/2018/2373642.f1.mp4
 
 \item Para que se usa la label de obstáculo móvil?
 \begin{itemize}
-  \item para saber que es potencialmente atravesadle y usarlo en el path planning
+  \item para saber que es potencialmente traversable y usarlo en el path planning
   \item quizás es posible utilizar una técnica del estilo en la sol mía
   \begin{itemize}
     \item dudoso por el hecho de que navegan por el voronoi por lo que habría que integrar esa información ahí
@@ -80,6 +85,213 @@ http://downloads.hindawi.com/journals/mpe/2018/2373642.f1.mp4
 
 \item También buscar métricas para utilizar, las métricas usadas en el articulo fueron: The metrics to be evaluated to compare the performance of the proposed system against other methods established in the literature are as follows: the average distance traveled by each robot, the total distance of the exploration team, the average time of exploration, and the average number of communication exchanges between the robot team members, divided by the average time of explore. Tratar de usar alguno de estas en nuestro caso estaría bueno
 
-\item acá implementan varias técnicas para comparar contra ellas (pag 11) hacer algo así estaría bueno.
+\item acá implementan varias técnicas para comparar contra ellas (pagina 11) hacer algo así estaría bueno.
 \end{itemize}
 
+\subsection{Incremental contour-based topological segmentation for robot exploration}
+
+\subsubsection{Resumen}
+Habla de mapas topológicos, estos son los mapas que se generan a partir de la segmentación del entorno. 
+Específicamente se centra en describir y evaluar un algoritmo de segmentación para la contracción de mapas topológicos en 2D: Segmentación topológica basada en el contorno de los obstáculos del mapa (Contour Based Topological Segmentation).
+También se describe una variante incremental para poder usarse en tiempo real para la exploración multirobot.
+
+\subsubsection{Notas generales}
+Interesante tener en cuenta la existencia de diferentes métodos para segmentar el espacio.
+
+Este se evalúa contra la segmentación humana.
+
+Se describe una variante incremental para poder usarse en tiempo real para la exploración multirobot.
+
+En la parte de trabajos relacionados habla de la segmentación basada en GVD. <- importante
+
+Interesante el trabajo relacionado por describir los tipos de segmentación
+
+Funcionamiento:
+\begin{enumerate}
+  \item De grid 2D based map a un conjunto de polígonos:
+  \begin{enumerate}
+     \item De grid a imagen binaria
+     \item A partir de esa imagen usando el modo árbol de la función de la biblioteca OpenCV $findCountours$ que devuelve hacer jerarquía de contornos según que contornos (padres) contienen a otros (hijos)
+  \end{enumerate}
+\item Luego se usa la función DuDe\_segment toma los polígonos del paso anterior para obtener la descomposición del espacio en segmentos. Esto se hace para cada polígono encontrado en 1. Y el resultado final es la union de estas segmentaciones. La descomposición DuDe se explica en: 
+
+  http://masc.cs.gmu.edu/wiki/Dude2D
+\end{enumerate}
+
+Obtienen buenos resultados, la version incremental permite tiempo real, solo tiene un parámetro a tunear (maxima convexidad, usado en el DuDe\_segment), flexible para entornos estructurados y no estructurados. Y es independiente del tamaño de la grid, solo importan las proporciones del contorno.
+
+\subsection{Coordinated Multi-Robot Exploration:Out of the Box Packages for ROS}
+\subsubsection{Resumen}
+Se presentan y evalúan paquetes de ROS para la exploración multirobot coordinada. Estos paquetes tienen el objetivo de ofrecer funcionalidades básicas para tener una solución completa pero simple para el problema de la exploración multirobot permitiendo una configuración completamente distribuida, apuntando a que grupos de investigación puedan utilizarlos. Los paquetes son:
+\begin{itemize}
+  \item ad hoc communication between robots,
+  \item construction of global maps from local maps
+  \item exploration of unknown environments
+\end{itemize}
+
+\subsubsection{Notas}
+\paragraph{WIRELESS AD HOC COMMUNICATION}
+
+ROS permite comunicación ínter proceso local a través de un maestro usando el patron de comunicación duplicación/subscripción. El maestro se encarga de manejar los publicadores y los subscriptores a  tópicos de ROS ( canales de comunicación entre procesos ). Para hacer un sistema multirobot en este caso seria necesario que todos los robots se conecten inalambricamente a un solo maestro y solo este maestro es el encargado de establecer canales de comunicación entre procesos. Esto significa que dos procesos deben comunicarse con el maestro para poder luego comunicarse entre si y en el caso de desconectarse deben recaer nuevamente en el maestro para lograr una re conexión. Esto es malo ya que el maestro es un punto único de fallo y porque dos procesos que corren localmente en un robot deben comunicarse con el maestro para poder comunicarse entre ellos.
+
+La solución presentada por el articulo es tener un maestro por robot para manejar la comunicación ínter proceso local y manejar la comunicación global entre robots con un paquete propuesto por ellos. 
+
+Su paquete se basa en generar una red Ad-Hoc usando un protocoló similar a AODV (protocolo conocido para generar redes ad-hoc). Sus features son:
+\begin{itemize}
+\item Routing: allows robots to communicate via multiple hops to other robots which are not in the immediate neighbor-hood.
+\item Multicast: allows to transmit from one robot to multiple robots, especially useful for dissemination of map data, for example.
+\item ARQ: stands for automatic repeat request. If a frame is not acknowledged within a specified time, the sender will automatically repeat the transmission. The Ad Hoc Communication package supports both hop-by-hop ARQ and end-to-end ARQ.
+\item Segmentation: allows to split data packets into multiple frames of smaller size. The IEEE 802.11a/g/n MAC layer supports payloads up to 2304 octets [12]. At the receiver side the frames are ordered and combined.
+\item Ordering: ensures that frames and packets are delivered in the correct order.
+\end{itemize}
+
+El uso de este paquete es:
+Cuando un robot A se quiere comunicar con un robot B no lo hacen de forma directa si no que utilizan el un service call del paquete que debe incluir:
+\begin{itemize}
+  \item destino, datos, tópico en el cual publicar el dato al llegar al destino
+\end{itemize}
+
+Esto causa que el paquete envié el dato junto a los metadatos necesarios en un frame MAC a través de un raw socket hasta B
+
+B al recibir el frame el paquete lo interpreta y lo publica en el tópico indicado en los metadatos.
+
+De esta manera se conserva parcialmente el manejo de tópicos de ros. Hay transparencia en la subscripción pero no me queda claro si hay transparencia en la publicación (es la service call implícita al publicar en un tópico)
+
+\paragraph{MAP MERGER}
+
+El map merger es el encargado de recolectar mapas locales de los robots y combinarlos en un solo mapa global. El mapa global es utilizado por los robots para navegar, explorar y coordinar.
+
+El Map merger puede ser centralizado o distribuido:
+\begin{itemize}
+\item si es centralizado los mapas locales deben enviarse a la central, ser combinados ahí y luego distribuirse el mapa global resultante a los robots
+\item si no es centralizado los mapas locales deben enviarse a todos los robots para que cada uno de estos lo combine y obtenga su propio mapa global
+\end{itemize}
+
+Este modulo esta inspirado en map\_stich pero extiende y mejora varios aspectos.
+
+Proceso de combinado
+\begin{itemize}
+  \item El paquete combina dos mapas M1 y M2 en un solo mapa global juntando dichos mapas de forma de maximizar la areas que se solapan.
+
+  \item La transformación entre los sistemas de coordenadas que debe hacerse para juntar los mapas se calcula con OpenCV:
+  \begin{itemize}
+    \item Se convierten las grillas de ocupación en bitmaps
+    \item Se utiliza la función de OpenCV $estimateRigitTrasnform$ que intenta emparejar patrones entre los mapas.
+  \end{itemize}
+\end{itemize}
+
+Al basarse en solapamientos se requiere asumir que los robots van a empezar en la misma posición (por ejemplo una entrada) para que los mapas locales solapen desde un principio.
+
+Features:
+\begin{itemize}
+\item Map updates are triggered if changes in local maps are detected.
+\item New robots are added and maps are exchanged automatically if the Ad Hoc Communication package reports a new robot in the system.
+\item Robot positions are transmitted in regular intervals. The package automatically converts other robots’ positions to the correct coordinate system.
+\item Integration Ad Hoc Communication package allows the wireless exchange of maps between robots right out of the box. All topics are preconfigured.
+\end{itemize}
+
+\paragraph{EXPLORATION}
+
+Este paquete:
+\begin{enumerate}
+\item Identifica fronteras basado en el mapa (global) actual.
+  \begin{itemize}
+     \item No se explica como, seguramente est en la referencia que mencionan (5)
+  \end{itemize}
+\item Selecciona fronteras a ser exploradas ( la exploración termina si no hay mas fronteras para explorar ).
+\
+  \begin{itemize}
+     \item Las fronteras objetivo se priorizan según la distancia euclídea entre la pos del robot y la frontera 
+     \item Las fronteras se agrupan
+     \item Menciona que usar un camino real seria un drawback por consumir mas recursos y que es propenso errores con los path planners de ros actuales?
+  \end{itemize}
+\item Los robots deben coordinarse para reducir el tiempo de exploración.
+  \begin{itemize}
+     \item se hace una subasta para determinar que robot sigue que objetivo a través del método húngaro (igual que Wurm)
+  \end{itemize}
+\end{enumerate}
+
+Features:
+\begin{itemize}
+\item Integration Ad Hoc Communication package and
+\item Integration Map Merger package allow out of the box deployment. All topics and settings are pre-configured.
+\item Coordination exploration including frontier identification and coordinated assignment as described above.
+\item Bid interpolation aims to interpolates bids of other robots which did not send their bids for an auctioned cluster.
+\end{itemize}
+
+\subsubsection{Definiciones}
+Ad-hoc network: An ad hoc network is one that is spontaneously formed when devices connect and communicate with each other. The term ad hoc is a Latin word that literally means "for this," implying improvised or impromptu. Ad hoc networks are mostly wireless local area networks (LANs).The devices communicate with each other directly instead of relying on a base station or access points as in wireless LANs for data transfer co-ordination. Each device participates in routing activity, by determining the route using the routing algorithm and forwarding data to other devices via this route. 
+
+
+\subsubsection{Ideas}
+Los paquetes presentados pueden ser útiles:
+\begin{itemize}
+\item WIRELESS AD HOC COMMUNICATION: es una solución al 
+  
+  funcionamiento centralizado del sistema de tópicos de ROS.
+\item MAP MERGER se presenta como una solución a la combinación de mapas cuyo código puede llegar a resultar útil dependiendo de que tan bien se pueda adaptar la solución actual
+\item EXPLORATION resulta simple en comparación a las funcionalidades que provee nuestro paquete pero de igual, resaltando el uso de el método húngaro para la resolución de subastas el cual seria interesante considerar para nuestro paquete (comparar ordenes del método actual).
+\end{itemize}
+
+El código no se actualiza hace 5 años y no hay releases para versiones recientes de ros, de igual manera es posible extraer código para reutilizar en nuestro proyecto.
+
+\subsection{Distributed matroid - constrained submodular maximization for multi - robot exploration: theory and practice}
+\subsubsection{Resumen}
+Este articulo describe el problema de exploración multirobot y se centra en la descripción de "distributed sequential greedy assignment (DSGA)", un algoritmo que resuelve de forma eficiente la asignación de objetivos de exploración de forma distribuida.
+
+\subsubsection{Notas}
+Informative planning problems of this form are known to be NP-Hard 
+
+https://www.jmlr.org/papers/volume9/krause08a/krause08a.pdf
+
+Entonces rather than attempt to find an optimal solution in possibly exponential time, we seek approximate solutions with bounded suboptimality that can be found efficiently in practice.
+
+Para probar la eficiencia hacen un modelo que considera la incertidumbre del entorno y la modela, siendo el objetivo de la exploración reducir la entropía del mapa (concepto que cuantifica la incertidumbre).
+
+Se tratan conceptos como la entropía, las funciones submodulares
+
+\url{https://www.youtube.com/watch?v=yEnYXCAj4WY}
+
+y matroides
+
+\url{https://www.youtube.com/watch?v=XcSzR_tpHYE}
+
+Me costo bastante entender las partes iniciales, pero logre entender por arriba, parece que la complejidad crece en las siguientes partes.
+
+\subsection{Communication - Efficient Planning and Mapping for Multi - Robot Exploration in Large Environments}
+\subsubsection{Resumen}
+El aspecto principal es la utilización de una representación alternativa a las grillas de ocupación llamada "Gaussian mixture model (GMM)". Dicha representación es mas eficiente en tamaño que las grillas de ocupación, por lo que se usan para los mapas globales y para que los robots compartan la información global del mapa. Por otro lado cada robot usa el GMM para mantener un mapa local denso (grilla de ocupación) para usar en el planning. 
+
+\subsubsection{Notas}
+
+The perception system uses a Gaussian mixture model (GMM) that accurately represents detailed geometry and efficiently captures empty volumes and surfaces. 
+
+The resulting GMM has a small memory footprint and communicating updates across a network of robots requires relatively little bandwidth compared to the volume of novel data.
+
+Samples from the GMM are, in turn, used to maintain a dense local map for use in planning.
+
+A receding horizon planner maximizes information gain over sequences of camera views, and a terminal cost based on distances to highly informative views provides global spatial reasoning and ensures complete exploration.
+
+Robots maintain a library of such views by sampling and updating views locally and share updates with the rest of the team. 
+
+Para planificar se clasifican vistas ("over sequences of camera views") según su ganancia de información, estas vistas son compartidas entre los robots para tener un modelo global. Las vistas consideradas son las "vistas informativas" (son significativamente informativas).
+Los robots se mueven a las fronteras o vistas basados en criterios como la distancia y la información. Aunque también toma encenta en la secuencia de observaciones del trayecto.
+Se define un costo terminal basado en el camino mas corto a una vista informativa para mantener una compatibilidad con el mapa local que los robot extraen del GMM para el planning.
+
+El trabajo no aplica coordinación entre los robots.
+
+Seria interesante entender como funciona la representación alternativa
+
+"Gaussian mixture model (GMM)" y como esta puede ser utilizada para tener comunicaciones eficientes.
+
+\subsection{Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration}
+
+\subsubsection{Resumen}
+En el marco de la exploración multi robot, este trabajo se centra en la parte de la cooperación/coordinación. 
+
+Según los autores en muchos entornos del mundo-real, en especial los altamente dinámicos, son muy complejos para que los humanos diseñen estrategias eficientes y descentralizadas.
+
+Dicho esto, presentan un método de coordinación basado en redes neuronales con mecanismos de atención. Le llaman Attention-based Communication neural network (CommAttn). Esta les permite a los robot aprender estrategias de cooperación a través de la comunicación explicita. El mecanismo de atención se introduce para que los robots puedan determinar con que otros robots es necesario comunicarse.
+
+\subsubsection{Notas}
+Interesante pero no seria el foco del proyecto
