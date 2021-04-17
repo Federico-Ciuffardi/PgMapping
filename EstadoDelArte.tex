@@ -3,83 +3,83 @@
 \subsection{Distributed Multirobot Exploration Based on Scene Partitioning and Frontier Selection}
 \subsubsection{Notas generales}
 
-Interesante el trabajo relacionado, Su parte de trabajos relacionados es muy amplia y diversa citando ariculos que refieren a distintos desafios de la exploracion multirobot (asignacion, fusion de informacion, funciones de costo relacionadas a la teoria de informacion )
+Interesante el trabajo relacionado, Su parte de trabajos relacionados es muy amplia y diversa citando artículos que refieren a distintos desafíos de la exploración multirobot (asignación, fusión de información, funciones de costo relacionadas a la teoría de información )
 
-La tecnica de coordinacion utilizada no permite que un robot ocioso ayude a robots cuya region asignada tiene muchos posibles objetivos. ( ver video de la demo )
+La técnica de coordinación utilizada no permite que un robot ocioso ayude a robots cuya región asignada tiene muchos posibles objetivos. ( ver vídeo de la demo )
 
-la tecnica se resume en:
+la técnica se resume en:
 \begin{enumerate}
-  \item compartir la info entre el equipo robotico
-  \item utilizar esa info para asignar region a robots
-  \item esos robots exploran sus region lo mas que puedan (coparten la info mientras exploran)
-  \item cuando alguno no puiede continuar explorando su region se va a 1.
+  \item Compartir la información entre el equipo robótico
+  \item Utilizar esa información para asignar región a robots
+  \item Esos robots exploran sus región lo mas que puedan (comparten la información mientras exploran)
+  \item Cuando alguno no puede continuar explorando su región se va a 1.
 \end{enumerate}
 
-La definicion de regiones no es tan sofisticada como la de segmentacion con grafos de voronoi, simplemente separan en regiones diciendo que una celda C esta en la region de un robot Ri si la distancia de C a Ri es la menor de todas las distancias entre C y Rj (los demas robots)
+La definición de regiones no es tan sofisticada como la de segmentación con grafos de voronoi, simplemente separan en regiones diciendo que una celda C esta en la región de un robot $R_i$ si la distancia de C a $R_i$ es la menor de todas las distancias entre $C$ y $R_j$ (los demás robots)
 
-No tengo claro como se asegura la sincronizacion de las regiones, esto es como aseguran que las reginoes de los robots no se solapan. La frase "If Ei is empty, robot Ri will request a new zone assignment." me hace pesar que cuando un robot pide para reasingar regiones todos los robots asignan a la vez regiones a la vez y si cuando lo hacen todos comparten la misma info sobre sus posiciones la asignacion seria la misma.
+No tengo claro como se asegura la sincronización de las regiones, esto es como aseguran que las regiones de los robots no se solapan. La frase "If $E_i$ is empty, robot $R_i$ will request a new zone assignment." me hace pesar que cuando un robot pide para reasingar regiones todos los robots asignan a la vez regiones a la vez y si cuando lo hacen todos comparten la misma información sobre sus posiciones la asignación seria la misma.
 
-La solucion es completamente distribuida y supera los metodos mas simples de la frontera mas cercana y de frontera random ( descentralizado compartiendo mapas y sin coordinacnion que pueden llevar a dos robots a explorar la misma frontera ), y a el de Bhattacharya que aunque sus objetivos no son fronteras si no que son centroides de regiones de voronoi computadas sobre sus mapas locales con entropy-weighted Voronoi (no lei como es) y Then, each robot takes a step along the shortest-path route towards the nearest entropy-weighted Voronoi region centroid. Y este ultimo tambien parece que puede llevar a interferencias entre los robots.
+La solución es completamente distribuida y supera los métodos mas simples de la frontera mas cercana y de frontera random ( descentralizado compartiendo mapas y sin coordinación que pueden llevar a dos robots a explorar la misma frontera ), y a el de Bhattacharya que aunque sus objetivos no son fronteras si no que son centroides de regiones de voronoi computadas sobre sus mapas locales con entropy-weighted Voronoi (no leí como es) y Then, each robot takes a step along the shortest-path route towards the nearest entropy-weighted Voronoi region centroid. Y este ultimo también parece que puede llevar a interferencias entre los robots.
 
 A pesar de esto ultimo la demo es desalentadora, muy simple y hasta se llega ver como se desaprovecha recursos.
 
 http://downloads.hindawi.com/journals/mpe/2018/2373642.f1.mp4
 
-\subsubsection{Notas por seccion}
+\subsubsection{Notas por sección}
 2.5:
 \begin{itemize}
   \item que es k? sera para todo k distinto de i
-  \item  Asumo que d esta tomando en cuenta obtaculos, de lo contrario habria problemas en la asignacion de zonas
-  \item  Ui serian entoces las celdas desconocidas segun el concimiento de Ri (me confunde el termino asociadas)
+  \item  Asumo que d esta tomando en cuenta obstáculos, de lo contrario habría problemas en la asignación de zonas
+  \item  $U_i$ serian entonces las celdas desconocidas según el conocimiento de $R_i$ (me confunde el termino asociadas)
 \end{itemize}
 
 2.6:
 \begin{itemize}
-  \item safety radius of the mobile robot = 1.5 (segun la figura 3)
-  \item DUDA: cuando f1 es 1 f2 es 0, es esto una regla extra o es una deduccion de las fuciones, no lo estaria entendiendo si es una deduccion, ver figura 4, ahi no hay celdas que estan dentro del poligono que son obstaculos (pero no se marcan como exploradas por lo que se refuerza la idea de que es una regla extra )
+  \item safety radius of the mobile robot = 1.5 (según la figura 3)
+  \item DUDA: cuando f1 es 1 f2 es 0, es esto una regla extra o es una deducción de las ficciones, no lo estaría entendiendo si es una deducción, ver figura 4, ahí no hay celdas que están dentro del polígono que son obstáculos (pero no se marcan como exploradas por lo que se refuerza la idea de que es una regla extra )
 \end{itemize}
 
 2.7.1:
 \begin{itemize}
-\item DUDA porque el angulo es entre la orientaciondel robot y el vector Ci (orientacion del robot) y cj (objetivo), deberia ser el angulo para entrar al camino (quizas asi entra al camino, lo cual es dudoso dado que usa a* y hay obstaculos)
+\item DUDA porque el ángulo es entre la orientación del robot y el vector $C_i$ (orientación del robot) y $c_j$ (objetivo), debería ser el ángulo para entrar al camino (quizás así entra al camino, lo cual es dudoso dado que usa a* y hay obstáculos)
 \end{itemize}
 
 2.7.3:
 \begin{itemize}
-\item Usa algorimos geneticos para determinar los parametros de configuracion para controlador de trayectoria (acutadores)
-\item DUDA: An individual is better fitted if it represents a motion command suited to move the mobile robot in less time and less distance, pero en realidad la funcion objetivo a minimizar no involucra al tiempo solo la pos final y el angulo final.
+\item Usa algoritmos genéticos para determinar los parámetros de configuración para controlador de trayectoria (actuadores)
+\item DUDA: An individual is better fitted if it represents a motion command suited to move the mobile robot in less time and less distance, pero en realidad la función objetivo a minimizar no involucra al tiempo solo la pos final y el ángulo final.
 \end{itemize}
 
 
 \subsubsection{Ideas}
 \begin{itemize}
-\item Para distribuir los mensajes (con la pos de todos los robots y su mapa) se usa una topologia de anillo que segun dicen reduce el numero de mensajes. Interesante pensar porque y intentar aplicar tecnicas similares en nuestro caso.
+\item Para distribuir los mensajes (con la pos de todos los robots y su mapa) se usa una topología de anillo que según dicen reduce el numero de mensajes. Interesante pensar porque y intentar aplicar técnicas similares en nuestro caso.
 
 \item valor de subasta que dependa del giro que el robot tiene que hacer para entrar al camino
 
-\item Quizas cuando se encuentra un obstaculo, en lugar de quedarse quieto y esperar por una nueva subasta se puede intentar de replanificar con la informacion de que se encontro un obstaculo, si se encontro un camino que permite evadirlo buenisimo, si no esperar esta bien.
+\item Quizás cuando se encuentra un obstáculo, en lugar de quedarse quieto y esperar por una nueva subasta se puede intentar de planificar con la información de que se encontró un obstáculo, si se encontró un camino que permite evadirlo buenísimo, si no esperar esta bien.
 
-\item Para que se usa la label de obstaculo movil?
+\item Para que se usa la label de obstáculo móvil?
 \begin{itemize}
-  \item para saber que es potencialmente atravesable y usarlo en el path planning
-  \item quizas es posible utilizar una tecnica del estilo en la sol mia
+  \item para saber que es potencialmente atravesadle y usarlo en el path planning
+  \item quizás es posible utilizar una técnica del estilo en la sol mía
   \begin{itemize}
-    \item dudoso por el hecho de que navegan por el voronoi por lo que habria que integrar esa info ahi
-    \item quizas puede usarse para una tecnica local 
-    \item pero en realidad esto ya se hace: en el caso de encontrar un obstaculo inesperado entoces se espera que este se mueva y si lo hace se resume el camino. (el estado de esperar es hasta que se resuelva una proxima subasta)
+    \item dudoso por el hecho de que navegan por el voronoi por lo que habría que integrar esa información ahí
+    \item quizás puede usarse para una técnica local 
+    \item pero en realidad esto ya se hace: en el caso de encontrar un obstáculo inesperado entonces se espera que este se mueva y si lo hace se resume el camino. (el estado de esperar es hasta que se resuelva una próxima subasta)
   \end{itemize}
 \end{itemize}
 
-\item uso de algoritmos evolutivos para encotrar parametros de conf para el controlador de movimiento o similares?
+\item uso de algoritmos evolutivos para encontrar parámetros de configuración para el controlador de movimiento o similares?
 
 \item este usa gazebo y utiliza estos mapas: Benchmark set of test scenarios from the repository of the Technical University of Prague.
 \begin{itemize}
   \item http://imr.ciirc.cvut.cz/planning/maps.xml
-  \item Quizas estaria bueno buscar propuestas de benchmarks de exploracion multirobot para gazebo (incluyendo la mencionada anteriormente), si estan estandarizadas o tienen papers puede ser probechoso para comparar resultados.
+  \item Quizás estaría bueno buscar propuestas de benchmarks de exploración multirobot para gazebo (incluyendo la mencionada anteriormente), si están estandarizadas o tienen papers puede ser provechoso para comparar resultados.
 \end{itemize}
 
-\item Tambien buscar metricas para utilizar, las metricas usadas en el articulo fueron: The metrics to be evaluated to compare the performance of the proposed system against other methods established in the literature are as follows: the average distance traveled by each robot, the total distance of the exploration team, the average time of exploration, and the average number of communication exchanges between the robot team members, divided by the average time of explore. tratar de usar alguno de estas en nuestro caso estaria bueno
+\item También buscar métricas para utilizar, las métricas usadas en el articulo fueron: The metrics to be evaluated to compare the performance of the proposed system against other methods established in the literature are as follows: the average distance traveled by each robot, the total distance of the exploration team, the average time of exploration, and the average number of communication exchanges between the robot team members, divided by the average time of explore. Tratar de usar alguno de estas en nuestro caso estaría bueno
 
-\item aca implementean varias tecnicas para comparar contra ellas (pag 11) hacer algo asi estaria bueno
+\item acá implementan varias técnicas para comparar contra ellas (pag 11) hacer algo así estaría bueno.
 \end{itemize}
 
