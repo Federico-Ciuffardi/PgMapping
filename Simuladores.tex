@@ -325,6 +325,8 @@ Los objetivos que pensé para el benchmark son probar:
 
 Después de leer la documentación mas a fondo (cosas que no son de ros) comencé a ver una correspondencia entre el código de $webots\_ros$ y los ejemplos/conceptos que se documentan para las librerías "nativas" de we bots. Que me facilito la búsqueda de información, esto es porque puede buscar conceptos genéricos de webots para luego relacionarlos con los de webots-ro así solucione las dudas anteriores (enable de los sensores/actuadores y el control de tiempo).
 
+Los motores se comandan a partir de servicios (uno para cada motor) y donde es posible establecer la velocidad angular para cada uno.
+
 Algunos errores en $webots\_ros$ por ejemplo
 \begin{itemize}
   \item usan names relativos para cosas que son globales
@@ -347,3 +349,77 @@ TODO: explicar como es maso el flujo
 
 
 \paragraph{Gazebo}
+La integracion con ros es buena y simple, 
+
+  - los topicos de los sensores se encuentran desde el principio activos sin necesidad de ser activados con un llamado a un servicio como en webots.
+
+  - Existe un topico $cmd\_vel$ donde  se publica la velocidad lineal y angular que se desea que el robot tenga y esa informacion llegara a un controlador diferencial que movera los motores de forma de lograr dichas velocidades.
+
+\paragraph{Conclusion}
+En comparacion el uso de topicos ante servicios en el caso de los motores y el hecho de que los topicos estan activos desde un principio hacen que el codigo en el  caso gazebo sea mas simple.
+
+
+\subsubsection{Adaptando la velocidad}
+\begin{itemize}
+  \item gazebo usa $m/s$
+  \item webots usa $rad/s$ (wb\_motor\_set\_velocity(motor, 6.28);  // 1 rotation per second)
+\end{itemize}
+
+para lograr la correspondecia busque las dimiensiones de las ruedas en la documentacion del oficial del robot (esperando que el simulador sea realista en las dimensiones) \href{https://www.generationrobots.com/media/Pioneer3DX-P3DX-RevA.pdf}{link}. La informacion que encontre en dicha documentacion es que el diametro de las ruedas es de $0.195$ metros.
+
+Y esto lo pude confirmar en el simulador, en la composicion del robot indica que para cualquiera de las ruedas el BoundingObjec (que indica las dimensiones para determinar colisiones) de las mismas es el grupo BOUNDING\_WHEEL y este consiste de un cilindro de radio 0.0975, osea diametro 0.195 siendo la unidade de estos valores metros.
+
+\subsubsection{Obteniendo pose}
+\paragraph{Gazebo}
+
+\href{http://docs.ros.org/en/electric/api/gazebo_plugins/html/group__GazeboRosP3D.html}{GazeboRosP3D}
+
+Es un plugin de gazebo que permite publicar la pose del robot a partir de un mensaje nav\_msgs::Odometry, configurandolo publique esta info en /[nombre\_robot]/pose
+
+Notar que no es un mensaje de tivo geometry\_msgs::Pose pero se podria convertir en uno extrayendo la pose del mensaje de odometrai
+
+\paragraph{Webots}
+Para publicar la pose del robot se modifico el controlador intermedio entre webots y ros esta decicion se tomo porque de las otras alternativas que fuer on descartadas:
+\begin{itemize}
+  \item usar servicios de ROS ya provistos, fue descartada porque era necesario utilizar varios servicos y luego ensamblar la Pose:
+  \begin{itemize}
+    \item uno para obtener un ID a partir de un nombre
+    \item otro para obtener la posicion a partir del ID 
+    \item otro para obtener la orientacion a partir de la ID
+    \item luego pasar la orientacion de matriz de rotaciones a quaterniones
+    \item combinar posicion y orientacion en una Pose 
+  \end{itemize}
+\item usar un GPS, esto podria generar un punto extra de falla, por lo que intento primero modificar el controlador 
+\end{itemize}
+
+Para modificar el controlador se copio el original y se agrego al proyecto, dentro de la carpeta controllers.
+
+Para lograr la publicar la pose en el cotnrolador se hizo un proceso similar al necesario al utilizar servicos de ROS provsitos por webots, la diferencia es que esto se hace de forma interna en el controlador utilizando funciones de la biblioteca de webots evitando asi el overhead del uso de servicios  y el codigo extra necesario para que nodo utilizando los servicois compile una pose.
+
+Es darle al controlador la capacidad de proveer de forma nativa la pose como la queremos.
+
+\subsubsection{rviz}
+\paragraph{Gazebo}
+El paquete que permite generar robots p3dx ya publica los tf que son marcos de referecia, que permiten ubicar a los robots en el mundo (?), necesarios para lograr visualizar al robot en rviz.
+
+Fue necesartrio cambiar el parametro <frameName>map</frameName> recomendado por la doc a el siguiente valor <frameName>/map</frameName> (esto es porque solo map es un camino relativo y esto causa que al usar muchos robots se haga referencia a `/robot\_name/map` en lugar de `/map` como se deberia)
+
+Para evitar warnigs de tf repetidos (TF\_REPEATED\_DATA) se cambio a false la parametro	<publishWheelTF>  del plugin diff\_drive de gazebo, porque hay un nodo que ya publica el tf de las ruedas
+
+Observaciones: A pesar de esto quedan warnings de tf repetidos, en tiempo real son ocacionales (antes eran constantes) y en tiempo acelerado son constanes.
+
+\paragraph{Webots}
+En este caso los tf deben ser publicados a mano, para esto se modifico nuevamente el controlador de ros, para publicar los tf haciendo algo similar a los motrado en el siguiente tutorial:
+\url{http://wiki.ros.org/tf/Tutorials/Writing%20a%20tf%20broadcaster%20%28C%2B%2B%29}
+
+para lo cual fue necesario agregar la flag `-ltf` a la variable LIBRARIES del makefile del controlador de webots-ROS (si no el linker no encontraba las funiciones de tf)
+
+Al lograr visualizar por primera vez en rviz se noto que los ejes estaban cambiados, esto es porque el sistema de coordenadas de webots estaba configurada como "NUE" mientras que "ENU" es la convencion mas usada en ros
+
+Para esto fue de utilidad un script provisto por webots \url{https://github.com/cyberbotics/webots/tree/master/scripts/converter} que permite rotar el entorno de simulacion entero para que este quede bien al cambiar de una convencion a otra (para visualizar, si no se rotara la gravedad seria se veria horizontal)
+
+La misma rotacion fue necesaria en la orientacion del robot, ya que el cambio de NUE a ENU no altero la forma de medir rotaciones
+
+Observaciones: Se nota que el lidar capta la pared levenmente inclinada aunque no deberia, probe a rotarlo de forma que el lidar pueda sensar al piso y siguio pasando algo similar. Inspeccionanod el topico tambien se puede notar la diferencia entre las medidas de una parte de la "simetria" y la otra
+Observaciones: El robot se mece (fisicamente se inclina hacia adelante y hacia atras mientras se mueve)
+
