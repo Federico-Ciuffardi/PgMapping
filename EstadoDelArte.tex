@@ -1,14 +1,14 @@
 \section{Estado del arte}
 
-\subsection{Distributed Multirobot Exploration Based on Scene Partitioning and Frontier Selection}
+\subsection{Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection}
 
 \subsubsection{Resumen}
-Describen una solución al problema de exploración multirobot. Haciendo énfasis en el método para explorar zonas desconocidas, el cual se basa en la segmentación del espacio.
+Describen una solución al problema de exploración multi-robot. Haciendo énfasis en el método para explorar zonas desconocidas, el cual se basa en la segmentación del espacio.
 
 \subsubsection{Notas generales}
-Parece fácil de implementar, seria interesante por lo tanto entenderlo bien, para poder considerar su implementación para comparar contra otro método de exploración mutirobot.
+Parece fácil de implementar, seria interesante por lo tanto entenderlo bien, para poder considerar su implementación para comparar contra otro método de exploración multi-robot.
 
-El trabajo relacionado esta interesante, es amplio y diverso citando artículos que refieren a distintos desafíos de la exploración multirobot (asignación, fusión de información, funciones de costo relacionadas a la teoría de información )
+El trabajo relacionado esta interesante, es amplio y diverso citando artículos que refieren a distintos desafíos de la exploración multi-robot (asignación, fusión de información, funciones de costo relacionadas a la teoría de información )
 
 La técnica de coordinación utilizada no permite que un robot ocioso ayude a robots cuya región asignada tiene muchos posibles objetivos. ( ver vídeo de la demo )
 
@@ -20,11 +20,11 @@ La técnica se resume en:
   \item Cuando alguno no puede continuar explorando su región se va a 1.
 \end{enumerate}
 
-La definición de regiones no es tan sofisticada como la de segmentación con grafos de voronoi, simplemente separan en regiones diciendo que una celda C esta en la región de un robot $R_i$ si la distancia de C a $R_i$ es la menor de todas las distancias entre $C$ y $R_j$ (los demás robots)
+La definición de regiones no es tan sofisticada como la de segmentación con grafos de Voronoi, simplemente separan en regiones diciendo que una celda C esta en la región de un robot $R_i$ si la distancia de C a $R_i$ es la menor de todas las distancias entre $C$ y $R_j$ (los demás robots)
 
 No tengo claro como se asegura la sincronización de las regiones, esto es como aseguran que las regiones de los robots no se solapan. La frase "If $E_i$ is empty, robot $R_i$ will request a new zone assignment." me hace pesar que cuando un robot pide para reasignar regiones todos los robots asignan a la vez regiones a la vez y si cuando lo hacen todos comparten la misma información sobre sus posiciones la asignación seria la misma.
 
-La solución es completamente distribuida y supera los métodos mas simples de la frontera mas cercana y de frontera random ( descentralizado compartiendo mapas y sin coordinación que pueden llevar a dos robots a explorar la misma frontera ), y a el de Bhattacharya que aunque sus objetivos no son fronteras si no que son centroides de regiones de voronoi computadas sobre sus mapas locales con entropy-weighted Voronoi (no leí como es) y Then, each robot takes a step along the shortest-path route towards the nearest entropy-weighted Voronoi region centroid. Y este ultimo también parece que puede llevar a interferencias entre los robots.
+La solución es completamente distribuida y supera los métodos mas simples de la frontera mas cercana y de frontera random ( descentralizado compartiendo mapas y sin coordinación que pueden llevar a dos robots a explorar la misma frontera ), y a el de Bhattacharya que aunque sus objetivos no son fronteras si no que son centroides de regiones de Voronoi computadas sobre sus mapas locales con entropy-weighted Voronoi (no leí como es) y Then, each robot takes a step along the shortest-path route towards the nearest entropy-weighted Voronoi region centroid. Y este ultimo también parece que puede llevar a interferencias entre los robots.
 
 A pesar de esto ultimo la demo es desalentadora, muy simple y hasta se llega ver como se desaprovecha recursos.
 
@@ -33,7 +33,7 @@ A pesar de esto ultimo la demo es desalentadora, muy simple y hasta se llega ver
 \subsubsection{Notas por sección}
 2.5:
 \begin{itemize}
-  \item que es k? Será para todo k distinto de i
+  \item que es $k$? Será para todo $k$ distinto de $i$
   \item  Asumo que d esta tomando en cuenta obstáculos, de lo contrario habría problemas en la asignación de zonas
   \item  $U_i$ serian entonces las celdas desconocidas según el conocimiento de $R_i$ (me confunde el termino asociadas)
 \end{itemize}
@@ -69,7 +69,7 @@ A pesar de esto ultimo la demo es desalentadora, muy simple y hasta se llega ver
   \item para saber que es potencialmente traversable y usarlo en el path planning
   \item quizás es posible utilizar una técnica del estilo en la sol mía
   \begin{itemize}
-    \item dudoso por el hecho de que navegan por el voronoi por lo que habría que integrar esa información ahí
+    \item dudoso por el hecho de que navegan por el Voronoi por lo que habría que integrar esa información ahí
     \item quizás puede usarse para una técnica local 
     \item pero en realidad esto ya se hace: en el caso de encontrar un obstáculo inesperado entonces se espera que este se mueva y si lo hace se resume el camino. (el estado de esperar es hasta que se resuelva una próxima subasta)
   \end{itemize}
@@ -80,7 +80,7 @@ A pesar de esto ultimo la demo es desalentadora, muy simple y hasta se llega ver
 \item este usa gazebo y utiliza estos mapas: Benchmark set of test scenarios from the repository of the Technical University of Prague.
 \begin{itemize}
   \item \url{http://imr.ciirc.cvut.cz/planning/maps.xml}
-  \item Quizás estaría bueno buscar propuestas de benchmarks de exploración multirobot para gazebo (incluyendo la mencionada anteriormente), si están estandarizadas o tienen papers puede ser provechoso para comparar resultados.
+  \item Quizás estaría bueno buscar propuestas de benchmarks de exploración multi-robot para gazebo (incluyendo la mencionada anteriormente), si están estandarizadas o tienen papers puede ser provechoso para comparar resultados.
 \end{itemize}
 
 \item También buscar métricas para utilizar, las métricas usadas en el articulo fueron: The metrics to be evaluated to compare the performance of the proposed system against other methods established in the literature are as follows: the average distance traveled by each robot, the total distance of the exploration team, the average time of exploration, and the average number of communication exchanges between the robot team members, divided by the average time of explore. Tratar de usar alguno de estas en nuestro caso estaría bueno
@@ -93,14 +93,14 @@ A pesar de esto ultimo la demo es desalentadora, muy simple y hasta se llega ver
 \subsubsection{Resumen}
 Habla de mapas topológicos, estos son los mapas que se generan a partir de la segmentación del entorno. 
 Específicamente se centra en describir y evaluar un algoritmo de segmentación para la contracción de mapas topológicos en 2D: Segmentación topológica basada en el contorno de los obstáculos del mapa (Contour Based Topological Segmentation).
-También se describe una variante incremental para poder usarse en tiempo real para la exploración multirobot.
+También se describe una variante incremental para poder usarse en tiempo real para la exploración multi-robot.
 
 \subsubsection{Notas generales}
 Interesante tener en cuenta la existencia de diferentes métodos para segmentar el espacio.
 
 Este se evalúa contra la segmentación humana.
 
-Se describe una variante incremental para poder usarse en tiempo real para la exploración multirobot.
+Se describe una variante incremental para poder usarse en tiempo real para la exploración multi-robot.
 
 En la parte de trabajos relacionados habla de la segmentación basada en GVD. <- importante
 
@@ -120,9 +120,9 @@ Funcionamiento:
 
 Obtienen buenos resultados, la version incremental permite tiempo real, solo tiene un parámetro a tunear (maxima convexidad, usado en el DuDe\_segment), flexible para entornos estructurados y no estructurados. Y es independiente del tamaño de la grid, solo importan las proporciones del contorno.
 
-\subsection{Coordinated Multi-Robot Exploration:Out of the Box Packages for ROS}
+\subsection[Coordinated Multi-Robot Exploration: Out of the Box Packages for ROS]{Coordinated Multi-Robot Exploration: Out of the\\ Box Packages for ROS}
 \subsubsection{Resumen}
-Se presentan y evalúan paquetes de ROS para la exploración multirobot coordinada. Estos paquetes tienen el objetivo de ofrecer funcionalidades básicas para tener una solución completa pero simple para el problema de la exploración multirobot permitiendo una configuración completamente distribuida, apuntando a que grupos de investigación puedan utilizarlos. Los paquetes son:
+Se presentan y evalúan paquetes de ROS para la exploración multi-robot coordinada. Estos paquetes tienen el objetivo de ofrecer funcionalidades básicas para tener una solución completa pero simple para el problema de la exploración multi-robot permitiendo una configuración completamente distribuida, apuntando a que grupos de investigación puedan utilizarlos. Los paquetes son:
 \begin{itemize}
   \item ad hoc communication between robots,
   \item construction of global maps from local maps
@@ -132,7 +132,7 @@ Se presentan y evalúan paquetes de ROS para la exploración multirobot coordina
 \subsubsection{Notas}
 \paragraph{WIRELESS AD HOC COMMUNICATION}
 
-ROS permite comunicación ínter proceso local a través de un maestro usando el patron de comunicación duplicación/subscripción. El maestro se encarga de manejar los publicadores y los subscriptores a  tópicos de ROS ( canales de comunicación entre procesos ). Para hacer un sistema multirobot en este caso seria necesario que todos los robots se conecten inalambricamente a un solo maestro y solo este maestro es el encargado de establecer canales de comunicación entre procesos. Esto significa que dos procesos deben comunicarse con el maestro para poder luego comunicarse entre si y en el caso de desconectarse deben recaer nuevamente en el maestro para lograr una re conexión. Esto es malo ya que el maestro es un punto único de fallo y porque dos procesos que corren localmente en un robot deben comunicarse con el maestro para poder comunicarse entre ellos.
+ROS permite comunicación ínter proceso local a través de un maestro usando el patron de comunicación duplicación/subscripción. El maestro se encarga de manejar los publicadores y los subscriptores a  tópicos de ROS ( canales de comunicación entre procesos ). Para hacer un sistema multi-robot en este caso seria necesario que todos los robots se conecten inalámbricamente a un solo maestro y solo este maestro es el encargado de establecer canales de comunicación entre procesos. Esto significa que dos procesos deben comunicarse con el maestro para poder luego comunicarse entre si y en el caso de desconectarse deben recaer nuevamente en el maestro para lograr una re conexión. Esto es malo ya que el maestro es un punto único de fallo y porque dos procesos que corren localmente en un robot deben comunicarse con el maestro para poder comunicarse entre ellos.
 
 La solución presentada por el articulo es tener un maestro por robot para manejar la comunicación ínter proceso local y manejar la comunicación global entre robots con un paquete propuesto por ellos. 
 
@@ -141,7 +141,7 @@ Su paquete se basa en generar una red Ad-Hoc usando un protocoló similar a AODV
 \item Routing: allows robots to communicate via multiple hops to other robots which are not in the immediate neighbor-hood.
 \item Multicast: allows to transmit from one robot to multiple robots, especially useful for dissemination of map data, for example.
 \item ARQ: stands for automatic repeat request. If a frame is not acknowledged within a specified time, the sender will automatically repeat the transmission. The Ad Hoc Communication package supports both hop-by-hop ARQ and end-to-end ARQ.
-\item Segmentation: allows to split data packets into multiple frames of smaller size. The IEEE 802.11a/g/n MAC layer supports payloads up to 2304 octets [12]. At the receiver side the frames are ordered and combined.
+\item Segmentation: allows to split data packets into multiple frames of smaller size. The IEEE 802.11a/$g$/$n$ MAC layer supports payloads up to 2304 octets [12]. At the receiver side the frames are ordered and combined.
 \item Ordering: ensures that frames and packets are delivered in the correct order.
 \end{itemize}
 
@@ -167,11 +167,11 @@ El Map merger puede ser centralizado o distribuido:
 \item si no es centralizado los mapas locales deben enviarse a todos los robots para que cada uno de estos lo combine y obtenga su propio mapa global
 \end{itemize}
 
-Este modulo esta inspirado en map\_stich pero extiende y mejora varios aspectos.
+Este modulo esta inspirado en $map\_stich$ pero extiende y mejora varios aspectos.
 
 Proceso de combinado
 \begin{itemize}
-  \item El paquete combina dos mapas M1 y M2 en un solo mapa global juntando dichos mapas de forma de maximizar la areas que se solapan.
+  \item El paquete combina dos mapas $M_1$ y $M_2$ en un solo mapa global juntando dichos mapas de forma de maximizar la areas que se solapan.
 
   \item La transformación entre los sistemas de coordenadas que debe hacerse para juntar los mapas se calcula con OpenCV:
   \begin{itemize}
@@ -226,18 +226,16 @@ Ad-hoc network: An ad hoc network is one that is spontaneously formed when devic
 \subsubsection{Ideas}
 Los paquetes presentados pueden ser útiles:
 \begin{itemize}
-\item WIRELESS AD HOC COMMUNICATION: es una solución al 
-  
-  funcionamiento centralizado del sistema de tópicos de ROS.
+\item WIRELESS AD HOC COMMUNICATION: es una solución al funcionamiento centralizado del sistema de tópicos de ROS.
 \item MAP MERGER se presenta como una solución a la combinación de mapas cuyo código puede llegar a resultar útil dependiendo de que tan bien se pueda adaptar la solución actual
 \item EXPLORATION resulta simple en comparación a las funcionalidades que provee nuestro paquete pero de igual, resaltando el uso de el método húngaro para la resolución de subastas el cual seria interesante considerar para nuestro paquete (comparar ordenes del método actual).
 \end{itemize}
 
 El código no se actualiza hace 5 años y no hay releases para versiones recientes de ros, de igual manera es posible extraer código para reutilizar en nuestro proyecto.
 
-\subsection{Distributed matroid - constrained submodular maximization for multi - robot exploration: theory and practice}
+\subsection[Distributed matroid constrained submodular maximization for multi-robot exploration: theory and practice]{Distributed matroid constrained submodular maximization for multi-robot exploration: theory and\\ practice}
 \subsubsection{Resumen}
-Este articulo describe el problema de exploración multirobot y se centra en la descripción de "distributed sequential greedy assignment (DSGA)", un algoritmo que resuelve de forma eficiente la asignación de objetivos de exploración de forma distribuida.
+Este articulo describe el problema de exploración multi-robot y se centra en la descripción de "distributed sequential greedy assignment (DSGA)", un algoritmo que resuelve de forma eficiente la asignación de objetivos de exploración de forma distribuida.
 
 \subsubsection{Notas}
 Informative planning problems of this form are known to be NP-Hard 
@@ -248,11 +246,11 @@ Entonces rather than attempt to find an optimal solution in possibly exponential
 
 Para probar la eficiencia hacen un modelo que considera la incertidumbre del entorno y la modela, siendo el objetivo de la exploración reducir la entropía del mapa (concepto que cuantifica la incertidumbre).
 
-Se tratan conceptos como la entropía, las funciones submodulares
+Se tratan conceptos como la entropía, las funciones submodulares.
 
 \url{https://www.youtube.com/watch?v=yEnYXCAj4WY}
 
-y matroides
+Y matroides
 
 \url{https://www.youtube.com/watch?v=XcSzR_tpHYE}
 
@@ -291,7 +289,143 @@ En el marco de la exploración multi robot, este trabajo se centra en la parte d
 
 Según los autores en muchos entornos del mundo-real, en especial los altamente dinámicos, son muy complejos para que los humanos diseñen estrategias eficientes y descentralizadas.
 
-Dicho esto, presentan un método de coordinación basado en redes neuronales con mecanismos de atención. Le llaman Attention-based Communication neural network (CommAttn). Esta les permite a los robot aprender estrategias de cooperación a través de la comunicación explicita. El mecanismo de atención se introduce para que los robots puedan determinar con que otros robots es necesario comunicarse.
+Dicho esto, presentan un método de coordinación basado en redes neuronales con mecanismos de atención. Le llaman Attention-based Communication neural network ($CommAttn$). Esta les permite a los robot aprender estrategias de cooperación a través de la comunicación explicita. El mecanismo de atención se introduce para que los robots puedan determinar con que otros robots es necesario comunicarse.
 
 \subsubsection{Notas}
 Interesante pero no seria el foco del proyecto
+
+%%%%%%%
+% Desde acá TSCF
+%%%%%%%
+% \section{Investigación previa}
+% Con el motivo de introducirnos y orientar el trabajo, se investigaron cuatro artículos relacionados al problema de la exploración multi-robot. A continuación se describirá cada uno de los artículos, haciendo especial énfasis en las características de los mismos que se relacionan con el trabajo realizado.
+\subsection{A novel stop criterion to support efficient Multi-robot mapping}\cite{amorin2019novel}
+El articulo modela e implementa una solución al el problema de coordinación y exploración de un entorno desconocido a partir de un sistema de robots homogéneos, con el objetivo de analizar un criterio de terminación novedoso basado en la ganancia de información esperada.
+
+% El articulo consta de varias secciones: la representación del entorno, los componentes(robot y estación central) y comunicaciones entre ellos, método de identificación de tareas para cada robot y el criterio de finalización.
+
+\subsubsection{Representación del entorno}
+El entorno $E$ se define como un espacio de trabajo plano limitado limitado $E\subseteq R^2$. Para que sea computacionalmente tratable dicho entorno $E$ está representado por una estructura de grilla de ocupación donde cada celda $c$ puede pertenecer a tres estados probabilísticos diferentes $S = \{f, o, u\}$, representando libre, ocupado y desconocido, respectivamente. Para realizar las asignaciones solo se considerara el centro de la celda.
+
+\subsubsection{Componentes y comunicaciones}
+La flota se compone de $N$ robots móviles circulares rígidos con capacidad para tomar mediciones en toda la circunferencia alrededor con un radio $r$. Existe una estación central encargada de la tarea de reconocimiento de objetivos y asignación de los mismos. Los robots serán quienes recopilen la información del entorno y la central la encargada de crear un mapa global a partir de esta. 
+
+En el articulo, se consideran comunicaciones ideales, suponiendo que los robots no tienen restricciones de comunicación (por ejemplo, sin errores ni pérdidas con ancho de banda y alcance ilimitados). %Cabe aclarar que las comunicaciones inalámbricas son importantes en el contexto de exploración multi-robot.
+
+\subsubsection{Método de identificación y asignación de tareas}
+
+Las celdas que llevan a espacios desconocidos, consideradas como libres y que son adyacentes a celdas desconocidas, son denominadas celdas frontera (fronteras), en tanto conforman una frontera entre espacios libres y desconocidos. Las fronteras son objetivos potenciales de exploración ya que si el robot alcanzara dicha celda este podría recopilar nueva información dentro del radio de sensado. Sin embargo, el tratamiento de todas las fronteras como tareas de exploración diferentes podría ser computacionalmente prohibitivo. Por lo tanto, para reducir la carga, se intenta determinar las celdas frontera mas significativas, para lograr esto se hace lo siguiente, primero, las fronteras se dividen en conjuntos disjuntos $F_k$. 
+Luego, se obtienen las fronteras mas significativas de cada conjunto $F_k$ considerando el radio de sensado de un robot de forma que si dos robots van a dos celdas frontera significativas distintas de $F_k$, sus radios de sensado no se solapen, esto se hace utilizando el algoritmo K-Means. Finalmente las fronteras consideradas significativas para algún $F_k$ se convierten en celdas objetivo, también conocidas como tareas de exploración.
+
+La asignación de tareas se resuelve organizando una subasta entre robots. Cuando un robot completa una tarea (llegando a una celda objetivo), este envía una notificación a la estación central. La Estación Central comparte la última versión del mapa con la flota e inicia un proceso de subasta solicitando postores. Durante un corto período de tiempo, cada robot no asignado es notificado, pudiendo enviar una oferta; cada oferta consiste en una lista de pares tarea-utilidad, donde la utilidad considera tanto la estimación de ganancia de información como el costo asociado a la ruta necesaria para cumplir con la tarea. Finalmente la central, a partir de las listas de todos los postores, resuelve las asignaciones de forma voraz, para luego notificar a cada robot su tarea asignada.
+% Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
+
+El valor de la ganancia de información de cada frontera resultante debe ser estimado, en el artículo se presenta un estimador de ganancia, el cual se basa en el rango de visión del robot y el entorno conocido. 
+
+\subsubsection{Criterio de parada}
+
+El criterio según el cual detener la exploración es un aspecto importante de la exploración multi-robot. Una de las opciones sería la configuración del sistema para que, al llegar a un porcentaje de cubrimiento del entorno, la exploración sea detenida. Esta medida en la práctica no es efectiva, solo sirve en caso de tener conocimiento del mapa global. Otra opción es que el sistema verifique de forma autónoma si existen espacios accesibles desde donde cualquier robot pueda recopilar nueva información, y detener la exploración de lo contrario.
+
+El criterio de parada propuesto en el articulo, se basa en que durante la exploración, los robots obtienen conocimiento sobre el entorno que mejora continuamente sus habilidades de predicción. Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis son dos, la primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. Dicho esto el criterio de parada es que dada una cierta tolerancia cada robot da por concluida su participación en la exploración cuando para $n$ objetivos seguidos, dicha tolerancia es mayor a la diferencia entre la estimación de ganancia de información que se hizo para un objetivo y la ganancia de información real. La idea subyacente es que tan pronto como los robots obtengan suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, estos podrán detenerse.
+
+%PARA EL PAPER DE COORDINACION ASUMI QUE YA SE EXPLICO QUE ERA UNA GRILLA DE OCUPACIÓN
+
+% SEGUIR %
+
+\subsection{Coordinated Multi-Robot Exploration using a Segmentation of the Environment}\cite{wurm2008coordinated}
+El articulo describe y analiza un enfoque de coordinación para la exploración multi-robot que se basa en la distribución eficiente de los robots al explorar el entorno, teniendo en cuenta la estructura de dicho entorno. Para lograr la distribución el entorno se divide en segmentos, por ejemplo, correspondientes a habitaciones y corredores. Luego, las asignaciones de robots a objetivos se hacen considerando que los robots deben ser distribuidos de forma uniforme sobre los segmentos identificados. 
+
+% Y en lugar de considerar todas las fronteras entre áreas desconocidas y exploradas como ubicaciones objetivo, se envían los robots a los segmentos individuales con la tarea de explorar el área correspondiente.
+En el articulo se describen dos tareas principales: la segmentación del mapa y la asignación de objetivos a los robots.
+
+\subsubsection{Segmentación del mapa}
+% La segmentación de mapas se basada en la partición de un grafo.  
+% , como lo son los grafos de Voronoi
+En el articulo el mapa es representado como un grafo de Voronoi, para calcular el grafo de Voronoi $G(m) = (V, E)$ asociado a un mapa $m$, se considera el conjunto $O_p (m)$ que contiene para cada punto $p$ en el espacio libre $C$ de $m$ el conjunto de puntos de obstáculos más cercanos. El conjunto $V$ de nodos del grafo de Voronoi es definido como el conjunto de puntos $p$ en $C$ para los cuales hay al menos dos puntos de obstáculo a distancia mínima, existiendo una arista entre dos nodos si sus puntos correspondientes en $m$ son adyacentes:
+\[
+V = \{p \in C : |O_p (m)| \geq 2\}
+\]
+\[
+E = \{(p, q) : p, q \in V, p \text{ adjacent } q \text{ in } m\}
+\]
+
+El grafo de Voronoi se puede generar a partir de una grilla de ocupación, aplicándole la transformación de distancia euclidiana\cite{meijster2002general} se obtiene como resultado un mapa de distancia que mantiene para cada celda de la grilla la distancia al obstáculo más cercano, a partir del cual es posible determinar $V$ y $E$ como se describió anteriormente.
+% (o de interés para explorar, normalmente corredores o puertas)
+%, los cuales normalmente se ubican en puertas 
+
+La segmentación de mapas se basa en la partición del grafo utilizado para representar el mapa, y se realiza a partir de los denominados puntos críticos, definidos como puntos que cumplen con ser mínimos locales según la distancia a los obstáculos. La idea es utilizar los puntos críticos para reconocer pasajes entre dos habitaciones o entre habitaciones y corredores. Dado que la forma de los pasajes suelen generar puntos críticos en ellos, el problema pasa a ser el de evitar reconocer falsos positivos (puntos críticos que no estén en un pasaje). Con el motivo de evitar falsos positivos los puntos críticos se restringen a los nodos del grafo que sean mínimos locales según la distancia a los obstáculos, de grado 2 (tengan dos aristas), que tengan un vecino de grado 3 (un nodo de intersección entre varios caminos) y que conduzcan a áreas desconocidas.
+Finalmente los pasajes reconocidos determinan una partición del grafo que a su vez determina los segmentos, que por estar entre pasajes serán corredores y habitaciones.
+
+\subsubsection{Asignación de objetivos}
+% Los entornos interiores son en general estructurados, por ejemplo, los edificios generalmente se dividen en habitaciones a las que se puede llegar por pasillos.
+Los objetivos serán, como es usual, las fronteras entre las partes desconocidas y conocidas del mapa.
+
+Asignar más de un robot a un mismo segmento en muchos casos, puede ser una desventaja, ya que el segmento podría ser demasiado pequeño para que un segundo robot acelere su exploración, aunque inicialmente haya más de una frontera en el mismo o, por otro lado, al terminar la exploración de un segmento, los robots pueden incluso bloquearse entre sí mientras intentan abandonarlo, lo que aumentará el tiempo de exploración. Por lo tanto, el objetivo es distribuir uniformemente a los robots sobre los segmentos.
+
+Para resolver la asignación se propone utilizar el método húngaro, a partir de los costos $C_{s}^{i}$ definidos como el costo de llegar a la celda frontera más cercana del segmento $s$ con el robot $i$, descontando un valor constante en caso de que el robot ya se encuentre en el segmento. El método húngaro da soluciones que evitan tener más de un robot por segmento mientras esto sea posible, y asigna más de un robot a un segmento en el caso de que haya más robots que segmentos. Esta descripción corresponde al algoritmo \ref{alg:asignacionobjetivos}.
+
+\begin{algorithm}
+\SetAlgoLined
+    Determinar segmentos $S = \{s_{1} , ..., s_{n} \}$ del mapa\\
+    Determinar el conjunto de fronteras objetivo para cada segmento\\
+    \For{cada robot $i$}{
+        \For{cada segmento $s \in S$}{
+                Computar el costo $C_{s}^{i}$\\
+                Descontar al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
+            }
+    }
+    Asignar robots a los segmentos usando el método húngaro\\
+    \For{cada segmento $s \in S$}{
+        Asignar robots a las fronteras objetivas en $s$ utilizando el método húngaro\\
+    }
+    \caption{Asignación de objetivos}
+    \label{alg:asignacionobjetivos}
+    
+\end{algorithm}
+
+Usando este enfoque, cada uno de los corredores es explorado completamente por uno de los robots revelando rápidamente la estructura de un edificio, mientras que se asignarán otros robots a las habitaciones accesibles desde los corredores a medida que estas se vayan detectando.
+
+\subsection[Voronoi-Based Space Partitioning for Coordinated Multi-Robot Exploration]{Voronoi-Based Space Partitioning for Coordinated\\ Multi-Robot Exploration} \cite{wu2007voronoi}
+
+% Este artículo describe y evalúa la extensión de un algoritmo de exploración multi-robot y muestra que al reemplazar el modelo de mapa original (una grilla de ocupación) con una representación poligonal más compacta y flexible, el nuevo enfoque aumenta significativamente la eficiencia de la etapa más costosa del algoritmo original, que es la división de áreas desconocidas en tantas regiones como robots. El algoritmo de agrupación K-Means original se sustituye por un algoritmo de partición basado en Voronoi aplicado a polígonos.
+Como se vio hasta el momento, es usual utilizar grillas de ocupación para la representación de mapas en exploraciones multi-robot, sin embargo, estas grillas no son apropiadas para entornos que son muy grandes o cuyos límites no están bien delimitados desde el comienzo de la exploración. En contraste, las representaciones poligonales no tienen tales limitaciones.
+
+El artículo propone utilizar un mapa constituido por la union de un conjunto de polígonos cerrados de forma y tamaño arbitrario, que pueden estar libres, no explorados u ocupados (obstaculizados). Con el propósito de analizar el modelo de mapa propuesto se describe y evalúa la extensión de un algoritmo de exploración multi-robot y se muestra que al reemplazar el modelo de mapa usual (grilla de ocupación) con una representación poligonal más compacta y flexible, el aumenta significativamente la eficiencia.
+
+La representación poligonal funciona de la siguiente manera, inicialmente, todo el mapa estará constituido por un solo polígono desconocido. Polígonos libres y ocupados son incluidos en el mapa luego del sensado del robot y son substraídos de los polígonos desconocidos a los que pertenecían.
+
+Para determinar objetivos se utilizan las aristas entre polígonos desconocidos y polígonos libres denominadas como aristas frontera que son análogas a las celdas frontera de las grillas de ocupación.
+
+El trabajo propone una asignación de tareas a partir de division el entorno desconocido en tantas regiones como robots existan en la flota, para luego asignar a cada robot la tarea de explorar una region diferente. El entorno se divide a partir de un algoritmo que adapta al algoritmo K-Means para funcionar con el modelo poligonal propuesto, que se explica en la sección\ref{subsubsec:particionamientovoronoi}.
+
+%La division del entorno se logra adaptando el algoritmo K-means para funcionar en utilizado para encontrar los centroides correspondientes a las agrupaciones de áreas desconocidas, ya que se asume que estos serán los puntos más provechosos para que los robots exploren.
+
+Finalmente, la planificación del camino del robot es realizada en el interior de los polígonos libres, cosa que se puede hacer a partir de la aplicación de cualquier algoritmo de descomposición celular, por ejemplo el que se explica en \cite{schachter1978decomposition}.
+
+
+   
+\subsubsection{Particionamiento basado en polígonos}\label{subsubsec:particionamientovoronoi}
+El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como sitios, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. 
+
+Sea $n$ numero de robots, el resultado deseado sería obtener un conjunto de $K=n$ celdas de Voronoi. % cerradas que están globalmente delimitadas por el polígono a dividir
+
+La generación de estas celdas se realiza a partir del algoritmo \ref{alg:particionamientovoronoi} que adapta K-Means (algoritmo que encuentra clusters en un mapa discretizado) a partir de diagramas de Voronoi.
+
+\begin{algorithm}
+\SetAlgoLined
+    Elegir aleatoriamente $K$ puntos $C_i$, $1 \leq i \leq K$, contenidos en los polígonos correspondientes a las regiones desconocidas actuales en el mapa.\\
+    Calcular el diagrama de Voronoi asociado con el conjunto actual de $C_i$.\\
+    Restringir las celdas del diagrama de Voronoi a los polígonos desconocidos actuales.\\
+    Determinar el centro de masa $M_i$ de cada celda Voronoi restringida.\\
+    \eIf{$C_i - M_i < \varepsilon\ \forall i$}{
+        Saltar al paso 11.\\
+    }{
+        Sustituir cada $C_i$ por su $M_i$ correspondiente.\\ Volver al paso 2.\\
+    }
+    
+    Dividir el conjunto de polígonos desconocidos en $K$ regiones disjuntas según las celdas de Voronoi restringidas encontradas.\\
+    \caption{Particionamiento basado en Voronoi}
+    \label{alg:particionamientovoronoi}
+    
+\end{algorithm}
+

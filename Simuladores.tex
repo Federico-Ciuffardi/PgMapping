@@ -402,7 +402,7 @@ Es darle al controlador la capacidad de proveer de forma nativa la pose como la 
 \paragraph{Gazebo}
 El paquete que permite generar robots p3dx ya publica los tf que son marcos de referecia, que permiten ubicar a los robots en el mundo (?), necesarios para lograr visualizar al robot en rviz.
 
-Fue necesartrio cambiar el parametro <frameName>map</frameName> recomendado por la doc a el siguiente valor <frameName>/map</frameName> (esto es porque solo map es un camino relativo y esto causa que al usar muchos robots se haga referencia a `/robot\_name/map` en lugar de `/map` como se deberia)
+Fue necesartrio cambiar el parametro <frameName>map</frameName>\\ recomendado por la doc a el siguiente valor <frameName>/map</frameName>\\ (esto es porque solo map es un camino relativo y esto causa que al usar muchos robots se haga referencia a `/robot\_name/map` en lugar de `/map` como se deberia)
 
 Para evitar warnigs de tf repetidos (TF\_REPEATED\_DATA) se cambio a false la parametro	<publishWheelTF>  del plugin diff\_drive de gazebo, porque hay un nodo que ya publica el tf de las ruedas
 

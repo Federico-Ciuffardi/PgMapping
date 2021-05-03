@@ -1,17 +1,129 @@
 \documentclass{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{enumitem}
+
+% *** CAPTION AND QUOTES ***
+\usepackage{dirtytalk}
+\usepackage[center]{caption}
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+\usepackage{verbatim}
 \usepackage{hyperref}
 
-\title{PgMapping}
-\author{Federico Ciuffardi }
-\date{April 2021}
+% *** MATH PACKAGES ***
+\usepackage{amsmath}
+
+% *** CODE PACKAGES ***
+\usepackage[ruled,vlined,spanish,onelanguage,linesnumbered]{algorithm2e}
+\usepackage{listings}
+
+
+% *** FIGURE PACKAGES ***
+\usepackage{graphicx,wrapfig,lipsum}
+\usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
+
+% *** COLOR PACKAGES ***
+\usepackage{xcolor}
+
+% *** DEFINITIONS ***
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\definecolor{mBlack}{rgb}{0,0,0}
+\definecolor{mGreen}{rgb}{0,0.6,0}
+\definecolor{mGray}{rgb}{0.5,0.5,0.5}
+\definecolor{mPurple}{rgb}{0.58,0,0.82}
+\definecolor{mBlue}{rgb}{0.25,0.25,1}
+\definecolor{backgroundColour}{rgb}{0.98,0.98,0.98}
+\lstset{
+    language=Pascal,
+    literate={á}{{\'a}}1
+        {ã}{{\~a}}1
+        {é}{{\'e}}1
+        {ó}{{\'o}}1
+        {í}{{\'i}}1
+        {ñ}{{\~n}}1
+        {¡}{{!`}}1
+        {¿}{{?`}}1
+        {ú}{{\'u}}1
+        {Í}{{\'I}}1
+        {Ó}{{\'O}}1
+}
+\lstdefinestyle{CStyle}{
+    backgroundcolor=\color{backgroundColour},   
+    commentstyle=\color{mGreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\small\color{mGray},
+    stringstyle=\color{mBlue},
+    %basicstyle=\footnotesize,
+    breakatwhitespace=true,         
+    breaklines=true,                 
+    %captionpos=b,
+    frame=l,
+    %keepspaces=true,                 
+    numbers=left,                    
+    numbersep=7pt,                  
+%    showspaces=false,                
+%    showstringspaces=false,
+%    showtabs=true,
+    literate={\ \ }{{\ }}1,
+    tabsize=1,
+    language=pascal,
+    escapeinside={(*} {*)},
+    columns=fullflexible,
+    breakautoindent=false,
+    framerule=1pt,
+    xleftmargin=15pt,
+    xrightmargin=0pt,
+    breakindent=0pt,
+    resetmargins=true
+}
+
+% *** Cover ***
+
+\title{%
+\begin{figure}[H]
+\vspace{-2.5cm}
+  \subfloat{\hspace{0.075\textwidth}}
+  \subfloat{\includegraphics[clip=true, width=0.15\textwidth]{logos/udelar.jpg}}
+  \subfloat{\hspace{0.2\textwidth}}
+  \subfloat{\includegraphics[clip=true, width=0.15\textwidth]{logos/logo-fing.png}}
+  \subfloat{\hspace{0.2\textwidth}}
+  \subfloat{\includegraphics[clip=true, width=0.15\textwidth]{logos/inco.png}}
+\end{figure}
+\vspace{0.25cm}
+\huge
+Exploración multi-robot basada en grillas de ocupación probabilística y digramas de Voronoi\\
+}
+
+\author{%
+\Large
+\vspace{0.5cm}\\
+Estudiante: Federico Ciuffardi\\
+\vspace{0.5cm}\\
+Tutor: Facundo Benavides%
+}
+
+\date{}
 
 \begin{document}
 
 \maketitle
+\thispagestyle{empty}
+\setcounter{page}{0}
 
 \include{EstadoDelArte}
 
 \include{Simuladores}
+
+\begingroup
+\bibliographystyle{IEEEtran}
+\raggedright
+
+\bibliography{references}
 
 \end{document}
