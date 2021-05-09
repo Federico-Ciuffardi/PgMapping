@@ -1,4 +1,119 @@
+\chapter{Marco de trabajo}
 \section{Estado del arte}
+
+%PARA EL PAPER DE COORDINACION ASUMI QUE YA SE EXPLICO QUE ERA UNA GRILLA DE OCUPACIÓN
+
+% SEGUIR %
+
+\subsection{Coordinated Multi-Robot Exploration using a Segmentation of the Environment}\cite{wurm2008coordinated}
+El articulo describe y analiza un enfoque de coordinación para la exploración multi-robot que se basa en la distribución eficiente de los robots al explorar el entorno, teniendo en cuenta la estructura de dicho entorno. Para lograr la distribución el entorno se divide en segmentos, por ejemplo, correspondientes a habitaciones y corredores. Luego, las asignaciones de robots a objetivos se hacen considerando que los robots deben ser distribuidos de forma uniforme sobre los segmentos identificados. 
+
+% Y en lugar de considerar todas las fronteras entre áreas desconocidas y exploradas como ubicaciones objetivo, se envían los robots a los segmentos individuales con la tarea de explorar el área correspondiente.
+En el articulo se describen dos tareas principales: la segmentación del mapa y la asignación de objetivos a los robots.
+
+\subsubsection{Segmentación del mapa}
+% La segmentación de mapas se basada en la partición de un grafo.  
+% , como lo son los grafos de Voronoi
+En el articulo el mapa es representado como un grafo de Voronoi, para calcular el grafo de Voronoi $G(m) = (V, E)$ asociado a un mapa $m$, se considera el conjunto $O_p (m)$ que contiene para cada punto $p$ en el espacio libre $C$ de $m$ el conjunto de puntos de obstáculos más cercanos. El conjunto $V$ de nodos del grafo de Voronoi es definido como el conjunto de puntos $p$ en $C$ para los cuales hay al menos dos puntos de obstáculo a distancia mínima, existiendo una arista entre dos nodos si sus puntos correspondientes en $m$ son adyacentes:
+\[
+V = \{p \in C : |O_p (m)| \geq 2\}
+\]
+\[
+E = \{(p, q) : p, q \in V, p \text{ adjacent } q \text{ in } m\}
+\]
+
+El grafo de Voronoi se puede generar a partir de una grilla de ocupación, aplicándole la transformación de distancia euclidiana\cite{meijster2002general} se obtiene como resultado un mapa de distancia que mantiene para cada celda de la grilla la distancia al obstáculo más cercano, a partir del cual es posible determinar $V$ y $E$ como se describió anteriormente.
+% (o de interés para explorar, normalmente corredores o puertas)
+%, los cuales normalmente se ubican en puertas 
+
+La segmentación de mapas se basa en la partición del grafo utilizado para representar el mapa, y se realiza a partir de los denominados puntos críticos, definidos como puntos que cumplen con ser mínimos locales según la distancia a los obstáculos. La idea es utilizar los puntos críticos para reconocer pasajes entre dos habitaciones o entre habitaciones y corredores. Dado que la forma de los pasajes suelen generar puntos críticos en ellos, el problema pasa a ser el de evitar reconocer falsos positivos (puntos críticos que no estén en un pasaje). Con el motivo de evitar falsos positivos los puntos críticos se restringen a los nodos del grafo que sean mínimos locales según la distancia a los obstáculos, de grado 2 (tengan dos aristas), que tengan un vecino de grado 3 (un nodo de intersección entre varios caminos) y que conduzcan a áreas desconocidas.
+Finalmente los pasajes reconocidos determinan una partición del grafo que a su vez determina los segmentos, que por estar entre pasajes serán corredores y habitaciones.
+
+\subsubsection{Asignación de objetivos}
+% Los entornos interiores son en general estructurados, por ejemplo, los edificios generalmente se dividen en habitaciones a las que se puede llegar por pasillos.
+Los objetivos serán, como es usual, las fronteras entre las partes desconocidas y conocidas del mapa.
+
+Asignar más de un robot a un mismo segmento en muchos casos, puede ser una desventaja, ya que el segmento podría ser demasiado pequeño para que un segundo robot acelere su exploración, aunque inicialmente haya más de una frontera en el mismo o, por otro lado, al terminar la exploración de un segmento, los robots pueden incluso bloquearse entre sí mientras intentan abandonarlo, lo que aumentará el tiempo de exploración. Por lo tanto, el objetivo es distribuir uniformemente a los robots sobre los segmentos.
+
+Para resolver la asignación se propone utilizar el método húngaro, a partir de los costos $C_{s}^{i}$ definidos como el costo de llegar a la celda frontera más cercana del segmento $s$ con el robot $i$, descontando un valor constante en caso de que el robot ya se encuentre en el segmento. El método húngaro da soluciones que evitan tener más de un robot por segmento mientras esto sea posible, y asigna más de un robot a un segmento en el caso de que haya más robots que segmentos. Esta descripción corresponde al algoritmo \ref{alg:asignacionobjetivos}.
+
+\begin{algorithm}
+\SetAlgoLined
+    Determinar segmentos $S = \{s_{1} , ..., s_{n} \}$ del mapa\\
+    Determinar el conjunto de fronteras objetivo para cada segmento\\
+    \For{cada robot $i$}{
+        \For{cada segmento $s \in S$}{
+                Computar el costo $C_{s}^{i}$\\
+                Descontar al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
+            }
+    }
+    Asignar robots a los segmentos usando el método húngaro\\
+    \For{cada segmento $s \in S$}{
+        Asignar robots a las fronteras objetivas en $s$ utilizando el método húngaro\\
+    }
+    \caption{Asignación de objetivos}
+    \label{alg:asignacionobjetivos}
+    
+\end{algorithm}
+
+Usando este enfoque, cada uno de los corredores es explorado completamente por uno de los robots revelando rápidamente la estructura de un edificio, mientras que se asignarán otros robots a las habitaciones accesibles desde los corredores a medida que estas se vayan detectando.
+
+\subsection[Voronoi-Based Space Partitioning for Coordinated Multi-Robot Exploration]{Voronoi-Based Space Partitioning for Coordinated\\ Multi-Robot Exploration} \cite{wu2007voronoi}
+
+% Este artículo describe y evalúa la extensión de un algoritmo de exploración multi-robot y muestra que al reemplazar el modelo de mapa original (una grilla de ocupación) con una representación poligonal más compacta y flexible, el nuevo enfoque aumenta significativamente la eficiencia de la etapa más costosa del algoritmo original, que es la división de áreas desconocidas en tantas regiones como robots. El algoritmo de agrupación K-Means original se sustituye por un algoritmo de partición basado en Voronoi aplicado a polígonos.
+Como se vio hasta el momento, es usual utilizar grillas de ocupación para la representación de mapas en exploraciones multi-robot, sin embargo, estas grillas no son apropiadas para entornos que son muy grandes o cuyos límites no están bien delimitados desde el comienzo de la exploración. En contraste, las representaciones poligonales no tienen tales limitaciones.
+
+El artículo propone utilizar una representación poligonal en la cual el mapa consiste en la union de conjunto de polígonos cerrados de forma y tamaño arbitrario, que pueden estar libres, no explorados u obstaculizados. 
+
+Con el propósito de analizar el desempeño de la representación propuesta se comparan dos soluciones .  y se muestra que al reemplazar el modelo de mapa usual (grilla de ocupación) con una representación poligonal más compacta y flexible, el aumenta significativamente la eficiencia.
+
+Inicialmente, todo el mapa estará constituido por un solo polígono desconocido. Polígonos libres y ocupados son incluidos en el mapa luego del sensado del robot y son substraídos de los polígonos desconocidos a los que pertenecían.
+
+Para determinar objetivos se utilizan las aristas entre polígonos desconocidos y polígonos libres denominadas como aristas frontera que son análogas a las celdas frontera de las grillas de ocupación.
+
+El trabajo propone una asignación de tareas a partir de division el entorno desconocido en tantas regiones como robots existan en la flota, para luego asignar a cada robot la tarea de explorar una region diferente. El entorno se divide a partir de un algoritmo que adapta al algoritmo K-Means para funcionar con el modelo poligonal propuesto, que se explica en la sección\ref{subsubsec:particionamientovoronoi}.
+
+%La division del entorno se logra adaptando el algoritmo K-means para funcionar en utilizado para encontrar los centroides correspondientes a las agrupaciones de áreas desconocidas, ya que se asume que estos serán los puntos más provechosos para que los robots exploren.
+
+Finalmente, la planificación del camino del robot es realizada en el interior de los polígonos libres, cosa que se puede hacer a partir de la aplicación de cualquier algoritmo de descomposición celular, por ejemplo el que se explica en \cite{schachter1978decomposition}.
+   
+\subsubsection{Particionamiento basado en polígonos}\label{subsubsec:particionamientovoronoi}
+El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como sitios, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. 
+
+Sea $n$ numero de robots, el resultado deseado sería obtener un conjunto de $K=n$ celdas de Voronoi. % cerradas que están globalmente delimitadas por el polígono a dividir
+
+La generación de estas celdas se realiza a partir del algoritmo \ref{alg:particionamientovoronoi} que adapta K-Means (algoritmo que encuentra clusters en un mapa discretizado) a partir de diagramas de Voronoi.
+
+\begin{algorithm}
+\SetAlgoLined
+    Elegir aleatoriamente $K$ puntos $C_i$, $1 \leq i \leq K$, contenidos en los polígonos correspondientes a las regiones desconocidas actuales en el mapa.\\
+    Calcular el diagrama de Voronoi asociado con el conjunto actual de $C_i$.\\
+    Restringir las celdas del diagrama de Voronoi a los polígonos desconocidos actuales.\\
+    Determinar el centro de masa $M_i$ de cada celda Voronoi restringida.\\
+    \eIf{$C_i - M_i < \varepsilon\ \forall i$}{
+        Saltar al paso 11.\\
+    }{
+        Sustituir cada $C_i$ por su $M_i$ correspondiente.\\ Volver al paso 2.\\
+    }
+    
+    Dividir el conjunto de polígonos desconocidos en $K$ regiones disjuntas según las celdas de Voronoi restringidas encontradas.\\
+    \caption{Particionamiento basado en Voronoi}
+    \label{alg:particionamientovoronoi}
+    
+\end{algorithm}
+
+%%%%%%%
+% Desde acá modulo taller
+%%%%%%%
+
+\subsection{Incremental reconstruction of generalized Voronoi diagrams on grids}
+
+El principal problema con este acercamiento es que el GVD se construye basa en determinar obstáculos independientes para luego calcular el GVD. Esto es un problema porque no es claro en como pasar de celdas obstaculizadas a obstáculos que están compuestos por estas (buscar mas problemas, ineficiencia?, nuestro código no lo soportaba de antes).  El siguiente artículo propone una solución que evita esta necesidad y solo basta con tener un grilla de ocupación.
+
+\subsection{Efficient grid-based spatial representations for robot navigation in dynamic environments}
+
+% sacar de acá las definiciones de GVD GVG VD etc: https://www.ri.cmu.edu/pub_files/pub1/choset_howie_1997_2/choset_howie_1997_2.pdf
+
 
 \subsection{Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection}
 
@@ -88,7 +203,7 @@ A pesar de esto ultimo la demo es desalentadora, muy simple y hasta se llega ver
 \item acá implementan varias técnicas para comparar contra ellas (pagina 11) hacer algo así estaría bueno.
 \end{itemize}
 
-\subsection{Incremental contour-based topological segmentation for robot exploration}
+\subsection[Incremental contour-based topological segmentation for robot exploration]{Incremental contour-based topological\\ segmentation for robot exploration}
 
 \subsubsection{Resumen}
 Habla de mapas topológicos, estos son los mapas que se generan a partir de la segmentación del entorno. 
@@ -282,7 +397,7 @@ Seria interesante entender como funciona la representación alternativa
 
 "Gaussian mixture model (GMM)" y como esta puede ser utilizada para tener comunicaciones eficientes.
 
-\subsection{Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration}
+\subsection[Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration]{Learning to Cooperate via an Attention-Based\\ Communication Neural Network in Decentralized Multi-Robot Exploration}
 
 \subsubsection{Resumen}
 En el marco de la exploración multi robot, este trabajo se centra en la parte de la cooperación/coordinación. 
@@ -327,116 +442,3 @@ El valor de la ganancia de información de cada frontera resultante debe ser est
 El criterio según el cual detener la exploración es un aspecto importante de la exploración multi-robot. Una de las opciones sería la configuración del sistema para que, al llegar a un porcentaje de cubrimiento del entorno, la exploración sea detenida. Esta medida en la práctica no es efectiva, solo sirve en caso de tener conocimiento del mapa global. Otra opción es que el sistema verifique de forma autónoma si existen espacios accesibles desde donde cualquier robot pueda recopilar nueva información, y detener la exploración de lo contrario.
 
 El criterio de parada propuesto en el articulo, se basa en que durante la exploración, los robots obtienen conocimiento sobre el entorno que mejora continuamente sus habilidades de predicción. Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis son dos, la primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. Dicho esto el criterio de parada es que dada una cierta tolerancia cada robot da por concluida su participación en la exploración cuando para $n$ objetivos seguidos, dicha tolerancia es mayor a la diferencia entre la estimación de ganancia de información que se hizo para un objetivo y la ganancia de información real. La idea subyacente es que tan pronto como los robots obtengan suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, estos podrán detenerse.
-
-%PARA EL PAPER DE COORDINACION ASUMI QUE YA SE EXPLICO QUE ERA UNA GRILLA DE OCUPACIÓN
-
-% SEGUIR %
-
-\subsection{Coordinated Multi-Robot Exploration using a Segmentation of the Environment}\cite{wurm2008coordinated}
-El articulo describe y analiza un enfoque de coordinación para la exploración multi-robot que se basa en la distribución eficiente de los robots al explorar el entorno, teniendo en cuenta la estructura de dicho entorno. Para lograr la distribución el entorno se divide en segmentos, por ejemplo, correspondientes a habitaciones y corredores. Luego, las asignaciones de robots a objetivos se hacen considerando que los robots deben ser distribuidos de forma uniforme sobre los segmentos identificados. 
-
-% Y en lugar de considerar todas las fronteras entre áreas desconocidas y exploradas como ubicaciones objetivo, se envían los robots a los segmentos individuales con la tarea de explorar el área correspondiente.
-En el articulo se describen dos tareas principales: la segmentación del mapa y la asignación de objetivos a los robots.
-
-\subsubsection{Segmentación del mapa}
-% La segmentación de mapas se basada en la partición de un grafo.  
-% , como lo son los grafos de Voronoi
-En el articulo el mapa es representado como un grafo de Voronoi, para calcular el grafo de Voronoi $G(m) = (V, E)$ asociado a un mapa $m$, se considera el conjunto $O_p (m)$ que contiene para cada punto $p$ en el espacio libre $C$ de $m$ el conjunto de puntos de obstáculos más cercanos. El conjunto $V$ de nodos del grafo de Voronoi es definido como el conjunto de puntos $p$ en $C$ para los cuales hay al menos dos puntos de obstáculo a distancia mínima, existiendo una arista entre dos nodos si sus puntos correspondientes en $m$ son adyacentes:
-\[
-V = \{p \in C : |O_p (m)| \geq 2\}
-\]
-\[
-E = \{(p, q) : p, q \in V, p \text{ adjacent } q \text{ in } m\}
-\]
-
-El grafo de Voronoi se puede generar a partir de una grilla de ocupación, aplicándole la transformación de distancia euclidiana\cite{meijster2002general} se obtiene como resultado un mapa de distancia que mantiene para cada celda de la grilla la distancia al obstáculo más cercano, a partir del cual es posible determinar $V$ y $E$ como se describió anteriormente.
-% (o de interés para explorar, normalmente corredores o puertas)
-%, los cuales normalmente se ubican en puertas 
-
-La segmentación de mapas se basa en la partición del grafo utilizado para representar el mapa, y se realiza a partir de los denominados puntos críticos, definidos como puntos que cumplen con ser mínimos locales según la distancia a los obstáculos. La idea es utilizar los puntos críticos para reconocer pasajes entre dos habitaciones o entre habitaciones y corredores. Dado que la forma de los pasajes suelen generar puntos críticos en ellos, el problema pasa a ser el de evitar reconocer falsos positivos (puntos críticos que no estén en un pasaje). Con el motivo de evitar falsos positivos los puntos críticos se restringen a los nodos del grafo que sean mínimos locales según la distancia a los obstáculos, de grado 2 (tengan dos aristas), que tengan un vecino de grado 3 (un nodo de intersección entre varios caminos) y que conduzcan a áreas desconocidas.
-Finalmente los pasajes reconocidos determinan una partición del grafo que a su vez determina los segmentos, que por estar entre pasajes serán corredores y habitaciones.
-
-\subsubsection{Asignación de objetivos}
-% Los entornos interiores son en general estructurados, por ejemplo, los edificios generalmente se dividen en habitaciones a las que se puede llegar por pasillos.
-Los objetivos serán, como es usual, las fronteras entre las partes desconocidas y conocidas del mapa.
-
-Asignar más de un robot a un mismo segmento en muchos casos, puede ser una desventaja, ya que el segmento podría ser demasiado pequeño para que un segundo robot acelere su exploración, aunque inicialmente haya más de una frontera en el mismo o, por otro lado, al terminar la exploración de un segmento, los robots pueden incluso bloquearse entre sí mientras intentan abandonarlo, lo que aumentará el tiempo de exploración. Por lo tanto, el objetivo es distribuir uniformemente a los robots sobre los segmentos.
-
-Para resolver la asignación se propone utilizar el método húngaro, a partir de los costos $C_{s}^{i}$ definidos como el costo de llegar a la celda frontera más cercana del segmento $s$ con el robot $i$, descontando un valor constante en caso de que el robot ya se encuentre en el segmento. El método húngaro da soluciones que evitan tener más de un robot por segmento mientras esto sea posible, y asigna más de un robot a un segmento en el caso de que haya más robots que segmentos. Esta descripción corresponde al algoritmo \ref{alg:asignacionobjetivos}.
-
-\begin{algorithm}
-\SetAlgoLined
-    Determinar segmentos $S = \{s_{1} , ..., s_{n} \}$ del mapa\\
-    Determinar el conjunto de fronteras objetivo para cada segmento\\
-    \For{cada robot $i$}{
-        \For{cada segmento $s \in S$}{
-                Computar el costo $C_{s}^{i}$\\
-                Descontar al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
-            }
-    }
-    Asignar robots a los segmentos usando el método húngaro\\
-    \For{cada segmento $s \in S$}{
-        Asignar robots a las fronteras objetivas en $s$ utilizando el método húngaro\\
-    }
-    \caption{Asignación de objetivos}
-    \label{alg:asignacionobjetivos}
-    
-\end{algorithm}
-
-Usando este enfoque, cada uno de los corredores es explorado completamente por uno de los robots revelando rápidamente la estructura de un edificio, mientras que se asignarán otros robots a las habitaciones accesibles desde los corredores a medida que estas se vayan detectando.
-
-\subsection[Voronoi-Based Space Partitioning for Coordinated Multi-Robot Exploration]{Voronoi-Based Space Partitioning for Coordinated\\ Multi-Robot Exploration} \cite{wu2007voronoi}
-
-% Este artículo describe y evalúa la extensión de un algoritmo de exploración multi-robot y muestra que al reemplazar el modelo de mapa original (una grilla de ocupación) con una representación poligonal más compacta y flexible, el nuevo enfoque aumenta significativamente la eficiencia de la etapa más costosa del algoritmo original, que es la división de áreas desconocidas en tantas regiones como robots. El algoritmo de agrupación K-Means original se sustituye por un algoritmo de partición basado en Voronoi aplicado a polígonos.
-Como se vio hasta el momento, es usual utilizar grillas de ocupación para la representación de mapas en exploraciones multi-robot, sin embargo, estas grillas no son apropiadas para entornos que son muy grandes o cuyos límites no están bien delimitados desde el comienzo de la exploración. En contraste, las representaciones poligonales no tienen tales limitaciones.
-
-El artículo propone utilizar un mapa constituido por la union de un conjunto de polígonos cerrados de forma y tamaño arbitrario, que pueden estar libres, no explorados u ocupados (obstaculizados). Con el propósito de analizar el modelo de mapa propuesto se describe y evalúa la extensión de un algoritmo de exploración multi-robot y se muestra que al reemplazar el modelo de mapa usual (grilla de ocupación) con una representación poligonal más compacta y flexible, el aumenta significativamente la eficiencia.
-
-La representación poligonal funciona de la siguiente manera, inicialmente, todo el mapa estará constituido por un solo polígono desconocido. Polígonos libres y ocupados son incluidos en el mapa luego del sensado del robot y son substraídos de los polígonos desconocidos a los que pertenecían.
-
-Para determinar objetivos se utilizan las aristas entre polígonos desconocidos y polígonos libres denominadas como aristas frontera que son análogas a las celdas frontera de las grillas de ocupación.
-
-El trabajo propone una asignación de tareas a partir de division el entorno desconocido en tantas regiones como robots existan en la flota, para luego asignar a cada robot la tarea de explorar una region diferente. El entorno se divide a partir de un algoritmo que adapta al algoritmo K-Means para funcionar con el modelo poligonal propuesto, que se explica en la sección\ref{subsubsec:particionamientovoronoi}.
-
-%La division del entorno se logra adaptando el algoritmo K-means para funcionar en utilizado para encontrar los centroides correspondientes a las agrupaciones de áreas desconocidas, ya que se asume que estos serán los puntos más provechosos para que los robots exploren.
-
-Finalmente, la planificación del camino del robot es realizada en el interior de los polígonos libres, cosa que se puede hacer a partir de la aplicación de cualquier algoritmo de descomposición celular, por ejemplo el que se explica en \cite{schachter1978decomposition}.
-
-
-   
-\subsubsection{Particionamiento basado en polígonos}\label{subsubsec:particionamientovoronoi}
-El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como sitios, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. 
-
-Sea $n$ numero de robots, el resultado deseado sería obtener un conjunto de $K=n$ celdas de Voronoi. % cerradas que están globalmente delimitadas por el polígono a dividir
-
-La generación de estas celdas se realiza a partir del algoritmo \ref{alg:particionamientovoronoi} que adapta K-Means (algoritmo que encuentra clusters en un mapa discretizado) a partir de diagramas de Voronoi.
-
-\begin{algorithm}
-\SetAlgoLined
-    Elegir aleatoriamente $K$ puntos $C_i$, $1 \leq i \leq K$, contenidos en los polígonos correspondientes a las regiones desconocidas actuales en el mapa.\\
-    Calcular el diagrama de Voronoi asociado con el conjunto actual de $C_i$.\\
-    Restringir las celdas del diagrama de Voronoi a los polígonos desconocidos actuales.\\
-    Determinar el centro de masa $M_i$ de cada celda Voronoi restringida.\\
-    \eIf{$C_i - M_i < \varepsilon\ \forall i$}{
-        Saltar al paso 11.\\
-    }{
-        Sustituir cada $C_i$ por su $M_i$ correspondiente.\\ Volver al paso 2.\\
-    }
-    
-    Dividir el conjunto de polígonos desconocidos en $K$ regiones disjuntas según las celdas de Voronoi restringidas encontradas.\\
-    \caption{Particionamiento basado en Voronoi}
-    \label{alg:particionamientovoronoi}
-    
-\end{algorithm}
-
-%%%%%%%
-% Desde acá modulo taller
-%%%%%%%
-
-\subsection{Incremental reconstruction of generalized Voronoi diagrams on grids}
-
-El principal problema con este acercamiento es que el GVD se construye basa en determinar obstáculos independientes para luego calcular el GVD. Esto es un problema porque no es claro en como pasar de celdas obstaculizadas a obstáculos que están compuestos por estas (buscar mas problemas, ineficiencia?, nuestro código no lo soportaba de antes).  El siguiente artículo propone una solución que evita esta necesidad y solo basta con tener un grilla de ocupación.
-
-\subsection{Efficient grid-based spatial representations for robot navigation in dynamic environments}
-
-% sacar de aca las definiciones de GVD GVG VD etc: https://www.ri.cmu.edu/pub_files/pub1/choset_howie_1997_2/choset_howie_1997_2.pdf
