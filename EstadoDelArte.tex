@@ -1,9 +1,38 @@
-\chapter{Marco de trabajo}
 \section{Estado del arte}
 
-%PARA EL PAPER DE COORDINACION ASUMI QUE YA SE EXPLICO QUE ERA UNA GRILLA DE OCUPACIÓN
+%%%%%%%
+% Desde acá TSCF
+%%%%%%%
+% \section{Investigación previa}
+% Con el motivo de introducirnos y orientar el trabajo, se investigaron cuatro artículos relacionados al problema de la exploración multi-robot. A continuación se describirá cada uno de los artículos, haciendo especial énfasis en las características de los mismos que se relacionan con el trabajo realizado.
+\subsection{A novel stop criterion to support efficient Multi-robot mapping}\cite{amorin2019novel}
+El articulo modela e implementa una solución al el problema de coordinación y exploración de un entorno desconocido a partir de un sistema de robots homogéneos, con el objetivo de analizar un criterio de terminación novedoso basado en la ganancia de información esperada.
 
-% SEGUIR %
+% El articulo consta de varias secciones: la representación del entorno, los componentes(robot y estación central) y comunicaciones entre ellos, método de identificación de tareas para cada robot y el criterio de finalización.
+
+\subsubsection{Representación del entorno}
+El entorno $E$ se define como un espacio de trabajo plano limitado limitado $E\subseteq R^2$. Para que sea computacionalmente tratable dicho entorno $E$ está representado por una estructura de grilla de ocupación donde cada celda $c$ puede pertenecer a tres estados probabilísticos diferentes $S = \{f, o, u\}$, representando libre, ocupado y desconocido, respectivamente. Para realizar las asignaciones solo se considerara el centro de la celda.
+
+\subsubsection{Componentes y comunicaciones}
+La flota se compone de $N$ robots móviles circulares rígidos con capacidad para tomar mediciones en toda la circunferencia alrededor con un radio $r$. Existe una estación central encargada de la tarea de reconocimiento de objetivos y asignación de los mismos. Los robots serán quienes recopilen la información del entorno y la central la encargada de crear un mapa global a partir de esta. 
+
+En el articulo, se consideran comunicaciones ideales, suponiendo que los robots no tienen restricciones de comunicación (por ejemplo, sin errores ni pérdidas con ancho de banda y alcance ilimitados). %Cabe aclarar que las comunicaciones inalámbricas son importantes en el contexto de exploración multi-robot.
+
+\subsubsection{Método de identificación y asignación de tareas}
+
+Las celdas que llevan a espacios desconocidos, consideradas como libres y que son adyacentes a celdas desconocidas, son denominadas celdas frontera (fronteras), en tanto conforman una frontera entre espacios libres y desconocidos. Las fronteras son objetivos potenciales de exploración ya que si el robot alcanzara dicha celda este podría recopilar nueva información dentro del radio de sensado. Sin embargo, el tratamiento de todas las fronteras como tareas de exploración diferentes podría ser computacionalmente prohibitivo. Por lo tanto, para reducir la carga, se intenta determinar las celdas frontera mas significativas, para lograr esto se hace lo siguiente, primero, las fronteras se dividen en conjuntos disjuntos $F_k$. 
+Luego, se obtienen las fronteras mas significativas de cada conjunto $F_k$ considerando el radio de sensado de un robot de forma que si dos robots van a dos celdas frontera significativas distintas de $F_k$, sus radios de sensado no se solapen, esto se hace utilizando el algoritmo K-Means. Finalmente las fronteras consideradas significativas para algún $F_k$ se convierten en celdas objetivo, también conocidas como tareas de exploración.
+
+La asignación de tareas se resuelve organizando una subasta entre robots. Cuando un robot completa una tarea (llegando a una celda objetivo), este envía una notificación a la estación central. La Estación Central comparte la última versión del mapa con la flota e inicia un proceso de subasta solicitando postores. Durante un corto período de tiempo, cada robot no asignado es notificado, pudiendo enviar una oferta; cada oferta consiste en una lista de pares tarea-utilidad, donde la utilidad considera tanto la estimación de ganancia de información como el costo asociado a la ruta necesaria para cumplir con la tarea. Finalmente la central, a partir de las listas de todos los postores, resuelve las asignaciones de forma voraz, para luego notificar a cada robot su tarea asignada.
+% Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
+
+El valor de la ganancia de información de cada frontera resultante debe ser estimado, en el artículo se presenta un estimador de ganancia, el cual se basa en el rango de visión del robot y el entorno conocido. 
+
+\subsubsection{Criterio de parada}
+
+El criterio según el cual detener la exploración es un aspecto importante de la exploración multi-robot. Una de las opciones sería la configuración del sistema para que, al llegar a un porcentaje de cubrimiento del entorno, la exploración sea detenida. Esta medida en la práctica no es efectiva, solo sirve en caso de tener conocimiento del mapa global. Otra opción es que el sistema verifique de forma autónoma si existen espacios accesibles desde donde cualquier robot pueda recopilar nueva información, y detener la exploración de lo contrario.
+
+El criterio de parada propuesto en el articulo, se basa en que durante la exploración, los robots obtienen conocimiento sobre el entorno que mejora continuamente sus habilidades de predicción. Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis son dos, la primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. Dicho esto el criterio de parada es que dada una cierta tolerancia cada robot da por concluida su participación en la exploración cuando para $n$ objetivos seguidos, dicha tolerancia es mayor a la diferencia entre la estimación de ganancia de información que se hizo para un objetivo y la ganancia de información real. La idea subyacente es que tan pronto como los robots obtengan suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, estos podrán detenerse.
 
 \subsection{Coordinated Multi-Robot Exploration using a Segmentation of the Environment}\cite{wurm2008coordinated}
 El articulo describe y analiza un enfoque de coordinación para la exploración multi-robot que se basa en la distribución eficiente de los robots al explorar el entorno, teniendo en cuenta la estructura de dicho entorno. Para lograr la distribución el entorno se divide en segmentos, por ejemplo, correspondientes a habitaciones y corredores. Luego, las asignaciones de robots a objetivos se hacen considerando que los robots deben ser distribuidos de forma uniforme sobre los segmentos identificados. 
@@ -61,17 +90,18 @@ Usando este enfoque, cada uno de los corredores es explorado completamente por u
 \subsection[Voronoi-Based Space Partitioning for Coordinated Multi-Robot Exploration]{Voronoi-Based Space Partitioning for Coordinated\\ Multi-Robot Exploration} \cite{wu2007voronoi}
 
 % Este artículo describe y evalúa la extensión de un algoritmo de exploración multi-robot y muestra que al reemplazar el modelo de mapa original (una grilla de ocupación) con una representación poligonal más compacta y flexible, el nuevo enfoque aumenta significativamente la eficiencia de la etapa más costosa del algoritmo original, que es la división de áreas desconocidas en tantas regiones como robots. El algoritmo de agrupación K-Means original se sustituye por un algoritmo de partición basado en Voronoi aplicado a polígonos.
-Como se vio hasta el momento, es usual utilizar grillas de ocupación para la representación de mapas en exploraciones multi-robot, sin embargo, estas grillas no son apropiadas para entornos que son muy grandes o cuyos límites no están bien delimitados desde el comienzo de la exploración. En contraste, las representaciones poligonales no tienen tales limitaciones.
+Las grillas de ocupación es una de las representaciones de mapas mas utilizadas en el contexto de exploración multi-robot, sin embargo, estas grillas no son apropiadas para entornos que son muy grandes o cuyos límites no están bien delimitados desde el comienzo de la exploración. En contraste, las representaciones poligonales no tienen tales limitaciones.
 
 El artículo propone utilizar una representación poligonal en la cual el mapa consiste en la union de conjunto de polígonos cerrados de forma y tamaño arbitrario, que pueden estar libres, no explorados u obstaculizados. 
 
-Con el propósito de analizar el desempeño de la representación propuesta se comparan dos soluciones .  y se muestra que al reemplazar el modelo de mapa usual (grilla de ocupación) con una representación poligonal más compacta y flexible, el aumenta significativamente la eficiencia.
+El desempeño de la representación propuesta se comprueba contra una estrategia de exploración multi-robot que hace uso de grillas de ocupación, de lo cual se concluye que una representación poligonal es más compacta, flexible y logra aumentar significativamente la eficiencia.
 
-Inicialmente, todo el mapa estará constituido por un solo polígono desconocido. Polígonos libres y ocupados son incluidos en el mapa luego del sensado del robot y son substraídos de los polígonos desconocidos a los que pertenecían.
+\subsubsection{Representación poligonal}
+Inicialmente, todo el mapa estará constituido por un solo polígono desconocido. A partir de lo sensado por cada robot, se incluye nueva información sobre entorno a la representación agregando polígonos libres y ocupados que son substraídos de los polígonos desconocidos a los que pertenecían.
 
-Para determinar objetivos se utilizan las aristas entre polígonos desconocidos y polígonos libres denominadas como aristas frontera que son análogas a las celdas frontera de las grillas de ocupación.
+Los objetivos de exploración se determinan a partir de las aristas entre polígonos desconocidos y polígonos libres denominadas como aristas frontera que son análogas a las celdas frontera de las grillas de ocupación.
 
-El trabajo propone una asignación de tareas a partir de division el entorno desconocido en tantas regiones como robots existan en la flota, para luego asignar a cada robot la tarea de explorar una region diferente. El entorno se divide a partir de un algoritmo que adapta al algoritmo K-Means para funcionar con el modelo poligonal propuesto, que se explica en la sección\ref{subsubsec:particionamientovoronoi}.
+El trabajo propone asignar tareas a partir de la division el entorno desconocido en tantas regiones como robots existan en la flota, para luego asignar a cada robot la tarea de explorar una region diferente. El entorno se divide a partir de un algoritmo que adapta al algoritmo K-Means para funcionar a partir de la representación poligonal propuesta, este algoritmo se explica en la sección\ref{subsubsec:particionamientovoronoi}.
 
 %La division del entorno se logra adaptando el algoritmo K-means para funcionar en utilizado para encontrar los centroides correspondientes a las agrupaciones de áreas desconocidas, ya que se asume que estos serán los puntos más provechosos para que los robots exploren.
 
@@ -80,9 +110,11 @@ Finalmente, la planificación del camino del robot es realizada en el interior d
 \subsubsection{Particionamiento basado en polígonos}\label{subsubsec:particionamientovoronoi}
 El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como sitios, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. 
 
-Sea $n$ numero de robots, el resultado deseado sería obtener un conjunto de $K=n$ celdas de Voronoi. % cerradas que están globalmente delimitadas por el polígono a dividir
+Sea $n$ numero de robots, el resultado deseado es obtener un conjunto de $K=n$ celdas de Voronoi para las cuales, sus centroides (centros de masa) y sus sitios estén a una distancia menos que cierta tolerancia $\varepsilon$. % cerradas que están globalmente delimitadas por el polígono a dividir
 
 La generación de estas celdas se realiza a partir del algoritmo \ref{alg:particionamientovoronoi} que adapta K-Means (algoritmo que encuentra clusters en un mapa discretizado) a partir de diagramas de Voronoi.
+
+Notar que el algoritmo trabaja con celdas de Voronoi restringidas, estas son las celdas resultantes de un diagrama de Voronoi restringidas a los limites del mapa conocidos por hipótesis.
 
 \begin{algorithm}
 \SetAlgoLined
@@ -103,108 +135,133 @@ La generación de estas celdas se realiza a partir del algoritmo \ref{alg:partic
 \end{algorithm}
 
 %%%%%%%
-% Desde acá modulo taller
+% Desde acá modulo taller (redactado)
 %%%%%%%
+% hasta acá redactado
 
 \subsection{Incremental reconstruction of generalized Voronoi diagrams on grids}
 
 El principal problema con este acercamiento es que el GVD se construye basa en determinar obstáculos independientes para luego calcular el GVD. Esto es un problema porque no es claro en como pasar de celdas obstaculizadas a obstáculos que están compuestos por estas (buscar mas problemas, ineficiencia?, nuestro código no lo soportaba de antes).  El siguiente artículo propone una solución que evita esta necesidad y solo basta con tener un grilla de ocupación.
 
 \subsection{Efficient grid-based spatial representations for robot navigation in dynamic environments}
+Articulo del cual obtuvimos varias las características de nuestra implementación incremental
 
-% sacar de acá las definiciones de GVD GVG VD etc: https://www.ri.cmu.edu/pub_files/pub1/choset_howie_1997_2/choset_howie_1997_2.pdf
+\subsection{Sensor-based exploration: Incremental construction of the hierarchical generalized Voronoi graph}
 
+Obtener de este las definiciones de GVD GVG VD etc
+
+Ademas en este se muestra que HGVG es un roadmap y como GVD = HGVG en dimension 2 entonces se tiene que GVD es un roadmap y esto justifica su uso para la navegación.
+
+Se puede explicar que es un roadmap y para que sirve.
+%https://docs.google.com/document/d/1yFqYCa47JHWA1tYXfWRbPnJMDWjv4nsER7b-64Yx2YM/edit#heading=h.w7bvjvihzhqy
+%https://docs.google.com/document/d/1pxqyMlNkoJkrIP6SBvMu3rOycAUBt72uPNH_S8o-HYw/edit#heading=h.l9jal9qqz7kt
+
+%%%%%%%
+% Desde acá proyecto de grado redactado
+%%%%%%%
 
 \subsection{Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection}
+% Al considerase una solución para el problema de exploración hay dos aspectos centrales a resolver, identificar posibles objetivos de exploración y como priorizar estos objetivos de forma de priorizar los mas relevantes.
 
-\subsubsection{Resumen}
-Describen una solución al problema de exploración multi-robot. Haciendo énfasis en el método para explorar zonas desconocidas, el cual se basa en la segmentación del espacio.
+Este articulo propone una solución distribuida al problema de exploración multi-robot%, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
 
-\subsubsection{Notas generales}
-Parece fácil de implementar, seria interesante por lo tanto entenderlo bien, para poder considerar su implementación para comparar contra otro método de exploración multi-robot.
-
-El trabajo relacionado esta interesante, es amplio y diverso citando artículos que refieren a distintos desafíos de la exploración multi-robot (asignación, fusión de información, funciones de costo relacionadas a la teoría de información )
-
-La técnica de coordinación utilizada no permite que un robot ocioso ayude a robots cuya región asignada tiene muchos posibles objetivos. ( ver vídeo de la demo )
-
-La técnica se resume en:
+\subsubsection{Formulación del problema}
+La variante del problema de exploración multi-robot tratada en este articulo es la de explorar un entorno desconocido $W\in R^2$ utilizando un conjunto de robots $R={R_1,R_2,...,R_n}$. Se utilizan celdas de ocupación, por lo que el entorno se descompone en un conjunto de celdas $C={c_1,c_2,...,c_n}$. Cada robot $R_i$ tiene:
 \begin{enumerate}
-  \item Compartir la información entre el equipo robótico
-  \item Utilizar esa información para asignar región a robots
-  \item Esos robots exploran sus región lo mas que puedan (comparten la información mientras exploran)
-  \item Cuando alguno no puede continuar explorando su región se va a 1.
+  \item Un mapa $M_i \in CxL$ donde $L$ son las diferentes estados en los que puede estar una celda. 
+  \item Una posición inicial $q_{init}^{i}\in R^2 \times [-\pi,\pi]$. 
+  \item Un sensor $S_i$ para explorar el entorno desconocido.
 \end{enumerate}
 
-La definición de regiones no es tan sofisticada como la de segmentación con grafos de Voronoi, simplemente separan en regiones diciendo que una celda C esta en la región de un robot $R_i$ si la distancia de C a $R_i$ es la menor de todas las distancias entre $C$ y $R_j$ (los demás robots)
+Adicionalmente asumen que existe siempre un cuadro delimitador de $W$ que puede ser establecido, aunque sea de forma aproximada, antes de que la exploración comience, comunicación perfecta (sin perdida de rango infinito) y que cada robot tiene acceso a su posición respecto a un marco de referencia común.
 
-No tengo claro como se asegura la sincronización de las regiones, esto es como aseguran que las regiones de los robots no se solapan. La frase "If $E_i$ is empty, robot $R_i$ will request a new zone assignment." me hace pesar que cuando un robot pide para reasignar regiones todos los robots asignan a la vez regiones a la vez y si cuando lo hacen todos comparten la misma información sobre sus posiciones la asignación seria la misma.
+\subsubsection{Descripción del sistema}
+El sistema tiene un diseño modular, este consta de 4 módulos que se encuentran en cada robot, el modulo de distribución de información, el modulo de asignación de zonas, el modulo de adquisición de información y el modulo de exploración. Estos se describen en las siguientes secciones. 
 
-La solución es completamente distribuida y supera los métodos mas simples de la frontera mas cercana y de frontera random ( descentralizado compartiendo mapas y sin coordinación que pueden llevar a dos robots a explorar la misma frontera ), y a el de Bhattacharya que aunque sus objetivos no son fronteras si no que son centroides de regiones de Voronoi computadas sobre sus mapas locales con entropy-weighted Voronoi (no leí como es) y Then, each robot takes a step along the shortest-path route towards the nearest entropy-weighted Voronoi region centroid. Y este ultimo también parece que puede llevar a interferencias entre los robots.
+\paragraph{Modulo de distribución de información}
+Este modulo se encarga de distribuir a los demás robots la posición del robot al que pretence, las ubicaciones que conoce de los demás robots y su mapa $M_i$. 
 
-A pesar de esto ultimo la demo es desalentadora, muy simple y hasta se llega ver como se desaprovecha recursos.
+\paragraph{Modulo de asignación de zonas }
+El entorno es segmentado en zonas y la exploración cada una de estas es asignada a un robot. El modulo de asignación de zonas es el responsable de realizar la segmentación en zonas y su posterior asignación a los robots. La segmentación genera tantas zonas $E_i$ como robots $R_i$ que $E_i$ se define en la ecuación \ref{ec:zones} a partir de la posición $C_i$ de $R_i$. .
+\begin{equation}\label{ec:zones}
+  E_i=\{c_j:d_g(C_i,c_j)\leq d_g(V_i(k),c_j) \forall i \neq k , c_j \in U_i\}
+\end{equation}
+Donde $U_i \subset M_i$ son la celdas desconocidas del mapa asociado al robot $R_i$ y $d_g(c',c'')$ es la distancia geodésica, que indica el camino compuesto de centros de celdas mas corto entre dos celdas $c'$ y $c''$ que respecta la conectividad entre las celdas que lo componen.
 
-\url{http://downloads.hindawi.com/journals/mpe/2018/2373642.f1.mp4}
+Cada zona $E_i$ es asignada al robot $R_i$ y este explorara las celdas de $E_i$ según lo determine el \hyperref[par:estar:moduloexp]{modulo de exploración}.
 
-\subsubsection{Notas por sección}
-2.5:
-\begin{itemize}
-  \item que es $k$? Será para todo $k$ distinto de $i$
-  \item  Asumo que d esta tomando en cuenta obstáculos, de lo contrario habría problemas en la asignación de zonas
-  \item  $U_i$ serian entonces las celdas desconocidas según el conocimiento de $R_i$ (me confunde el termino asociadas)
-\end{itemize}
+\paragraph{Modulo de adquisición de información}
+El propósito de este es el de actualizar el mapa $M_i$ de el robot $R_i$ según la información obtenida por su sensor $S_i$ y su posición $C_i$.
 
-2.6:
-\begin{itemize}
-  \item safety radius of the mobile robot = 1.5 (según la figura 3)
-  \item DUDA: cuando $f1$ es 1 $f2$ es 0, es esto una regla extra o es una deducción de las ficciones, no lo estaría entendiendo si es una deducción, ver figura 4, ahí no hay celdas que están dentro del polígono que son obstáculos (pero no se marcan como exploradas por lo que se refuerza la idea de que es una regla extra )
-\end{itemize}
+\paragraph{Modulo de exploración}\label{par:estar:moduloexp}
+El modulo de exploración esta compuesto por tres submódulos. 
 
-2.7.1:
-\begin{itemize}
-\item DUDA porque el ángulo es entre la orientación del robot y el vector $C_i$ (orientación del robot) y $c_j$ (objetivo), debería ser el ángulo para entrar al camino (quizás así entra al camino, lo cual es dudoso dado que usa a* y hay obstáculos)
-\end{itemize}
+El primero de ellos es el submódulo de asignación de objetivos, como su nombre lo indica, este se encarga de seleccionar un objetivo de todos los pertenecientes a la zona asignada $E_i$ para asignarlo al robot $R_i$. El objetivo seleccionado $G_i$ es el que alcanza el menor valor para la función de peso $f_p$ que se computa como \ref{ec:weight}.
+\begin{equation}\label{ec:weight}
+  f_p(c_j) = k_d.d_g(C_i,c_j) + k_a.\phi_i(c_j)
+\end{equation}
+Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada sumando, $d_g(C_i,c_j)$ hace referencia a la distancia geodésica mencionada anteriormente, $\phi_i(c_j)$ es el angulo entre la orientación del robot y el vector con origen en la posiciones del robot $C_i$, y fin en el centro de celda $c_j$. 
 
-2.7.3:
-\begin{itemize}
-\item Usa algoritmos genéticos para determinar los parámetros de configuración para controlador de trayectoria (actuadores)
-\item DUDA: An individual is better fitted if it represents a motion command suited to move the mobile robot in less time and less distance, pero en realidad la función objetivo a minimizar no involucra al tiempo solo la pos final y el ángulo final.
-\end{itemize}
+Luego esta el submódulo de planificación de ruta, este se encarga de generar una ruta que le permita al robot llegar al objetivo asignado. Esto se logra a partir del algoritmo $A*$, para la ejecución de este se asume que las celdas desconocidas son libres. En el caso de encontrarse un obstáculo en la ruta planificada se replanifica ejecutando nuevamente el algoritmo $A*$ en la version mas reciente del mapa.
+
+El ultimo es el submódulo de ejecución de trayectoria que se encarga de generar los comandos de actuación para seguir una ruta planeada.
+
+\subsection{Learning metric-topological maps for indoor mobile robot navigation}
+En este articulo se propone un método de segmentación del espacio a partir de mapa representado con una grilla de ocupación. El concepto de segmento es equivalente al de habitaciones y corredores en entornos estructurados, como lo son las casas y oficinas. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas de los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos. En este caso el objetivo de segmentar el espacio en habitaciones y corredores, es el de generar un mapa topológico.
+
+\subsubsection{Mapas topológicos}
+Los mapas topológicos son mapas simplificados al punto de solo incluir regiones de interés y conexiones entre estas. En este caso las regiones de interés serán los segmentos. 
+
+La simplicidad de los mapas topológicos es útil para ayudar a los humanos a entender un entorno (por esto es usual ver mapas topológicos de sistemas de transporte) y permiten instrucciones que nos resultan naturales, por ejemplo, "ir a la habitación A". Otra ventaja es que por su simplicidad estos suelen ser mas compactos y por lo tanto pueden utilizarse para desarrollar técnicas de planificación eficiente.
+
+\subsubsection{Algoritmo de segmentación}
+Para introducir el algoritmo de segmentación se definen algunos conceptos fundamentales que se se mencionaran a lo largo del informe:
+\begin{enumerate}
+  \item Puntos base: Dado un punto en el espacio, los puntos base es el conjunto de los puntos de espacio ocupado que están a la misma minima distancia.
+  \item Despeje: Es la distancia de un punto en el espacio a sus puntos base.
+  \item Diagrama Generalizado de Voronoi (GVD): Conjunto de puntos del espacio libre que tienen al menos dos puntos base.
+  \item Puntos críticos: Puntos pertenecientes al GVD que a su vez son mínimos locales según el despeje.
+  \item Lineas criticas: Segmentos de linea que conectan a un punto critico con sus puntos base.
+\end{enumerate}
+
+Como trabaja sobre una grilla de ocupación por lo que se trabaja con celdas en lugar de con puntos. El algoritmo comienza por la construcción del GVD asociado la grilla de ocupación, posteriormente se encuentran los puntos críticos los cuales se ubican en el centro de pasajes estrechos, para luego obtener las lineas criticas asociadas a cada punto critico. Las lineas criticas estarán ubicadas a lo largo de cada pasaje estrecho y por lo tanto serán los limites entre cada segmento obteniendo así la segmentación deseada.
+
+\subsection[Incremental Topological Segmentation for Semi-structured Environments using discretized GVG]{Incremental Topological Segmentation for Semi-\\structured Environments using discretized GVG}
+
+Este articulo se centra en la descripción de un método de segmentación incremental del entorno que se basa en la propuesta por Thrun \cite{Thrun1998}. Para lograr la incrementalidad se desarrollaron variantes incrementales para la generación del GVD y para la detección de segmentos.
+
+El algoritmo de generación incremental del GVD se basa en el desarrollado en \cite{kalra2009incremental}. 
+
+La detección incremental de puntos críticos se hace solo considerando la definición básica de Thrun, sin considerar las técnicas de remoción de falsos positivos propuestas por Wurm \cite{wurm2008coordinated}, esto facilita la tarea de detección pero impacta negativamente los resultados. Para lograr la mencionada detección incremental de puntos críticos, se recalculan los mínimos locales según los cambios del GVD (nuevos nodos, nodos removidos, cambios de despeje) de cada incremento, específicamente se recalcula en los cambios y sus vecinos de primer y segundo grado. Al detectar nuevo punto critico se calcula la linea critica asociada.
+
+Finalmente es necesario, a partir de las lineas criticas, determinar de forma incremental a que segmento pertenece cada celda. Para esto, se elije una celda de todas las celdas afectadas en el incremento y se la agrega a una nueva region, sus celdas vecinas que estén dentro del mapa, no estén ocupadas y no sean cruzadas por una linea critica serán agregada...
 
 
-\subsubsection{Ideas}
-\begin{itemize}
-\item Para distribuir los mensajes (con la pos de todos los robots y su mapa) se usa una topología de anillo que según dicen reduce el numero de mensajes. Interesante pensar porque y intentar aplicar técnicas similares en nuestro caso.
 
-\item valor de subasta que dependa del giro que el robot tiene que hacer para entrar al camino
+% \begin{algorithm}
+% \SetAlgoLined
+%     Determinar segmentos $S = \{s_{1} , ..., s_{n} \}$ del mapa\\
+%     Determinar el conjunto de fronteras objetivo para cada segmento\\
+%     \For{cada robot $i$}{
+%         \For{cada segmento $s \in S$}{
+%                 Computar el costo $C_{s}^{i}$\\
+%                 Descontar al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
+%             }
+%     }
+%     Asignar robots a los segmentos usando el método húngaro\\
+%     \For{cada segmento $s \in S$}{
+%         Asignar robots a las fronteras objetivas en $s$ utilizando el método húngaro\\
+%     }
+%     \caption{Asignación de objetivos}
+%     \label{alg:asignacionobjetivos}
+    
+% \end{algorithm}
 
-\item Quizás cuando se encuentra un obstáculo, en lugar de quedarse quieto y esperar por una nueva subasta se puede intentar de planificar con la información de que se encontró un obstáculo, si se encontró un camino que permite evadirlo buenísimo, si no esperar esta bien.
 
-\item Para que se usa la label de obstáculo móvil?
-\begin{itemize}
-  \item para saber que es potencialmente traversable y usarlo en el path planning
-  \item quizás es posible utilizar una técnica del estilo en la sol mía
-  \begin{itemize}
-    \item dudoso por el hecho de que navegan por el Voronoi por lo que habría que integrar esa información ahí
-    \item quizás puede usarse para una técnica local 
-    \item pero en realidad esto ya se hace: en el caso de encontrar un obstáculo inesperado entonces se espera que este se mueva y si lo hace se resume el camino. (el estado de esperar es hasta que se resuelva una próxima subasta)
-  \end{itemize}
-\end{itemize}
+% hasta acá redactado
 
-\item uso de algoritmos evolutivos para encontrar parámetros de configuración para el controlador de movimiento o similares?
-
-\item este usa gazebo y utiliza estos mapas: Benchmark set of test scenarios from the repository of the Technical University of Prague.
-\begin{itemize}
-  \item \url{http://imr.ciirc.cvut.cz/planning/maps.xml}
-  \item Quizás estaría bueno buscar propuestas de benchmarks de exploración multi-robot para gazebo (incluyendo la mencionada anteriormente), si están estandarizadas o tienen papers puede ser provechoso para comparar resultados.
-\end{itemize}
-
-\item También buscar métricas para utilizar, las métricas usadas en el articulo fueron: The metrics to be evaluated to compare the performance of the proposed system against other methods established in the literature are as follows: the average distance traveled by each robot, the total distance of the exploration team, the average time of exploration, and the average number of communication exchanges between the robot team members, divided by the average time of explore. Tratar de usar alguno de estas en nuestro caso estaría bueno
-
-\item acá implementan varias técnicas para comparar contra ellas (pagina 11) hacer algo así estaría bueno.
-\end{itemize}
 
 \subsection[Incremental contour-based topological segmentation for robot exploration]{Incremental contour-based topological\\ segmentation for robot exploration}
-
 \subsubsection{Resumen}
 Habla de mapas topológicos, estos son los mapas que se generan a partir de la segmentación del entorno. 
 Específicamente se centra en describir y evaluar un algoritmo de segmentación para la contracción de mapas topológicos en 2D: Segmentación topológica basada en el contorno de los obstáculos del mapa (Contour Based Topological Segmentation).
@@ -408,37 +465,3 @@ Dicho esto, presentan un método de coordinación basado en redes neuronales con
 
 \subsubsection{Notas}
 Interesante pero no seria el foco del proyecto
-
-%%%%%%%
-% Desde acá TSCF
-%%%%%%%
-% \section{Investigación previa}
-% Con el motivo de introducirnos y orientar el trabajo, se investigaron cuatro artículos relacionados al problema de la exploración multi-robot. A continuación se describirá cada uno de los artículos, haciendo especial énfasis en las características de los mismos que se relacionan con el trabajo realizado.
-\subsection{A novel stop criterion to support efficient Multi-robot mapping}\cite{amorin2019novel}
-El articulo modela e implementa una solución al el problema de coordinación y exploración de un entorno desconocido a partir de un sistema de robots homogéneos, con el objetivo de analizar un criterio de terminación novedoso basado en la ganancia de información esperada.
-
-% El articulo consta de varias secciones: la representación del entorno, los componentes(robot y estación central) y comunicaciones entre ellos, método de identificación de tareas para cada robot y el criterio de finalización.
-
-\subsubsection{Representación del entorno}
-El entorno $E$ se define como un espacio de trabajo plano limitado limitado $E\subseteq R^2$. Para que sea computacionalmente tratable dicho entorno $E$ está representado por una estructura de grilla de ocupación donde cada celda $c$ puede pertenecer a tres estados probabilísticos diferentes $S = \{f, o, u\}$, representando libre, ocupado y desconocido, respectivamente. Para realizar las asignaciones solo se considerara el centro de la celda.
-
-\subsubsection{Componentes y comunicaciones}
-La flota se compone de $N$ robots móviles circulares rígidos con capacidad para tomar mediciones en toda la circunferencia alrededor con un radio $r$. Existe una estación central encargada de la tarea de reconocimiento de objetivos y asignación de los mismos. Los robots serán quienes recopilen la información del entorno y la central la encargada de crear un mapa global a partir de esta. 
-
-En el articulo, se consideran comunicaciones ideales, suponiendo que los robots no tienen restricciones de comunicación (por ejemplo, sin errores ni pérdidas con ancho de banda y alcance ilimitados). %Cabe aclarar que las comunicaciones inalámbricas son importantes en el contexto de exploración multi-robot.
-
-\subsubsection{Método de identificación y asignación de tareas}
-
-Las celdas que llevan a espacios desconocidos, consideradas como libres y que son adyacentes a celdas desconocidas, son denominadas celdas frontera (fronteras), en tanto conforman una frontera entre espacios libres y desconocidos. Las fronteras son objetivos potenciales de exploración ya que si el robot alcanzara dicha celda este podría recopilar nueva información dentro del radio de sensado. Sin embargo, el tratamiento de todas las fronteras como tareas de exploración diferentes podría ser computacionalmente prohibitivo. Por lo tanto, para reducir la carga, se intenta determinar las celdas frontera mas significativas, para lograr esto se hace lo siguiente, primero, las fronteras se dividen en conjuntos disjuntos $F_k$. 
-Luego, se obtienen las fronteras mas significativas de cada conjunto $F_k$ considerando el radio de sensado de un robot de forma que si dos robots van a dos celdas frontera significativas distintas de $F_k$, sus radios de sensado no se solapen, esto se hace utilizando el algoritmo K-Means. Finalmente las fronteras consideradas significativas para algún $F_k$ se convierten en celdas objetivo, también conocidas como tareas de exploración.
-
-La asignación de tareas se resuelve organizando una subasta entre robots. Cuando un robot completa una tarea (llegando a una celda objetivo), este envía una notificación a la estación central. La Estación Central comparte la última versión del mapa con la flota e inicia un proceso de subasta solicitando postores. Durante un corto período de tiempo, cada robot no asignado es notificado, pudiendo enviar una oferta; cada oferta consiste en una lista de pares tarea-utilidad, donde la utilidad considera tanto la estimación de ganancia de información como el costo asociado a la ruta necesaria para cumplir con la tarea. Finalmente la central, a partir de las listas de todos los postores, resuelve las asignaciones de forma voraz, para luego notificar a cada robot su tarea asignada.
-% Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
-
-El valor de la ganancia de información de cada frontera resultante debe ser estimado, en el artículo se presenta un estimador de ganancia, el cual se basa en el rango de visión del robot y el entorno conocido. 
-
-\subsubsection{Criterio de parada}
-
-El criterio según el cual detener la exploración es un aspecto importante de la exploración multi-robot. Una de las opciones sería la configuración del sistema para que, al llegar a un porcentaje de cubrimiento del entorno, la exploración sea detenida. Esta medida en la práctica no es efectiva, solo sirve en caso de tener conocimiento del mapa global. Otra opción es que el sistema verifique de forma autónoma si existen espacios accesibles desde donde cualquier robot pueda recopilar nueva información, y detener la exploración de lo contrario.
-
-El criterio de parada propuesto en el articulo, se basa en que durante la exploración, los robots obtienen conocimiento sobre el entorno que mejora continuamente sus habilidades de predicción. Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis son dos, la primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. Dicho esto el criterio de parada es que dada una cierta tolerancia cada robot da por concluida su participación en la exploración cuando para $n$ objetivos seguidos, dicha tolerancia es mayor a la diferencia entre la estimación de ganancia de información que se hizo para un objetivo y la ganancia de información real. La idea subyacente es que tan pronto como los robots obtengan suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, estos podrán detenerse.
