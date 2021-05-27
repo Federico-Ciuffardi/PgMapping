@@ -1,4 +1,4 @@
-\documentclass{book}
+\documentclass[oneside]{book}
 
 \usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
@@ -17,6 +17,9 @@
 
 % *** MATH PACKAGES ***
 \usepackage{amsmath}
+
+\DeclareMathOperator*{\argmin}{argmin}
+\newcommand{\mli}[1]{\mathit{#1}}
 
 % *** CODE PACKAGES ***
 \usepackage[ruled,vlined,spanish,onelanguage,linesnumbered]{algorithm2e}
@@ -111,13 +114,20 @@ Tutor: Facundo Benavides%
 \date{}
 
 % \setcounter{secnumdepth}{6}
-
 \begin{document}
 
 \maketitle
+
+% Reset page number
 \thispagestyle{empty}
 \setcounter{page}{0}
 
+% TOC
+\hfuzz=10pt 
+\tableofcontents
+\hfuzz=0pt 
+
+% Content starts here
 \chapter{Marco de trabajo}
 \include{EstadoDelArte}
 

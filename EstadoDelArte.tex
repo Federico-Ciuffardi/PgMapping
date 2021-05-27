@@ -1,54 +1,166 @@
 \section{Estado del arte}
 
-\subsection{Sensor-based exploration: Incremental construction of the hierarchical generalized Voronoi graph}
 
-Obtener de este las definiciones de GVD GVG VD etc
+\subsection{Exploración multi-robot}
+no se bien si esta sección va como parte del estado del arte o seria parte de la intro. Algunas cosas que se pueden incluir en esta son:
 
-Ademas en este se muestra que HGVG es un roadmap y como GVD = HGVG en dimension 2 entonces se tiene que GVD es un roadmap y esto justifica su uso para la navegación.
+Descripción genérica del problema
 
-Se puede explicar que es un roadmap y para que sirve.
+Aspectos a considerar
 
-\subsection{Diagrama de Voronoi}
-Dado un conjunto de puntos llamados \emph{sitios}, un \emph{diagrama de Voronoi} se define como todos los puntos equidistantes a dos sitios. Una \emph{region de Voronoi} es el conjunto de puntos mas cercanos a un sitio particular. Se puede decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi.
+Problemas relacionados
+
+Soluciones posibles a alto nivel
+
+\subsection{Diagrama de Voronoi}\cite{choset2005principles}\cite{Thrun1998}
+Dado un espacio de trabajo $W$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. Una \emph{region de Voronoi}\ref{eq:regV} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular.
+\begin{equation}
+  R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:regV}
+\end{equation}
+De forma similar $BP_p \in S$ \ref{eq:bases} es el conjunto de sitios mas cercanos a un punto $p \in W$ que se denominan \emph{puntos bases} de $p$.
+\begin{equation}
+  \mli{BP}_p =\{s_i : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:bases}
+\end{equation}
+Un \emph{diagrama de Voronoi} $\mli{VD}\in W$ \ref{eq:DV} se define como todos los puntos con dos o mas sitios a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base.
+\begin{equation}
+  \mli{VD} = \{p \in W : |\mli{BP}_p| \geq 2\}\label{eq:DV}
+\end{equation}
+
+Las fronteras de las regiones de Voronoi forman parte del diagrama de Voronoi por lo que es posible decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi. En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Voronoi, con $sitios=\{A_i | 0\leq i \leq 10\}$.
+
+Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el serán máximos locales (no estrictos) de distancia a los sitios. Esta propiedad es útil en el contexto de la robótica porque permite asegurar que los caminos en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios, son seguros en tanto mantienen la mayor distancia posible a los obstáculos.
+
+\begin{figure}[ht]
+  \center
+  \includegraphics[width=5.5cm]{imagenes/VD.png}
+  \caption{Ejemplo de un diagrama de Voronoi con diez sitios.\cite{voronoigeo}}\label{fig:ejemploVoronoi}
+\end{figure} 
+
+\subsection{Diagrama generalizado de Voronoi}\cite{choset2005principles}\cite{latombe1991}\cite{wurm2008coordinated}
+Recordando que los sitios en un diagrama de Voronoi son puntos, se tiene un problema al querer utilizar obstáculos como sitios. El problema se debe a que normalmente, los obstáculos no pueden representarse como puntos en el espacio, para solucionar esto se generaliza la definición de diagrama de Voronoi para poder definirlo a partir de sitos de mayor orden, como lo son lineas, o polígonos. A esta generalización se la denomina como \emph{diagrama generalizado de Voronoi}(GVD) y los sitios de mayor orden o sitios generalizados serán representados como conjuntos de puntos del espacio de trabajo $\mli{GS}\subset 2^{W}$.
+
+Las definiciones planteadas para los diagramas de Voronoi son similares a las utilizadas en los diagramas generalizados de Voronoi (GVD), solo es necesario cambiar la función de distancia para ser compatibles con las formas de los sitios generalizados. Para lograr esto solo es necesario intercambiar la función de distancia $d_p$ a la función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que se define a partir de $d_p$ como se muestra en \ref{eq:dg}. Las regiones generalizadas de Voronoi $\mli{GR}_i$, los puntos base generalizados $\mli{GBP}_p$ y el diagrama generalizado de Voronoi $\mli{GVD}$ se definen según se muestra en \ref{eq:GR}, \ref{eq:GBP} y \ref{eq:GVD} respectivamente. Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los sitios generalizados mas cercanos $\mli{GBS}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
+\begin{equation}
+  \mli{gd}_p(s_i) = \min_{p'\in s_i}\{d_p(p')\} \label{eq:dg}
+\end{equation}
+
+\begin{equation}
+  \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GR}
+\end{equation}
+
+\begin{equation}
+  \mli{GBS}_p = \{s_i : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GBS}
+\end{equation}
+
+\begin{equation}
+  \mli{GBP}_p =\bigcup_{s_i \in \mli{GBS}_p} \argmin_{p'\in s_i}\{d_p(p')\}\label{eq:GBP}
+\end{equation}
+\begin{equation}
+  \mli{GBP}_p =\{p' : d_p(p') \leq d_p(p''), p' \in s_i, p'' \in s_j, s_i,s_j \in S,p' \neq p''\}
+\end{equation}
+
+\begin{equation}
+  \mli{GVD}  = \{p \in W : |GBP_p| \geq 2\}\label{eq:GVD}
+\end{equation}
+
+% En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio libre se marca con blanco, el ocupado con negro y el GVD con azul. 
+% \begin{figure}[ht]
+%   \center
+%   \includegraphics[width=5.5cm]{imagenes/GVD.png}
+%   \caption{Ejemplo de un diagrama generalizado de Voronoi.}\label{fig:ejemploGVD}
+% \end{figure} 
+
+Es posible representar un GVD con un grafo en el cual los vertices son los puntos pertenecientes al GVD, y existen aristas entre dos vertices si estos son adyacentes en el espacio. Por otro lado otra forma mas compacta es que los vertices sean los puntos $p$ del espacio tal que $|\mli{GBP}_p|\geq 3$ y que haya aristas entre los vertices que puedan alcanzarse por caminos formados por puntos adyacentes pertenecientes al GVD. Para referirse a la segunda forma, mas compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado.
+
+\subsection{Mapa vial}\cite{choset2005principles}
+Un mapa vial (del ingles roadmap) es un concepto normalmente representado con grafos, cuyos vertices son puntos no obstaculizados, es decir, del espacio libre $W_{libre} \subset W$ y sus aristas implican la existencia de caminos disjuntos entre los vertices. La idea principal es que un mapa vial captura la topología del espacio según el cual fueron creados y los robots lo utilizan para navegar, es decir que a partir de un mapa vial se puede planificar un camino entre dos puntos cualquiera del espacio libre 
+
+Por lo tanto un mapa vial $\mli{MV}$ se define como un grafo que cumple con 3 propiedades fundamentales para asegurar la navegación es posible a partir del mapa vial, las propiedades son:
+
+\begin{enumerate}
+\item Accesibilidad: Para todo $p_{inicio} \in W_{libre}$ existe un camino a un $p'_{inicio}$ Nodo de $MV$.
+\item Conectividad: Existe un camino entre cualquier par vertices de $\mli{MV}$ $p'_{inicio}$ y $p'_{fin}$.
+\item Capacidad de salida: Para todo $p'_{fin}$ nodo de $\mli{MV}$ existe un camino a un $p_{fin} \in W_{libre}$.
+\end{enumerate}
+
+Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inicio},p_{fin}\in W_{libre}$ es posible construir un camino entre ellos. Primero por \emph{accesibilidad} se tiene un camino entre $p_{inicio}$ y un $p'_{inicio}$ Nodo de $\mli{MV}$, luego por \emph{capacidad de salida} se asegura la existencia de un  $p'_{fin}$ nodo de $\mli{MV}$ desde el cual hay un camino a $p_{fin}$ y finalmente por \emph{conectividad} se sabe que existe un camino entre $p'_{inicio}$ y $p'_{fin}$. Entonces uniendo los caminos $p_{inicio} - p'_{inicio}$(por accesibilidad), $p'_{inicio} - p'_{fin}$(por conectividad) y $p'_{fin} - p_{fin}$(por capacidad de salida) se tiene un camino que conecta dos puntos genéricos del espacio libre $p_{inicio}$ y $p_{fin}$.
+
+En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como sus sitios cumplen con las 3 propiedades necesarias para ser mapas viales, lo cual justifica su uso para la navegación.
+
+\subsection{Grilla de ocupación}
+Una grilla de ocupación es una representación que se basa en una teselación del espacio en celdas, donde cada celda almacena una estimación probabilística de su estado (libre, ocupado, etc). 
+
+En esta seccion se debe tratar:
+
+que es una grilla de ocupación.
+
+Para que sirve en general
+
+Se puede contruir un GVD a partir de una grilla de ocupación.
+
+\subsection{Representación poligonal}
+
+mencionar aca la representacion poligonal del paper que segmenta a partir de k-means del espacio desconocido
+
+\subsection{Mapa topológico}\cite{Thrun1998}\cite{Liu2015}
+Los mapas topológicos son mapas simplificados al punto de solo incluir regiones de interés y conexiones entre estas. Normalmente se representan con grafos donde las regiones de interés son los vertices y las aristas son las conexiones entre ellas.
+
+% En entornos estructurados, , como lo son las casas y oficinas, las regiones suelen ser estar asociadas a las habitaciones y corredores del entorno.
+
+La simplicidad de los mapas topológicos es útil para ayudar a los humanos a entender un entorno (por esto es usual ver mapas topológicos de sistemas de transporte) y permiten instrucciones que nos resultan naturales, por ejemplo, \say{ir a la habitación A}. Otra ventaja es que por su simplicidad estos suelen ser mas compactos y por lo tanto pueden utilizarse para desarrollar técnicas de planificación eficiente.
+
+\subsection{Construcción de un GVD} 
+TODO
+En esta seccion dar un algormo para esto simple y no incremtal, basicamente sacarlo wurm y nuestra solucion de TSCF.
+despues de grillas de ocupacion porque las usa
+
+\subsection{Mapa topológico a partir de un GVD}
+En \cite{Thrun1998} Thrun propone un método de segmentación del espacio a partir de mapa representado con una grilla de ocupación. El concepto de segmento es equivalente al de habitaciones y corredores en entornos estructurados como lo son las casas y oficinas. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos. En este caso el objetivo de segmentar el espacio en habitaciones y corredores, es el de generar un mapa topológico en el cual los segmentos serán las regiones de interés.
+
+Para describir el método de segmentación necesario introducir tres nuevos conceptos asociados al GVD, el primero es el concepto de despeje (del ingles clearance) $D : W \rightarrow R$ de un punto $p$, que equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia). El segundo es el de los puntos critico $C$ de un GVD, un punto cumple con ser critico si pertenece al GVD y es un mínimo local según el despeje \ref{eq:crit}. El tercer y ultimo concepto es el de linea critica, que son las lineas que conectan a un punto critico $p \in C$ con sus puntos base $\mli{GBP}_p$.
+
+\begin{equation}
+  p\ \in C \iff p \in \mli{GVD},\ D(p) < D(p')\ \forall p' \in \mli{GVD} \ adyacente\_a\ p \label{eq:crit}
+\end{equation}
+
+El algoritmo comienza por la construcción del GVD, posteriormente se encuentran los puntos críticos asociados a dicho GVD para luego obtener las lineas criticas para cada punto critico encontrado. Finalmente los segmentos serán las regiones delimitadas por las lineas criticas.
+
+La idea subyacente de este algoritmo es que, por definición, los puntos críticos se encuentran presentes en el centro de todo pasaje estrecho siendo sus puntos base los extremos de dicho pasaje. Por lo tanto las lineas criticas estarán ubicadas a lo largo de cada pasaje estrecho y dada la consideración que las transiciones entre los segmentos se dan en los pasajes estrechos, las lineas criticas actúan naturalmente como limites entre cada segmento.
+
+TODO describir bien el algoritmo no incremental de Liu ming
+
+\subsection{Forma alternativa de generar mapas topologicos}
+Incluir el articulo que habla de la generacion de mapas topologicos con el contorno 
+
+\subsection{Criterios de calidad de un mapa topológico}
+Aca van los criterios de calidad de un mapa topologicos de liu ming
+
+\subsection{Eficiencia en la construccion de GVD y mapa topologicos a partir de GVD}
+en esta seccion se trataria sobre las diferencias entre incremental y no incremental, mencionar lo que se gana en performance y que implica una dificultad mayor, y despues comentar bien como es la:
+
+generacion de GVD incrmental
+
+segmentacion incremental (mencionar tambien que la contorno tambien tiene variante incrmental)
+
+Luego comentar nueveametne las tecnicas de remoción de falsos positivos de Wurm y la diferencia entre utilzarlas y no (usar de ejemplo resultados de Liu ming) esto para decir que una de las cosas que se hace en el desarrollo es generar un algoritmo que hace esto
 
 
-%https://docs.google.com/document/d/1yFqYCa47JHWA1tYXfWRbPnJMDWjv4nsER7b-64Yx2YM/edit#heading=h.w7bvjvihzhqy
-%https://docs.google.com/document/d/1pxqyMlNkoJkrIP6SBvMu3rOycAUBt72uPNH_S8o-HYw/edit#heading=h.l9jal9qqz7kt
-%%%%%%%
-% Desde acá TSCF
-%%%%%%%
-% \section{Investigación previa}
-% Con el motivo de introducirnos y orientar el trabajo, se investigaron cuatro artículos relacionados al problema de la exploración multi-robot. A continuación se describirá cada uno de los artículos, haciendo especial énfasis en las características de los mismos que se relacionan con el trabajo realizado.
-\subsection{A novel stop criterion to support efficient Multi-robot mapping}\cite{amorin2019novel}
-El articulo modela e implementa una solución al el problema de coordinación y exploración de un entorno desconocido a partir de un sistema de robots homogéneos, con el objetivo de analizar un criterio de terminación novedoso basado en la ganancia de información esperada.
+\subsection{Coordinación a partir de mapas topológicos}
+Incluir aca a wurm la parte de coordinacion
 
-% El articulo consta de varias secciones: la representación del entorno, los componentes(robot y estación central) y comunicaciones entre ellos, método de identificación de tareas para cada robot y el criterio de finalización.
+\subsection{Coordinación a partir de la segmentaciones alternativas del entorno}
+Hablar aca de otras forma de coordinar a partri de la segmentacion que no sean mapas topologicos:
 
-\subsubsection{Representación del entorno}
-El entorno $E$ se define como un espacio de trabajo plano limitado limitado $E\subseteq R^2$. Para que sea computacionalmente tratable dicho entorno $E$ está representado por una estructura de grilla de ocupación donde cada celda $c$ puede pertenecer a tres estados probabilísticos diferentes $S = \{f, o, u\}$, representando libre, ocupado y desconocido, respectivamente. Para realizar las asignaciones solo se considerara el centro de la celda.
+El que segmenta a partir de los centros de los robots
 
-\subsubsection{Componentes y comunicaciones}
-La flota se compone de $N$ robots móviles circulares rígidos con capacidad para tomar mediciones en toda la circunferencia alrededor con un radio $r$. Existe una estación central encargada de la tarea de reconocimiento de objetivos y asignación de los mismos. Los robots serán quienes recopilen la información del entorno y la central la encargada de crear un mapa global a partir de esta. 
+El que segmenta haciendo k-means de las zonas desconocidas
 
-En el articulo, se consideran comunicaciones ideales, suponiendo que los robots no tienen restricciones de comunicación (por ejemplo, sin errores ni pérdidas con ancho de banda y alcance ilimitados). %Cabe aclarar que las comunicaciones inalámbricas son importantes en el contexto de exploración multi-robot.
+\subsection{No se bien como nombrar esto}
+Se puede incluir cosas mas genericas de la exploracion multirobot, esto puede incluir la solucion de guillermo y su criterio de parada anticipado. Y tambien podria incluir las soluciones propuestas en el paper que describe paquetes de exploracion, que entre otras cosas permite mencionar el paquete ad-hoc y el problema de las comunicaciones no perfetas que esto intenta solucionar.
 
-\subsubsection{Método de identificación y asignación de tareas}
+\subsection[Coordinated Multi-Robot Exploration using a Segmentation of the Environment]{Coordinated Multi-Robot Exploration using a\\ Segmentation of the Environment}
 
-Las celdas que llevan a espacios desconocidos, consideradas como libres y que son adyacentes a celdas desconocidas, son denominadas celdas frontera (fronteras), en tanto conforman una frontera entre espacios libres y desconocidos. Las fronteras son objetivos potenciales de exploración ya que si el robot alcanzara dicha celda este podría recopilar nueva información dentro del radio de sensado. Sin embargo, el tratamiento de todas las fronteras como tareas de exploración diferentes podría ser computacionalmente prohibitivo. Por lo tanto, para reducir la carga, se intenta determinar las celdas frontera mas significativas, para lograr esto se hace lo siguiente, primero, las fronteras se dividen en conjuntos disjuntos $F_k$. 
-Luego, se obtienen las fronteras mas significativas de cada conjunto $F_k$ considerando el radio de sensado de un robot de forma que si dos robots van a dos celdas frontera significativas distintas de $F_k$, sus radios de sensado no se solapen, esto se hace utilizando el algoritmo K-Means. Finalmente las fronteras consideradas significativas para algún $F_k$ se convierten en celdas objetivo, también conocidas como tareas de exploración.
-
-La asignación de tareas se resuelve organizando una subasta entre robots. Cuando un robot completa una tarea (llegando a una celda objetivo), este envía una notificación a la estación central. La Estación Central comparte la última versión del mapa con la flota e inicia un proceso de subasta solicitando postores. Durante un corto período de tiempo, cada robot no asignado es notificado, pudiendo enviar una oferta; cada oferta consiste en una lista de pares tarea-utilidad, donde la utilidad considera tanto la estimación de ganancia de información como el costo asociado a la ruta necesaria para cumplir con la tarea. Finalmente la central, a partir de las listas de todos los postores, resuelve las asignaciones de forma voraz, para luego notificar a cada robot su tarea asignada.
-% Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
-
-El valor de la ganancia de información de cada frontera resultante debe ser estimado, en el artículo se presenta un estimador de ganancia, el cual se basa en el rango de visión del robot y el entorno conocido. 
-
-\subsubsection{Criterio de parada}
-
-El criterio según el cual detener la exploración es un aspecto importante de la exploración multi-robot. Una de las opciones sería la configuración del sistema para que, al llegar a un porcentaje de cubrimiento del entorno, la exploración sea detenida. Esta medida en la práctica no es efectiva, solo sirve en caso de tener conocimiento del mapa global. Otra opción es que el sistema verifique de forma autónoma si existen espacios accesibles desde donde cualquier robot pueda recopilar nueva información, y detener la exploración de lo contrario.
-
-El criterio de parada propuesto en el articulo, se basa en que durante la exploración, los robots obtienen conocimiento sobre el entorno que mejora continuamente sus habilidades de predicción. Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis son dos, la primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. Dicho esto el criterio de parada es que dada una cierta tolerancia cada robot da por concluida su participación en la exploración cuando para $n$ objetivos seguidos, dicha tolerancia es mayor a la diferencia entre la estimación de ganancia de información que se hizo para un objetivo y la ganancia de información real. La idea subyacente es que tan pronto como los robots obtengan suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, estos podrán detenerse.
-
-\subsection{Coordinated Multi-Robot Exploration using a Segmentation of the Environment}\cite{wurm2008coordinated}
+\cite{wurm2008coordinated}
 El articulo describe y analiza un enfoque de coordinación para la exploración multi-robot que se basa en la distribución eficiente de los robots al explorar el entorno, teniendo en cuenta la estructura de dicho entorno. Para lograr la distribución el entorno se divide en segmentos, por ejemplo, correspondientes a habitaciones y corredores. Luego, las asignaciones de robots a objetivos se hacen considerando que los robots deben ser distribuidos de forma uniforme sobre los segmentos identificados. 
 
 % Y en lugar de considerar todas las fronteras entre áreas desconocidas y exploradas como ubicaciones objetivo, se envían los robots a los segmentos individuales con la tarea de explorar el área correspondiente.
@@ -100,6 +212,39 @@ Para resolver la asignación se propone utilizar el método húngaro, a partir d
 \end{algorithm}
 
 Usando este enfoque, cada uno de los corredores es explorado completamente por uno de los robots revelando rápidamente la estructura de un edificio, mientras que se asignarán otros robots a las habitaciones accesibles desde los corredores a medida que estas se vayan detectando.
+
+
+
+% \section{Investigación previa}
+% Con el motivo de introducirnos y orientar el trabajo, se investigaron cuatro artículos relacionados al problema de la exploración multi-robot. A continuación se describirá cada uno de los artículos, haciendo especial énfasis en las características de los mismos que se relacionan con el trabajo realizado.
+\subsection{A novel stop criterion to support efficient Multi-robot mapping}\cite{amorin2019novel}
+El articulo modela e implementa una solución al el problema de coordinación y exploración de un entorno desconocido a partir de un sistema de robots homogéneos, con el objetivo de analizar un criterio de terminación novedoso basado en la ganancia de información esperada.
+
+% El articulo consta de varias secciones: la representación del entorno, los componentes(robot y estación central) y comunicaciones entre ellos, método de identificación de tareas para cada robot y el criterio de finalización.
+
+\subsubsection{Representación del entorno}
+El entorno $E$ se define como un espacio de trabajo plano limitado limitado $E\subseteq R^2$. Para que sea computacionalmente tratable dicho entorno $E$ está representado por una estructura de grilla de ocupación donde cada celda $c$ puede pertenecer a tres estados probabilísticos diferentes $S = \{f, o, u\}$, representando libre, ocupado y desconocido, respectivamente. Para realizar las asignaciones solo se considerara el centro de la celda.
+
+\subsubsection{Componentes y comunicaciones}
+La flota se compone de $N$ robots móviles circulares rígidos con capacidad para tomar mediciones en toda la circunferencia alrededor con un radio $r$. Existe una estación central encargada de la tarea de reconocimiento de objetivos y asignación de los mismos. Los robots serán quienes recopilen la información del entorno y la central la encargada de crear un mapa global a partir de esta. 
+
+En el articulo, se consideran comunicaciones ideales, suponiendo que los robots no tienen restricciones de comunicación (por ejemplo, sin errores ni pérdidas con ancho de banda y alcance ilimitados). %Cabe aclarar que las comunicaciones inalámbricas son importantes en el contexto de exploración multi-robot.
+
+\subsubsection{Método de identificación y asignación de tareas}
+
+Las celdas que llevan a espacios desconocidos, consideradas como libres y que son adyacentes a celdas desconocidas, son denominadas celdas frontera (fronteras), en tanto conforman una frontera entre espacios libres y desconocidos. Las fronteras son objetivos potenciales de exploración ya que si el robot alcanzara dicha celda este podría recopilar nueva información dentro del radio de sensado. Sin embargo, el tratamiento de todas las fronteras como tareas de exploración diferentes podría ser computacionalmente prohibitivo. Por lo tanto, para reducir la carga, se intenta determinar las celdas frontera mas significativas, para lograr esto se hace lo siguiente, primero, las fronteras se dividen en conjuntos disjuntos $F_k$. 
+Luego, se obtienen las fronteras mas significativas de cada conjunto $F_k$ considerando el radio de sensado de un robot de forma que si dos robots van a dos celdas frontera significativas distintas de $F_k$, sus radios de sensado no se solapen, esto se hace utilizando el algoritmo K-Means. Finalmente las fronteras consideradas significativas para algún $F_k$ se convierten en celdas objetivo, también conocidas como tareas de exploración.
+
+La asignación de tareas se resuelve organizando una subasta entre robots. Cuando un robot completa una tarea (llegando a una celda objetivo), este envía una notificación a la estación central. La Estación Central comparte la última versión del mapa con la flota e inicia un proceso de subasta solicitando postores. Durante un corto período de tiempo, cada robot no asignado es notificado, pudiendo enviar una oferta; cada oferta consiste en una lista de pares tarea-utilidad, donde la utilidad considera tanto la estimación de ganancia de información como el costo asociado a la ruta necesaria para cumplir con la tarea. Finalmente la central, a partir de las listas de todos los postores, resuelve las asignaciones de forma voraz, para luego notificar a cada robot su tarea asignada.
+% Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
+
+El valor de la ganancia de información de cada frontera resultante debe ser estimado, en el artículo se presenta un estimador de ganancia, el cual se basa en el rango de visión del robot y el entorno conocido. 
+
+\subsubsection{Criterio de parada}
+
+El criterio según el cual detener la exploración es un aspecto importante de la exploración multi-robot. Una de las opciones sería la configuración del sistema para que, al llegar a un porcentaje de cubrimiento del entorno, la exploración sea detenida. Esta medida en la práctica no es efectiva, solo sirve en caso de tener conocimiento del mapa global. Otra opción es que el sistema verifique de forma autónoma si existen espacios accesibles desde donde cualquier robot pueda recopilar nueva información, y detener la exploración de lo contrario.
+
+El criterio de parada propuesto en el articulo, se basa en que durante la exploración, los robots obtienen conocimiento sobre el entorno que mejora continuamente sus habilidades de predicción. Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis son dos, la primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. Dicho esto el criterio de parada es que dada una cierta tolerancia cada robot da por concluida su participación en la exploración cuando para $n$ objetivos seguidos, dicha tolerancia es mayor a la diferencia entre la estimación de ganancia de información que se hizo para un objetivo y la ganancia de información real. La idea subyacente es que tan pronto como los robots obtengan suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, estos podrán detenerse.
 
 \subsection[Voronoi-Based Space Partitioning for Coordinated Multi-Robot Exploration]{Voronoi-Based Space Partitioning for Coordinated\\ Multi-Robot Exploration} \cite{wu2007voronoi}
 
@@ -165,7 +310,7 @@ Articulo del cual obtuvimos varias las características de nuestra implementaci�
 % Desde acá proyecto de grado redactado
 %%%%%%%
 
-\subsection{Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection}
+\subsection[Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection]{Distributed Multi-robot Exploration Based on\\ Scene Partitioning and Frontier Selection}
 % Al considerase una solución para el problema de exploración hay dos aspectos centrales a resolver, identificar posibles objetivos de exploración y como priorizar estos objetivos de forma de priorizar los mas relevantes.
 
 Este articulo propone una solución distribuida al problema de exploración multi-robot%, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
@@ -210,26 +355,6 @@ Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada 
 Luego esta el submódulo de planificación de ruta, este se encarga de generar una ruta que le permita al robot llegar al objetivo asignado. Esto se logra a partir del algoritmo $A*$, para la ejecución de este se asume que las celdas desconocidas son libres. En el caso de encontrarse un obstáculo en la ruta planificada se replanifica ejecutando nuevamente el algoritmo $A*$ en la version mas reciente del mapa.
 
 El ultimo es el submódulo de ejecución de trayectoria que se encarga de generar los comandos de actuación para seguir una ruta planeada.
-
-\subsection{Learning metric-topological maps for indoor mobile robot navigation}
-En este articulo se propone un método de segmentación del espacio a partir de mapa representado con una grilla de ocupación. El concepto de segmento es equivalente al de habitaciones y corredores en entornos estructurados, como lo son las casas y oficinas. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas de los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos. En este caso el objetivo de segmentar el espacio en habitaciones y corredores, es el de generar un mapa topológico.
-
-\subsubsection{Mapas topológicos}
-Los mapas topológicos son mapas simplificados al punto de solo incluir regiones de interés y conexiones entre estas. En este caso las regiones de interés serán los segmentos. 
-
-La simplicidad de los mapas topológicos es útil para ayudar a los humanos a entender un entorno (por esto es usual ver mapas topológicos de sistemas de transporte) y permiten instrucciones que nos resultan naturales, por ejemplo, "ir a la habitación A". Otra ventaja es que por su simplicidad estos suelen ser mas compactos y por lo tanto pueden utilizarse para desarrollar técnicas de planificación eficiente.
-
-\subsubsection{Algoritmo de segmentación}
-Para introducir el algoritmo de segmentación se definen algunos conceptos fundamentales que se se mencionaran a lo largo del informe:
-\begin{enumerate}
-  \item Puntos base: Dado un punto en el espacio, los puntos base es el conjunto de los puntos de espacio ocupado que están a la misma minima distancia.
-  \item Despeje: Es la distancia de un punto en el espacio a sus puntos base.
-  \item Diagrama Generalizado de Voronoi (GVD): Conjunto de puntos del espacio libre que tienen al menos dos puntos base.
-  \item Puntos críticos: Puntos pertenecientes al GVD que a su vez son mínimos locales según el despeje.
-  \item Lineas criticas: Segmentos de linea que conectan a un punto critico con sus puntos base.
-\end{enumerate}
-
-Como trabaja sobre una grilla de ocupación por lo que se trabaja con celdas en lugar de con puntos. El algoritmo comienza por la construcción del GVD asociado la grilla de ocupación, posteriormente se encuentran los puntos críticos los cuales se ubican en el centro de pasajes estrechos, para luego obtener las lineas criticas asociadas a cada punto critico. Las lineas criticas estarán ubicadas a lo largo de cada pasaje estrecho y por lo tanto serán los limites entre cada segmento obteniendo así la segmentación deseada.
 
 \subsection[Incremental Topological Segmentation for Semi-structured Environments using discretized GVG]{Incremental Topological Segmentation for Semi-\\structured Environments using discretized GVG}
 
@@ -470,3 +595,37 @@ Dicho esto, presentan un método de coordinación basado en redes neuronales con
 
 \subsubsection{Notas}
 Interesante pero no seria el foco del proyecto
+%% aca arranco a hablar articulo por articulo
+
+
+% \subsection{Learning metric-topological maps for indoor mobile robot navigation}
+% En este articulo se propone un método de segmentación del espacio a partir de mapa representado con una grilla de ocupación. El concepto de segmento es equivalente al de habitaciones y corredores en entornos estructurados, como lo son las casas y oficinas. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas de los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos. En este caso el objetivo de segmentar el espacio en habitaciones y corredores, es el de generar un mapa topológico.
+
+% \subsubsection{Mapas topológicos}
+% Los mapas topológicos son mapas simplificados al punto de solo incluir regiones de interés y conexiones entre estas. En este caso las regiones de interés serán los segmentos. 
+
+% La simplicidad de los mapas topológicos es útil para ayudar a los humanos a entender un entorno (por esto es usual ver mapas topológicos de sistemas de transporte) y permiten instrucciones que nos resultan naturales, por ejemplo, "ir a la habitación A". Otra ventaja es que por su simplicidad estos suelen ser mas compactos y por lo tanto pueden utilizarse para desarrollar técnicas de planificación eficiente.
+
+% \subsubsection{Algoritmo de segmentación}
+% Para introducir el algoritmo de segmentación se definen algunos conceptos fundamentales que se se mencionaran a lo largo del informe:
+% \begin{enumerate}
+%   \item Puntos base: Dado un punto en el espacio, los puntos base es el conjunto de los puntos de espacio ocupado que están a la misma minima distancia.
+%   \item Despeje: Es la distancia de un punto en el espacio a sus puntos base.
+%   \item Diagrama Generalizado de Voronoi (GVD): Conjunto de puntos del espacio libre que tienen al menos dos puntos base.
+%   \item Puntos críticos: Puntos pertenecientes al GVD que a su vez son mínimos locales según el despeje.
+%   \item Lineas criticas: Segmentos de linea que conectan a un punto critico con sus puntos base.
+% \end{enumerate}
+
+% Como trabaja sobre una grilla de ocupación por lo que se trabaja con celdas en lugar de con puntos. El algoritmo comienza por la construcción del GVD asociado la grilla de ocupación, posteriormente se encuentran los puntos críticos los cuales se ubican en el centro de pasajes estrechos, para luego obtener las lineas criticas asociadas a cada punto critico. Las lineas criticas estarán ubicadas a lo largo de cada pasaje estrecho y por lo tanto serán los limites entre cada segmento obteniendo así la segmentación deseada.
+
+% \begin{enumerate}
+%   \item Puntos base: Dado un punto en el espacio, los puntos base es el conjunto de los puntos de espacio ocupado que están a la misma minima distancia.
+%   \item Despeje: Es la distancia de un punto en el espacio a sus puntos base.
+%   \item Puntos críticos: Puntos pertenecientes al GVD que a su vez son mínimos locales según el despeje.
+%   \item Lineas criticas: Segmentos de linea que conectan a un punto critico con sus puntos base.
+% \end{enumerate}
+%https://docs.google.com/document/d/1yFqYCa47JHWA1tYXfWRbPnJMDWjv4nsER7b-64Yx2YM/edit#heading=h.w7bvjvihzhqy
+%https://docs.google.com/document/d/1pxqyMlNkoJkrIP6SBvMu3rOycAUBt72uPNH_S8o-HYw/edit#heading=h.l9jal9qqz7kt
+%%%%%%%
+% Desde acá TSCF
+%%%%%%%
