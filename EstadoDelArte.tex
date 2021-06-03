@@ -1,16 +1,51 @@
 \section{Estado del arte}
 
+\subsubsection{Exploración multi-robot}
+La exploración multi-robot consiste en utilizar una flota robotica para obtener de informacion de un entorno desconocido con el proposito de generar un mapa que lo represente. 
 
-\subsection{Exploración multi-robot}
+El uso de varios robots es util porque introduce redundacia, aumentando la tolerancia a fallos. Por otro lado la exploracion suele ser altamente paralelizable ya que en un mismo instante de tiempo suelen haber varios lugares en los cuales un robot puede obtener informacion, por lo que aumentar la cantidad de recursos roboticos es esperable que se reduzcan los tiempos de exploración\cite {cao1997cooperative}\cite{dudek1996taxonomy}\cite{guzzoni1997many}. Sin embargo aumentar el numero de robots en la flota de exploracion, aumenta el riesgo de que estos se interfieran entre si, causando perdidas de tiempo en desvíos para evitar colisiones\cite{guzzoni1997many}\cite{goldberg1997interference}. Esto determina que existe un numero optimo de robots en una flota, en el cual se logra un balance entre la capacidad de explotar el paralelismo en la exploracion y el tiempo perdido por interferencias. Un mecanismo de coordinación que logre evitar interferencias suele ser un factor critico en la exploracion multirobot porque permite lograr el balance anteriormente mencionado con una cantidad de robots mayor al que se podria tener sin coordinar\cite{nieto2014coordination}.
+
 no se bien si esta sección va como parte del estado del arte o seria parte de la intro. Algunas cosas que se pueden incluir en esta son:
 
-Descripción genérica del problema
+  Descripción genérica del problema
 
-Aspectos a considerar
+  Aspectos a considerar
 
-Problemas relacionados
+  Problemas relacionados
 
-Soluciones posibles a alto nivel
+  Soluciones posibles a alto nivel
+
+\subsection{Mapas}\cite{Liu2015}\cite{Thrun1998}
+Un mapa consiste en un modelo de un entorno, en el contexto de la robótica los mapas se pueden dividir en dos categorías, \emph{mapas métricos} y \emph{mapas topológicos}.
+
+Los mapas métricos son mapas principalmente caracterizados por representar la geometría de todo el entorno, incluyendo a su vez una escala que permite asociar las dimensiones representadas dentro del mapa con la realidad.
+
+Los mapas topológicos por otro lado son mapas simplificados al punto de solo incluir regiones topológicas y conexiones entre estas. Normalmente se representan con grafos donde las regiones de interés son los vertices y las aristas son las conexiones entre ellas.
+
+La simplicidad de los mapas topológicos es útil para ayudar a los humanos a entender un entorno (por esto es usual ver mapas topológicos de sistemas de transporte) y permiten instrucciones que nos resultan naturales, por ejemplo, \say{ir a la habitación A}.
+
+Dicha simplicidad también causa que para un mismo entorno los mapas topológicos suelan ser varios ordenes de magnitud mas pequeños que los mapas métricos y por lo tanto, mas allá de la memoria que se ahorra también se tiene una planificación mas eficiente. Sin embargo la falta de detalle en la representación hace que los planes de navegación obtenidos de un mapa topológico suelan ser peores que los obtenidos en mapas métricos.
+
+\subsubsection{Grilla de ocupación}
+Una grilla de ocupación es un mapa métrico que se basa en una teselación del espacio en celdas, donde cada celda almacena una estimación probabilística de su estado (libre, ocupado, etc). 
+
+% TODO
+% En esta seccion se debe tratar:
+
+% que es una grilla de ocupación.
+
+% Para que sirve en general
+
+% Se puede contruir un GVD a partir de una grilla de ocupación. (quizas despues?)
+
+% \subsection{Representación poligonal}
+% Las representaciones poligonales son mapas métricos propuestos como alternativas a las grillas de ocupación, que busca
+
+
+\subsubsection{Mapas topológicos basados en regiones}
+Una gran parte de los mapas topológicos se basa en segmentar el espacio en regiones de interés que serán las regiones topológicas del mapa. 
+
+El concepto de region de interés es equivalente al de habitaciones y corredores en entornos estructurados como lo son las casas y oficinas.
 
 \subsection{Diagrama de Voronoi}\cite{choset2005principles}\cite{Thrun1998}
 Dado un espacio de trabajo $W$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. Una \emph{region de Voronoi}\ref{eq:regV} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular.
@@ -87,27 +122,8 @@ Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inici
 
 En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como sus sitios cumplen con las 3 propiedades necesarias para ser mapas viales, lo cual justifica su uso para la navegación.
 
-\subsection{Grilla de ocupación}
-Una grilla de ocupación es una representación que se basa en una teselación del espacio en celdas, donde cada celda almacena una estimación probabilística de su estado (libre, ocupado, etc). 
 
-En esta seccion se debe tratar:
 
-que es una grilla de ocupación.
-
-Para que sirve en general
-
-Se puede contruir un GVD a partir de una grilla de ocupación.
-
-\subsection{Representación poligonal}
-
-mencionar aca la representacion poligonal del paper que segmenta a partir de k-means del espacio desconocido
-
-\subsection{Mapa topológico}\cite{Thrun1998}\cite{Liu2015}
-Los mapas topológicos son mapas simplificados al punto de solo incluir regiones de interés y conexiones entre estas. Normalmente se representan con grafos donde las regiones de interés son los vertices y las aristas son las conexiones entre ellas.
-
-% En entornos estructurados, , como lo son las casas y oficinas, las regiones suelen ser estar asociadas a las habitaciones y corredores del entorno.
-
-La simplicidad de los mapas topológicos es útil para ayudar a los humanos a entender un entorno (por esto es usual ver mapas topológicos de sistemas de transporte) y permiten instrucciones que nos resultan naturales, por ejemplo, \say{ir a la habitación A}. Otra ventaja es que por su simplicidad estos suelen ser mas compactos y por lo tanto pueden utilizarse para desarrollar técnicas de planificación eficiente.
 
 \subsection{Construcción de un GVD} 
 TODO
@@ -115,9 +131,9 @@ En esta seccion dar un algormo para esto simple y no incremtal, basicamente saca
 despues de grillas de ocupacion porque las usa
 
 \subsection{Mapa topológico a partir de un GVD}
-En \cite{Thrun1998} Thrun propone un método de segmentación del espacio a partir de mapa representado con una grilla de ocupación. El concepto de segmento es equivalente al de habitaciones y corredores en entornos estructurados como lo son las casas y oficinas. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos. En este caso el objetivo de segmentar el espacio en habitaciones y corredores, es el de generar un mapa topológico en el cual los segmentos serán las regiones de interés.
+En \cite{Thrun1998} Thrun propone un método de segmentación del espacio a partir de mapa representado con una grilla de ocupación.. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos. En este caso el objetivo de segmentar el espacio en habitaciones y corredores, es el de generar un mapa topológico en el cual los segmentos serán las regiones de interés.
 
-Para describir el método de segmentación necesario introducir tres nuevos conceptos asociados al GVD, el primero es el concepto de despeje (del ingles clearance) $D : W \rightarrow R$ de un punto $p$, que equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia). El segundo es el de los puntos critico $C$ de un GVD, un punto cumple con ser critico si pertenece al GVD y es un mínimo local según el despeje \ref{eq:crit}. El tercer y ultimo concepto es el de linea critica, que son las lineas que conectan a un punto critico $p \in C$ con sus puntos base $\mli{GBP}_p$.
+Para describir el método de segmentación necesario introducir tres nuevos conceptos asociados al GVD, el primero es el concepto de despeje (del ingles clearance) $D : W \rightarrow R$ de un punto $p$, que equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia). El segundo es el de los puntos criticos $C\in W_{libre}$ de un GVD, un punto cumple con ser critico si pertenece al GVD y es un mínimo local según el despeje \ref{eq:crit}. El tercer y ultimo concepto es el de linea critica, que son las lineas que conectan a un punto critico $p \in C$ con sus puntos base $\mli{GBP}_p$.
 
 \begin{equation}
   p\ \in C \iff p \in \mli{GVD},\ D(p) < D(p')\ \forall p' \in \mli{GVD} \ adyacente\_a\ p \label{eq:crit}
@@ -133,7 +149,65 @@ TODO describir bien el algoritmo no incremental de Liu ming
 Incluir el articulo que habla de la generacion de mapas topologicos con el contorno 
 
 \subsection{Criterios de calidad de un mapa topológico}
-Aca van los criterios de calidad de un mapa topologicos de liu ming
+Según \cite{Liu2015} un mapa topológico basado en regiones se considera útil si representa la estructura del entorno de manera correcta y eficiente. Para ello, consideran dos criterios, la calidad asociada a cada region y la topología la segmentación. Los criterios propuestos se basan principalmente en intuiciones geométricas. 
+
+\subsubsection{Calidad de una region}
+Los autores determinan que existen dos aspectos que intervienen en la calidad de una region, la convexidad $c_i$ y la compacidad $s_i$, específicamente, definiendo la calidad de una region como $q_i = c_i - s_i$. Adicionalmente se menciona que tanto $c_i$ como $s_i$ pueden ser multiplicados por pesos en el calculo de $q_i$ para  para hacer énfasis en una u otra característica.
+
+\paragraph{Convexidad}
+Esta se puede representar como el cociente entre el area de la region y el area de su envolvente convexa. La envolvente convexa de una region se define como el polígono convexo de menor area que contiene a la region. Un polígono convexo cumple que para cualquier par de puntos que pertenecen a la frontera del polígono, el segmento de recta que los conecta estará contenido en dicho polígono. Entonces sea $A_i$ el area de la region $R_i$ y $H_i$ el area de su envolvente convexa, la convexidad para esta region sera:
+\begin{equation}
+  c_i=\frac{A_i}{H_i}
+\end{equation}
+Se cumple que $A_i \leq H_i$ siendo iguales cuando la region es convexa, por lo tanto $c_i$ sera igual a uno cuando la region es convexa, y su valor disminuirá entre más difiera el area de la region con la de su componente convexa. En la figura \ref{fig:ejemplConvexidad} se muestra a modo de ejemplo el valor de convexidad $c$ asociado a dos regiones con distinta convexidad.
+\begin{figure}[ht]
+  \center
+  \includegraphics[width=5.5cm]{imagenes/convexidad.png}
+  \caption{Dos regiones con su valor de convexidad asociado, las lineas solidas delimitan la region y las lineas punteadas delimitan su envolvente convexa. Extraído de \cite{Liu2015}.}\label{fig:ejemplConvexidad}
+\end{figure} 
+
+\paragraph{Compacidad}
+% Cuanto mas cercanos son los puntos que componen una region a su centro mas compacta sera la region.
+La compacidad de una region mide la distribución una region con respecto a su centro de masa. La compacidad $s_i$ de una region $R_i$ se calcula a partir de una discretization de dicha region en celdas de dimensiones y peso uniforme, llamadas elementos de masa. La ecuación \ref{ec:compacidad} define la compacidad $s_i$ para un region $R_i$, donde $x_j$ e $y_j$ son las coordenadas x e y de los elementos de masa de $R_i$, $M_i$ es igual a la cantidad de dichos elementos de masa y $x_0$ e $y_0$ son las coordenadas del centro de gravedad de $R_i$.
+\begin{equation}
+  s_i=\frac{1}{M_iA_i}\sum_j \frac{(x_j-x_0)^2 + (y_j-y_0)^2}{A_i} \label{ec:compacidad}
+\end{equation}
+Notar que cuanto mas compacta sea una region menor sera su valor $s_i$ (si se entiende por region compacta una region en la cual sus puntos interiores son cercanos al centro de masa).
+
+\subsubsection{Calidad de segmentación}
+Para determinar la calidad general de la segmentación, sera necesaria, ademas de la calidad de cada region, la calidad de las características globales de la segmentación. Para lograr determinar dichas características se definen varios indicadores que se mencionarán a continuación.
+
+\paragraph{Cobertura}
+En el caso ideal cada punto del entorno esta asociado a una region en el mapa topológico, pero por diversas razones este puede no ser el caso. Dado esto se define la cobertura $C$ de una segmentación como el cociente del area representada por el mapa topológico y el area del mapa:
+\begin{equation}
+C=\frac{\sum^N_{i=1} A_i}{A_m}
+\end{equation}
+Donde $A_m$ es el area total del mapa y $N$ es el numero de regiones.
+
+\paragraph{Validez}
+La validez $V$ de una segmentación se define como el cociente entre el numero de regiones validas y el numero total de todas las regiones:
+\begin{equation}
+  V=\frac{\#regiones\ validas}{\#total\ de\ regiones}
+\end{equation}
+Se considera que una region valida debe ser accesible por los robots utilizados. Teniendo esto en cuenta una region será valida si cubre un area mayor a $A_{min}$ y tiene al menos una entrada de ancho mínimo $l_{min}$, siendo los valores $l_{min}$ y $A_{min}$ definidos a partir las dimensiones de los robots utilizados.
+
+\paragraph{Simplicidad}
+Dado que una de las ventajas principales de los mapas topológicos es su simplicidad, que permite ayudar a una navegación y planificación eficiente, los autores consideran que es de utilidad penalizar a los mapas topológicos que tengan una cantidad elevada de regiones, considerando dicha cantidad como un indicador de complejidad. 
+
+La simplicidad $S$ de una segmentación se define en la ecuación \ref{ec:simp} donde $\hat{N}$ es el numero esperado de regiones y $\phi$ refleja el impacto que tiene la diferencia entre el numero de regiones esperado y el obtenido. $\hat{N}$ y $\phi$ son parámetros a definir dependiendo de la aplicación.
+
+\begin{equation}
+  S=e^{-\frac{|N-\hat{N}|}{\phi}} \label{ec:simp}
+\end{equation}
+
+
+\subsubsection{Calidad general}
+Finalmente, evaluar la calidad general $Q$ de una segmentación, se reduce a combinar la calidad cada región y los indicadores de calidad de la segmentación, según la siguiente ecuación:
+\begin{equation}
+Q=\frac{CV}{N}\sum^N_{i=1}{q_i+\lambda S}
+\end{equation}
+
+Donde $\lambda$ es un peso que determinara la importancia de la simplicidad de la segmentación en cálculo calidad general de la segmentación.
 
 \subsection{Eficiencia en la construccion de GVD y mapa topologicos a partir de GVD}
 en esta seccion se trataria sobre las diferencias entre incremental y no incremental, mencionar lo que se gana en performance y que implica una dificultad mayor, y despues comentar bien como es la:

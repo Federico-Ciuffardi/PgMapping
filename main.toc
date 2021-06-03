@@ -1,85 +1,93 @@
 \babel@toc {spanish}{}
 \contentsline {chapter}{\numberline {1}Marco de trabajo}{2}{chapter.1}%
 \contentsline {section}{\numberline {1.1}Estado del arte}{3}{section.1.1}%
-\contentsline {subsection}{\numberline {1.1.1}Exploración multi-robot}{3}{subsection.1.1.1}%
-\contentsline {subsection}{\numberline {1.1.2}Diagrama de Voronoi}{3}{subsection.1.1.2}%
-\contentsline {subsection}{\numberline {1.1.3}Diagrama generalizado de Voronoi}{3}{subsection.1.1.3}%
-\contentsline {subsection}{\numberline {1.1.4}Mapa vial}{5}{subsection.1.1.4}%
-\contentsline {subsection}{\numberline {1.1.5}Grilla de ocupación}{5}{subsection.1.1.5}%
-\contentsline {subsection}{\numberline {1.1.6}Representación poligonal}{6}{subsection.1.1.6}%
-\contentsline {subsection}{\numberline {1.1.7}Mapa topológico}{6}{subsection.1.1.7}%
-\contentsline {subsection}{\numberline {1.1.8}Construcción de un GVD}{6}{subsection.1.1.8}%
-\contentsline {subsection}{\numberline {1.1.9}Mapa topológico a partir de un GVD}{6}{subsection.1.1.9}%
-\contentsline {subsection}{\numberline {1.1.10}Forma alternativa de generar mapas topologicos}{7}{subsection.1.1.10}%
-\contentsline {subsection}{\numberline {1.1.11}Criterios de calidad de un mapa topológico}{7}{subsection.1.1.11}%
-\contentsline {subsection}{\numberline {1.1.12}Eficiencia en la construccion de GVD y mapa topologicos a partir de GVD}{7}{subsection.1.1.12}%
-\contentsline {subsection}{\numberline {1.1.13}Coordinación a partir de mapas topológicos}{7}{subsection.1.1.13}%
-\contentsline {subsection}{\numberline {1.1.14}Coordinación a partir de la segmentaciones alternativas del entorno}{7}{subsection.1.1.14}%
-\contentsline {subsection}{\numberline {1.1.15}No se bien como nombrar esto}{8}{subsection.1.1.15}%
-\contentsline {subsection}{\numberline {1.1.16}Coordinated Multi-Robot Exploration using a Segmentation of the Environment}{8}{subsection.1.1.16}%
-\contentsline {subsubsection}{Segmentación del mapa}{8}{section*.4}%
-\contentsline {subsubsection}{Asignación de objetivos}{9}{section*.5}%
-\contentsline {subsection}{\numberline {1.1.17}A novel stop criterion to support efficient Multi-robot mapping}{10}{subsection.1.1.17}%
-\contentsline {subsubsection}{Representación del entorno}{10}{section*.7}%
-\contentsline {subsubsection}{Componentes y comunicaciones}{10}{section*.8}%
-\contentsline {subsubsection}{Método de identificación y asignación de tareas}{10}{section*.9}%
-\contentsline {subsubsection}{Criterio de parada}{11}{section*.10}%
-\contentsline {subsection}{\numberline {1.1.18}Voronoi-Based Space Partitioning for Coordinated Multi-Robot Exploration}{11}{subsection.1.1.18}%
-\contentsline {subsubsection}{Representación poligonal}{12}{section*.11}%
-\contentsline {subsubsection}{Particionamiento basado en polígonos}{12}{section*.12}%
-\contentsline {subsection}{\numberline {1.1.19}Incremental reconstruction of generalized Voronoi diagrams on grids}{13}{subsection.1.1.19}%
-\contentsline {subsection}{\numberline {1.1.20}Efficient grid-based spatial representations for robot navigation in dynamic environments}{13}{subsection.1.1.20}%
-\contentsline {subsection}{\numberline {1.1.21}Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection}{13}{subsection.1.1.21}%
-\contentsline {subsubsection}{Formulación del problema}{13}{section*.14}%
-\contentsline {subsubsection}{Descripción del sistema}{14}{section*.15}%
-\contentsline {paragraph}{Modulo de distribución de información}{14}{section*.16}%
-\contentsline {paragraph}{Modulo de asignación de zonas }{14}{section*.17}%
-\contentsline {paragraph}{Modulo de adquisición de información}{14}{section*.18}%
-\contentsline {paragraph}{Modulo de exploración}{14}{section*.19}%
-\contentsline {subsection}{\numberline {1.1.22}Incremental Topological Segmentation for Semi-structured Environments using discretized GVG}{15}{subsection.1.1.22}%
-\contentsline {subsection}{\numberline {1.1.23}Incremental contour-based topological segmentation for robot exploration}{16}{subsection.1.1.23}%
-\contentsline {subsubsection}{Resumen}{16}{section*.20}%
-\contentsline {subsubsection}{Notas generales}{16}{section*.21}%
-\contentsline {subsection}{\numberline {1.1.24}Coordinated Multi-Robot Exploration: Out of the Box Packages for ROS}{16}{subsection.1.1.24}%
-\contentsline {subsubsection}{Resumen}{16}{section*.22}%
-\contentsline {subsubsection}{Notas}{17}{section*.23}%
-\contentsline {paragraph}{WIRELESS AD HOC COMMUNICATION}{17}{section*.24}%
-\contentsline {paragraph}{MAP MERGER}{18}{section*.25}%
-\contentsline {paragraph}{EXPLORATION}{19}{section*.26}%
-\contentsline {subsubsection}{Definiciones}{19}{section*.27}%
-\contentsline {subsubsection}{Ideas}{20}{section*.28}%
-\contentsline {subsection}{\numberline {1.1.25}Distributed matroid constrained submodular maximization for multi-robot exploration: theory and practice}{20}{subsection.1.1.25}%
-\contentsline {subsubsection}{Resumen}{20}{section*.29}%
-\contentsline {subsubsection}{Notas}{20}{section*.30}%
-\contentsline {subsection}{\numberline {1.1.26}Communication - Efficient Planning and Mapping for Multi - Robot Exploration in Large Environments}{21}{subsection.1.1.26}%
-\contentsline {subsubsection}{Resumen}{21}{section*.31}%
-\contentsline {subsubsection}{Notas}{21}{section*.32}%
-\contentsline {subsection}{\numberline {1.1.27}Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration}{22}{subsection.1.1.27}%
-\contentsline {subsubsection}{Resumen}{22}{section*.33}%
-\contentsline {subsubsection}{Notas}{22}{section*.34}%
-\contentsline {section}{\numberline {1.2}Simuladores}{23}{section.1.2}%
-\contentsline {subsection}{\numberline {1.2.1}Características}{23}{subsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.2.2}Algunos artículos que comparan simuladores}{26}{subsection.1.2.2}%
-\contentsline {subsubsection}{Analysis and Comparison of Robotics 3D Simulators}{26}{section*.35}%
-\contentsline {subsubsection}{Feature and Performance Comparison of the V-REP, Gazebo and ARGoS Robot Simulators (2)}{26}{section*.36}%
-\contentsline {subsubsection}{Comparative Analysis Between Gazebo and V-REP Robotic Simulators}{27}{section*.37}%
-\contentsline {subsubsection}{An Overview of Simulation Software for Non-Experts to Perform Multi-Robot Experiments (4)}{27}{section*.38}%
-\contentsline {subsubsection}{Comparando engines de físicas}{27}{section*.39}%
-\contentsline {subsection}{\numberline {1.2.3}Conclusiones parciales}{27}{subsection.1.2.3}%
-\contentsline {subsection}{\numberline {1.2.4}Benchmark}{28}{subsection.1.2.4}%
-\contentsline {subsubsection}{Proceso}{29}{section*.40}%
-\contentsline {paragraph}{Gazebo}{29}{section*.41}%
-\contentsline {paragraph}{Webots}{30}{section*.42}%
-\contentsline {subsubsection}{Juicio sobre implementación}{31}{section*.43}%
-\contentsline {paragraph}{webots}{31}{section*.44}%
-\contentsline {paragraph}{Gazebo}{32}{section*.45}%
-\contentsline {paragraph}{Conclusion}{32}{section*.46}%
-\contentsline {subsubsection}{Adaptando la velocidad}{32}{section*.47}%
-\contentsline {subsubsection}{Obteniendo pose}{32}{section*.48}%
-\contentsline {paragraph}{Gazebo}{32}{section*.49}%
-\contentsline {paragraph}{Webots}{33}{section*.50}%
-\contentsline {subsubsection}{rviz}{33}{section*.51}%
-\contentsline {paragraph}{Gazebo}{33}{section*.52}%
-\contentsline {paragraph}{Webots}{33}{section*.53}%
-\contentsline {chapter}{\numberline {2}Parte Central}{35}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Hipotesis de trabajo}{36}{section.2.1}%
+\contentsline {subsubsection}{Exploración multi-robot}{3}{section*.3}%
+\contentsline {subsection}{\numberline {1.1.1}Mapas}{3}{subsection.1.1.1}%
+\contentsline {subsubsection}{Grilla de ocupación}{4}{section*.4}%
+\contentsline {subsubsection}{Mapas topológicos basados en regiones}{4}{section*.5}%
+\contentsline {subsection}{\numberline {1.1.2}Diagrama de Voronoi}{4}{subsection.1.1.2}%
+\contentsline {subsection}{\numberline {1.1.3}Diagrama generalizado de Voronoi}{5}{subsection.1.1.3}%
+\contentsline {subsection}{\numberline {1.1.4}Mapa vial}{6}{subsection.1.1.4}%
+\contentsline {subsection}{\numberline {1.1.5}Construcción de un GVD}{6}{subsection.1.1.5}%
+\contentsline {subsection}{\numberline {1.1.6}Mapa topológico a partir de un GVD}{7}{subsection.1.1.6}%
+\contentsline {subsection}{\numberline {1.1.7}Forma alternativa de generar mapas topologicos}{7}{subsection.1.1.7}%
+\contentsline {subsection}{\numberline {1.1.8}Criterios de calidad de un mapa topológico}{7}{subsection.1.1.8}%
+\contentsline {subsubsection}{Calidad de una region}{8}{section*.7}%
+\contentsline {paragraph}{Convexidad}{8}{section*.8}%
+\contentsline {paragraph}{Compacidad}{8}{section*.10}%
+\contentsline {subsubsection}{Calidad de segmentación}{9}{section*.11}%
+\contentsline {paragraph}{Cobertura}{9}{section*.12}%
+\contentsline {paragraph}{Validez}{9}{section*.13}%
+\contentsline {paragraph}{Simplicidad}{9}{section*.14}%
+\contentsline {subsubsection}{Calidad general}{10}{section*.15}%
+\contentsline {subsection}{\numberline {1.1.9}Eficiencia en la construccion de GVD y mapa topologicos a partir de GVD}{10}{subsection.1.1.9}%
+\contentsline {subsection}{\numberline {1.1.10}Coordinación a partir de mapas topológicos}{10}{subsection.1.1.10}%
+\contentsline {subsection}{\numberline {1.1.11}Coordinación a partir de la segmentaciones alternativas del entorno}{10}{subsection.1.1.11}%
+\contentsline {subsection}{\numberline {1.1.12}No se bien como nombrar esto}{10}{subsection.1.1.12}%
+\contentsline {subsection}{\numberline {1.1.13}Coordinated Multi-Robot Exploration using a Segmentation of the Environment}{11}{subsection.1.1.13}%
+\contentsline {subsubsection}{Segmentación del mapa}{11}{section*.16}%
+\contentsline {subsubsection}{Asignación de objetivos}{12}{section*.17}%
+\contentsline {subsection}{\numberline {1.1.14}A novel stop criterion to support efficient Multi-robot mapping}{12}{subsection.1.1.14}%
+\contentsline {subsubsection}{Representación del entorno}{13}{section*.19}%
+\contentsline {subsubsection}{Componentes y comunicaciones}{13}{section*.20}%
+\contentsline {subsubsection}{Método de identificación y asignación de tareas}{13}{section*.21}%
+\contentsline {subsubsection}{Criterio de parada}{14}{section*.22}%
+\contentsline {subsection}{\numberline {1.1.15}Voronoi-Based Space Partitioning for Coordinated Multi-Robot Exploration}{14}{subsection.1.1.15}%
+\contentsline {subsubsection}{Representación poligonal}{15}{section*.23}%
+\contentsline {subsubsection}{Particionamiento basado en polígonos}{15}{section*.24}%
+\contentsline {subsection}{\numberline {1.1.16}Incremental reconstruction of generalized Voronoi diagrams on grids}{16}{subsection.1.1.16}%
+\contentsline {subsection}{\numberline {1.1.17}Efficient grid-based spatial representations for robot navigation in dynamic environments}{16}{subsection.1.1.17}%
+\contentsline {subsection}{\numberline {1.1.18}Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection}{16}{subsection.1.1.18}%
+\contentsline {subsubsection}{Formulación del problema}{16}{section*.26}%
+\contentsline {subsubsection}{Descripción del sistema}{17}{section*.27}%
+\contentsline {paragraph}{Modulo de distribución de información}{17}{section*.28}%
+\contentsline {paragraph}{Modulo de asignación de zonas }{17}{section*.29}%
+\contentsline {paragraph}{Modulo de adquisición de información}{17}{section*.30}%
+\contentsline {paragraph}{Modulo de exploración}{17}{section*.31}%
+\contentsline {subsection}{\numberline {1.1.19}Incremental Topological Segmentation for Semi-structured Environments using discretized GVG}{18}{subsection.1.1.19}%
+\contentsline {subsection}{\numberline {1.1.20}Incremental contour-based topological segmentation for robot exploration}{19}{subsection.1.1.20}%
+\contentsline {subsubsection}{Resumen}{19}{section*.32}%
+\contentsline {subsubsection}{Notas generales}{19}{section*.33}%
+\contentsline {subsection}{\numberline {1.1.21}Coordinated Multi-Robot Exploration: Out of the Box Packages for ROS}{19}{subsection.1.1.21}%
+\contentsline {subsubsection}{Resumen}{19}{section*.34}%
+\contentsline {subsubsection}{Notas}{20}{section*.35}%
+\contentsline {paragraph}{WIRELESS AD HOC COMMUNICATION}{20}{section*.36}%
+\contentsline {paragraph}{MAP MERGER}{21}{section*.37}%
+\contentsline {paragraph}{EXPLORATION}{22}{section*.38}%
+\contentsline {subsubsection}{Definiciones}{22}{section*.39}%
+\contentsline {subsubsection}{Ideas}{23}{section*.40}%
+\contentsline {subsection}{\numberline {1.1.22}Distributed matroid constrained submodular maximization for multi-robot exploration: theory and practice}{23}{subsection.1.1.22}%
+\contentsline {subsubsection}{Resumen}{23}{section*.41}%
+\contentsline {subsubsection}{Notas}{23}{section*.42}%
+\contentsline {subsection}{\numberline {1.1.23}Communication - Efficient Planning and Mapping for Multi - Robot Exploration in Large Environments}{24}{subsection.1.1.23}%
+\contentsline {subsubsection}{Resumen}{24}{section*.43}%
+\contentsline {subsubsection}{Notas}{24}{section*.44}%
+\contentsline {subsection}{\numberline {1.1.24}Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration}{25}{subsection.1.1.24}%
+\contentsline {subsubsection}{Resumen}{25}{section*.45}%
+\contentsline {subsubsection}{Notas}{25}{section*.46}%
+\contentsline {section}{\numberline {1.2}Simuladores}{26}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Características}{26}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Algunos artículos que comparan simuladores}{29}{subsection.1.2.2}%
+\contentsline {subsubsection}{Analysis and Comparison of Robotics 3D Simulators}{29}{section*.47}%
+\contentsline {subsubsection}{Feature and Performance Comparison of the V-REP, Gazebo and ARGoS Robot Simulators (2)}{29}{section*.48}%
+\contentsline {subsubsection}{Comparative Analysis Between Gazebo and V-REP Robotic Simulators}{30}{section*.49}%
+\contentsline {subsubsection}{An Overview of Simulation Software for Non-Experts to Perform Multi-Robot Experiments (4)}{30}{section*.50}%
+\contentsline {subsubsection}{Comparando engines de físicas}{30}{section*.51}%
+\contentsline {subsection}{\numberline {1.2.3}Conclusiones parciales}{30}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}Benchmark}{31}{subsection.1.2.4}%
+\contentsline {subsubsection}{Proceso}{32}{section*.52}%
+\contentsline {paragraph}{Gazebo}{32}{section*.53}%
+\contentsline {paragraph}{Webots}{33}{section*.54}%
+\contentsline {subsubsection}{Juicio sobre implementación}{34}{section*.55}%
+\contentsline {paragraph}{webots}{34}{section*.56}%
+\contentsline {paragraph}{Gazebo}{35}{section*.57}%
+\contentsline {paragraph}{Conclusion}{35}{section*.58}%
+\contentsline {subsubsection}{Adaptando la velocidad}{35}{section*.59}%
+\contentsline {subsubsection}{Obteniendo pose}{35}{section*.60}%
+\contentsline {paragraph}{Gazebo}{35}{section*.61}%
+\contentsline {paragraph}{Webots}{36}{section*.62}%
+\contentsline {subsubsection}{rviz}{36}{section*.63}%
+\contentsline {paragraph}{Gazebo}{36}{section*.64}%
+\contentsline {paragraph}{Webots}{36}{section*.65}%
+\contentsline {chapter}{\numberline {2}Parte Central}{38}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Hipotesis de trabajo}{39}{section.2.1}%
