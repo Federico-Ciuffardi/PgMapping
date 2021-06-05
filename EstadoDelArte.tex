@@ -155,6 +155,7 @@ Según \cite{Liu2015} un mapa topológico basado en regiones se considera útil 
 Los autores determinan que existen dos aspectos que intervienen en la calidad de una region, la convexidad $c_i$ y la compacidad $s_i$, específicamente, definiendo la calidad de una region como $q_i = c_i - s_i$. Adicionalmente se menciona que tanto $c_i$ como $s_i$ pueden ser multiplicados por pesos en el calculo de $q_i$ para  para hacer énfasis en una u otra característica.
 
 \paragraph{Convexidad}
+% Convexity: A polygon is considered convex if for any pair of points inside the polygon, every point on the straight line segment that joins them is also inside the polygon.
 Esta se puede representar como el cociente entre el area de la region y el area de su envolvente convexa. La envolvente convexa de una region se define como el polígono convexo de menor area que contiene a la region. Un polígono convexo cumple que para cualquier par de puntos que pertenecen a la frontera del polígono, el segmento de recta que los conecta estará contenido en dicho polígono. Entonces sea $A_i$ el area de la region $R_i$ y $H_i$ el area de su envolvente convexa, la convexidad para esta region sera:
 \begin{equation}
   c_i=\frac{A_i}{H_i}
