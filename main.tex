@@ -1,41 +1,69 @@
-\documentclass[oneside]{book}
-%\documentclass{report}
+% = Document class =
+% \documentclass[oneside]{book}
+\documentclass{report}
 
-\usepackage{minitoc}
+% = Packages =
+% == silence warnings ==
+\usepackage{silence}
+
+% Extract of minitoc documentation:
+% Some packages alter the sectionning commands, like \part. Most of them should
+% be loaded before the minitoc package. The hyperref package, even if it is
+% loaded before the minitoc package (as recommended), alters the sectionning
+% commands in an \AtBeginDocument, so this message is always printed when you use
+% the hyperref package with minitoc, but then it is harmless.
+\WarningFilter{minitoc(hints)}{W0023}
+\WarningFilter{minitoc(hints)}{W0028}
+\WarningFilter{minitoc(hints)}{W0030}
+\WarningFilter{minitoc(hints)}{W0024}
+
+% == FONTS ==
 \usepackage[T1]{fontenc}
 \usepackage[spanish]{babel}
 \usepackage[utf8]{inputenc}
-\usepackage{float}
-% \restylefloat{table}
-\usepackage{enumitem}
 
-% *** CAPTION AND QUOTES ***
+% == CAPTION AND QUOTES ==
 \usepackage{dirtytalk}
 \usepackage[center]{caption}
 
-% *** PDF, URL AND HYPERLINK PACKAGES ***
+% == TOC == 
+\usepackage{minitoc}
+\dominitoc
+
+% == MISC ==
+\usepackage{float}
+% \restylefloat{table}
+% \usepackage{enumitem}
+
+% == PDF, URL AND HYPERLINK ***
 \usepackage{verbatim}
 \usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue
+}
 
-% *** MATH PACKAGES ***
+% == MATH ==
 \usepackage{amsmath}
 
 \DeclareMathOperator*{\argmin}{argmin}
 \newcommand{\mli}[1]{\mathit{#1}}
 
-% *** CODE PACKAGES ***
+% == CODE ==
 \usepackage[ruled,vlined,spanish,onelanguage,linesnumbered]{algorithm2e}
 \usepackage{listings}
 
-
-% *** FIGURE PACKAGES ***
+% == FIGURE PACKAGES ==
 \usepackage{graphicx,wrapfig,lipsum}
 \usepackage[caption=false,font=footnotesize,labelfont=sf,textfont=sf]{subfig}
 
-% *** COLOR PACKAGES ***
+% == COLOR PACKAGES ==
 \usepackage{xcolor}
 
-% *** DEFINITIONS ***
+% = DEFINITIONS =
 \hyphenation{op-tical net-works semi-conduc-tor}
 
 \definecolor{mBlack}{rgb}{0,0,0}
@@ -88,7 +116,7 @@
     resetmargins=true
 }
 
-% *** Cover ***
+% = Cover =
 
 \title{%
 \begin{figure}[H]
@@ -116,22 +144,26 @@ Tutor: Facundo Benavides%
 \date{}
 
 % \setcounter{secnumdepth}{6}
+
+% = DOCUMENT =
 \begin{document}
 
 \maketitle
 
-% Reset page number
+% == RESET PAGE NUMBER ==
 \thispagestyle{empty}
-\setcounter{page}{0}
+\setcounter{page}{1}
 
-% TOC
+% == TOC ==
 \hfuzz=10pt 
 \tableofcontents
 \hfuzz=0pt 
 
-% Content starts here
+% == CONTENT == 
 \chapter{Marco de trabajo}
+\hfuzz=10pt 
 \minitoc
+\hfuzz=0pt 
 \include{EstadoDelArte}
 
 \include{Simuladores}
@@ -139,6 +171,7 @@ Tutor: Facundo Benavides%
 \chapter{Parte Central}
 \include{ParteCentral}
 
+% == BIBLOGRAPHY ==
 \begingroup
 \bibliographystyle{IEEEtran}
 \raggedright
