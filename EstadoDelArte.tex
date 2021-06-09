@@ -1,51 +1,50 @@
-\section{Estado del arte}
+\section{Formalización del problema}
 
-\subsubsection{Exploración multi-robot}
-La exploración multi-robot consiste en utilizar una flota robotica para obtener de informacion de un entorno desconocido con el proposito de generar un mapa que lo represente. 
+\subsection{Exploración multi-robot}\label{subsec:expmutirob}
+La exploración multi-robot consiste en utilizar una flota robótica para obtener de información de un entorno desconocido con el propósito de generar un mapa que lo represente. 
 
-El uso de varios robots es util porque introduce redundacia, aumentando la tolerancia a fallos. Por otro lado la exploracion suele ser altamente paralelizable ya que en un mismo instante de tiempo suelen haber varios lugares en los cuales un robot puede obtener informacion, por lo que aumentar la cantidad de recursos roboticos es esperable que se reduzcan los tiempos de exploración\cite {cao1997cooperative}\cite{dudek1996taxonomy}\cite{guzzoni1997many}. Sin embargo aumentar el numero de robots en la flota de exploracion, aumenta el riesgo de que estos se interfieran entre si, causando perdidas de tiempo en desvíos para evitar colisiones\cite{guzzoni1997many}\cite{goldberg1997interference}. Esto determina que existe un numero optimo de robots en una flota, en el cual se logra un balance entre la capacidad de explotar el paralelismo en la exploracion y el tiempo perdido por interferencias. Un mecanismo de coordinación que logre evitar interferencias suele ser un factor critico en la exploracion multirobot porque permite lograr el balance anteriormente mencionado con una cantidad de robots mayor al que se podria tener sin coordinar\cite{nieto2014coordination}.
+El uso de varios robots es útil porque introduce redundancia, aumentando la tolerancia a fallos. Por otro lado la exploración suele ser altamente paralelizable ya que en un mismo instante de tiempo suelen haber varios lugares en los cuales un robot puede obtener información, por lo que aumentar la cantidad de recursos robotics es esperable que se reduzcan los tiempos de exploración\cite {cao1997cooperative}\cite{dudek1996taxonomy}\cite{guzzoni1997many}. Sin embargo aumentar el numero de robots en la flota de exploración, aumenta el riesgo de que estos se interfieran entre si, causando perdidas de tiempo en desvíos para evitar colisiones\cite{guzzoni1997many}\cite{goldberg1997interference}. Esto determina que existe un numero optimo de robots en una flota, en el cual se logra un balance entre la capacidad de explotar el paralelismo en la exploración y el tiempo perdido por interferencias. Un mecanismo de coordinación que logre evitar interferencias suele ser un factor critico en la exploración multirobot porque permite lograr el balance anteriormente mencionado con una cantidad de robots mayor al que se podría tener sin coordinar\cite{nieto2014coordination}.
 
-no se bien si esta sección va como parte del estado del arte o seria parte de la intro. Algunas cosas que se pueden incluir en esta son:
+% No se bien si esta sección va como parte del estado del arte o seria parte de la intro. Algunas cosas que se pueden incluir en esta son:
 
-  Descripción genérica del problema
+%   Descripción genérica del problema
 
-  Aspectos a considerar
+%   Aspectos a considerar
+  
+%   Problemas relacionados
 
-  Problemas relacionados
+%   Soluciones posibles a alto nivel
 
-  Soluciones posibles a alto nivel
-
-\subsection{Mapas}\cite{Liu2015}\cite{Thrun1998}
+\subsection{Mapas}\label{subsec:mapas}\cite{Liu2015}\cite{Thrun1998}
 Un mapa consiste en un modelo de un entorno, en el contexto de la robótica los mapas se pueden dividir en dos categorías, \emph{mapas métricos} y \emph{mapas topológicos}.
 
-Los \emph{mapas métricos} son mapas principalmente caracterizados por representar la geometría de todo el entorno, incluyendo a su vez una escala que permite asociar las dimensiones representadas dentro del mapa con la realidad.
+Los \emph{mapas métricos} son mapas principalmente caracterizados por representar la geometría de todo el entorno, incluyendo a su vez una escala que permite asociar las dimensiones representadas dentro del mapa con las dimensiones reales.
+
+Una \emph{grilla de ocupación} es un mapa métrico que se basa en una teselación del espacio en celdas, donde cada celda almacena una estimación probabilística de su estado (libre, ocupado, etc). 
 
 Los \emph{mapas topológicos} por otro lado son mapas simplificados al punto de solo incluir regiones topológicas y conexiones entre estas. Normalmente se representan con grafos donde las regiones de interés son los vertices y las aristas son las conexiones entre ellas.
+
+Una gran parte de los mapas topológicos son \emph{mapas topológicos basados en regiones}, estos consisten en una segmentación del espacio en regiones de interés que serán las regiones topológicas. El concepto de region de interés es equivalente al de habitaciones y corredores en entornos estructurados como lo son las casas y oficinas. 
 
 La simplicidad de los mapas topológicos es útil para ayudar a los humanos a entender un entorno (por esto es usual ver mapas topológicos de sistemas de transporte) y permiten instrucciones que nos resultan naturales, por ejemplo, \say{ir a la habitación A}.
 
 Dicha simplicidad también causa que para un mismo entorno los mapas topológicos suelan ser varios ordenes de magnitud mas pequeños que los mapas métricos y por lo tanto, mas allá de la memoria que se ahorra también se tiene una planificación mas eficiente. Sin embargo la falta de detalle en la representación hace que los planes de navegación obtenidos de un mapa topológico suelan ser peores que los obtenidos en mapas métricos.
 
-\subsubsection{Grilla de ocupación}
-Una grilla de ocupación es un mapa métrico que se basa en una teselación del espacio en celdas, donde cada celda almacena una estimación probabilística de su estado (libre, ocupado, etc). 
+Dadas las ventajas y desventajas mencionados existen trabajos \cite{Thrun1998}\cite{wurm2008coordinated}\cite{Liu2015} que proponen el uso simultaneo de mapas topológicos y métricos para \say{ganar lo mejor de los dos mundos} al tener disponible abstracción y detalle a la vez. Un ejemplo de como combinar las ventajas de ambos tipos de mapa es la planificación jerárquica descrita en \cite{Thrun1998} donde los mapas topológicos son utilizados para generar un plan de navegación topológico que consiste en una secuencia de corredores y habitaciones que se deben atravesar para llegar al objetivo, plan que aunque es fácil de generar no posee suficiente detalle como para traducirse directamente a acciones que el robot pueda realizar para llegar al objetivo. Dado esto se introduce una segunda etapa de planificación que consiste en a partir de la grilla de ocupación generar planes métricos que permitan al robot moverse entre los segmentos que componen al plan topológico. De esta forma se evita planificar sobre grilla de ocupación entera y así evitar una gran parte del costo computacional.
 
-% TODO
-% En esta seccion se debe tratar:
+Los tres trabajos antes mencionados aunque cada uno tiene sus aportes particulares, tienen en común que el uso de mapas topológicos y métricos a la vez se logra construyendo una grilla de ocupación a partir de los datos obtenidos de los sensores, para luego a partir de la grilla de ocupación generar una estructura intermedia llamada \emph{grafo generalizado de Voronoi} a partir del cual es posible detectar los segmentos que compondrán a un mapa topológico basado en regiones. Este proceso es una parte fundamental del trabajo desarrollado y se detallará a lo largo de las siguientes secciones.
+
+% 
+% En esta sección se debe tratar:
 
 % que es una grilla de ocupación.
 
 % Para que sirve en general
 
-% Se puede contruir un GVD a partir de una grilla de ocupación. (quizas despues?)
+% Se puede construir un GVD a partir de una grilla de ocupación. (quizás después?)
 
 % \subsection{Representación poligonal}
 % Las representaciones poligonales son mapas métricos propuestos como alternativas a las grillas de ocupación, que busca
-
-
-\subsubsection{Mapas topológicos basados en regiones}
-Una gran parte de los mapas topológicos se basa en segmentar el espacio en regiones de interés que serán las regiones topológicas del mapa. 
-
-El concepto de region de interés es equivalente al de habitaciones y corredores en entornos estructurados como lo son las casas y oficinas.
 
 \subsection{Diagrama de Voronoi}\cite{choset2005principles}\cite{Thrun1998}
 Dado un espacio de trabajo $W$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. Una \emph{region de Voronoi}\ref{eq:regV} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular.
@@ -72,7 +71,7 @@ Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el 
 \end{figure} 
 
 \subsection{Diagrama generalizado de Voronoi}\cite{choset2005principles}\cite{latombe1991}\cite{wurm2008coordinated}
-Recordando que los sitios en un diagrama de Voronoi son puntos, se tiene un problema al querer utilizar obstáculos como sitios. El problema se debe a que normalmente, los obstáculos no pueden representarse como puntos en el espacio, para solucionar esto se generaliza la definición de diagrama de Voronoi para poder definirlo a partir de sitos de mayor orden, como lo son lineas, o polígonos. A esta generalización se la denomina como \emph{diagrama generalizado de Voronoi}(GVD) y los sitios de mayor orden o sitios generalizados serán representados como conjuntos de puntos del espacio de trabajo $\mli{GS}\subset 2^{W}$.
+Recordando que los sitios en un diagrama de Voronoi son puntos, se tiene un problema al querer utilizar obstáculos como sitios. El problema se debe a que normalmente, los obstáculos no pueden representarse como puntos en el espacio, para solucionar esto se generaliza la definición de diagrama de Voronoi para poder definirlo a partir de sitos de mayor orden, como lo son lineas, o polígonos. A esta generalización se la denomina como \emph{diagrama generalizado de Voronoi} (GVD) y los sitios de mayor orden o sitios generalizados serán representados como conjuntos de puntos del espacio de trabajo $\mli{GS}\subset 2^{W}$.
 
 Las definiciones planteadas para los diagramas de Voronoi son similares a las utilizadas en los diagramas generalizados de Voronoi (GVD), solo es necesario cambiar la función de distancia para ser compatibles con las formas de los sitios generalizados. Para lograr esto solo es necesario intercambiar la función de distancia $d_p$ a la función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que se define a partir de $d_p$ como se muestra en \ref{eq:dg}. Las regiones generalizadas de Voronoi $\mli{GR}_i$, los puntos base generalizados $\mli{GBP}_p$ y el diagrama generalizado de Voronoi $\mli{GVD}$ se definen según se muestra en \ref{eq:GR}, \ref{eq:GBP} y \ref{eq:GVD} respectivamente. Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los sitios generalizados mas cercanos $\mli{GBS}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
 \begin{equation}
@@ -98,14 +97,22 @@ Las definiciones planteadas para los diagramas de Voronoi son similares a las ut
   \mli{GVD}  = \{p \in W : |GBP_p| \geq 2\}\label{eq:GVD}
 \end{equation}
 
-% En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio libre se marca con blanco, el ocupado con negro y el GVD con azul. 
-% \begin{figure}[ht]
-%   \center
-%   \includegraphics[width=5.5cm]{imagenes/GVD.png}
-%   \caption{Ejemplo de un diagrama generalizado de Voronoi.}\label{fig:ejemploGVD}
-% \end{figure} 
+En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio libre se marca con blanco, las lineas negras identifican al GVD y los polígonos negros representan obstáculos  . 
+\begin{figure}[ht]
+  \center
+  \includegraphics[width=5.5cm]{imagenes/GVD2.png}
+  \caption{Ejemplo de un diagrama generalizado de Voronoi. Extraído de \cite{Wallgrun2005}.}\label{fig:ejemploGVD}
+\end{figure} 
 
-Es posible representar un GVD con un grafo en el cual los vertices son los puntos pertenecientes al GVD, y existen aristas entre dos vertices si estos son adyacentes en el espacio. Por otro lado otra forma mas compacta es que los vertices sean los puntos $p$ del espacio tal que $|\mli{GBP}_p|\geq 3$ y que haya aristas entre los vertices que puedan alcanzarse por caminos formados por puntos adyacentes pertenecientes al GVD. Para referirse a la segunda forma, mas compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado.
+% vertices son los puntos pertenecientes al GVD, y las aristas están entre los vertices adyacentes en el espacio. Por otro lado otra forma mas compacta es que los 
+% Para referirse a la segunda forma, mas compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
+Los GVD pueden ser representados con un grafo en el cual los vertices son los puntos $p$ del espacio tal que $|\mli{GBP}_p|\geq 3$ o $|\mli{GBP}_p|= 1$ y con aristas entre los vertices que puedan alcanzarse por caminos formados por puntos adyacentes pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo del GVD de la figura \ref{fig:ejemploGVD}, donde los círculos azules son los vertices del grafo y las lineas negras las aristas (aunque no son visibles existen aristas entre los vertices correspondientes a puntos que son tan cercanos que se solapan).
+\begin{figure}[ht]
+  \center
+  \includegraphics[width=5.5cm]{imagenes/GVDGraph.png}
+  \caption{Grafo asociado al GVD de la figura \ref{fig:ejemploGVD}.} \label{fig:ejemploGVDgrafo}
+
+\end{figure} 
 
 \subsection{Mapa vial}\cite{choset2005principles}
 Un mapa vial (del ingles roadmap) es un concepto normalmente representado con grafos, cuyos vertices son puntos no obstaculizados, es decir, del espacio libre $W_{libre} \subset W$ y sus aristas implican la existencia de caminos disjuntos entre los vertices. La idea principal es que un mapa vial captura la topología del espacio según el cual fueron creados y los robots lo utilizan para navegar, es decir que a partir de un mapa vial se puede planificar un camino entre dos puntos cualquiera del espacio libre 
@@ -122,16 +129,32 @@ Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inici
 
 En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como sus sitios cumplen con las 3 propiedades necesarias para ser mapas viales, lo cual justifica su uso para la navegación.
 
-
-
-
 \subsection{Construcción de un GVD} 
-TODO
-En esta seccion dar un algormo para esto simple y no incremtal, basicamente sacarlo wurm y nuestra solucion de TSCF.
-despues de grillas de ocupacion porque las usa
+Existen dos tipos principales de métodos para la construcción de un GVD los basados en sensores y los basados en grillas. En el contexto del trabajo desarrollado sera relevante la método de construcción de un GVD basada en grillas propuesta en \cite{wurm2008coordinated}. 
+
+El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda esta ocupada o libre, resultando en un mapa que contiene para cada celda la distancia al obstáculo mas cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. El grafo generalizado de Voronoi se obtiene aplicando una esqueletización \cite{zhang1984fast} que consiste en erosionar las celdas mas cercanas a los obstáculos hasta llegar a las celdas mas distantes a estos siendo estas ultimas las celdas que se asignan al GVD construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}.
+\begin{figure}[ht]
+  \begin{center}
+  \includegraphics[width=7.5cm]{imagenes/wurmGVD.png}
+  \end{center}
+  \caption{Ejemplo del método de generación de \cite{wurm2008coordinated}. A la izquierda esta el mapa original, en el centro el mapa original y su correspondiente mapa de distancia (cuanto más oscuro es un punto, mayor es la distancia al obstáculo más cercano). A la derecha se encuentra el mapa original junto a la esqueletización del mapa de distancia (lineas negras) que es a su vez el GVD construido. Extraído de \cite{wurm2008coordinated}.}\label{fig:wurmGVD}
+\end{figure} 
+
+% La esqueletización es usada en lugar de s
+Este método evita problemas que se pueden dar al generar un GVD discretizado a partir de la definición de pertenencia al GVD directamente adaptada a un espacio discretizado en celdas, donde una celda pertenece al GVD si tiene dos o mas celdas obstaculizadas a una misma distancia. Un ejemplo de este tipo de problemas es el que se genera en los corredores cuya discretización tiene una cantidad par de celdas entre sus paredes, en este caso si se aplica la definición de GVD a las celdas ninguna debería pertenecer al GVD dado que ninguna celda tendría una misma distancia a dos celdas obstaculizadas (paredes del corredor). Este comportamiento no es deseable ya que se debe a una discretización particular del espacio, si el tamaño de las celdas fuera otro y en lugar de ser un numero par fuera uno impar se tendría un GVD a lo largo del centro del corredor, y mas importante aun, un GVD sobre un corredor en un espacio continuo siempre genera una linea sobre el centro del corredor. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
+
+% \begin{figure}
+%   \centering
+%   \subfloat[Ancho par]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/anchopar.png}
+%   \label{map:laberinto}}
+%   \subfloat[Ancho impar]{\hspace{0.1\linewidth}\includegraphics[clip=true, width=0.45\linewidth]{imagenes/anchoimpar.png}
+%   \label{map:office}}
+%   \caption{Entornos}
+% \end{figure}
+
 
 \subsection{Mapa topológico a partir de un GVD}
-En \cite{Thrun1998} Thrun propone un método de segmentación del espacio a partir de mapa representado con una grilla de ocupación.. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos. En este caso el objetivo de segmentar el espacio en habitaciones y corredores, es el de generar un mapa topológico en el cual los segmentos serán las regiones de interés.
+En \cite{Thrun1998} Thrun propone un método que permite, a partir de un mapa representado con una grilla de ocupación, segmentar el espacio en habitaciones y corredores, con el objetivo de generar un mapa topológico en el cual los segmentos serán las regiones de interés. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos.
 
 Para describir el método de segmentación necesario introducir tres nuevos conceptos asociados al GVD, el primero es el concepto de despeje (del ingles clearance) $D : W \rightarrow R$ de un punto $p$, que equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia). El segundo es el de los puntos criticos $C\in W_{libre}$ de un GVD, un punto cumple con ser critico si pertenece al GVD y es un mínimo local según el despeje \ref{eq:crit}. El tercer y ultimo concepto es el de linea critica, que son las lineas que conectan a un punto critico $p \in C$ con sus puntos base $\mli{GBP}_p$.
 
@@ -143,13 +166,13 @@ El algoritmo comienza por la construcción del GVD, posteriormente se encuentran
 
 La idea subyacente de este algoritmo es que, por definición, los puntos críticos se encuentran presentes en el centro de todo pasaje estrecho siendo sus puntos base los extremos de dicho pasaje. Por lo tanto las lineas criticas estarán ubicadas a lo largo de cada pasaje estrecho y dada la consideración que las transiciones entre los segmentos se dan en los pasajes estrechos, las lineas criticas actúan naturalmente como limites entre cada segmento.
 
-TODO describir bien el algoritmo no incremental de Liu ming
+% TODO describir bien el algoritmo no incremental de Lia ming
 
-\subsection{Forma alternativa de generar mapas topologicos}
-Incluir el articulo que habla de la generacion de mapas topologicos con el contorno 
+\subsection[Generación de mapas topológicos basada en contornos]{Generación de mapas topológicos basada en\\ contornos}
+Existen alternativas a la generación de mapas topológicos basada en grafos generalizados de Voronoi. Una de estas es la generación de mapas topológicos basada en contornos presentada en \cite{Fermin-Leon2017}. Esta se basa en representar a la grilla de ocupación como una imagen, extraer sus contornos los cuales se representan como polígonos y a partir de su convexidad se segmentar el espacio, obteniendo así un mapa topológico.
 
 \subsection{Criterios de calidad de un mapa topológico}
-Según \cite{Liu2015} un mapa topológico basado en regiones se considera útil si representa la estructura del entorno de manera correcta y eficiente. Para ello, consideran dos criterios, la calidad asociada a cada region y la topología la segmentación. Los criterios propuestos se basan principalmente en intuiciones geométricas. 
+Según \cite{Liu2015} un mapa topológico basado en regiones se considera útil si representa la estructura del entorno de manera correcta y eficiente. Para ello, consideran dos criterios principales, la calidad asociada a cada region y la topología la segmentación. Los criterios propuestos se basan principalmente en intuiciones geométricas. 
 
 \subsubsection{Calidad de una region}
 Los autores determinan que existen dos aspectos que intervienen en la calidad de una region, la convexidad $c_i$ y la compacidad $s_i$, específicamente, definiendo la calidad de una region como $q_i = c_i - s_i$. Adicionalmente se menciona que tanto $c_i$ como $s_i$ pueden ser multiplicados por pesos en el calculo de $q_i$ para  para hacer énfasis en una u otra característica.
@@ -210,26 +233,54 @@ Q=\frac{CV}{N}\sum^N_{i=1}{q_i+\lambda S}
 
 Donde $\lambda$ es un peso que determinara la importancia de la simplicidad de la segmentación en cálculo calidad general de la segmentación.
 
-\subsection{Eficiencia en la construccion de GVD y mapa topologicos a partir de GVD}
-en esta seccion se trataria sobre las diferencias entre incremental y no incremental, mencionar lo que se gana en performance y que implica una dificultad mayor, y despues comentar bien como es la:
+% \subsubsection{Evaluación humana}
+% Otra criterio de evaluación es el utilizado en \cite{Fermin-Leon2017} el cual compara la segmentación a evaluar $R_{seg}$ contra segmentaciones realizadas por humanos $R_{human}$. La comparación consiste en para cada pixel comprobar si este esta asignado a una misma region en ambas segmentaciones, lo cual se considera como un verdadero positivo $vp$, los falsos positivos $fp$ son los pixeles que están en la segmentación a evaluar pero no en la humana, o no, que se considera  
 
-generacion de GVD incrmental
+\subsection{Eficiencia en la construcción del GVD y mapa topológicos a partir de GVD}
+A lo largo de la exploración es usual que el mapa construido reciba de forma frecuente actualizaciones que solo modifiquen una pequeña porción del mismo. Dado esto por motivos de eficiencia  se busca que los algoritmos que utilizan al mapa como una entrada eviten recomputarse completamente en cada actualización y que en su lugar actualicen el ultimo resultado obtenido para que sea consistente con la ultima version del mapa.
 
-segmentacion incremental (mencionar tambien que la contorno tambien tiene variante incrmental)
+Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la ultima entrada son llamados \emph{algoritmos incrementales}.
 
-Luego comentar nueveametne las tecnicas de remoción de falsos positivos de Wurm y la diferencia entre utilzarlas y no (usar de ejemplo resultados de Liu ming) esto para decir que una de las cosas que se hace en el desarrollo es generar un algoritmo que hace esto
+Los algoritmos de generación de GVD, y de segmentación a partir de un GVD descritos anteriormente son no incrementales, por lo tanto dado el problema de eficiencia que esto implica es de interés describir variantes incrementales para los mismos.
+
+% , y por lo tanto su uso resulta ineficiente, por esto fueron desarrolladas variantes incrementales para los mismos.
+\subsubsection{Construcción incremental del GVD}
+\cite{kalra2009incremental}\cite{Lau2013}
+
+\subsubsection{Construcción de mapas topológicos a partir de un GVD}
+\cite{Liu2015}
+
+% como entrada eviten re 
+%  computar los cambios que se deben realizar a dicho resultado para que este corresponda al resultado del mapa actualizado.  
+
+
+% computarse completamente con cada cambio y que en su 
+
+% Los algoritmos presentados hasta el momento son todos no incrementales, en tanto si el mapa sobre el cual se construyen cambia, e
+
+% en esta seccion se trataria sobre las diferencias entre incremental y no incremental, mencionar lo que se gana en performance y que implica una dificultad mayor, y despues comentar bien como es la:
+
+% generacion de GVD incrmental
+
+% segmentacion incremental (mencionar tambien que la contorno tambien tiene variante incrmental)
+
+% Luego comentar nueveametne las tecnicas de remoción de falsos positivos de Wurm y la diferencia entre utilzarlas y no (usar de ejemplo resultados de Liu ming) esto para decir que una de las cosas que se hace en el desarrollo es generar un algoritmo que hace esto
 
 
 \subsection{Coordinación a partir de mapas topológicos}
+Dado el problema de la coordinación para la exploración multirobot mencionado en \ref{subsec:expmutirob}, fueron desarrolladas varias tecnicas de coordinacion sur
+
+
 Incluir aca a wurm la parte de coordinacion
 
-\subsection{Coordinación a partir de la segmentaciones alternativas del entorno}
+\subsection{Coordinación a partir de segmentaciones no topológicas}
 Hablar aca de otras forma de coordinar a partri de la segmentacion que no sean mapas topologicos:
 
 El que segmenta a partir de los centros de los robots
 
 El que segmenta haciendo k-means de las zonas desconocidas
 
+\section{ Trabajos relacionados }
 \subsection{No se bien como nombrar esto}
 Se puede incluir cosas mas genericas de la exploracion multirobot, esto puede incluir la solucion de guillermo y su criterio de parada anticipado. Y tambien podria incluir las soluciones propuestas en el paper que describe paquetes de exploracion, que entre otras cosas permite mencionar el paquete ad-hoc y el problema de las comunicaciones no perfetas que esto intenta solucionar.
 
