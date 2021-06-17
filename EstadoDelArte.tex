@@ -325,21 +325,25 @@ Donde $\lambda$ es un peso que determinara la importancia de la simplicidad de l
 
 % Los algoritmos de generación de GVD, y de segmentación a partir de un GVD descritos anteriormente son no incrementales, por lo tanto dado el problema de eficiencia que esto implica es de interés describir variantes incrementales para los mismos.
 
-A lo largo de la exploración el mapa construido recibirá, de forma frecuente, actualizaciones que solo modifican una pequeña porción del mismo. Dado esto, por motivos de eficiencia, se busca que los algoritmos que deben ejecutarse con el mapa como entrada cuando este se modifica, eviten recomputarse completamente en cada actualización, y que en su lugar modifiquen el ultimo resultado obtenido para que sea consistente con la ultima version del mapa.
+A lo largo de la exploración el mapa construido recibe actualizaciones de forma frecuente que solo modifican una pequeña porción del mismo. Esto causa que los datos que tienen que ser consistentes con el mapa también deban actualizarse de forma frecuente. Dado esto, por motivos de eficiencia, se busca que los algoritmos que deben ejecutarse para mantener la consistencia de los datos con el mapa, eviten descartar el resultado anterior y recomputarse completamente en cada actualización, sino que en su lugar modifiquen el ultimo resultado para que este sea consistente con la ultima version del mapa. 
+
+La idea se basa en que, como se mencionó anteriormente, las actualizaciones son frecuentes pero también pequeñas y por lo tanto luego de una actualización gran parte del mapa se mantiene igual. Esto usualmente implica que gran parte del resultado anterior continua siendo valido luego de la actualización, solo siendo necesario modificar una pequeña porción del mismo para que este vuelva a ser consistente, lo cual suele ser órdenes de magnitud menos costoso que la alternativa de calcular todo desde cero. 
  % hecho de que las actualizaciones solo modificaron una  que e 
 
-Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la ultima entrada son llamados \emph{algoritmos incrementales}.
+% Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la ultima entrada son llamados \emph{algoritmos incrementales}.
+Los algoritmos que actualizan el resultado anterior a partir de los cambios experimentados son llamados \emph{algoritmos incrementales}, en consecuencia los que algoritmos que al cambiar parte de la entrada descartan el ultimo resultado y recomputando el nuevo resultado desde cero se denominan como \emph{algoritmos no incrementales}.
 
-Los algoritmos de generación de GVD, y de segmentación a partir de un GVD descritos anteriormente son no incrementales, por lo tanto dado el problema de eficiencia que esto implica es de interés describir variantes incrementales para los mismos.
+En las secciones \ref{subsec:constGVD} y \ref{subsec:mapaTopGVD} los algoritmos presentados son no incrementales, dado el problema de eficiencia que esto implica son de interés sus variantes incrementales que se explicarán a continuación.
+% Los algoritmos de generación de GVD, y de segmentación a partir de un GVD presentados anteriormente no son incrementales, dado el problema de eficiencia que esto implica son de interés las variantes incrementales que se explicarán a continuación.
 
 % , y por lo tanto su uso resulta ineficiente, por esto fueron desarrolladas variantes incrementales para los mismos.
 \subsubsection{Construcción incremental del GVD}
-En \cite{kalra2009incremental} Kalra \textit{et al.} proponen
+En \cite{kalra2009incremental} Kalra \textit{et al.} proponen un algoritmo que se basa en el algoritmo no incremental llamado brushfire \cite{choset2005principles} que es un algoritmo que sirve para encontrar el mapa de distancias, que puede ser adaptado para obtener directamente el GVD como su salida, sin requerir el paso de esqueletización mencionado en \ref{subsec:constGVD}. La idea de este algoritmo
 % El principal problema con este acercamiento es que el GVD se construye basa en determinar obstáculos independientes para luego calcular el GVD. Esto es un problema porque no es claro en como pasar de celdas obstaculizadas a obstáculos que están compuestos por estas (buscar mas problemas, ineficiencia?, nuestro código no lo soportaba de antes).  El siguiente artículo propone una solución que evita esta necesidad y solo basta con tener un grilla de ocupación.
 
 \cite{Lau2013}
 
-\subsubsection{Construcción de mapas topológicos a partir de un GVD}
+\subsubsection{Construcción incremental de mapas topológicos a partir de un GVD}
 \cite{Liu2015}
 
 % Articulo del cual obtuvimos varias las características de nuestra implementación incremental
