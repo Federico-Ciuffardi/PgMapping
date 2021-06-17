@@ -1,3 +1,50 @@
+@book{elfes1989occupancy,
+  title={Occupancy grids: A probabilistic framework for robot perception and navigation},
+  author={Elfes, Alberto},
+  year={1989},
+  publisher={Carnegie Mellon University}
+}
+@article{hartigan1979ak,
+  title={AK-means clustering algorithm},
+  author={Hartigan, John A and Wong, Manchek A},
+  journal={Journal of the Royal Statistical Society: Series C (Applied Statistics)},
+  volume={28},
+  number={1},
+  pages={100--108},
+  year={1979},
+  publisher={Wiley Online Library}
+}
+
+@article{kuhn1955hungarian,
+  title={The Hungarian method for the assignment problem},
+  author={Kuhn, Harold W},
+  journal={Naval research logistics quarterly},
+  volume={2},
+  number={1-2},
+  pages={83--97},
+  year={1955},
+  publisher={Wiley Online Library}
+}
+
+@inproceedings{yamauchi1998frontier,
+  title={Frontier-based exploration using multiple robots},
+  author={Yamauchi, Brian},
+  booktitle={Proceedings of the second international conference on Autonomous agents},
+  pages={47--53},
+  year={1998}
+}
+
+@article{schuster2019towards,
+  title={Towards autonomous planetary exploration},
+  author={Schuster, Martin J and Brunner, Sebastian G and Bussmann, Kristin and B{\"u}ttner, Stefan and D{\"o}mel, Andreas and Hellerer, Matthias and Lehner, Hannah and Lehner, Peter and Porges, Oliver and Reill, Josef and others},
+  journal={Journal of Intelligent \& Robotic Systems},
+  volume={93},
+  number={3},
+  pages={461--494},
+  year={2019},
+  publisher={Springer}
+}
+
  @Misc{strucs,
     author = {Brian "Beej Jorgensen" Hall},
     title = {struct sockaddr\_in, struct in\_addr},
@@ -8,6 +55,18 @@
  @Misc{libro,
     author = {Kenneth Geisshirt},
     title = {Pluggable Authentication Modules The Definitive Guide to PAM for Linux SysAdmins and C Developers}
+    }
+
+ @Misc{metroBsAs,
+    title = {Mapa del subte y combinaciones},
+    howpublished  = {\\\url{https://www.buenosaires.gob.ar/subte/mapa-y-combinaciones}\\
+    Accedido por ultima vez: 15/06/2021}
+    }
+
+ @Misc{googlemaps,
+    title = {Google Maps},
+    howpublished  = {\\\url{https://www.google.com/maps/}\\
+    Accedido por ultima vez: 16/06/2021}
     }
 
  @Misc{tutorialm,
@@ -259,8 +318,38 @@
 
 
 
-
-
+@article{Choset1997,
+author = {Choset, H},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/choset_howie_1997_2.pdf:pdf},
+journal = {Proc. First CGC Workshop on Computational Geometry},
+title = {{Incremental construction of the generalized voronoi diagram, the generalized voronoi graph, and the hierarchical generalized voronoi graph}},
+url = {http://www.ri.cmu.edu/pub_files/pub1/choset_howie_1997_2/choset_howie_1997_2.pdf},
+year = {1997}
+}
+@article{Solanas2004,
+abstract = {This paper proposes a new coordination algorithm for efficiently exploring an unknown environment with a team of mobile robots. The proposed technique subsequently applies a well-known unsupervised clustering algorithm (K-Means) in order to fairly divide the remaining unknown space into as many disjoint regions as available robots. Each robot is primarily responsible for exploring its assigned region and can help other robots on its way through. Unknown space is dynamically repartitioned as new areas are discovered by the team, balancing thus the overall workload among team members and naturally leading to greater dispersion over the environment and thus faster broad coverage than with previous greedy-like approaches, which guide robots based on maximum profit strategies that simply trade off between distance to the closest frontiers and amount of unknown cells likely to be discovered from them.},
+author = {Solanas, Agusti and Garcia, Miguel Angel},
+doi = {10.1109/iros.2004.1389437},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/10.1.1.86.900.pdf:pdf},
+isbn = {0780384636},
+journal = {2004 IEEE/RSJ International Conference on Intelligent Robots and Systems (IROS)},
+pages = {717--721},
+title = {{Coordinated multi-robot exploration through unsupervised clustering of unknown space}},
+volume = {1},
+year = {2004}
+}
+@article{Hutchison2009,
+author = {Hutchison, David},
+doi = {10.1007/978-3-642-03613-2},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/Mathematical_Morphology_and_Its_Application_to_Sig.pdf:pdf},
+isbn = {3642036120},
+issn = {03029743},
+journal = {Lecture Notes in Computer Science (including subseries Lecture Notes in Artificial Intelligence and Lecture Notes in Bioinformatics)},
+number = {January},
+title = {{Mathematical Morphology and Its Application to Signal and Image Processing - 9th International Symposium, ISMM 2009, Proceedings}},
+volume = {5720 LNCS},
+year = {2009}
+}
 @article{Afyouni2012,
 abstract = {This paper surveys indoor spatial models developed for research fields ranging from mobile robot mapping, to indoor location-based services (LBS), and most recently to context-aware navigation services applied to indoor environments. Over the past few years, several studies have evaluated the potential of spatial models for robot navigation and ubiquitous computing. In this paper we take a slightly different perspective, considering not only the underlying properties of those spatial models, but also to which degree the notion of context can be taken into account when delivering services in indoor environments. Some preliminary recommendations for the development of indoor spatial models are introduced from a context-aware perspective. A taxonomy of models is then presented and assessed with the aim of providing a flexible spatial data model for navigation purposes, and by taking into account the context dimensions.},
 author = {Afyouni, Imad and Ray, Cyril and Claramunt, Christophe},
@@ -277,209 +366,6 @@ url = {http://josis.org/index.php/josis/article/view/73},
 volume = {4},
 year = {2012}
 }
-@incollection{Wallgrun2005,
-abstract = {A route graph as proposed in Werner et al. (2000) is a spatial representation of the environment that focuses on integrating qualitatively different routes an agent can use for navigation. In this paper we describe how a route graph based on the generalized Voronoi diagram (GVD) of the environment can be used for mobile robot mapping and navigation tasks in an office-like indoor environment. We propose a hierarchical organization of the graph structure resulting in more abstract layers that represent the environment at coarser levels of granularity. For this purpose, we define relevance measures to weight the meet points in the GVD based on how significant they are for navigation and present an algorithm that utilizes these weights to generate the coarser route graph layers. Computation of the relevance values from either complete or incomplete information about the environment is considered. Besides robot navigation, the techniques developed can be employed for other tasks in which abstract route graph representations are advantageous, e.g. automatically generating route descriptions from floor plans. {\textcopyright} Springer-Verlag Berlin Heidelberg 2005.},
-author = {Wallgr{\"{u}}n, Jan Oliver},
-booktitle = {Lecture Notes in Artificial Intelligence (Subseries of Lecture Notes in Computer Science)},
-doi = {10.1007/978-3-540-32255-9_23},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/2004-Wallgruen-SC2004-finaldraft.pdf:pdf},
-isbn = {9783540322559},
-issn = {03029743},
-number = {October 2004},
-pages = {413--433},
-title = {{Autonomous Construction of Hierarchical Voronoi-Based Route Graph Representations}},
-url = {http://link.springer.com/10.1007/978-3-540-32255-9_23},
-volume = {3343},
-year = {2005}
-}
-@book{Latombe1991,
-address = {Boston, MA},
-author = {Latombe, Jean-Claude},
-booktitle = {Cluster Computing for Robotics and Computer Vision},
-doi = {10.1007/978-1-4615-4022-9},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/latombe1991.pdf:pdf},
-isbn = {978-0-7923-9206-4},
-month = {dec},
-pages = {43--65},
-publisher = {Springer US},
-title = {{Robot Motion Planning}},
-url = {http://www.worldscientific.com/doi/abs/10.1142/9789812836366_0004 http://link.springer.com/10.1007/978-1-4615-4022-9},
-year = {1991}
-}
-@book{HowieChosetKevinLynch,
-author = {{Howie Choset, Kevin Lynch}, Seth Hutchinson and {George Kantor, Wolfram Burgard, Lydia Kavraki}, and Sebastian Thrun},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/Intelligent-Robotics-and-Autonomous-Agents-series-Choset-H.-et-al.-Principles-of-Robot-Motion_-Theory-Algorithms-and-Implementations-MIT-2005.pdf:pdf},
-isbn = {9780262033275},
-title = {{Principles of Robot Motion}}
-}
-@article{Roque2005a,
-abstract = {This paper discusses the techniques and their applications in the development of a path planning system composed of three modules, namely: global vision (GVM), trajectory planning (TPM) and navigation control (NCM). The GVM captures and processes the workspace image to identify the obstacle and the robot configurations. These configurations are used by the TPM to generate the Voronoi roadmap, to compute the maximal clearance shortest feasible path and the visibility pathway between two configurations. The NCM controls the robot functionalities and navigation. To validate the path planning system, three sets of experiments have been conducted using the Lab robot Khepera, which have shown very good results. {\textcopyright} 2005 Cambridge University Press.},
-author = {Roque, Waldir L. and Doering, Dion{\'{i}}sio},
-doi = {10.1017/S0263574704001183},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/roque2005.pdf:pdf},
-issn = {02635747},
-journal = {Robotica},
-keywords = {Global vision,Mobile robots,Path planning,Robot navigation,Voronoi roadmap},
-number = {4},
-pages = {467--477},
-title = {{Trajectory planning for lab robots based on global vision and Voronoi roadmaps}},
-volume = {23},
-year = {2005}
-}
-@article{Roque2005,
-abstract = {This paper discusses the techniques and their applications in the development of a path planning system composed of three modules, namely: global vision (GVM), trajectory planning (TPM) and navigation control (NCM). The GVM captures and processes the workspace image to identify the obstacle and the robot configurations. These configurations are used by the TPM to generate the Voronoi roadmap, to compute the maximal clearance shortest feasible path and the visibility pathway between two configurations. The NCM controls the robot functionalities and navigation. To validate the path planning system, three sets of experiments have been conducted using the Lab robot Khepera, which have shown very good results.},
-author = {Roque, Waldir L. and Doering, Dion{\'{i}}sio},
-doi = {10.1017/S0263574704001183},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/roque2005.pdf:pdf},
-issn = {0263-5747},
-journal = {Robotica},
-keywords = {Global vision,Mobile robots,Path planning,Robot navigation,Voronoi roadmap},
-month = {jul},
-number = {4},
-pages = {467--477},
-title = {{Trajectory planning for lab robots based on global vision and Voronoi roadmaps}},
-url = {https://www.cambridge.org/core/product/identifier/S0263574704001183/type/journal_article},
-volume = {23},
-year = {2005}
-}
-@article{Choset1997,
-author = {Choset, H},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/choset_howie_1997_2.pdf:pdf},
-journal = {Proc. First CGC Workshop on Computational Geometry},
-title = {{Incremental construction of the generalized voronoi diagram, the generalized voronoi graph, and the hierarchical generalized voronoi graph}},
-url = {http://www.ri.cmu.edu/pub_files/pub1/choset_howie_1997_2/choset_howie_1997_2.pdf},
-year = {1997}
-}
-@article{Thrun1998,
-abstract = {Autonomous robots must be able to learn and maintain models of their environments. Research on mobile robot navigation has produced two major paradigms for mapping indoor environments: grid-based and topological. While grid-based methods produce accurate metric maps, their complexity often prohibits efficient planning and problem solving in large-scale indoor environments. Topological maps, on the other hand, can be used much more efficiently, yet accurate and consistent topological maps are often difficult to learn and maintain in large-scale environments, particularly if momentary sensor data is highly ambiguous. This paper describes an approach that integrates both paradigms: grid-based and topological. Grid-based maps are learned using artificial neural networks and naive Bayesian integration. Topological maps are generated on top of the grid-based maps, by partitioning the latter into coherent regions. By combining both paradigms, the approach presented here gains advantages from both worlds: accuracy/consistency and efficiency. The paper gives results for autonomous exploration, mapping and operation of a mobile robot in populated multi-room environments. {\textcopyright} 1998 Elsevier Science B.V.},
-address = {New York, NY, USA},
-author = {Thrun, Sebastian},
-doi = {10.1016/S0004-3702(97)00078-7},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/1-s2.0-S0004370297000787-main.pdf:pdf},
-isbn = {9781450336314},
-issn = {00043702},
-journal = {Artificial Intelligence},
-keywords = {Autonomous robots,Exploration,Mobile robots,Neural networks,Occupancy grids,Path planning,Planning,Robot mapping,Topological maps},
-month = {feb},
-number = {1},
-pages = {21--71},
-publisher = {ACM},
-title = {{Learning metric-topological maps for indoor mobile robot navigation}},
-url = {https://dl.acm.org/doi/10.1145/2809695.2809702 https://linkinghub.elsevier.com/retrieve/pii/S0004370297000787},
-volume = {99},
-year = {1998}
-}
-@article{Choset2000,
-abstract = {This paper prescribes an incremental procedure to construct roadmaps of unknown environments. Recall that a roadmap is a geometric structure that a robot uses to plan a path between two points in an environment. If the robot knows the roadmap, then it knows the environment. Likewise, if the robot constructs the roadmap, then it has effectively explored the environment. This paper focuses on the hierarchical generalized Voronoi graph (HGVG), detailed in the companion paper in this issue. The incremental construction procedure of the HGVG requires only local distance sensor measurements, and therefore the method can be used as a basis for sensor-based planning algorithms. Simulations and experiments using a mobile robot with ultrasonic sensors verify this approach.},
-author = {Choset, Howie and Walker, Sean and Eiamsa-Ard, Kunnayut and Burdick, Joel},
-doi = {10.1177/02783640022066789},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/choset2000.pdf:pdf},
-issn = {02783649},
-journal = {International Journal of Robotics Research},
-keywords = {also useful in multidimensional,but the hgvg is,limited to planar configura-,motion planning,roadmap,sensor-based exploration,sensor-based motion planners are,skeletons,tion spaces,voronoi diagrams},
-number = {2},
-pages = {126--128},
-title = {{Sensor-based exploration: Incremental construction of the hierarchical generalized Voronoi graph}},
-volume = {19},
-year = {2000}
-}
-@article{Kalra2006,
-abstract = {We present an incremental algorithm for constructing and reconstructing Generalized Voronoi Diagrams (GVDs) on grids. Our algorithm, Dynamic Brush-fire, uses techniques from the path planning community to efficiently update GVDs when the underlying environment changes or when new information concerning the environment is received. Dynamic Brushfire is an order of magnitude more efficient than current approaches. In this paper we present the algorithm, compare it to current approaches on several experimental domains involving both simulated and real data, and demonstrate its usefulness for multirobot path planning. {\textcopyright} 2006 The authors.},
-author = {Kalra, Nidhi and Ferguson, Dave and Stentz, Anthony},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/MT/kalra_nidhi_2006_2.pdf:pdf},
-isbn = {1586035959},
-journal = {Intelligent Autonomous Systems 9, IAS 2006},
-keywords = {Incremental algorithms,Robot navigation,Voronoi diagrams},
-pages = {114--123},
-title = {{Incremental reconstruction of generalized voronoi diagrams on grids}},
-year = {2006}
-}
-@article{Yan2015,
-abstract = {Performance benchmarking has become an important topic within robotics. It is indeed, a critical way to compare different solutions under different conditions. In this paper, we focus on performance benchmarking of multi-robot systems which explore and map unknown terrains. We present a collection of metrics to objectively compare different algorithms that can be applied to collaborative multi-robot exploration. We also identify parameters that impact robotic fleet performances. By varying the parameters, we can identify strengths and limits of an algorithm. This work is also a first concrete step to address the general problem of objectively comparing different multi-robot coordination algorithms. We illustrate these contributions with realistic simulations of the frontier-based exploration strategy. The simulations were implemented in ROS, which enables to uncouple the control software from the drivers of the robot body. We can therefore use the same code on both simulation and real robots.},
-author = {Yan, Zhi and Fabresse, Luc and Laval, Jannik and Bouraqadi, Noury},
-doi = {10.1109/IROS.2015.7353852},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/yan2015.pdf:pdf},
-isbn = {9781479999941},
-issn = {21530866},
-journal = {IEEE International Conference on Intelligent Robots and Systems},
-keywords = {Benchmark testing,Buildings,Measurement,Multi-robot systems,Robot kinematics,Software algorithms},
-pages = {3407--3414},
-title = {{Metrics for performance benchmarking of multi-robot exploration}},
-volume = {2015-Decem},
-year = {2015}
-}
-@article{Lau2013,
-abstract = {In robotics, grid maps are often used for solving tasks like collision checking, path planning, and localization. Many approaches to these problems use Euclidean distance maps (DMs), generalized Voronoi diagrams (GVDs), or configuration space (c-space) maps. A key challenge for their application in dynamic environments is the efficient update after potential changes due to moving obstacles or when mapping a previously unknown area. To this end, this paper presents novel algorithms that perform incremental updates that only visit cells affected by changes. Furthermore, we propose incremental update algorithms for DMs and GVDs in the configuration space of non-circular robots. These approaches can be used to implement highly efficient collision checking and holonomic path planning for these platforms. Our c-space representations benefit from parallelization on multi-core CPUs and can also be integrated with other state-of-the-art path planners such as rapidly-exploring random trees. In various experiments using real-world data we show that our update strategies for DMs and GVDs require substantially less cell visits and computation time compared to previous approaches. Furthermore, we demonstrate that our GVD algorithm deals better with non-convex structures, such as indoor areas. All our algorithms consider actual Euclidean distances rather than grid steps and are easy to implement. An open source implementation is available online. {\textcopyright} 2012 Elsevier B.V. All rights reserved.},
-author = {Lau, Boris and Sprunk, Christoph and Burgard, Wolfram},
-doi = {10.1016/j.robot.2012.08.010},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/MT/lau13ras.pdf:pdf},
-issn = {09218890},
-journal = {Robotics and Autonomous Systems},
-keywords = {Collision checking,Configuration space,Distance maps,Incremental algorithms,Robot navigation,Voronoi diagrams},
-number = {10},
-pages = {1116--1130},
-title = {{Efficient grid-based spatial representations for robot navigation in dynamic environments}},
-volume = {61},
-year = {2013}
-}
-@article{Wu2007,
-abstract = {Recent multi-robot exploration algorithms usually rely on occupancy grids as their core world representation. However, those grids are not appropriate for environments that are very large or whose boundaries are not well delimited from the beginning of the exploration. In contrast, polygonal representations do not have such limitations. Previously, the authors have proposed a new exploration algorithm based on partitioning unknown space into as many regions as available robots by applying K-Means clustering to an occupancy grid representation, and have shown that this approach leads to higher robot dispersion than other approaches, which is potentially beneficial for quick coverage of wide areas. In this paper, the original K-Means clustering applied over grid cells, which is the most expensive stage of the aforementioned exploration algorithm, is substituted for a Voronoi-based partitioning algorithm applied to polygons. The computational cost of the exploration algorithm is thus significantly reduced for large maps. An empirical evaluation and comparison of both partitioning approaches is presented.},
-author = {Wu, Ling and {Garc{\'{i}}a Garc{\'{i}}a}, Miguel {\'{A}}ngel and {Puig Valls}, Domenec and {Sol{\'{e}} Ribalta}, Albert},
-doi = {10.14198/JoPha.2007.1.1.05},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/16365427.pdf:pdf},
-issn = {1888-0258},
-journal = {Journal of Physical Agents (JoPha)},
-keywords = {Exploration,Kmeans,Multi-robot,Polygonal model},
-number = {1},
-pages = {37--44},
-title = {{Voronoi-based space partitioning for coordinated multi-robot exploration}},
-url = {http://hdl.handle.net/10045/12600},
-volume = {1},
-year = {2007}
-}
-@inproceedings{Wurm2008,
-abstract = {This paper addresses the problem of exploring an unknown environment with a team of mobile robots. The key issue in coordinated multi-robot exploration is how to assign target locations to the individual robots such that the overall mission time is minimized. In this paper, we propose a novel approach to distribute the robots over the environment that takes into account the structure of the environment. To achieve this, it partitions the space into segments, for example, corresponding to individual rooms. Instead of only considering frontiers between unknown and explored areas as target locations, we send the robots to the individual segments with the task to explore the corresponding area. Our approach has been implemented and tested in simulation as well as in real world experiments. The experiments demonstrate that the overall exploration time can be significantly reduced by considering our segmentation method. {\textcopyright}2008 IEEE.},
-author = {Wurm, K.M. and Stachniss, Cyrill and Burgard, Wolfram},
-booktitle = {2008 IEEE/RSJ International Conference on Intelligent Robots and Systems},
-doi = {10.1109/IROS.2008.4650734},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/wurm08iros.pdf:pdf},
-isbn = {978-1-4244-2057-5},
-month = {sep},
-pages = {1160--1165},
-publisher = {IEEE},
-title = {{Coordinated multi-robot exploration using a segmentation of the environment}},
-url = {http://ieeexplore.ieee.org/document/4650734/},
-year = {2008}
-}
-@inproceedings{Amorin2019,
-abstract = {The exploration of an unknown environment is a classical and essential challenge in mobile robotics. Typically, the overall exploration time is the most commonly used quality indicator. Choosing a stop exploration criterion represents a critical issue, and the simple rule of exploring until reaching a given coverage percentage is useful only on simulations, but futile in practice. In this work we propose a stop criterion based on the expected information gain of the exploring fleet; we show that every component of the fleet can autonomously check whether there are reachable cells from where new information can be gathered, and this fact can be used to take a decision. We measure the exploring area error introduced by the stop decision, concluding that the proposal is feasible, while improvable. Certainly, the stop decisions are taken autonomously, and we understand that a cooperative approach may further improve the proposal. The experiments that support this work are built using ROS over the MORSE physical simulator.},
-author = {Amorin, Guillermo and Benavides, Facundo and Grmapin, Eduardo},
-booktitle = {2019 Latin American Robotics Symposium (LARS), 2019 Brazilian Symposium on Robotics (SBR) and 2019 Workshop on Robotics in Education (WRE)},
-doi = {10.1109/LARS-SBR-WRE48964.2019.00071},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/LARS19.pdf:pdf},
-isbn = {978-1-7281-4268-5},
-keywords = {Auctions,Mapping-tasks,Multirobot-exploration,Stop-criterion},
-month = {oct},
-number = {December},
-pages = {369--374},
-publisher = {IEEE},
-title = {{A Novel Stop Criterion to Support Efficient Multi-Robot Mapping}},
-url = {https://ieeexplore.ieee.org/document/9018592/},
-year = {2019}
-}
-@article{Liu2011,
-abstract = {When people communicate with robots, the most intuitive mean is by naming the different regions in the environment. The capability that robots are able to identify different regions highly depends on the unsupervised topological segmentation results. This paper addresses the problem of segmenting a metric map into regions. Nowadays many researches in this direction develop approaches based on spectral clustering. However there are inherent drawbacks of spectral clustering algorithms. In this paper, we first discuss these drawbacks using several testing results; then we propose our approach based on information theory which uses Chow-Liu tree to segment the composed graph according to the weight differences. The results show that our method provides more flexible and faster results in the sense of facilitating semantic mapping or further applications. {\textcopyright} 2011 IEEE.},
-author = {Liu, Ming and Colas, Francis and Siegwart, Roland},
-doi = {10.1109/ICRA.2011.5979672},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/icra11_321.pdf:pdf},
-isbn = {9781612843865},
-issn = {10504729},
-journal = {Proceedings - IEEE International Conference on Robotics and Automation},
-number = {May},
-pages = {3269--3274},
-title = {{Regional topological segmentation based on Mutual Information Graphs}},
-year = {2011}
-}
 @article{VanZwynsvoorde2000,
 abstract = {In the field of mobile robotics, one important issue is to allow the robot to navigate in an a priori unknown and non specific large scale environment. Large dimensions raise strong limitations of geometric modeling, and topological or mixed metric-topological models are now studied to better fit the problem. In this paper, we present a new method for incrementally building a topological model of an indoor environment from sensor range data. The approach consists in merging each local perception of the topology with the current state of the global graph. This local topology is captured through the construction of a Vorono{\"{i}}-like graph that takes into account not only visible features but also visibility constrains (hidden regions, limited sensing ranges, ...). We give the outline of the method and show first encouraging results on real data.},
 author = {{Van Zwynsvoorde}, D. and Simeon, T. and Alami, R.},
@@ -492,25 +378,16 @@ title = {{Incremental topological modeling using local Vorono{\"{i}}-like graphs
 volume = {2},
 year = {2000}
 }
-@article{Liu2015,
-abstract = {Over the past few decades, topological segmentation has been much studied, especially for structured environments. In this work, we first propose a set of criteria to assess the quality of topological segmentation, especially for semi-structured environments in 2D. These criteria provide a general benchmark for different segmentation algorithms. Then we introduce an incremental approach to create topological segmentation for semi-structured environments. Our novel approach is based on spectral clustering of an incremental generalized Voronoi decomposition of discretized metric maps. It extracts sparse spatial information from the maps, and builds an environment model which aims at simplifying the navigation task for mobile robots. Experimental results in real environments show the robustness and the quality of the topological map created by the proposed method. Extended experiments for urban search and rescue missions are performed to show the global consistency of the proposed incremental segmentation method using six different trails, during which the test robot traveled 1.8 km in total.},
-annote = {Notas:
-habla sobre la segmentacion del entorno incremental basada en un GVG
-
-(es el primero de los que hablan sobre este tema que voy a leer)},
-author = {Liu, Ming and Colas, Francis and Oth, Luc and Siegwart, Roland},
-doi = {10.1007/s10514-014-9398-8},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/Incremental_topological_segmentation_for_semi-stru.pdf:pdf},
-issn = {15737527},
-journal = {Autonomous Robots},
-keywords = {Generalized Voronoi graph,Search and rescue,Topological mapping},
-month = {feb},
-number = {2},
-pages = {143--160},
-title = {{Incremental topological segmentation for semi-structured environments using discretized GVG}},
-url = {http://link.springer.com/10.1007/s10514-014-9398-8},
-volume = {38},
-year = {2015}
+@article{Lau2010,
+abstract = {This paper presents novel, highly efficient approaches for updating Euclidean distance maps and Voronoi diagrams represented on grid maps. Our methods employ a dynamic variant of the brushfire algorithm to update only those cells that are actually affected by changes in the environment. In experiments in different environments we show that our update strategies for distance maps and Voronoi diagrams require substantially fewer cell visits and significantly less computation time compared to previous approaches. Furthermore, the dynamic Voronoi diagram also improves on previous work by correctly dealing with non-convex obstacles such as building walls. We also present a dynamic variant of a skeletonizationbased approach to Voronoi diagrams that is especially robust to noise. All of our algorithms consider actual Euclidean distances rather than grid steps. An open source implementation is available online [1]. {\textcopyright}2010 IEEE.},
+author = {Lau, Boris and Sprunk, Christoph and Burgard, Wolfram},
+doi = {10.1109/IROS.2010.5650794},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/MT/lau10iros.pdf:pdf},
+isbn = {9781424466757},
+journal = {IEEE/RSJ 2010 International Conference on Intelligent Robots and Systems, IROS 2010 - Conference Proceedings},
+pages = {281--286},
+title = {{Improved updating of Euclidean distance maps and Voronoi diagrams}},
+year = {2010}
 }
 @inproceedings{Choi2009,
 abstract = {This paper presents a method of topological modeling in home environments using only low-cost sonar sensors. The proposed method constructs a topological model using sonar gridmap by extracting subregions incrementally. A confidence for each occupied grid is evaluated to obtain reliable regions in a local gridmap, and a convexity measure is used to extract subregions automatically. Through these processes, the topological model is constructed without predefining the number of subregions in advance and the extracted subregions are guaranteed the convexity. Experimental results verify the performance of proposed method in real home environment. {\textcopyright} 2009 IEEE.},
@@ -525,97 +402,6 @@ publisher = {IEEE},
 title = {{Incremental topological modeling using sonar gridmap in home environment}},
 url = {http://ieeexplore.ieee.org/document/5354247/},
 year = {2009}
-}
-@inproceedings{Andre2014,
-abstract = {We present and evaluate new ROS packages for coordinated multi-robot exploration, namely communication, global map construction, and exploration. The packages allow completely distributed control and do not rely on (but allow) central controllers. Their integration including application layer protocols allows out of the box installation and execution. The communication package enables reliable ad hoc communication allowing to exchange local maps between robots which are merged to a global map. Exploration uses the global map to spatially spread robots and decrease exploration time. The intention of the implementation is to offer basic functionality for coordinated multi-robot systems and to enable other research groups to experimentally work on multi-robot systems. The packages are tested in real-world experiments using Turtlebot and Pioneer robots. Further, we analyze their performance using simulations and verify their correct working. I.},
-annote = {Resumen:
-Se presentan y eval{\'{u}}an paquetes de ROS para la exploraci{\'{o}}n multirobot coordinada. Estos paquetes tienen el objetivo de ofrecer funcionalidades b{\'{a}}sicas para tener una soluci{\'{o}}n completa pero simple para el problema de la exploraci{\'{o}}n multirobot permitiendo una configuraci{\'{o}}n completamente distribuida, apuntando a que grupos de investigaci{\'{o}}n puedan utilizarlos. Los paquetes son:
-- ad hoc communication between robots,
-- construction of global maps from local maps,
-- exploration of unknown environments
-
-Notas:
-Los paquetes presentados pueden ser {\'{u}}tiles:
-- WIRELESS AD HOC COMMUNICATION es una soluci{\'{o}}n al funcionamiento centralizado del sistema de t{\'{o}}picos de ROS.
-- MAP MERGER se presenta como una soluci{\'{o}}n a la combinaci{\'{o}}n de mapas cuyo c{\'{o}}digo puede llegar a resultar {\'{u}}til dependiendo de que tan bien se pueda adaptar la soluci{\'{o}}n actual
-- EXPLORATION resulta simple en comparaci{\'{o}}n a las funcionalidades que provee nuestro paquete pero de igual, resaltando el uso de el m{\'{e}}todo h{\'{u}}ngaro para la resoluci{\'{o}}n de subastas el cual seria interesante considerar para nuestro paquete (comparar ordenes del m{\'{e}}todo actual).
-
-El c{\'{o}}digo no se actualiza hace 5 a{\~{n}}os y no hay releases para versiones recientes de ros, de igual manera es posible extraer c{\'{o}}digo para reutilizar en nuestro proyecto.},
-author = {Andre, Torsten and Neuhold, Daniel and Bettstetter, Christian},
-booktitle = {2014 IEEE Globecom Workshops (GC Wkshps)},
-doi = {10.1109/GLOCOMW.2014.7063639},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/andre2014.pdf:pdf},
-isbn = {978-1-4799-7470-2},
-month = {dec},
-pages = {1457--1462},
-publisher = {IEEE},
-title = {{Coordinated multi-robot exploration: Out of the box packages for ROS}},
-url = {http://ieeexplore.ieee.org/document/7063639/},
-year = {2014}
-}
-@article{Lopez-Perez2018,
-abstract = {In mobile robotics, the exploration task consists of navigating through an unknown environment and building a representation of it. The mobile robot community has developed many approaches to solve this problem. These methods are mainly based on two key ideas. The first one is the selection of promising regions to explore and the second is the minimization of a cost function involving the distance traveled by the robots, the time it takes for them to finish the exploration, and others. An option to solve the exploration problem is the use of multiple robots to reduce the time needed for the task and to add fault tolerance to the system. We propose a new method to explore unknown areas, by using a scene partitioning scheme and assigning weights to the frontiers between explored and unknown areas. Energy consumption is always a concern during the exploration, for this reason our method is a distributed algorithm, which helps to reduce the number of communications between robots. By using this approach, we also effectively reduce the time needed to explore unknown regions and the distance traveled by each robot. We performed comparisons of our approach with state-of-the-art methods, obtaining a visible advantage over other works.},
-annote = {Resumen:
-Describen una solucion al problema de exploracion multirobot. Haciendo enfasis en el metodo para explorar zonas desconocidas, el cual se basa en la segmentacion del espacio.
-
-Notas:
-Parece facil de implementar, seria interesante por lo tanto entenderlo bien, para poder considerar su implementacion para comparar contra otro metodo de exploracion mutirobot.},
-author = {Lopez-Perez, Jose J. and Hernandez-Belmonte, Uriel H. and Ramirez-Paredes, Juan-Pablo and Contreras-Cruz, Marco A. and Ayala-Ramirez, Victor},
-doi = {10.1155/2018/2373642},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/2373642.pdf:pdf},
-issn = {1024-123X},
-journal = {Mathematical Problems in Engineering},
-keywords = {10,1155,17 pages,2018,2373642,article id 2373642,dawi,doi,https,mathematical problems in engineering,org,volume 2018},
-month = {jun},
-pages = {1--17},
-title = {{Distributed Multirobot Exploration Based on Scene Partitioning and Frontier Selection}},
-url = {https://www.hindawi.com/journals/mpe/2018/2373642/},
-volume = {2018},
-year = {2018}
-}
-@article{Geng2019,
-abstract = {In a decentralized multi-robot exploration problem, the robots have to cooperate effectively to map a strange environment as soon as possible without a centralized controller. In the past few decades, a set of “human-designed” cooperation strategies have been proposed to address this problem, such as the well-known frontier-based approach. However, many real-world settings, especially the ones that are constantly changing, are too complex for humans to design efficient and decentralized strategies. This paper presents a novel approach, the Attention-based Communication neural network (CommAttn), to “learn” the cooperation strategies automatically in the decentralized multi-robot exploration problem. The communication neural network enables the robots to learn the cooperation strategies with explicit communication. Moreover, the attention mechanism we introduced additionally can precisely calculate whether the communication is necessary for each pair of agents by considering the relevance of each received message, which enables the robots to communicate only with the necessary partners. The empirical results on a simulated multi-robot disaster exploration scenario demonstrate that our proposal outperforms the traditional “human-designed” methods, as well as other competing “learning-based” methods in the exploration task.},
-annote = {Resumen:
-En el marco de la exploracion multi robot, este trabajo se centra en la parte de la cooperacion/coordinacion. 
-Segun los autores en muchos entornos del mundo-real, en especial los altamente dinamicos, son muy comlejos para que los humanos dise{\~{n}}en estrategias eficientes y descentralizadas.
-Dicho esto, presentan un metodo de coordinacion basado en redes neuronales con mecanimos de atencion. Le llaman Attention-based Communication neural network (CommAttn). Esta les permite a los robot aprender estrategias de cooperacion a traves de la comunicacion explicita. El mecanismo de atencion se introduce para que los robots puedan determinar con que otros robots es necesario comunicarse.
-
-Notas:
-Interesante pero no seria el foco del proyecto.},
-author = {Geng, Mingyang and Xu, Kele and Zhou, Xing and Ding, Bo and Wang, Huaimin and Zhang, Lei},
-doi = {10.3390/e21030294},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/entropy-21-00294.pdf:pdf},
-issn = {1099-4300},
-journal = {Entropy},
-keywords = {Attention mechanism,Deep reinforcement learning,Dynamic environments,Multi-robot exploration},
-month = {mar},
-number = {3},
-pages = {294},
-title = {{Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration}},
-url = {https://www.mdpi.com/1099-4300/21/3/294},
-volume = {21},
-year = {2019}
-}
-@inproceedings{Fermin-Leon2017,
-abstract = {We propose an alternative to the common ap- proaches to the topological segmentation in structured or unstructured environments, Contour-Based Segmentation. It is faster and equally accurate, without the need of fine tuning parameters or heuristics. During robotic exploration, we pro- pose an incremental version that reduces the processing time by reusing the previous segmentation. Tests demonstrate the velocity and quality in room segmentation in both batch and incremental mode. Tests also demonstrate the incremental ver- sion outperforms the state of the art in incremental topological segmentation.},
-annote = {Resumen:
-Habla de mapas topologicos, estos son los mapas que se generan a partir de la segmentacion del entorno. 
-Especificamente se sentra en describir y evaluar un algorimo de segmentacion para la contruccion de mapas topologicos en 2D: Segmentacion topologica basada en el contorno de los obstaculos del mapa (Contour Based Topological Segmentation).
-Tambien se describe una variante incremental para poder usarse en tiempo real para la exploracion multirobot.
-
-Notas:
-Interesante tener en cuenta la existencia de diferentes metodos para segmentar el espacio.},
-author = {Fermin-Leon, L. and Neira, J. and Castellanos, J. A.},
-booktitle = {2017 IEEE International Conference on Robotics and Automation (ICRA)},
-doi = {10.1109/ICRA.2017.7989297},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/fermin-leon2017.pdf:pdf},
-isbn = {978-1-5090-4633-1},
-month = {may},
-pages = {2554--2561},
-publisher = {IEEE},
-title = {{Incremental contour-based topological segmentation for robot exploration}},
-url = {http://ieeexplore.ieee.org/document/7989297/},
-year = {2017}
 }
 @article{Corah2019,
 abstract = {This letter presents a framework for planning and perception for multi-robot exploration in large and unstructured three-dimensional environments. We employ a Gaussian mixture model for global mapping to model complex environment geometries while maintaining a small memory footprint which enables distributed operation with a low volume of communication. We then generate a local occupancy grid for use in planning from the Gaussian mixture model using Monte Carlo ray tracing. Then, a finite-horizon, information-based planner uses this local map and optimizes sequences of observations locally while accounting for the global distribution of information in the robot state space which we model using a library of informative views. Simulation results demonstrate that the proposed system is able to maintain efficiency and completeness in exploration while only requiring a low rate of communication.},
@@ -637,43 +423,6 @@ publisher = {IEEE},
 title = {{Communication-Efficient Planning and Mapping for Multi-Robot Exploration in Large Environments}},
 url = {https://ieeexplore.ieee.org/document/8633953/},
 volume = {4},
-year = {2019}
-}
-@article{Corah2019a,
-abstract = {This work addresses the problem of efficient online exploration and mapping using multi-robot teams via a new distributed algorithm for multi-robot exploration, distributed sequential greedy assignment (DSGA), which is based on sequential greedy assignment (SGA). While SGA permits bounds on suboptimality, robots must execute planning steps sequentially. Rather than plan for each robot sequentially as in SGA, DSGA assigns plans to subsets of robots using a fixed number of sequential planning rounds. DSGA retains the same suboptimality bounds as SGA with the addition of a term that describes the additional suboptimality incurred when assigning multiple plans at once. We use this result to extend a single-robot planner based on Monte-Carlo tree search to the multi-robot domain and evaluate the resulting planner in simulated exploration of a confined and cluttered environment. The experimental results show that for teams of 4–32 robots suboptimality due to redundant sensor information introduced in the distributed planning rounds remains small in practice given only two or three distributed planning rounds while providing a 2–8 times speedup over SGA. We also incorporate aerial robots with inter-robot collision constraints and non-trivial dynamics and address subsequent impacts on safety and optimality. Real-time simulation and experimental results for teams of quadrotors demonstrate online planning for multi-robot exploration and indicate that collision constraints have limited impacts on exploration performance.},
-annote = {Resumen:
-Este articulo describe el problema de exploracion multirobot y se centra en la descripcion de "distributed sequential greedy assignment (DSGA)", un algorimo que resuelve de forma eficiente la asignacion de objetivos de exploracion de forma distribuida.
-
-Nota:
-Podria ser interesante comprender tanto el modelo utilizado para el problema como el algorimo que describen.},
-author = {Corah, Micah and Michael, Nathan},
-doi = {10.1007/s10514-018-9778-6},
-file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/corah2018.pdf:pdf},
-issn = {0929-5593},
-journal = {Autonomous Robots},
-keywords = {Exploration,Informative planning,Matroid,Multi-robot,Submodular},
-month = {feb},
-number = {2},
-pages = {485--501},
-publisher = {Springer US},
-title = {{Distributed matroid-constrained submodular maximization for multi-robot exploration: theory and practice}},
-url = {https://doi.org/10.1007/s10514-018-9778-6 http://link.springer.com/10.1007/s10514-018-9778-6},
-volume = {43},
-year = {2019}
-}
-@inproceedings{SantosPessoadeMelo2019,
-abstract = {Validating robotics projects is a hard task. It demands more than intellectual effort, but also specific hardware usage, turning the designed project expensive and because of that, unviable to be executed. This process can be improved by the use of 3D simulators, which have been developed directed to scenarios such as architecture, games and virtual reality experiences, and can also be applied to robotics. There are available many 3D simulator options in the market, paid or free. Considering the 3D simulator options, a robotics project designer may have questions on how to choose the best suitable one. From that, this paper intends to analyze these software focusing on robotics simulation, proposing to clarify some questions and guide the simulator choice. After a literature review made in two stages (a more general search regarding 3D simulators and then the final choice considering abstract and conclusion), it was possible to choose the three most used ones by the robotic community: V-Rep, Gazebo, and Unity. We made a more in-depth study about them in order to evaluate and describe important features related to robotics. Later, we also did experiments using each tool intending to analyze terms relative to usability. The experiment consisted of replicating the same standard 3D scene in the three software. Based on the literature review and the experiments, it became possible to punctuate some observations. In terms of usability, V-Rep and Unity presented a significant degree of freedom considering scene editing, besides both having a friendly interface, while Gazebo showed to be more limited and it has a poor user interface. In the three simulators it is possible to perform a connection with ROS, but with different complexities, being Gazebo and V-Rep the easiest ones. They both have more features and facilities when considering developing a robotics project, leaving Unity behind.},
-author = {{Santos Pessoa de Melo}, Mirella and {Gomes da Silva Neto}, Jose and {Jorge Lima da Silva}, Pedro and {Natario Teixeira}, Joao Marcelo Xavier and Teichrieb, Veronica},
-booktitle = {2019 21st Symposium on Virtual and Augmented Reality (SVR)},
-doi = {10.1109/SVR.2019.00049},
-file = {:home/fede/facultad/ProyGrado/biblio/Simuladores/santospessoademelo2019.pdf:pdf},
-isbn = {978-1-7281-5434-3},
-keywords = {Robot control,Robot programming,Simulation,Visualization},
-month = {oct},
-pages = {242--251},
-publisher = {IEEE},
-title = {{Analysis and Comparison of Robotics 3D Simulators}},
-url = {https://ieeexplore.ieee.org/document/8921035/},
 year = {2019}
 }
 @inproceedings{Ramli2015,
@@ -714,6 +463,21 @@ url = {http://dx.doi.org/10.1007/978-3-319-96728-8_30 http://link.springer.com/1
 volume = {10965 LNAI},
 year = {2018}
 }
+@inproceedings{SantosPessoadeMelo2019,
+abstract = {Validating robotics projects is a hard task. It demands more than intellectual effort, but also specific hardware usage, turning the designed project expensive and because of that, unviable to be executed. This process can be improved by the use of 3D simulators, which have been developed directed to scenarios such as architecture, games and virtual reality experiences, and can also be applied to robotics. There are available many 3D simulator options in the market, paid or free. Considering the 3D simulator options, a robotics project designer may have questions on how to choose the best suitable one. From that, this paper intends to analyze these software focusing on robotics simulation, proposing to clarify some questions and guide the simulator choice. After a literature review made in two stages (a more general search regarding 3D simulators and then the final choice considering abstract and conclusion), it was possible to choose the three most used ones by the robotic community: V-Rep, Gazebo, and Unity. We made a more in-depth study about them in order to evaluate and describe important features related to robotics. Later, we also did experiments using each tool intending to analyze terms relative to usability. The experiment consisted of replicating the same standard 3D scene in the three software. Based on the literature review and the experiments, it became possible to punctuate some observations. In terms of usability, V-Rep and Unity presented a significant degree of freedom considering scene editing, besides both having a friendly interface, while Gazebo showed to be more limited and it has a poor user interface. In the three simulators it is possible to perform a connection with ROS, but with different complexities, being Gazebo and V-Rep the easiest ones. They both have more features and facilities when considering developing a robotics project, leaving Unity behind.},
+author = {{Santos Pessoa de Melo}, Mirella and {Gomes da Silva Neto}, Jose and {Jorge Lima da Silva}, Pedro and {Natario Teixeira}, Joao Marcelo Xavier and Teichrieb, Veronica},
+booktitle = {2019 21st Symposium on Virtual and Augmented Reality (SVR)},
+doi = {10.1109/SVR.2019.00049},
+file = {:home/fede/facultad/ProyGrado/biblio/Simuladores/santospessoademelo2019.pdf:pdf},
+isbn = {978-1-7281-5434-3},
+keywords = {Robot control,Robot programming,Simulation,Visualization},
+month = {oct},
+pages = {242--251},
+publisher = {IEEE},
+title = {{Analysis and Comparison of Robotics 3D Simulators}},
+url = {https://ieeexplore.ieee.org/document/8921035/},
+year = {2019}
+}
 @article{Nogueira2014,
 abstract = {Robotic simulators are normally used in the design and testing of control algorithms for different platforms. But they can also be seen in a more broad context of Artificial Creatures. This a natural development of the cognitive paradigm proposed by Brooks. Related to this, in recent years the Robot Operating System (ROS) has emerged as a de facto standard for robot software architecture. I selected two of the best-known simulators and performed a comparison between them, evaluating the strengths and weaknesses for each one, and how well to these simulators interact with ROS, based on an experiment with a Pioneer 2DX robot.},
 author = {Nogueira, Lucas(School of Electrical andComputer EngineeringUniversidade de Campinas)},
@@ -723,4 +487,344 @@ journal = {Seminario Interno de Cognicao Artificial-SICA},
 keywords = {Gazebo,ROS,V-REP,cognitivescience,robotic simulators},
 title = {{Comparative Analysis Between Gazebo and V-REP Robotic Simulators}},
 year = {2014}
+}
+@article{Wu2007,
+abstract = {Recent multi-robot exploration algorithms usually rely on occupancy grids as their core world representation. However, those grids are not appropriate for environments that are very large or whose boundaries are not well delimited from the beginning of the exploration. In contrast, polygonal representations do not have such limitations. Previously, the authors have proposed a new exploration algorithm based on partitioning unknown space into as many regions as available robots by applying K-Means clustering to an occupancy grid representation, and have shown that this approach leads to higher robot dispersion than other approaches, which is potentially beneficial for quick coverage of wide areas. In this paper, the original K-Means clustering applied over grid cells, which is the most expensive stage of the aforementioned exploration algorithm, is substituted for a Voronoi-based partitioning algorithm applied to polygons. The computational cost of the exploration algorithm is thus significantly reduced for large maps. An empirical evaluation and comparison of both partitioning approaches is presented.},
+author = {Wu, Ling and {Garc{\'{i}}a Garc{\'{i}}a}, Miguel {\'{A}}ngel and {Puig Valls}, Domenec and {Sol{\'{e}} Ribalta}, Albert},
+doi = {10.14198/JoPha.2007.1.1.05},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/16365427.pdf:pdf},
+issn = {1888-0258},
+journal = {Journal of Physical Agents (JoPha)},
+keywords = {Exploration,Kmeans,Multi-robot,Polygonal model},
+number = {1},
+pages = {37--44},
+title = {{Voronoi-based space partitioning for coordinated multi-robot exploration}},
+url = {http://hdl.handle.net/10045/12600},
+volume = {1},
+year = {2007}
+}
+@article{Choset2000,
+abstract = {This paper prescribes an incremental procedure to construct roadmaps of unknown environments. Recall that a roadmap is a geometric structure that a robot uses to plan a path between two points in an environment. If the robot knows the roadmap, then it knows the environment. Likewise, if the robot constructs the roadmap, then it has effectively explored the environment. This paper focuses on the hierarchical generalized Voronoi graph (HGVG), detailed in the companion paper in this issue. The incremental construction procedure of the HGVG requires only local distance sensor measurements, and therefore the method can be used as a basis for sensor-based planning algorithms. Simulations and experiments using a mobile robot with ultrasonic sensors verify this approach.},
+author = {Choset, Howie and Walker, Sean and Eiamsa-Ard, Kunnayut and Burdick, Joel},
+doi = {10.1177/02783640022066789},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/choset2000.pdf:pdf},
+issn = {02783649},
+journal = {International Journal of Robotics Research},
+keywords = {also useful in multidimensional,but the hgvg is,limited to planar configura-,motion planning,roadmap,sensor-based exploration,sensor-based motion planners are,skeletons,tion spaces,voronoi diagrams},
+number = {2},
+pages = {126--128},
+title = {{Sensor-based exploration: Incremental construction of the hierarchical generalized Voronoi graph}},
+volume = {19},
+year = {2000}
+}
+@article{Meijster2005,
+abstract = {A new general algorithm fur computing distance transforms of digital images is presented. The algorithm consists of two phases. Both phases consist of two scans, a forward and a backward scan. The first phase scans the image column-wise, while the second phase scans the image row-wise. Since the computation per row (column) is independent of the computation of other rows (columns), the algorithm can be easily parallelized on shared memory computers. The algorithm can be used for the computation of the exact Euclidean, manhattan (L-1 norm), and chessboard distance (L-infinity norm) transforms.},
+author = {Meijster, A. and Roerdink, J. B. T. M. and Hesselink, W. H.},
+doi = {10.1007/0-306-47025-x_36},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/DistanceTransform.pdf:pdf},
+isbn = {030647025X},
+journal = {Mathematical Morphology and its Applications to Image and Signal Processing},
+number = {May 2014},
+pages = {331--340},
+title = {{A General Algorithm for Computing Distance Transforms in Linear Time}},
+year = {2005}
+}
+@inproceedings{Wurm2008,
+abstract = {This paper addresses the problem of exploring an unknown environment with a team of mobile robots. The key issue in coordinated multi-robot exploration is how to assign target locations to the individual robots such that the overall mission time is minimized. In this paper, we propose a novel approach to distribute the robots over the environment that takes into account the structure of the environment. To achieve this, it partitions the space into segments, for example, corresponding to individual rooms. Instead of only considering frontiers between unknown and explored areas as target locations, we send the robots to the individual segments with the task to explore the corresponding area. Our approach has been implemented and tested in simulation as well as in real world experiments. The experiments demonstrate that the overall exploration time can be significantly reduced by considering our segmentation method. {\textcopyright}2008 IEEE.},
+author = {Wurm, K.M. and Stachniss, Cyrill and Burgard, Wolfram},
+booktitle = {2008 IEEE/RSJ International Conference on Intelligent Robots and Systems},
+doi = {10.1109/IROS.2008.4650734},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/wurm08iros.pdf:pdf},
+isbn = {978-1-4244-2057-5},
+month = {sep},
+pages = {1160--1165},
+publisher = {IEEE},
+title = {{Coordinated multi-robot exploration using a segmentation of the environment}},
+url = {http://ieeexplore.ieee.org/document/4650734/},
+year = {2008}
+}
+@book{Latombe1991,
+address = {Boston, MA},
+author = {Latombe, Jean-Claude},
+booktitle = {Cluster Computing for Robotics and Computer Vision},
+doi = {10.1007/978-1-4615-4022-9},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/latombe1991.pdf:pdf},
+isbn = {978-0-7923-9206-4},
+month = {dec},
+pages = {43--65},
+publisher = {Springer US},
+title = {{Robot Motion Planning}},
+url = {http://www.worldscientific.com/doi/abs/10.1142/9789812836366_0004 http://link.springer.com/10.1007/978-1-4615-4022-9},
+year = {1991}
+}
+@article{Lopez-Perez2018,
+abstract = {In mobile robotics, the exploration task consists of navigating through an unknown environment and building a representation of it. The mobile robot community has developed many approaches to solve this problem. These methods are mainly based on two key ideas. The first one is the selection of promising regions to explore and the second is the minimization of a cost function involving the distance traveled by the robots, the time it takes for them to finish the exploration, and others. An option to solve the exploration problem is the use of multiple robots to reduce the time needed for the task and to add fault tolerance to the system. We propose a new method to explore unknown areas, by using a scene partitioning scheme and assigning weights to the frontiers between explored and unknown areas. Energy consumption is always a concern during the exploration, for this reason our method is a distributed algorithm, which helps to reduce the number of communications between robots. By using this approach, we also effectively reduce the time needed to explore unknown regions and the distance traveled by each robot. We performed comparisons of our approach with state-of-the-art methods, obtaining a visible advantage over other works.},
+annote = {Resumen:
+Describen una solucion al problema de exploracion multirobot. Haciendo enfasis en el metodo para explorar zonas desconocidas, el cual se basa en la segmentacion del espacio.
+
+Notas:
+Parece facil de implementar, seria interesante por lo tanto entenderlo bien, para poder considerar su implementacion para comparar contra otro metodo de exploracion mutirobot.},
+author = {Lopez-Perez, Jose J. and Hernandez-Belmonte, Uriel H. and Ramirez-Paredes, Juan-Pablo and Contreras-Cruz, Marco A. and Ayala-Ramirez, Victor},
+doi = {10.1155/2018/2373642},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/2373642.pdf:pdf},
+issn = {1024-123X},
+journal = {Mathematical Problems in Engineering},
+keywords = {10,1155,17 pages,2018,2373642,article id 2373642,dawi,doi,https,mathematical problems in engineering,org,volume 2018},
+month = {jun},
+pages = {1--17},
+title = {{Distributed Multirobot Exploration Based on Scene Partitioning and Frontier Selection}},
+url = {https://www.hindawi.com/journals/mpe/2018/2373642/},
+volume = {2018},
+year = {2018}
+}
+@article{Liu2015,
+abstract = {Over the past few decades, topological segmentation has been much studied, especially for structured environments. In this work, we first propose a set of criteria to assess the quality of topological segmentation, especially for semi-structured environments in 2D. These criteria provide a general benchmark for different segmentation algorithms. Then we introduce an incremental approach to create topological segmentation for semi-structured environments. Our novel approach is based on spectral clustering of an incremental generalized Voronoi decomposition of discretized metric maps. It extracts sparse spatial information from the maps, and builds an environment model which aims at simplifying the navigation task for mobile robots. Experimental results in real environments show the robustness and the quality of the topological map created by the proposed method. Extended experiments for urban search and rescue missions are performed to show the global consistency of the proposed incremental segmentation method using six different trails, during which the test robot traveled 1.8 km in total.},
+annote = {Notas:
+habla sobre la segmentacion del entorno incremental basada en un GVG
+
+(es el primero de los que hablan sobre este tema que voy a leer)},
+author = {Liu, Ming and Colas, Francis and Oth, Luc and Siegwart, Roland},
+doi = {10.1007/s10514-014-9398-8},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/Incremental_topological_segmentation_for_semi-stru.pdf:pdf},
+issn = {15737527},
+journal = {Autonomous Robots},
+keywords = {Generalized Voronoi graph,Search and rescue,Topological mapping},
+month = {feb},
+number = {2},
+pages = {143--160},
+title = {{Incremental topological segmentation for semi-structured environments using discretized GVG}},
+url = {http://link.springer.com/10.1007/s10514-014-9398-8},
+volume = {38},
+year = {2015}
+}
+@article{Thrun1998,
+abstract = {Autonomous robots must be able to learn and maintain models of their environments. Research on mobile robot navigation has produced two major paradigms for mapping indoor environments: grid-based and topological. While grid-based methods produce accurate metric maps, their complexity often prohibits efficient planning and problem solving in large-scale indoor environments. Topological maps, on the other hand, can be used much more efficiently, yet accurate and consistent topological maps are often difficult to learn and maintain in large-scale environments, particularly if momentary sensor data is highly ambiguous. This paper describes an approach that integrates both paradigms: grid-based and topological. Grid-based maps are learned using artificial neural networks and naive Bayesian integration. Topological maps are generated on top of the grid-based maps, by partitioning the latter into coherent regions. By combining both paradigms, the approach presented here gains advantages from both worlds: accuracy/consistency and efficiency. The paper gives results for autonomous exploration, mapping and operation of a mobile robot in populated multi-room environments. {\textcopyright} 1998 Elsevier Science B.V.},
+address = {New York, NY, USA},
+author = {Thrun, Sebastian},
+doi = {10.1016/S0004-3702(97)00078-7},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/1-s2.0-S0004370297000787-main.pdf:pdf},
+isbn = {9781450336314},
+issn = {00043702},
+journal = {Artificial Intelligence},
+keywords = {Autonomous robots,Exploration,Mobile robots,Neural networks,Occupancy grids,Path planning,Planning,Robot mapping,Topological maps},
+month = {feb},
+number = {1},
+pages = {21--71},
+publisher = {ACM},
+title = {{Learning metric-topological maps for indoor mobile robot navigation}},
+url = {https://dl.acm.org/doi/10.1145/2809695.2809702 https://linkinghub.elsevier.com/retrieve/pii/S0004370297000787},
+volume = {99},
+year = {1998}
+}
+@inproceedings{Fermin-Leon2017,
+abstract = {We propose an alternative to the common ap- proaches to the topological segmentation in structured or unstructured environments, Contour-Based Segmentation. It is faster and equally accurate, without the need of fine tuning parameters or heuristics. During robotic exploration, we pro- pose an incremental version that reduces the processing time by reusing the previous segmentation. Tests demonstrate the velocity and quality in room segmentation in both batch and incremental mode. Tests also demonstrate the incremental ver- sion outperforms the state of the art in incremental topological segmentation.},
+annote = {Resumen:
+Habla de mapas topologicos, estos son los mapas que se generan a partir de la segmentacion del entorno. 
+Especificamente se sentra en describir y evaluar un algorimo de segmentacion para la contruccion de mapas topologicos en 2D: Segmentacion topologica basada en el contorno de los obstaculos del mapa (Contour Based Topological Segmentation).
+Tambien se describe una variante incremental para poder usarse en tiempo real para la exploracion multirobot.
+
+Notas:
+Interesante tener en cuenta la existencia de diferentes metodos para segmentar el espacio.},
+author = {Fermin-Leon, L. and Neira, J. and Castellanos, J. A.},
+booktitle = {2017 IEEE International Conference on Robotics and Automation (ICRA)},
+doi = {10.1109/ICRA.2017.7989297},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/fermin-leon2017.pdf:pdf},
+isbn = {978-1-5090-4633-1},
+month = {may},
+pages = {2554--2561},
+publisher = {IEEE},
+title = {{Incremental contour-based topological segmentation for robot exploration}},
+url = {http://ieeexplore.ieee.org/document/7989297/},
+year = {2017}
+}
+@inproceedings{Andre2014,
+abstract = {We present and evaluate new ROS packages for coordinated multi-robot exploration, namely communication, global map construction, and exploration. The packages allow completely distributed control and do not rely on (but allow) central controllers. Their integration including application layer protocols allows out of the box installation and execution. The communication package enables reliable ad hoc communication allowing to exchange local maps between robots which are merged to a global map. Exploration uses the global map to spatially spread robots and decrease exploration time. The intention of the implementation is to offer basic functionality for coordinated multi-robot systems and to enable other research groups to experimentally work on multi-robot systems. The packages are tested in real-world experiments using Turtlebot and Pioneer robots. Further, we analyze their performance using simulations and verify their correct working. I.},
+annote = {Resumen:
+Se presentan y eval{\'{u}}an paquetes de ROS para la exploraci{\'{o}}n multirobot coordinada. Estos paquetes tienen el objetivo de ofrecer funcionalidades b{\'{a}}sicas para tener una soluci{\'{o}}n completa pero simple para el problema de la exploraci{\'{o}}n multirobot permitiendo una configuraci{\'{o}}n completamente distribuida, apuntando a que grupos de investigaci{\'{o}}n puedan utilizarlos. Los paquetes son:
+- ad hoc communication between robots,
+- construction of global maps from local maps,
+- exploration of unknown environments
+
+Notas:
+Los paquetes presentados pueden ser {\'{u}}tiles:
+- WIRELESS AD HOC COMMUNICATION es una soluci{\'{o}}n al funcionamiento centralizado del sistema de t{\'{o}}picos de ROS.
+- MAP MERGER se presenta como una soluci{\'{o}}n a la combinaci{\'{o}}n de mapas cuyo c{\'{o}}digo puede llegar a resultar {\'{u}}til dependiendo de que tan bien se pueda adaptar la soluci{\'{o}}n actual
+- EXPLORATION resulta simple en comparaci{\'{o}}n a las funcionalidades que provee nuestro paquete pero de igual, resaltando el uso de el m{\'{e}}todo h{\'{u}}ngaro para la resoluci{\'{o}}n de subastas el cual seria interesante considerar para nuestro paquete (comparar ordenes del m{\'{e}}todo actual).
+
+El c{\'{o}}digo no se actualiza hace 5 a{\~{n}}os y no hay releases para versiones recientes de ros, de igual manera es posible extraer c{\'{o}}digo para reutilizar en nuestro proyecto.},
+author = {Andre, Torsten and Neuhold, Daniel and Bettstetter, Christian},
+booktitle = {2014 IEEE Globecom Workshops (GC Wkshps)},
+doi = {10.1109/GLOCOMW.2014.7063639},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/andre2014.pdf:pdf},
+isbn = {978-1-4799-7470-2},
+month = {dec},
+pages = {1457--1462},
+publisher = {IEEE},
+title = {{Coordinated multi-robot exploration: Out of the box packages for ROS}},
+url = {http://ieeexplore.ieee.org/document/7063639/},
+year = {2014}
+}
+@article{Lau2013,
+abstract = {In robotics, grid maps are often used for solving tasks like collision checking, path planning, and localization. Many approaches to these problems use Euclidean distance maps (DMs), generalized Voronoi diagrams (GVDs), or configuration space (c-space) maps. A key challenge for their application in dynamic environments is the efficient update after potential changes due to moving obstacles or when mapping a previously unknown area. To this end, this paper presents novel algorithms that perform incremental updates that only visit cells affected by changes. Furthermore, we propose incremental update algorithms for DMs and GVDs in the configuration space of non-circular robots. These approaches can be used to implement highly efficient collision checking and holonomic path planning for these platforms. Our c-space representations benefit from parallelization on multi-core CPUs and can also be integrated with other state-of-the-art path planners such as rapidly-exploring random trees. In various experiments using real-world data we show that our update strategies for DMs and GVDs require substantially less cell visits and computation time compared to previous approaches. Furthermore, we demonstrate that our GVD algorithm deals better with non-convex structures, such as indoor areas. All our algorithms consider actual Euclidean distances rather than grid steps and are easy to implement. An open source implementation is available online. {\textcopyright} 2012 Elsevier B.V. All rights reserved.},
+author = {Lau, Boris and Sprunk, Christoph and Burgard, Wolfram},
+doi = {10.1016/j.robot.2012.08.010},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/MT/lau13ras.pdf:pdf},
+issn = {09218890},
+journal = {Robotics and Autonomous Systems},
+keywords = {Collision checking,Configuration space,Distance maps,Incremental algorithms,Robot navigation,Voronoi diagrams},
+number = {10},
+pages = {1116--1130},
+title = {{Efficient grid-based spatial representations for robot navigation in dynamic environments}},
+volume = {61},
+year = {2013}
+}
+@article{Kalra2006,
+abstract = {We present an incremental algorithm for constructing and reconstructing Generalized Voronoi Diagrams (GVDs) on grids. Our algorithm, Dynamic Brush-fire, uses techniques from the path planning community to efficiently update GVDs when the underlying environment changes or when new information concerning the environment is received. Dynamic Brushfire is an order of magnitude more efficient than current approaches. In this paper we present the algorithm, compare it to current approaches on several experimental domains involving both simulated and real data, and demonstrate its usefulness for multirobot path planning. {\textcopyright} 2006 The authors.},
+author = {Kalra, Nidhi and Ferguson, Dave and Stentz, Anthony},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/MT/kalra_nidhi_2006_2.pdf:pdf},
+isbn = {1586035959},
+journal = {Intelligent Autonomous Systems 9, IAS 2006},
+keywords = {Incremental algorithms,Robot navigation,Voronoi diagrams},
+pages = {114--123},
+title = {{Incremental reconstruction of generalized voronoi diagrams on grids}},
+year = {2006}
+}
+@book{HowieChosetKevinLynch,
+author = {{Howie Choset, Kevin Lynch}, Seth Hutchinson and {George Kantor, Wolfram Burgard, Lydia Kavraki}, and Sebastian Thrun},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/Intelligent-Robotics-and-Autonomous-Agents-series-Choset-H.-et-al.-Principles-of-Robot-Motion_-Theory-Algorithms-and-Implementations-MIT-2005.pdf:pdf},
+isbn = {9780262033275},
+title = {{Principles of Robot Motion}}
+}
+@incollection{Wallgrun2005,
+abstract = {A route graph as proposed in Werner et al. (2000) is a spatial representation of the environment that focuses on integrating qualitatively different routes an agent can use for navigation. In this paper we describe how a route graph based on the generalized Voronoi diagram (GVD) of the environment can be used for mobile robot mapping and navigation tasks in an office-like indoor environment. We propose a hierarchical organization of the graph structure resulting in more abstract layers that represent the environment at coarser levels of granularity. For this purpose, we define relevance measures to weight the meet points in the GVD based on how significant they are for navigation and present an algorithm that utilizes these weights to generate the coarser route graph layers. Computation of the relevance values from either complete or incomplete information about the environment is considered. Besides robot navigation, the techniques developed can be employed for other tasks in which abstract route graph representations are advantageous, e.g. automatically generating route descriptions from floor plans. {\textcopyright} Springer-Verlag Berlin Heidelberg 2005.},
+author = {Wallgr{\"{u}}n, Jan Oliver},
+booktitle = {Lecture Notes in Artificial Intelligence (Subseries of Lecture Notes in Computer Science)},
+doi = {10.1007/978-3-540-32255-9_23},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/2004-Wallgruen-SC2004-finaldraft.pdf:pdf},
+isbn = {9783540322559},
+issn = {03029743},
+number = {October 2004},
+pages = {413--433},
+title = {{Autonomous Construction of Hierarchical Voronoi-Based Route Graph Representations}},
+url = {http://link.springer.com/10.1007/978-3-540-32255-9_23},
+volume = {3343},
+year = {2005}
+}
+@article{Roque2005,
+abstract = {This paper discusses the techniques and their applications in the development of a path planning system composed of three modules, namely: global vision (GVM), trajectory planning (TPM) and navigation control (NCM). The GVM captures and processes the workspace image to identify the obstacle and the robot configurations. These configurations are used by the TPM to generate the Voronoi roadmap, to compute the maximal clearance shortest feasible path and the visibility pathway between two configurations. The NCM controls the robot functionalities and navigation. To validate the path planning system, three sets of experiments have been conducted using the Lab robot Khepera, which have shown very good results.},
+author = {Roque, Waldir L. and Doering, Dion{\'{i}}sio},
+doi = {10.1017/S0263574704001183},
+file = {::;:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/roque2005.pdf:pdf},
+issn = {0263-5747},
+journal = {Robotica},
+keywords = {Global vision,Mobile robots,Path planning,Robot navigation,Voronoi roadmap},
+month = {jul},
+number = {4},
+pages = {467--477},
+title = {{Trajectory planning for lab robots based on global vision and Voronoi roadmaps}},
+url = {https://www.cambridge.org/core/product/identifier/S0263574704001183/type/journal_article},
+volume = {23},
+year = {2005}
+}
+@article{Corah2019a,
+abstract = {This work addresses the problem of efficient online exploration and mapping using multi-robot teams via a new distributed algorithm for multi-robot exploration, distributed sequential greedy assignment (DSGA), which is based on sequential greedy assignment (SGA). While SGA permits bounds on suboptimality, robots must execute planning steps sequentially. Rather than plan for each robot sequentially as in SGA, DSGA assigns plans to subsets of robots using a fixed number of sequential planning rounds. DSGA retains the same suboptimality bounds as SGA with the addition of a term that describes the additional suboptimality incurred when assigning multiple plans at once. We use this result to extend a single-robot planner based on Monte-Carlo tree search to the multi-robot domain and evaluate the resulting planner in simulated exploration of a confined and cluttered environment. The experimental results show that for teams of 4–32 robots suboptimality due to redundant sensor information introduced in the distributed planning rounds remains small in practice given only two or three distributed planning rounds while providing a 2–8 times speedup over SGA. We also incorporate aerial robots with inter-robot collision constraints and non-trivial dynamics and address subsequent impacts on safety and optimality. Real-time simulation and experimental results for teams of quadrotors demonstrate online planning for multi-robot exploration and indicate that collision constraints have limited impacts on exploration performance.},
+annote = {Resumen:
+Este articulo describe el problema de exploracion multirobot y se centra en la descripcion de "distributed sequential greedy assignment (DSGA)", un algorimo que resuelve de forma eficiente la asignacion de objetivos de exploracion de forma distribuida.
+
+Nota:
+Podria ser interesante comprender tanto el modelo utilizado para el problema como el algorimo que describen.},
+author = {Corah, Micah and Michael, Nathan},
+doi = {10.1007/s10514-018-9778-6},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/corah2018.pdf:pdf},
+issn = {0929-5593},
+journal = {Autonomous Robots},
+keywords = {Exploration,Informative planning,Matroid,Multi-robot,Submodular},
+month = {feb},
+number = {2},
+pages = {485--501},
+publisher = {Springer US},
+title = {{Distributed matroid-constrained submodular maximization for multi-robot exploration: theory and practice}},
+url = {https://doi.org/10.1007/s10514-018-9778-6 http://link.springer.com/10.1007/s10514-018-9778-6},
+volume = {43},
+year = {2019}
+}
+@article{Yan2015,
+abstract = {Performance benchmarking has become an important topic within robotics. It is indeed, a critical way to compare different solutions under different conditions. In this paper, we focus on performance benchmarking of multi-robot systems which explore and map unknown terrains. We present a collection of metrics to objectively compare different algorithms that can be applied to collaborative multi-robot exploration. We also identify parameters that impact robotic fleet performances. By varying the parameters, we can identify strengths and limits of an algorithm. This work is also a first concrete step to address the general problem of objectively comparing different multi-robot coordination algorithms. We illustrate these contributions with realistic simulations of the frontier-based exploration strategy. The simulations were implemented in ROS, which enables to uncouple the control software from the drivers of the robot body. We can therefore use the same code on both simulation and real robots.},
+author = {Yan, Zhi and Fabresse, Luc and Laval, Jannik and Bouraqadi, Noury},
+doi = {10.1109/IROS.2015.7353852},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/yan2015.pdf:pdf},
+isbn = {9781479999941},
+issn = {21530866},
+journal = {IEEE International Conference on Intelligent Robots and Systems},
+keywords = {Benchmark testing,Buildings,Measurement,Multi-robot systems,Robot kinematics,Software algorithms},
+pages = {3407--3414},
+title = {{Metrics for performance benchmarking of multi-robot exploration}},
+volume = {2015-Decem},
+year = {2015}
+}
+@inproceedings{Amorin2019,
+abstract = {The exploration of an unknown environment is a classical and essential challenge in mobile robotics. Typically, the overall exploration time is the most commonly used quality indicator. Choosing a stop exploration criterion represents a critical issue, and the simple rule of exploring until reaching a given coverage percentage is useful only on simulations, but futile in practice. In this work we propose a stop criterion based on the expected information gain of the exploring fleet; we show that every component of the fleet can autonomously check whether there are reachable cells from where new information can be gathered, and this fact can be used to take a decision. We measure the exploring area error introduced by the stop decision, concluding that the proposal is feasible, while improvable. Certainly, the stop decisions are taken autonomously, and we understand that a cooperative approach may further improve the proposal. The experiments that support this work are built using ROS over the MORSE physical simulator.},
+author = {Amorin, Guillermo and Benavides, Facundo and Grmapin, Eduardo},
+booktitle = {2019 Latin American Robotics Symposium (LARS), 2019 Brazilian Symposium on Robotics (SBR) and 2019 Workshop on Robotics in Education (WRE)},
+doi = {10.1109/LARS-SBR-WRE48964.2019.00071},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/TSCF/LARS19.pdf:pdf},
+isbn = {978-1-7281-4268-5},
+keywords = {Auctions,Mapping-tasks,Multirobot-exploration,Stop-criterion},
+month = {oct},
+number = {December},
+pages = {369--374},
+publisher = {IEEE},
+title = {{A Novel Stop Criterion to Support Efficient Multi-Robot Mapping}},
+url = {https://ieeexplore.ieee.org/document/9018592/},
+year = {2019}
+}
+@article{Roque2005a,
+abstract = {This paper discusses the techniques and their applications in the development of a path planning system composed of three modules, namely: global vision (GVM), trajectory planning (TPM) and navigation control (NCM). The GVM captures and processes the workspace image to identify the obstacle and the robot configurations. These configurations are used by the TPM to generate the Voronoi roadmap, to compute the maximal clearance shortest feasible path and the visibility pathway between two configurations. The NCM controls the robot functionalities and navigation. To validate the path planning system, three sets of experiments have been conducted using the Lab robot Khepera, which have shown very good results. {\textcopyright} 2005 Cambridge University Press.},
+author = {Roque, Waldir L. and Doering, Dion{\'{i}}sio},
+doi = {10.1017/S0263574704001183},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/roque2005.pdf:pdf},
+issn = {02635747},
+journal = {Robotica},
+keywords = {Global vision,Mobile robots,Path planning,Robot navigation,Voronoi roadmap},
+number = {4},
+pages = {467--477},
+title = {{Trajectory planning for lab robots based on global vision and Voronoi roadmaps}},
+volume = {23},
+year = {2005}
+}
+@article{Liu2011,
+abstract = {When people communicate with robots, the most intuitive mean is by naming the different regions in the environment. The capability that robots are able to identify different regions highly depends on the unsupervised topological segmentation results. This paper addresses the problem of segmenting a metric map into regions. Nowadays many researches in this direction develop approaches based on spectral clustering. However there are inherent drawbacks of spectral clustering algorithms. In this paper, we first discuss these drawbacks using several testing results; then we propose our approach based on information theory which uses Chow-Liu tree to segment the composed graph according to the weight differences. The results show that our method provides more flexible and faster results in the sense of facilitating semantic mapping or further applications. {\textcopyright} 2011 IEEE.},
+author = {Liu, Ming and Colas, Francis and Siegwart, Roland},
+doi = {10.1109/ICRA.2011.5979672},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/icra11_321.pdf:pdf},
+isbn = {9781612843865},
+issn = {10504729},
+journal = {Proceedings - IEEE International Conference on Robotics and Automation},
+number = {May},
+pages = {3269--3274},
+title = {{Regional topological segmentation based on Mutual Information Graphs}},
+year = {2011}
+}
+@article{Geng2019,
+abstract = {In a decentralized multi-robot exploration problem, the robots have to cooperate effectively to map a strange environment as soon as possible without a centralized controller. In the past few decades, a set of “human-designed” cooperation strategies have been proposed to address this problem, such as the well-known frontier-based approach. However, many real-world settings, especially the ones that are constantly changing, are too complex for humans to design efficient and decentralized strategies. This paper presents a novel approach, the Attention-based Communication neural network (CommAttn), to “learn” the cooperation strategies automatically in the decentralized multi-robot exploration problem. The communication neural network enables the robots to learn the cooperation strategies with explicit communication. Moreover, the attention mechanism we introduced additionally can precisely calculate whether the communication is necessary for each pair of agents by considering the relevance of each received message, which enables the robots to communicate only with the necessary partners. The empirical results on a simulated multi-robot disaster exploration scenario demonstrate that our proposal outperforms the traditional “human-designed” methods, as well as other competing “learning-based” methods in the exploration task.},
+annote = {Resumen:
+En el marco de la exploracion multi robot, este trabajo se centra en la parte de la cooperacion/coordinacion. 
+Segun los autores en muchos entornos del mundo-real, en especial los altamente dinamicos, son muy comlejos para que los humanos dise{\~{n}}en estrategias eficientes y descentralizadas.
+Dicho esto, presentan un metodo de coordinacion basado en redes neuronales con mecanimos de atencion. Le llaman Attention-based Communication neural network (CommAttn). Esta les permite a los robot aprender estrategias de cooperacion a traves de la comunicacion explicita. El mecanismo de atencion se introduce para que los robots puedan determinar con que otros robots es necesario comunicarse.
+
+Notas:
+Interesante pero no seria el foco del proyecto.},
+author = {Geng, Mingyang and Xu, Kele and Zhou, Xing and Ding, Bo and Wang, Huaimin and Zhang, Lei},
+doi = {10.3390/e21030294},
+file = {:home/fede/facultad/ProyGrado/biblio/EstadoDelArte/PgGrado/entropy-21-00294.pdf:pdf},
+issn = {1099-4300},
+journal = {Entropy},
+keywords = {Attention mechanism,Deep reinforcement learning,Dynamic environments,Multi-robot exploration},
+month = {mar},
+number = {3},
+pages = {294},
+title = {{Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration}},
+url = {https://www.mdpi.com/1099-4300/21/3/294},
+volume = {21},
+year = {2019}
 }
