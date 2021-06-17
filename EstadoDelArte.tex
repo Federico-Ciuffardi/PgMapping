@@ -221,9 +221,9 @@ Este método evita problemas que se pueden dar al generar un GVD discretizado a 
 \subsection{Mapa topológico basado en regiones a partir de un GVD}\label{subsec:mapaTopGVD}
 En \cite{Thrun1998} Thrun propone un método que permite, a partir de un mapa representado con una grilla de ocupación, segmentar el espacio en habitaciones y corredores, con el objetivo de generar un mapa topológico en el cual los segmentos serán las regiones de interés. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos.
 
-Para describir el método de segmentación necesario introducir tres nuevos conceptos asociados al GVD, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que es igual a la distancia del punto al entorno, que si $p \in \mli{GVD}$ equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia de $p$). El segundo es el de los \emph{puntos críticos} $C \subset W_{libre}$ de un GVD, un punto es critico si este pertenece al GVD y es un mínimo local según el despeje, esta definición se formaliza en \ref{eq:crit} donde $N(p)$ son los vertices adyacentes a $p$ en el GVD. 
+Para describir el método de segmentación necesario introducir tres nuevos conceptos asociados al GVD, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que es igual a la distancia del punto al entorno, que si $p \in \mli{GVD}$ equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia de $p$). El segundo es el de los \emph{puntos críticos} $C \subset W_{libre}$ de un GVD, un punto es critico si este pertenece al GVD y es un mínimo local según el despeje, esta definición se formaliza en \ref{eq:crit} donde $Ady(p)$ son los vertices adyacentes a $p$ en el GVD. 
 \begin{equation}
-  p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in N(p) \label{eq:crit}
+  p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) \label{eq:crit}
 \end{equation}
 El tercer y ultimo concepto es el de \emph{linea critica}, que son las lineas que conectan a un punto critico $p \in C$ con sus puntos base $\mli{GBP}_p$.
 
@@ -338,7 +338,16 @@ En las secciones \ref{subsec:constGVD} y \ref{subsec:mapaTopGVD} los algoritmos 
 
 % , y por lo tanto su uso resulta ineficiente, por esto fueron desarrolladas variantes incrementales para los mismos.
 \subsubsection{Construcción incremental del GVD}
-En \cite{kalra2009incremental} Kalra \textit{et al.} proponen un algoritmo que se basa en el algoritmo no incremental llamado brushfire \cite{choset2005principles} que es un algoritmo que sirve para encontrar el mapa de distancias, que puede ser adaptado para obtener directamente el GVD como su salida, sin requerir el paso de esqueletización mencionado en \ref{subsec:constGVD}. La idea de este algoritmo
+En \cite{choset2005principles} se describe un algoritmo llamado \emph{brushfire} que permite determinar el mapa de distancia a los obstáculos, asociado a una grilla donde cada celda tiene asociado un estado libre u ocupado. Este algoritmo se puede ver como una variante al conocido algoritmo de Dijkstra que permite varias fuentes y no tiene destino, donde las fuentes son los obstáculos y la distancia calculada es la minima distancia hacia un obstáculo. Se comienza inicializando las distancias de las celdas libres con $\infty$ y las obstaculizadas con $0$. Adicionalmente, las celdas obstaculizadas se insertan en una cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que las cola de prioridad este vacía se remueve la celda mas prioritaria $c$ y para cada celda $c'$ adyacente a $c$ se computa la distancia según la ecuación \ref{ec:distBrushFire}
+
+\begin{equation}\label{ec:distBrushFire}
+  distancia_c = \min_{a\in Ady(c)}\{distancia(c,a)+dist_a]
+\end{equation}
+
+
+También se muestra que este algoritmo puede ser adaptado para obtener directamente el GVD como su salida, sin requerir el paso de esqueletización mencionado en \ref{subsec:constGVD}. 
+
+En \cite{kalra2009incremental} Kalra \textit{et al.} proponen un algoritmo que se basa en el algoritmo no incremental llamado brushfire \cite{choset2005principles} cuyo propósito es computar el mapa de distancia,  La idea de este algoritmo
 % El principal problema con este acercamiento es que el GVD se construye basa en determinar obstáculos independientes para luego calcular el GVD. Esto es un problema porque no es claro en como pasar de celdas obstaculizadas a obstáculos que están compuestos por estas (buscar mas problemas, ineficiencia?, nuestro código no lo soportaba de antes).  El siguiente artículo propone una solución que evita esta necesidad y solo basta con tener un grilla de ocupación.
 
 \cite{Lau2013}
