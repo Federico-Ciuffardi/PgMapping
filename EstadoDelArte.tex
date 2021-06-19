@@ -83,7 +83,7 @@ Los tres trabajos antes mencionados aunque cada uno tiene sus aportes particular
 % \subsection{Representación poligonal}
 % Las representaciones poligonales son mapas métricos propuestos como alternativas a las grillas de ocupación, que busca
 
-\subsection{Mapa de carreteras}
+\subsection{Mapa de carreteras}\label{subsec:mapacarr}
 % Un \emph{mapa de carreteras} (del ingles road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos ubicaciónes distantes, por ejemplo dos depatamentos distintos, en lugar de considerar cada camino posible, normalemte planificamos primero un camino hacia una red de carreteras, luego a lo largo de la red de carreteras y, finalmente, desde la red de carreteras hacia el destino. %(ver figura \ref{fig:ejemplovial}). 
 Un \emph{mapa de carreteras} (del ingles road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente, desde la red de carreteras (Ruta 3) ir hacia el destino(ver figura \ref{fig:ejemplovial}). 
 
@@ -103,54 +103,60 @@ Para considerarse un mapa de carreteras, un mapa topológico debe estar represen
 
 Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inicio},p_{fin}\in W_{libre}$ es posible construir un camino entre ellos. Primero por \emph{accesibilidad} se tiene un camino entre $p_{inicio}$ y un $p'_{inicio}$ vertice de $\mli{MC}$, luego por \emph{capacidad de salida} se asegura la existencia de un  $p'_{fin}$ vertice de $\mli{MC}$ desde el cual hay un camino a $p_{fin}$ y finalmente por \emph{conectividad} se sabe que existe un camino entre $p'_{inicio}$ y $p'_{fin}$. Entonces uniendo los caminos $p_{inicio} - p'_{inicio}$ (por accesibilidad), $p'_{inicio} - p'_{fin}$ (por conectividad) y $p'_{fin} - p_{fin}$(por capacidad de salida) se tiene un camino que conecta dos puntos genéricos del espacio libre $p_{inicio}$ y $p_{fin}$.
 
-
+% \cite{choset2005principles}, \cite{Thrun1998}, \cite{Liu2015}.
 \subsection{Diagrama de Voronoi}
-Dado un espacio $W \subset R^2$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. Una \emph{region de Voronoi}\ref{eq:regV} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular \cite{choset2005principles}, \cite{Thrun1998}, \cite{Liu2015}.
+Dado un espacio $W \subseteq R^2$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular. %(ecuación \ref{eq:regV})
 \begin{equation}
   R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:regV}
 \end{equation}
-De forma similar $BP_p \in S$ \ref{eq:bases} es el conjunto de sitios mas cercanos a un punto $p \in W$ que se denominan \emph{puntos bases} de $p$.
+De forma similar $BP_p \in S$ es el conjunto de sitios mas cercanos a un punto $p \in W$ denominados \emph{puntos bases} de $p$. %\ref{eq:bases} 
 \begin{equation}
   \mli{BP}_p =\{s_i : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:bases}
 \end{equation}
-Un \emph{diagrama de Voronoi} $\mli{VD}\in W$ \ref{eq:DV} se define como todos los puntos con dos o mas sitios a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base.
+Un \emph{diagrama de Voronoi} $\mli{VD}\in W$ se define como todos los puntos con dos o mas sitios a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base. %\ref{eq:DV} 
 \begin{equation}
   \mli{VD} = \{p \in W : |\mli{BP}_p| \geq 2\}\label{eq:DV}
 \end{equation}
 
-Las fronteras de las regiones de Voronoi forman parte del diagrama de Voronoi por lo que es posible decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi. En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Voronoi, con $sitios=\{A_i | 0\leq i \leq 10\}$.
+% Notar que las fronteras de las regiones de Voronoi forman parte del diagrama de Voronoi por lo que es posible decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi. 
+Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el serán máximos locales no estrictos de distancia a los sitios. Esta propiedad es útil en el contexto de la robótica porque permite asegurar que los caminos en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios son seguros en tanto mantienen la mayor distancia posible a los obstáculos.
 
-Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el serán máximos locales (no estrictos) de distancia a los sitios. Esta propiedad es útil en el contexto de la robótica porque permite asegurar que los caminos en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios, son seguros en tanto mantienen la mayor distancia posible a los obstáculos.
-
+ En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Voronoi, con $sitios=\{A_i | 0\leq i \leq 10\}$.
 \begin{figure}[H]
   \center
   \includegraphics[width=5.5cm]{imagenes/VD.png}
   \caption{Ejemplo de un diagrama de Voronoi con diez sitios. Generado con \cite{voronoigeo}.}\label{fig:ejemploVoronoi}
 \end{figure} 
 
+ % \cite{choset2005principles}, \cite{latombe1991}, \cite{wurm2008coordinated}
 \subsection{Diagrama generalizado de Voronoi}
-Recordando que los sitios en un diagrama de Voronoi son puntos, se tiene un problema al querer utilizar obstáculos como sitios. El problema se debe a que normalmente, los obstáculos no pueden representarse como puntos en el espacio, para solucionar esto se generaliza la definición de diagrama de Voronoi para poder definirlo a partir de sitos de mayor orden, como lo son lineas, o polígonos. A esta generalización se la denomina como \emph{diagrama generalizado de Voronoi} (GVD) y los sitios de mayor orden o sitios generalizados serán representados como conjuntos de puntos del espacio de trabajo $\mli{GS}\subset 2^{W}$ \cite{choset2005principles}, \cite{latombe1991}, \cite{wurm2008coordinated}.
+Recordando que los sitios en un diagrama de Voronoi son puntos, se tiene un problema al querer utilizar obstáculos como sitios. El problema radica en que normalmente los obstáculos no pueden representarse como puntos en el espacio, para solucionar esto se generaliza la definición de diagrama de Voronoi para poder definirlo a partir de sitos de mayor orden, como lo son lineas, o polígonos. A esta generalización se la denomina como \emph{diagrama generalizado de Voronoi} (GVD) y los sitios de mayor orden o sitios generalizados son representados como conjuntos conexos de puntos del espacio de trabajo, siendo $\mli{GS}\subset 2^{W}$ el conjunto de todos los sitios generalizados.
 
-Las definiciones planteadas para los diagramas de Voronoi son similares a las utilizadas en los diagramas generalizados de Voronoi (GVD), solo es necesario cambiar la función de distancia para ser compatibles con las formas de los sitios generalizados. Para lograr esto solo es necesario intercambiar la función de distancia $d_p$ a la función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que se define a partir de $d_p$ como se muestra en \ref{eq:dg}. Las regiones generalizadas de Voronoi $\mli{GR}_i$, los puntos base generalizados $\mli{GBP}_p$ y el diagrama generalizado de Voronoi $\mli{GVD}$ se definen según se muestra en \ref{eq:GR}, \ref{eq:GBP} y \ref{eq:GVD} respectivamente. Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los sitios generalizados mas cercanos $\mli{GBS}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
+% Las nuevas definiciones generalizadas son en su mayoría análogas a las originales, siendo el principal cambio la substitución de la función de distancia $d_p$ por una función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los sitios generalizados. La función $\mli{gd}_p$ se define a partir de $d_p$ como se muestra en la ecuación \ref{eq:dg}.
+
+
+Las definiciones relacionadas a los GVD se basan en las definiciones planteadas para los diagramas de Voronoi pero considerando sitios generalizados en lugar de sitios puntuales. Una parte fundamental de las definiciones del GVD es la llamada función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los sitios generalizados, esta se define a partir de la distancia puntual $d_p$ como se muestra en la ecuación \ref{eq:dg}.
 \begin{equation}
   \mli{gd}_p(s_i) = \min_{p'\in s_i}\{d_p(p')\} \label{eq:dg}
 \end{equation}
+La generalización hace necesaria la introducción del concepto de sitios base generalizados $\mli{GBS}_p$ que son los sitios mas cercanos a un punto $p$ (ecuación \ref{eq:GBS}), los cuales se utilizan para la definición de los puntos base generalizados de un punto $p$ $\mli{GBP}_p$ que son los puntos pertenecientes a los sitios de $\mli{GBS}_p$ mas cercanos a $p$ (ecuación \ref{eq:GBP}) . 
+Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de Voronoi $\mli{GVD}$ son las definiciones mas similares a sus contra partes no generalizadas y se definen según se muestra en las ecuaciones \ref{eq:GR} y \ref{eq:GVD} respectivamente. 
+
+
+% Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los sitios generalizados mas cercanos $\mli{GBS}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
 
 \begin{equation}
   \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GR}
 \end{equation}
-
 \begin{equation}
   \mli{GBS}_p = \{s_i : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GBS}
 \end{equation}
-
+% \begin{equation}
+%   \mli{GBP}_p =\{p' \in W : d_p(p') \leq d_p(p''), p' \in s_i, p'' \in s_j, s_i,s_j \in S,p' \neq p''\}
+% \end{equation}
 \begin{equation}
   \mli{GBP}_p =\bigcup_{s_i \in \mli{GBS}_p} \argmin_{p'\in s_i}\{d_p(p')\}\label{eq:GBP}
 \end{equation}
-\begin{equation}
-  \mli{GBP}_p =\{p' : d_p(p') \leq d_p(p''), p' \in s_i, p'' \in s_j, s_i,s_j \in S,p' \neq p''\}
-\end{equation}
-
 \begin{equation}
   \mli{GVD}  = \{p \in W : |GBP_p| \geq 2\}\label{eq:GVD}
 \end{equation}
@@ -159,21 +165,20 @@ En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio li
 
 % vertices son los puntos pertenecientes al GVD, y las aristas están entre los vertices adyacentes en el espacio. Por otro lado otra forma mas compacta es que los 
 % Para referirse a la segunda forma, mas compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
-Los GVD suelen ser representados con un grafo en el cual los vertices son los puntos $p$ del espacio tal que $|\mli{GBP}_p|\geq 3$ o $|\mli{GBP}_p|= 1$ y con aristas entre los vertices que puedan alcanzarse por caminos formados por puntos adyacentes pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo del GVD de la figura \ref{fig:ejemploGVD}, donde los círculos azules son los vertices del grafo y las lineas negras las aristas (aunque no son visibles existen aristas entre los vertices correspondientes a puntos que son tan cercanos que se solapan).
+Los GVD suelen ser representados con un grafo en el cual los vertices son los puntos $p$ pertenecientes al GVD adyacentes a obstáculos o que cumplen con $|\mli{GBP}_p|\geq 3$, mientras que las aristas se encuentran entre los vertices que se encuentran conectados por caminos disjuntos formados por puntos pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo asociado al GVD de la figura \ref{fig:ejemploGVD}, donde los círculos azules son los vertices del grafo y las lineas negras las aristas (aunque no son visibles existen aristas entre los vertices correspondientes a puntos que son tan cercanos que se solapan).
 
-En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como sus sitios cumplen con las 3 propiedades necesarias para ser mapas viales, lo cual justifica su uso para la navegación.
+En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como sitios cumplen con las 3 propiedades necesarias para ser mapas de carreteras (sección \ref{subsec:mapacarr}), lo cual justifica su uso para la navegación.
 
+% La definición de GVD puede ser con sitos base generalizados GBS en lugar de puntos base generalizado GBP:
+% \begin{equation}
+%   \mli{GVD}  = \{p \in W : |GBS_p| \geq 2\}\label{eq:GVD}
+% \end{equation}
 
-% \begin{figure}[H]
-%   \center
-%   \includegraphics[width=5.5cm]{imagenes/GVD2.png}
-%   \caption{Ejemplo de un diagrama generalizado de Voronoi. Extraído de \cite{Wallgrun2005}.}\label{fig:ejemploGVD}
-% \end{figure} 
+% Esto  necesita asumir que los obstáculos son convexos para poder entenderse porque por ejemplo si se considera las 4 paredes de una habitación como un único obstáculo eso seria un único sitio generalizado y no formaría un GVD.
 
-% \begin{figure}[H]
-%   \center
-%   \includegraphics[width=5.5cm]{imagenes/GVDGraph.png}
-%   \caption{Grafo asociado al GVD de la figura \ref{fig:ejemploGVD}.} \label{fig:ejemploGVDgrafo}
+% En la def que use también es necesario  porque podrían darse pequeñas imperfecciones en un espacio continuo que generen que lo que a escala macroscópica es una pared a escala microscópica sean tenga pequeñas hendiduras circulares que causen puntos pertenecientes al GVD en lugares no deseados. Esto se evita considerando obstáculos convexos. 
+
+% La ventaja de la forma que use es que no requiere entrar en los asuntos de obstáculos convexos para un entendimiento superficial, mientras que en la otra si.
 
 % \end{figure} 
 \begin{figure}[H]
@@ -186,11 +191,12 @@ En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos
 \end{figure}
 
 \subsection{Construcción de un GVD}\label{subsec:constGVD}
-Existen dos tipos principales de métodos para la construcción de un GVD los basados en sensores y los basados en grillas. En el contexto del trabajo desarrollado serán relevantes los métodos de construcción de un GVD basada en grillas. 
+Existen dos tipos principales de métodos para la construcción de un GVD los basados en sensores y los basados en grillas. En el contexto del trabajo desarrollado serán relevantes los métodos de construcción basados en grillas. 
 
-La idea más intuitiva para generar un GVD en un espacio representado con una grilla es la de adaptar la definición original de GVD que considera espacios continuos para considerar en su lugar espacios discretizados en celdas, y luego celda a celda, determinar según la nueva definición si estas pertenecen o no al GVD. La definición adaptada en lugar de puntos considera celdas las cuales pertenecen al GVD si tiene dos o mas celdas obstaculizadas a una misma distancia, siendo la distancia entre celdas la distancia entre sus centros. Esta técnica genera resultados erróneos al no considerar los efectos que causa la discretización. Por ejemplo en corredores cuya discretización tiene una cantidad par de celdas entre sus paredes, si se aplica directamente la definición de GVD a las celdas ninguna debería pertenecer al GVD dado que ninguna celda tendría una misma distancia a dos celdas obstaculizadas (paredes del corredor). Esto se considera incorrecto porque los puntos del centro de un corredor siempre pertenecen a un GVD construido en un espacio continuo. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
+La idea más intuitiva para generar un GVD en un espacio representado con una grilla es la de adaptar la definición original de GVD que considera espacios continuos, para que en su lugar considere espacios discretizados en celdas, y luego celda a celda, determinar según la nueva definición si estas pertenecen o no al GVD. La definición adaptada una grilla consiste en que una celda pertenece al GVD si tiene dos o mas celdas obstaculizadas a una misma distancia, siendo la distancia entre celdas la distancia entre sus centros. Sin embargo, esta técnica genera resultados erróneos al no considerar los efectos causados por la discretización. Por ejemplo, en corredores cuya discretización resulta en una cantidad par de celdas entre sus paredes, según este método ninguna celda debería pertenecer al GVD dado que ninguna  tendría una misma distancia a dos celdas obstaculizadas (paredes del corredor). Esto se considera incorrecto porque el GVD construido en un espacio discretizado debe asemejarse al GVD que se construiría en el mismo espacio si fuera continuo y  en el caso continuo los puntos del centro de un corredor siempre pertenecen al GVD. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
 
-En \cite{wurm2008coordinated} se propone un método que resuelve dicho tipo de problemas. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda esta ocupada o libre , resultando en un mapa que contiene para cada celda la distancia al obstáculo mas cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. El grafo generalizado de Voronoi se obtiene aplicando una esqueletización \cite{zhang1984fast} que consiste en erosionar las celdas mas cercanas a los obstáculos hasta llegar a las celdas mas distantes a estos siendo estas ultimas las celdas que se asignan al GVD construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}.
+En \cite{wurm2008coordinated} se propone un método que logra construir un GVD evitando los problemas de discretización mencionados. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda esta ocupada o libre , resultando en un mapa que contiene para cada celda la distancia al obstáculo mas cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. Finalmente GVD se obtiene aplicando un algoritmo de esqueletización \cite{wan2008distance} al mapa de distancia construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}.
+% que consiste en erosionar las celdas mas cercanas a los obstáculos hasta llegar a las celdas mas distantes a estos siendo estas ultimas las celdas que se asignan al GVD construido. Un ejemplo de este proceso se puede ver en la figur
 \begin{figure}[H]
   \centering
   \subfloat[Mapa original]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/wurmSeg/a.png}\label{fig:ejWurmA}}
@@ -320,7 +326,7 @@ Donde $\lambda$ es un peso que determinara la importancia de la simplicidad de l
 % \subsubsection{Evaluación humana}
 % Otra criterio de evaluación es el utilizado en \cite{Fermin-Leon2017} el cual compara la segmentación a evaluar $R_{seg}$ contra segmentaciones realizadas por humanos $R_{human}$. La comparación consiste en para cada pixel comprobar si este esta asignado a una misma region en ambas segmentaciones, lo cual se considera como un verdadero positivo $vp$, los falsos positivos $fp$ son los pixeles que están en la segmentación a evaluar pero no en la humana, o no, que se considera  
 
-\subsection{Eficiencia en la construcción del GVD y mapa topológicos a partir de GVD}
+\subsection{Eficiencia en la construcción del GVD y de mapas topológicos a partir de un GVD}
 % A lo largo de la exploración el mapa construido recibirá, de forma frecuente, actualizaciones que solo modifican una pequeña porción del mismo. Dado esto, por motivos de eficiencia, se busca que los algoritmos que utilizan al mapa como una entrada eviten recomputarse completamente en cada actualización y que en su lugar actualicen el ultimo resultado obtenido para que sea consistente con la ultima version del mapa.
 
 % Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la ultima entrada son llamados \emph{algoritmos incrementales}.
@@ -340,22 +346,65 @@ En las secciones \ref{subsec:constGVD} y \ref{subsec:mapaTopGVD} los algoritmos 
 
 % , y por lo tanto su uso resulta ineficiente, por esto fueron desarrolladas variantes incrementales para los mismos.
 \subsubsection{Construcción incremental del GVD}
-Introducido en \cite{choset2005principles} el algoritmo \emph{brushfire} permite determinar el mapa de distancia a los obstáculos, asociado a una grilla donde cada celda tiene asociado un estado libre u ocupado. Este algoritmo se puede ver como una variante al conocido algoritmo de Dijkstra que permite varias fuentes y no tiene destino, donde las fuentes son los obstáculos y la distancia calculada es la minima distancia hacia un obstáculo. Se comienza inicializando las distancias de las celdas libres con $\infty$ y las obstaculizadas con $0$. Adicionalmente, las celdas obstaculizadas se insertan en una cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que las cola de prioridad este vacía se remueve la celda mas prioritaria $c$ y para cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $dt_{c'}$ según la ecuación \ref{ec:dtBrushFire} que remplaza la distancia actual $d_{c'}$ de la celda $c'$ si $dt_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en la cola de prioridad. 
+% El algoritmo incremental para la construcción de un GVD que se presentara en esta sección es conocido como \emph{brushfire dinámico}, formulado originalmente por Karla \textit{et al.} en \cite{kalra2009incremental}. Este algoritmo se basa en el algoritmo no incremental \emph{brushfire}
+
+El algoritmo \emph{brushfire} permite determinar el mapa de distancia a los obstáculos, asociado a una grilla donde cada celda tiene asociado un estado libre u ocupado. Este algoritmo se puede ver como una variante al conocido algoritmo de Dijkstra que permite varias fuentes y no tiene destino, donde las fuentes son los obstáculos y la distancia calculada es la minima distancia hacia un obstáculo. Se comienza inicializando las distancias de las celdas libres con $\infty$ y las obstaculizadas con $0$. Adicionalmente, las celdas obstaculizadas se insertan en una cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que las cola de prioridad este vacía se remueve la celda mas prioritaria $c$ y para cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $dt_{c'}$ según la ecuación \ref{ec:dtBrushFire} que remplaza la distancia actual $d_{c'}$ de la celda $c'$ si $dt_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en la cola de prioridad. 
+
 \begin{equation}\label{ec:dtBrushFire}
   dt_{c'} = d_c+||c'-c||_2
 \end{equation}
-Una vez que la cola de prioridad queda vacía, el valor de distancia de las celdas converge al valor de la minima distancia hacia un obstáculo.
 
-El nombre de este algoritmo proviene de como este va determinando las distancias, comenzando desde cada obstáculo se va extendiendo desde las celdas mas cercanas a las mas lejanas asemejándose a un incendio de maleza (traducido al ingles como brushfire). Comportamiento que también se puede interpretar como ondas que parten desde cada obstáculo, asignando la distancia recorrida a cada celda por la que pasan mientras avanzan.
+Una vez que la cola de prioridad queda vacía, el valor de distancia de las celdas converge al valor de la minima distancia hacia un obstáculo. 
 
-Una observation sobre la interpretation de brushfire como ondas es que en los lugares donde estas colisionan la distancia minima hacia los obstáculos se maximiza
+El nombre de este algoritmo proviene de como este determina las distancias comenzando desde cada obstáculo y extendiéndose desde las celdas mas cercanas a las mas lejanas asemejándose a un incendio de maleza (traducido al ingles como brushfire). Adicionalmente el algoritmo también puede interpretarse como ondas que parten desde cada obstáculo, y a medida de que avanzan le asignan la distancia recorrida a las celdas que atraviesan. Un ejemplo de ejecución se muestra en la figura \ref{fig:wavesBrush}.  
+% a cada celda por la que pasan mientras avanzan
 
-En \ref{subsec:constGVD} se muestra un método de construcción que requiere primero encontrar un mapa de distancia y luego aplicar un algoritmo de esqueletización, pero brushfire puede ser adaptado para construir el GVD sin el paso intermedio de esqueletización. Según la interpretación de brushfire como ondas se tiene que las celdas que pertenecen al GVD serán las que se 
+\begin{figure}[H]
+  \center
+  \includegraphics[width=1\linewidth]{imagenes/wavesBrush.png}
+  \caption{Ejemplo de brushfire. (A) Los valores de distancia se inicializan con 0 (negro) para celdas ocupadas e infinito (blanco) para celdas vacías. (B) y (C) Las celdas ocupadas generan ondas que asignan distancias crecientes a medida que se propagan, indicadas por el aumento de brillo de las celdas. (D) Las ondas se detienen al no poderse reducir más valores de distancia. Una vez que se han detenido todas las ondas, se obtiene el mapa de distancia completo. Extraído de \cite{Lau2013}.}\label{fig:wavesBrush}
+\end{figure} 
 
-En \cite{kalra2009incremental} Kalra \textit{et al.} proponen un algoritmo que se basa en el algoritmo no incremental llamado brushfire \cite{choset2005principles} cuyo propósito es computar el mapa de distancia,  La idea de este algoritmo
+En \ref{subsec:constGVD} se muestra un método de construcción que requiere primero encontrar un mapa de distancia y luego aplicar un algoritmo de esqueletización, pero brushfire puede ser adaptado para construir el GVD sin el paso intermedio de esqueletización. La idea se basa en asignar identificadores a cada conjunto conexo de celdas obstaculizadas y luego según la interpretación de brushfire como ondas, las ondas provenientes de celdas obstaculizadas con identificadores distintos colisionan en las celdas que deben pertenecer al GVD. 
+
+El algoritmo de brushfire descrito hasta el momento no es incremental, pero en \cite{kalra2009incremental} Kalra \textit{et al.} presentan una variante nombrada \emph{brushfire dinámico} que si lo es.
+
+Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la ultima ejecución, y a partir de estos modificar solo las porciones del ultimo resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser obstaculizado a ser libre o viceversa. 
+
+Partiendo de un mapa de distancias parcialmente correcto brushfire dinámico propaga los cambios ocurridos en forma de ondas. Las celdas $o$ que pasan a estar obstaculizadas emiten una onda \say{consistente} que establece la distancia $dt_c$ recorrida por la onda a la nueva distancia $d_c$ asociada a la celda $c$ si $dt_{c}<d_{c}$, si la distancia se modifica se establece a $o$ como el obstáculo a minima distancia de $c$. En el caso de las celdas $l$ que pasan a estar libres emanan una onda \say{inconsistente} que reinicia a $\infty$ (invalida) las distancias $d_c$ de las celdas $c$ que tienen a $l$ como obstáculo a minima distancia, esta onda se expande hasta llegar a una celda $c'$ que tiene obstáculo valido a minima distancia, al suceder esto desde $c'$ se resume la onda \say{consciente} que causo su valor de distancia actual de forma de restablecer la distancia de las celdas reiniciadas. En la figura \ref{fig:wavesBrushDyn} se muestra gráficamente el funcionamiento de brushfire dinámico.
+
+\begin{figure}[H]
+  \center
+  \includegraphics[width=1\linewidth]{imagenes/wavesBrushDinClean.png}
+  \caption{Ejemplo de brushfire dinámico. (A) Ultimo mapa de distancias calculado. (B) Un obstáculo es eliminado (contorno rojo) lo cual causa ondas inconsistentes que comienza a reiniciar los valores de distancia inválidos, a su vez un obstáculo es insertado (contorno azul) y generando ondas consistentes que propagan las nuevas distancias. (C) Cuando las ondas inconsistentes chocan contra celdas con un obstáculo más cercano válido estas se detienen y en ese mismo lugar inicia una onda consistente para restaurar los valores de distancia reiniciados. (D) Después que todas las ondas se detienen, la actualización se completa. Extraído de \cite{Lau2013}.}\label{fig:wavesBrushDyn}
+\end{figure} 
+
+Con esto se tiene una definición de brushfire dinámico que calcula un mapa de distancia. De forma análoga a lo realizado en brushfire, brushfire dinámico se puede adaptar para lograr construir un GVD, pero en este caso de forma incremental. Las ondas consistentes causan la pertenecía al GVD de las celdas en donde estas se detienen y de las celdas que causaron que se detengan. Por otro lado las ondas inconsistentes remueven del GVD a todas las celdas cuya pertenencia al GVD involucra a celdas previamente obstaculizadas que pasaron a ser libres.
+
+\begin{figure}[H]
+  \center
+  \includegraphics[width=1\linewidth]{imagenes/wavesKalra.png}
+  \caption{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda obstaculizada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al detenerse genera celdas pertenecientes al GVD (en gris). (6-10) La celda central se elimina produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda obstaculizada que paso a ser libre mientras que al al llegar a cedas con una distancia minima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
+\end{figure} 
+
+
+De esta forma se logra la construcción incremental de un GVD. Sin embargo en \cite{Lau2013} Lau \textit{et al.} destacan algunas problemáticas de brushfire dinámico, principalmente, que genera un GVD con lineas de dos celdas de ancho y que por basar la generación en los conjuntos conexos de obstáculos no genera celdas pertenecientes al GVD dentro de los conjuntos conexos de obstáculos que a su vez son cóncavos. Estos problemas se pueden ver en a la izquierda de la figura \ref{fig:lauPalo}.
+% Nuestro enfoque genera líneas de Voronoi delgadas, de modo que diferentes caminos en el GVD corresponden a rutas topológicamente diferentes.
+\begin{figure}[H]
+  \center
+  \includegraphics[width=0.75\linewidth]{imagenes/lauPalo.png}
+  \caption{GVD calculado con el algoritmo de brushfire dinámico original a la izquierda y el calculado por el brushfire dinámico modificado de Lau \textit{et al.} a la derecha. Las elipses marcan las líneas de Voronoi que faltan.  Extraído de \cite{Lau2013}.}\label{fig:lauPalo}
+\end{figure} 
+
+% Sin
+% En el caso anterior la onda solo puede reducir la distancia $d_{c'}$ de una celda $c'$, esta es la principal diferencia con las ondas que provienen de una celda que pasa de estar ocupada a estar libre, en este caso se tendra una onda que aumentara la distancia  
+
+
+% Según la interpretación de brushfire como ondas se tiene que las celdas que pertenecen al GVD serán las que se 
+
+% En \cite{kalra2009incremental} Kalra \textit{et al.} proponen un algoritmo que se basa en el algoritmo no incremental llamado brushfire \cite{choset2005principles} cuyo propósito es computar el mapa de distancia,  La idea de este algoritmo
 % El principal problema con este acercamiento es que el GVD se construye basa en determinar obstáculos independientes para luego calcular el GVD. Esto es un problema porque no es claro en como pasar de celdas obstaculizadas a obstáculos que están compuestos por estas (buscar mas problemas, ineficiencia?, nuestro código no lo soportaba de antes).  El siguiente artículo propone una solución que evita esta necesidad y solo basta con tener un grilla de ocupación.
 
-\cite{Lau2013}
 
 \subsubsection{Construcción incremental de mapas topológicos a partir de un GVD}
 \cite{Liu2015}
