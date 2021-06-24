@@ -105,20 +105,20 @@ Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inici
 
 % \cite{choset2005principles}, \cite{Thrun1998}, \cite{Liu2015}.
 \subsection{Diagrama de Voronoi}
-Dado un espacio $W \subseteq R^2$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular. %(ecuación \ref{eq:regV})
+Dado un espacio $W \subseteq R^2$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular: %(ecuación \ref{eq:regV})
 \begin{equation}
   R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:regV}
 \end{equation}
-De forma similar $BP_p \in S$ es el conjunto de sitios mas cercanos a un punto $p \in W$ denominados \emph{puntos bases} de $p$. %\ref{eq:bases} 
+De forma similar $BP_p \in S$ es el conjunto de sitios mas cercanos a un punto $p \in W$ denominados \emph{puntos bases} de $p$: %\ref{eq:bases} 
 \begin{equation}
-  \mli{BP}_p =\{s_i : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:bases}
+  \mli{BP}_p =\{s_i \in S: d_p(s_i) \leq d_p(s_j), s_j\in S,s_j \neq s_i\}\label{eq:bases}
 \end{equation}
-Un \emph{diagrama de Voronoi} $\mli{VD}\in W$ se define como todos los puntos con dos o mas sitios a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base. %\ref{eq:DV} 
+Un \emph{diagrama de Voronoi} $\mli{VD}\in W$ se define como todos los puntos con dos o mas sitios a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base: %\ref{eq:DV} 
 \begin{equation}
   \mli{VD} = \{p \in W : |\mli{BP}_p| \geq 2\}\label{eq:DV}
 \end{equation}
 
-% Notar que las fronteras de las regiones de Voronoi forman parte del diagrama de Voronoi por lo que es posible decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi. 
+Notar que las fronteras de las regiones de Voronoi forman parte del diagrama de Voronoi por lo que es posible decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi. 
 Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el serán máximos locales no estrictos de distancia a los sitios. Esta propiedad es útil en el contexto de la robótica porque permite asegurar que los caminos en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios son seguros en tanto mantienen la mayor distancia posible a los obstáculos.
 
  En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Voronoi, con $sitios=\{A_i | 0\leq i \leq 10\}$.
@@ -135,19 +135,17 @@ Recordando que los sitios en un diagrama de Voronoi son puntos, se tiene un prob
 % Las nuevas definiciones generalizadas son en su mayoría análogas a las originales, siendo el principal cambio la substitución de la función de distancia $d_p$ por una función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los sitios generalizados. La función $\mli{gd}_p$ se define a partir de $d_p$ como se muestra en la ecuación \ref{eq:dg}.
 
 
-Las definiciones relacionadas a los GVD se basan en las definiciones planteadas para los diagramas de Voronoi pero considerando sitios generalizados en lugar de sitios puntuales. Una parte fundamental de las definiciones del GVD es la llamada función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los sitios generalizados, esta se define a partir de la distancia puntual $d_p$ como se muestra en la ecuación \ref{eq:dg}.
+Las definiciones relacionadas a los GVD se basan en las definiciones planteadas para los diagramas de Voronoi pero considerando sitios generalizados en lugar de sitios puntuales. Una parte fundamental de las definiciones del GVD es la llamada función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los sitios generalizados, esta se define a partir de la distancia puntual $d_p$ como se muestra en \eqref{eq:dg}.
 \begin{equation}
   \mli{gd}_p(s_i) = \min_{p'\in s_i}\{d_p(p')\} \label{eq:dg}
 \end{equation}
-La generalización hace necesaria la introducción del concepto de sitios base generalizados $\mli{GBS}_p$ que son los sitios mas cercanos a un punto $p$ (ecuación \ref{eq:GBS}), los cuales se utilizan para la definición de los puntos base generalizados de un punto $p$ $\mli{GBP}_p$ que son los puntos pertenecientes a los sitios de $\mli{GBS}_p$ mas cercanos a $p$ (ecuación \ref{eq:GBP}) . 
+La generalización hace necesaria la introducción del concepto de sitios base generalizados $\mli{GBS}_p$ que son los sitios mas cercanos a un punto $p$ \eqref{eq:GBS}, los cuales se utilizan para la definición de los puntos base generalizados de un punto $p$ $\mli{GBP}_p$ que son los puntos pertenecientes a los sitios de $\mli{GBS}_p$ mas cercanos a $p$ (ecuación \ref{eq:GBP}) . 
 Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de Voronoi $\mli{GVD}$ son las definiciones mas similares a sus contra partes no generalizadas y se definen según se muestra en las ecuaciones \ref{eq:GR} y \ref{eq:GVD} respectivamente. 
 
 
 % Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los sitios generalizados mas cercanos $\mli{GBS}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
 
-\begin{equation}
-  \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GR}
-\end{equation}
+
 \begin{equation}
   \mli{GBS}_p = \{s_i : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GBS}
 \end{equation}
@@ -159,6 +157,9 @@ Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de
 \end{equation}
 \begin{equation}
   \mli{GVD}  = \{p \in W : |GBP_p| \geq 2\}\label{eq:GVD}
+\end{equation}
+\begin{equation}
+  \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GR}
 \end{equation}
 
 En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio libre se marca con blanco, las lineas negras identifican al GVD y los polígonos negros representan obstáculos  . 
