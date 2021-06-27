@@ -105,28 +105,35 @@ Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inici
 
 % \cite{choset2005principles}, \cite{Thrun1998}, \cite{Liu2015}.
 \subsection{Diagrama de Voronoi}
-Dado un espacio $W \subseteq R^2$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular: %(ecuación \ref{eq:regV})
-\begin{equation}
-  R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:regV}
-\end{equation}
-De forma similar $BP_p \in S$ es el conjunto de sitios mas cercanos a un punto $p \in W$ denominados \emph{puntos bases} de $p$: %\ref{eq:bases} 
+Dado un espacio $W \subseteq R^2$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia entre dos puntos en $W$. 
+
+% Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular: 
+% \begin{equation}
+%   R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:regV}
+% \end{equation}
+Los denominados \emph{puntos bases} de $p$, $BP_p \subseteq S$ es el conjunto de sitios mas cercanos a un punto $p \in W$ :
 \begin{equation}
   \mli{BP}_p =\{s_i \in S: d_p(s_i) \leq d_p(s_j), s_j\in S,s_j \neq s_i\}\label{eq:bases}
 \end{equation}
-Un \emph{diagrama de Voronoi} $\mli{VD}\in W$ se define como todos los puntos con dos o mas sitios a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base: %\ref{eq:DV} 
+Un \emph{diagrama de Voronoi} $\mli{VD}\subset W$ se define como todos los puntos con dos o mas sitios a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base: 
 \begin{equation}
   \mli{VD} = \{p \in W : |\mli{BP}_p| \geq 2\}\label{eq:DV}
 \end{equation}
 
-Notar que las fronteras de las regiones de Voronoi forman parte del diagrama de Voronoi por lo que es posible decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi. 
-Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el serán máximos locales no estrictos de distancia a los sitios. Esta propiedad es útil en el contexto de la robótica porque permite asegurar que los caminos en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios son seguros en tanto mantienen la mayor distancia posible a los obstáculos.
+% Notar que las fronteras de las regiones de Voronoi forman parte del diagrama de Voronoi por lo que es posible decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi. 
+% Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el serán máximos locales no estrictos de distancia a los sitios. Esta propiedad es útil en el contexto de la robótica porque permite asegurar que los caminos en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios son seguros en tanto mantienen la mayor distancia posible a los obstáculos.
 
- En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Voronoi, con $sitios=\{A_i | 0\leq i \leq 10\}$.
+En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Voronoi, con $S=\{A_i | 0\leq i \leq 10\}$ como sitios.
 \begin{figure}[H]
   \center
   \includegraphics[width=5.5cm]{imagenes/VD.png}
-  \caption{Ejemplo de un diagrama de Voronoi con diez sitios. Generado con \cite{voronoigeo}.}\label{fig:ejemploVoronoi}
+  \caption{Ejemplo de un diagrama de Voronoi (en violeta) con diez sitios. Generado con \cite{voronoigeo}.}\label{fig:ejemploVoronoi}
 \end{figure} 
+
+Una propiedad de los diagramas de Voronoi es que los caminos sobre este tipo de diagramas mantienen a lo largo de ellos la mayor distancia posible al sitio mas cercano.
+Esta propiedad es útil en el contexto de la robótica porque dado un diagrama de Voronoi generado con el conjunto de obstáculos como sitios, los caminos sobre este se consideran seguros en tanto mantienen al robot lo mas alejado posible de los obstáculos durante el recorrido.
+
+% Una propiedad de los diagramas de Voronoi  es que los caminos sobre este tipo de diagramas aseguran mantener la mayor distancia posible a los sitios. Esta propiedad es util en el contexto de la robotica porque permite asegurar por lo tanto en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios se puede decir que los caminos sobre este serán seguros en tanto mantienen la mayor distancia posible a los obstáculos.
 
  % \cite{choset2005principles}, \cite{latombe1991}, \cite{wurm2008coordinated}
 \subsection{Diagrama generalizado de Voronoi}
@@ -134,13 +141,13 @@ Recordando que los sitios en un diagrama de Voronoi son puntos, se tiene un prob
 
 % Las nuevas definiciones generalizadas son en su mayoría análogas a las originales, siendo el principal cambio la substitución de la función de distancia $d_p$ por una función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los sitios generalizados. La función $\mli{gd}_p$ se define a partir de $d_p$ como se muestra en la ecuación \ref{eq:dg}.
 
-
 Las definiciones relacionadas a los GVD se basan en las definiciones planteadas para los diagramas de Voronoi pero considerando sitios generalizados en lugar de sitios puntuales. Una parte fundamental de las definiciones del GVD es la llamada función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los sitios generalizados, esta se define a partir de la distancia puntual $d_p$ como se muestra en \eqref{eq:dg}.
 \begin{equation}
   \mli{gd}_p(s_i) = \min_{p'\in s_i}\{d_p(p')\} \label{eq:dg}
 \end{equation}
-La generalización hace necesaria la introducción del concepto de sitios base generalizados $\mli{GBS}_p$ que son los sitios mas cercanos a un punto $p$ \eqref{eq:GBS}, los cuales se utilizan para la definición de los puntos base generalizados de un punto $p$ $\mli{GBP}_p$ que son los puntos pertenecientes a los sitios de $\mli{GBS}_p$ mas cercanos a $p$ (ecuación \ref{eq:GBP}) . 
-Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de Voronoi $\mli{GVD}$ son las definiciones mas similares a sus contra partes no generalizadas y se definen según se muestra en las ecuaciones \ref{eq:GR} y \ref{eq:GVD} respectivamente. 
+La generalización hace necesaria la introducción del concepto de sitios base generalizados $\mli{GBS}_p\subseteq GS$ que son los sitios mas cercanos a un punto $p$ \eqref{eq:GBS}, los cuales se utilizan para la definición de los puntos base generalizados de un punto $p$ $\mli{GBP}_p$ que son los puntos pertenecientes a los sitios de $\mli{GBS}_p$ mas cercanos a $p$ \eqref{eq:GBP} . 
+La definición diagrama de Voronoi $\mli{GVD}$ es similar a su contra parte no generalizada y se define según se muestra en \eqref{eq:GVD}. 
+% Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de Voronoi $\mli{GVD}$ son las definiciones mas similares a sus contra partes no generalizadas y se definen según se muestra en \eqref{eq:GR} y \eqref{eq:GVD} respectivamente. 
 
 
 % Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los sitios generalizados mas cercanos $\mli{GBS}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
@@ -158,22 +165,24 @@ Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de
 \begin{equation}
   \mli{GVD}  = \{p \in W : |GBP_p| \geq 2\}\label{eq:GVD}
 \end{equation}
-\begin{equation}
-  \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GR}
-\end{equation}
+% \begin{equation}
+%   \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GR}
+% \end{equation}
 
-En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio libre se marca con blanco, las lineas negras identifican al GVD y los polígonos negros representan obstáculos  . 
+En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio libre se marca con blanco, las lineas negras identifican al GVD y los polígonos negros representan obstáculos. 
 
 % vertices son los puntos pertenecientes al GVD, y las aristas están entre los vertices adyacentes en el espacio. Por otro lado otra forma mas compacta es que los 
 % Para referirse a la segunda forma, mas compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
 Los GVD suelen ser representados con un grafo en el cual los vertices son los puntos $p$ pertenecientes al GVD adyacentes a obstáculos o que cumplen con $|\mli{GBP}_p|\geq 3$, mientras que las aristas se encuentran entre los vertices que se encuentran conectados por caminos disjuntos formados por puntos pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo asociado al GVD de la figura \ref{fig:ejemploGVD}, donde los círculos azules son los vertices del grafo y las lineas negras las aristas (aunque no son visibles existen aristas entre los vertices correspondientes a puntos que son tan cercanos que se solapan).
 
-En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como sitios cumplen con las 3 propiedades necesarias para ser mapas de carreteras (sección \ref{subsec:mapacarr}), lo cual justifica su uso para la navegación.
+En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como sitios cumplen con las 3 propiedades necesarias para ser mapas de carreteras (sección \ref{subsec:mapacarr}), lo cual justifica su uso para la navegación. Esto junto a la capacidad de generar caminos seguros ya mencionada junto a otras como su utilidad para la coordinación y para generar mapas topológicos basados en regiones que se tratarán mas adelante, hacen que los GVD que utilizan obstáculos como sitios, son estructuras de gran útilidad en el contexto de la robótica. De ahora en mas al hablar de GVD se hace referencia a GVD generado obstáculos como sitios.
 
-% La definición de GVD puede ser con sitos base generalizados GBS en lugar de puntos base generalizado GBP:
+% Otra definición alternativa de GVD se muestra en \eqref{eq:GVDalt}, esta definición es mas restrictiva que la anterior en tanto no permite que un punto pertenezca si tiene mas de dos puntos bases pero estos pertenecen a un mismo sitio. Esta definición trae problemas ya que distintas formas de separar a los obstáculos en sitios puede causar distintos GVD. Por ejemplo si se considera u sitio como un conjunto conexo de puntos obstaculizados se tiene que en el interior de las habitaciones con una entrada no se generara GVD, ya que sus paredes por estar conectadas serán un solo sitio, y por lo tanto los puntos $p$ interiores a la habitación aunque pueden cumplir con $|GBP_p| \geq 2$ no cumplirán con $|GBS_p| \geq 2$.
 % \begin{equation}
-%   \mli{GVD}  = \{p \in W : |GBS_p| \geq 2\}\label{eq:GVD}
+%   \mli{GVD}  = \{p \in W : |GBS_p| \geq 2\}\label{eq:GVDalt}
 % \end{equation}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Esto  necesita asumir que los obstáculos son convexos para poder entenderse porque por ejemplo si se considera las 4 paredes de una habitación como un único obstáculo eso seria un único sitio generalizado y no formaría un GVD.
 
@@ -230,7 +239,7 @@ En \cite{wurm2008coordinated} se propone un método que logra construir un GVD e
 \subsection{Mapa topológico basado en regiones a partir de un GVD}\label{subsec:mapaTopGVD}
 En \cite{Thrun1998} Thrun propone un método que permite, a partir de un mapa representado con una grilla de ocupación, segmentar el espacio en habitaciones y corredores, con el objetivo de generar un mapa topológico en el cual los segmentos serán las regiones de interés. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos.
 
-Para describir el método de segmentación necesario introducir tres nuevos conceptos asociados al GVD, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que es igual a la distancia del punto al entorno, que si $p \in \mli{GVD}$ equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia de $p$). El segundo es el de los \emph{puntos críticos} $C \subset W_{libre}$ de un GVD, un punto es critico si este pertenece al GVD y es un mínimo local según el despeje, esta definición se formaliza en \ref{eq:crit} donde $Ady(p)$ son los vertices adyacentes a $p$ en el GVD. 
+Para describir el método de segmentación necesario introducir tres nuevos conceptos asociados al GVD, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que es igual a la distancia del punto $p$ a el punto del obstaculizado mas cercano, que si $p \in \mli{GVD}$ equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia de $p$). El segundo es el de los \emph{puntos críticos} $C \subset W_{libre}$ de un GVD, un punto es critico si este pertenece al GVD y es un mínimo local según el despeje, esta definición se formaliza en \eqref{eq:crit} donde $Ady(p)$ son los vertices adyacentes a $p$ en el GVD. 
 \begin{equation}
   p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) \label{eq:crit}
 \end{equation}
@@ -283,7 +292,7 @@ Se cumple que $A_i \leq H_i$ siendo iguales cuando la region es convexa, por lo 
 
 \paragraph{Compacidad}
 % Cuanto mas cercanos son los puntos que componen una region a su centro mas compacta sera la region.
-La compacidad de una region mide la distribución una region con respecto a su centro de masa. La compacidad $s_i$ de una region $R_i$ se calcula a partir de una discretization de dicha region en celdas de dimensiones y peso uniforme, llamadas elementos de masa. La ecuación \ref{ec:compacidad} define la compacidad $s_i$ para un region $R_i$, donde $x_j$ e $y_j$ son las coordenadas x e y de los elementos de masa de $R_i$, $M_i$ es igual a la cantidad de dichos elementos de masa y $x_0$ e $y_0$ son las coordenadas del centro de gravedad de $R_i$.
+La compacidad de una region mide la distribución una region con respecto a su centro de masa. La compacidad $s_i$ de una region $R_i$ se calcula a partir de una discretization de dicha region en celdas de dimensiones y peso uniforme, llamadas elementos de masa. En \eqref{ec:compacidad} se define la compacidad $s_i$ para un region $R_i$, donde $x_j$ e $y_j$ son las coordenadas x e y de los elementos de masa de $R_i$, $M_i$ es igual a la cantidad de dichos elementos de masa y $x_0$ e $y_0$ son las coordenadas del centro de gravedad de $R_i$.
 \begin{equation}
   s_i=\frac{1}{M_iA_i}\sum_j \frac{(x_j-x_0)^2 + (y_j-y_0)^2}{A_i} \label{ec:compacidad}
 \end{equation}
@@ -309,7 +318,7 @@ Se considera que una region valida debe ser accesible por los robots utilizados.
 \paragraph{Simplicidad}
 Una de las ventajas principales de los mapas topológicos es su simplicidad, que permite ayudar a una navegación y planificación eficiente. Los autores consideran que es de utilidad penalizar a los mapas topológicos que tengan una cantidad elevada de regiones, considerando dicha cantidad como un indicador de complejidad. 
 
-La simplicidad $S$ de una segmentación se define en la ecuación \ref{ec:simp} donde $\hat{N}$ es el numero esperado de regiones y $\phi$ refleja el impacto que tiene la diferencia entre el numero de regiones esperado y el obtenido. $\hat{N}$ y $\phi$ son parámetros a definir dependiendo de la aplicación.
+La simplicidad $S$ de una segmentación se define en \eqref{ec:simp} donde $\hat{N}$ es el numero esperado de regiones y $\phi$ refleja el impacto que tiene la diferencia entre el numero de regiones esperado y el obtenido. $\hat{N}$ y $\phi$ son parámetros a definir dependiendo de la aplicación.
 
 \begin{equation}
   S=e^{-\frac{|N-\hat{N}|}{\phi}} \label{ec:simp}
@@ -347,9 +356,9 @@ En las secciones \ref{subsec:constGVD} y \ref{subsec:mapaTopGVD} los algoritmos 
 
 % , y por lo tanto su uso resulta ineficiente, por esto fueron desarrolladas variantes incrementales para los mismos.
 \subsubsection{Construcción incremental del GVD}
-% El algoritmo incremental para la construcción de un GVD que se presentara en esta sección es conocido como \emph{brushfire dinámico}, formulado originalmente por Karla \textit{et al.} en \cite{kalra2009incremental}. Este algoritmo se basa en el algoritmo no incremental \emph{brushfire}
+% El algoritmo incremental para la construcción de un GVD que se presentara en esta sección es conocido como \emph{brushfire dinámico}, formulado originalmente por \textit{et al.} en \cite{kalra2009incremental}. Este algoritmo se basa en el algoritmo no incremental \emph{brushfire}
 
-El algoritmo \emph{brushfire} permite determinar el mapa de distancia a los obstáculos, asociado a una grilla donde cada celda tiene asociado un estado libre u ocupado. Este algoritmo se puede ver como una variante al conocido algoritmo de Dijkstra que permite varias fuentes y no tiene destino, donde las fuentes son los obstáculos y la distancia calculada es la minima distancia hacia un obstáculo. Se comienza inicializando las distancias de las celdas libres con $\infty$ y las obstaculizadas con $0$. Adicionalmente, las celdas obstaculizadas se insertan en una cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que las cola de prioridad este vacía se remueve la celda mas prioritaria $c$ y para cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $dt_{c'}$ según la ecuación \ref{ec:dtBrushFire} que remplaza la distancia actual $d_{c'}$ de la celda $c'$ si $dt_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en la cola de prioridad. 
+El algoritmo \emph{brushfire} permite determinar el mapa de distancia a los obstáculos, asociado a una grilla donde cada celda tiene asociado un estado libre u ocupado. Este algoritmo se puede ver como una variante con multiples fuentes y sin destino del conocido algoritmo de Dijkstra, en el que las fuentes son los obstáculos y la distancia calculada es la minima distancia hacia un obstáculo. Se comienza inicializando las distancias de las celdas libres con $\infty$ y las obstaculizadas con $0$. Adicionalmente, las celdas obstaculizadas se insertan en una cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que las cola de prioridad este vacía se remueve la celda mas prioritaria $c$ y para cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $dt_{c'}$ según \eqref{ec:dtBrushFire} que remplaza la distancia actual $d_{c'}$ de la celda $c'$ si $dt_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en la cola de prioridad. 
 
 \begin{equation}\label{ec:dtBrushFire}
   dt_{c'} = d_c+||c'-c||_2
@@ -362,7 +371,7 @@ El nombre de este algoritmo proviene de como este determina las distancias comen
 
 \begin{figure}[H]
   \center
-  \includegraphics[width=1\linewidth]{imagenes/wavesBrush.png}
+  \includegraphics[width=1\linewidth]{imagenes/wavesBrush2Rows.png}
   \caption{Ejemplo de brushfire. (A) Los valores de distancia se inicializan con 0 (negro) para celdas ocupadas e infinito (blanco) para celdas vacías. (B) y (C) Las celdas ocupadas generan ondas que asignan distancias crecientes a medida que se propagan, indicadas por el aumento de brillo de las celdas. (D) Las ondas se detienen al no poderse reducir más valores de distancia. Una vez que se han detenido todas las ondas, se obtiene el mapa de distancia completo. Extraído de \cite{Lau2013}.}\label{fig:wavesBrush}
 \end{figure} 
 
@@ -371,22 +380,22 @@ En \ref{subsec:constGVD} se muestra un método de construcción que requiere pri
 El algoritmo de brushfire descrito hasta el momento no es incremental, pero en \cite{kalra2009incremental} Kalra \textit{et al.} presentan una variante nombrada \emph{brushfire dinámico} que si lo es.
 
 % Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la ultima ejecución, y a partir de estos modificar solo las porciones del ultimo resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser obstaculizado a ser libre (se quita una celda obstaculizada) o viceversa (se agrega una celda obstaculizada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios alteran la distancia minima a un obstáculo calculada previamente. Cuando se quita una celda obstaculizada, son aquellas celdas que estaban más cerca de esta que de otra. Mientras que cuando se agrega una celda de obstaculizada, los cambios se dan en las celdas que pasan a tener esta nueva celda obstaculizada mas cerca que las demás.
-Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la ultima ejecución, y a partir de estos modificar solo las porciones del ultimo resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser obstaculizado a ser libre (se quita una celda obstaculizada) o viceversa (se agrega una celda obstaculizada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios alteran la distancia minima a un obstáculo calculada previamente. Cuando se quita una celda obstaculizada, son aquellas celdas que definían su minima distancia a un obstáculo según esta celda que ahora se encuentra libre. Mientras que cuando se agrega una celda de obstaculizada, los cambios se dan en las celdas que pasan a tener esta nueva celda obstaculizada mas cerca que las demás, necesitando disminuir su mini coma distancia a un obstáculo.
+Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la ultima ejecución, y a partir de estos modificar solo las porciones del ultimo resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser obstaculizado a ser libre (se quita una celda obstaculizada) o viceversa (se agrega una celda obstaculizada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios deben modificar su distancia minima a un obstáculo calculada previamente al ser ahora invalida. Específicamente, al quitarse una celda obstaculizada, son aquellas celdas que definían su minima distancia a un obstáculo según esta celda que ahora se encuentra libre. Mientras que al agregarse una celda de obstaculizada, los cambios se dan en las celdas que pasan a tener esta nueva celda obstaculizada mas cerca que las demás, necesitando disminuir su mini coma distancia a un obstáculo.
 
 Esto se logra partiendo de un mapa de distancias parcialmente correcto brushfire dinámico y propagando los cambios ocurridos en forma de ondas. Las celdas $o$ que pasan a estar obstaculizadas emiten una onda \say{consistente} que establece la distancia $dt_c$ recorrida por la onda a la distancia $d_c$ asociada a la celda $c$ si $dt_{c}<d_{c}$, si la distancia se modifica se establece a $o$ como el obstáculo a minima distancia de $c$. En el caso de las celdas $l$ que pasan a estar libres emanan una onda \say{inconsistente} que reinicia a $\infty$ (invalida) las distancias $d_c$ de las celdas $c$ que tienen a $l$ como obstáculo a minima distancia, esta onda se expande hasta llegar a una celda $c'$ que tiene obstáculo valido a minima distancia, al suceder esto desde $c'$ se resume la onda \say{consciente} que causo su valor de distancia actual (y valido) de forma de restablecer la distancia de las celdas reiniciadas. En la figura \ref{fig:wavesBrushDyn} se muestra gráficamente el funcionamiento de brushfire dinámico.
 
 \begin{figure}[H]
   \center
-  \includegraphics[width=1\linewidth]{imagenes/wavesBrushDinClean.png}
+  \includegraphics[width=1\linewidth]{imagenes/wavesBrushDinClean2Rows.png}
   \caption{Ejemplo de brushfire dinámico. (A) Ultimo mapa de distancias calculado. (B) Un obstáculo es eliminado (contorno rojo) lo cual causa ondas inconsistentes que comienza a reiniciar los valores de distancia inválidos, a su vez un obstáculo es insertado (contorno azul) y generando ondas consistentes que propagan las nuevas distancias. (C) Cuando las ondas inconsistentes chocan contra celdas con un obstáculo más cercano válido estas se detienen y en ese mismo lugar inicia una onda consistente para restaurar los valores de distancia reiniciados. (D) Después que todas las ondas se detienen, la actualización se completa. Extraído de \cite{Lau2013}.}\label{fig:wavesBrushDyn}
 \end{figure} 
 
-Con esto se tiene una definición de brushfire dinámico que calcula un mapa de distancia. De forma análoga a lo realizado en algoritmo brushfire original, brushfire dinámico se puede adaptar para lograr construir un GVD, pero en este caso de forma incremental. Las ondas consistentes causan la pertenecía al GVD de las celdas en donde estas se detienen y las celdas que causaron que se detengan, siempre y cuando ambas tengan identificadores de conjuntos de obstáculos conexos distintos. Por otro lado las ondas inconsistentes remueven del GVD a todas las celdas cuya pertenencia al GVD involucra a celdas previamente obstaculizadas que pasaron a ser libres.
+Con esto se tiene una definición de brushfire dinámico que calcula un mapa de distancia. De forma análoga a lo realizado en algoritmo brushfire original, brushfire dinámico se puede adaptar para lograr construir un GVD, pero en este caso de forma incremental. Las ondas consistentes causan la pertenecía al GVD de las celdas en donde estas se detienen y las celdas que causaron que se detengan, siempre y cuando ambas tengan identificadores de conjuntos de obstáculos conexos distintos. Por otro lado las ondas inconsistentes remueven del GVD a todas las celdas cuya pertenencia al GVD involucra a celdas previamente obstaculizadas que pasaron a ser libres. Un ejemplo de como agregar y remover un obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}. 
 
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesKalra.png}
-  \caption{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda obstaculizada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al detenerse genera celdas pertenecientes al GVD (en gris). (6-10) La celda central se elimina produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda obstaculizada que paso a ser libre mientras que al al llegar a cedas con una distancia minima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
+  \caption{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda obstaculizada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al detenerse genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda obstaculizada que paso a ser libre mientras que al al llegar a cedas con una distancia minima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
 \end{figure} 
 
 
@@ -395,7 +404,7 @@ De esta forma se logra la construcción incremental de un GVD. Sin embargo en \c
 \begin{figure}[H]
   \center
   \includegraphics[width=0.75\linewidth]{imagenes/lauPalo.png}
-  \caption{GVD calculado con el algoritmo de brushfire dinámico original a la izquierda y el calculado por el brushfire dinámico modificado de Lau \textit{et al.} a la derecha. Las elipses marcan los lugares en donde el acercamiento de karla \textit{et al.} falla al no generar celdas pertenecientes al GVD. Extraído de \cite{Lau2013}.}\label{fig:lauPalo}
+  \caption{GVD calculado con el algoritmo de brushfire dinámico original a la izquierda y el calculado por el brushfire dinámico modificado de Lau \textit{et al.} a la derecha. Las elipses marcan los lugares en donde el acercamiento de Kalra \textit{et al.} falla al no generar celdas pertenecientes al GVD. Extraído de \cite{Lau2013}.}\label{fig:lauPalo}
 \end{figure} 
 
 % Sin
@@ -443,13 +452,13 @@ Implementar esta técnica de coordinación requiere la construcción de un mapa 
 La idea es que al asignar un robot a un segmento este deberá completar los objetivos de exploración que estén dentro de dicho segmento, siendo los objetivos, como es usual, las fronteras entre las partes desconocidas y conocidas del mapa. 
 
 % Los entornos interiores son en general estructurados, por ejemplo, los edificios generalmente se dividen en habitaciones a las que se puede llegar por pasillos.
-Para asignar los objetivos a los robots primero estos son asignados a los segmentos a explorar, de forma de maximizar la distribución de los robots sobre los segmentos, por ejemplo evitando asignar mas de un robot por segmento si la cantidad de segmentos a explorar es mayor que la cantidad de robots. Dicha maximización se obtiene cuando los robots están distribuidos de forma uniforme en los segmentos, cosa que se obtiene si se cumple lo planteado en la ecuación \ref{ec:uniform} donde $S$ es el conjunto de todos los segmentos del mapa topológico, y $\#Robots : S \rightarrow N$ es una función que dado un segmento devuelve el numero de robots asignados al mismo. 
+Para asignar los objetivos a los robots primero estos son asignados a los segmentos a explorar, de forma de maximizar la distribución de los robots sobre los segmentos, por ejemplo evitando asignar mas de un robot por segmento si la cantidad de segmentos a explorar es mayor que la cantidad de robots. Dicha maximización se obtiene cuando los robots están distribuidos de forma uniforme en los segmentos, cosa que se obtiene si se cumple lo planteado en \eqref{ec:uniform} donde $S$ es el conjunto de todos los segmentos del mapa topológico, y $\#Robots : S \rightarrow N$ es una función que dado un segmento devuelve el numero de robots asignados al mismo. 
 
 \begin{equation}\label{ec:uniform}
   \forall s,s' \in S, |\#Robots(s) - \#Robots(s')| <= 1
 \end{equation}
 
-Para resolver la asignación se propone el uso del método húngaro\cite{kuhn1955hungarian} de una forma particular que permite cumplir con la restricción \ref{ec:uniform}. Para ejecutar el método húngaro es necesario calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la celda frontera más cercana del segmento $s \in S$ con el robot $i$ y descontando un valor constante en caso de que el robot ya se encuentre en el segmento. 
+Para resolver la asignación se propone el uso del método húngaro\cite{kuhn1955hungarian} de una forma particular que permite cumplir con la restricción \eqref{ec:uniform}. Para ejecutar el método húngaro es necesario calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la celda frontera más cercana del segmento $s \in S$ con el robot $i$ y descontando un valor constante en caso de que el robot ya se encuentre en el segmento. 
 
 La técnica de coordinación explicada en esta sección se resume en el algoritmo \ref{alg:asignacionobjetivos}.
 
@@ -494,7 +503,7 @@ Existen métodos de coordinación que se basan en segmentar el espacio sin consi
   \caption{Ejemplo de la segmentación propuesta en \cite{Solanas2004}. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
 \end{figure} 
 
-Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \ref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no obstaculizado mas corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ esta en el rango de sensado de algún robot.
+Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no obstaculizado mas corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ esta en el rango de sensado de algún robot.
 
 \begin{equation}\label{ec:costsolanas}
 costo_{ij} = 
@@ -506,13 +515,13 @@ costo_{ij} =
 
 Dado un robot $R_i$ la función de costo, a partir del valor $\Delta$, penaliza fuertemente a los objetivos que no pertenecen al segmento $\zeta_i$ asignado a $R_i$, por lo tanto los objetivos pertenecientes al segmento asignado al robot tendrán prioridad frente a los pertenecen a otro segmento, asegurando que los robots se mantendrán explorado sus segmentos asignados. Los objetivos pertenecientes a otros segmentos son considerados para permitir que un robot pueda continuar tomando objetivos aunque su segmento no tenga ningún objetivo restante. La penalización $o_ij$ evita el el solapamiento del los rangos de sensado de los robots, evitando así el trabajo redundante.\medbreak
 
-Otro método es el que se describe en \cite{Lopez-Perez2018}, en este caso la segmentacion consiste en asignar cada punto del espacio desconocido a el robot mas cercano de la flota, por lo tanto el entorno se particiona en tantos segmentos $S_i$ como robots $R_i$ componen la flota de exploración. La definición exacta de los segmentos se encuentra en la ecuación \ref{ec:segmentsLopez} donde $U_i \subset M_i$ son los puntos desconocidos del espacio, $C_i$ es la posición del robot $R_i$ y la distancia $d$ se define de la misma manera que la distancia homónima del método anterior.
+Otro método es el que se describe en \cite{Lopez-Perez2018}, en este caso la segmentacion consiste en asignar cada punto del espacio desconocido a el robot mas cercano de la flota, por lo tanto el entorno se particiona en tantos segmentos $S_i$ como robots $R_i$ componen la flota de exploración. La definición exacta de los segmentos se encuentra en \eqref{ec:segmentsLopez} donde $U_i \subset M_i$ son los puntos desconocidos del espacio, $C_i$ es la posición del robot $R_i$ y la distancia $d$ se define de la misma manera que la distancia homónima del método anterior.
 \begin{equation}\label{ec:segmentsLopez}
   S_i=\{c_j:d_g(C_i,c_j)\leq d(V_i(k),c_j) \forall i \neq k , c_j \in U_i\}
 \end{equation}
 
 
-Un ejemplo de esta segmentacion se muestra en la figura \ref{fig:ejemploCoordCenter} para un entrono completamente desconocido, donde se puede visualizar las posiciones de los robots y con colores se indican los distintos segmentos. Notar que por la definición de segmento cada robot $R_i$ se encuentra dentro del segmento $S_i$ definido a partir de su ubicación $C_i$. Otra cosa a notar sobre esta técnica de segmentacion es que en este caso, donde todo el espacio es desconocido, los segmentos se corresponden directamente a las regiones de un diagrama de Voronoi generado con las posiciones de los robots como sitios y para los casos en donde el espacio no es completamente desconocido se deberá excluir los puntos conocidos de las regiones de Voronoi para obtener la segmentacion propuesta.
+Un ejemplo de esta segmentacion se muestra en la figura \ref{fig:ejemploCoordCenter} para un entrono completamente desconocido, donde se puede visualizar las posiciones de los robots y con colores se indican los distintos segmentos. Notar que por la definición de segmento cada robot $R_i$ se encuentra dentro del segmento $S_i$ que fue definido a partir de su ubicación $C_i$. %Otra cosa a notar sobre esta técnica de segmentacion es que en este caso, donde todo el espacio es desconocido, los segmentos se corresponden directamente a las regiones de un diagrama de Voronoi generado con las posiciones de los robots como sitios y para los casos en donde el espacio no es completamente desconocido se deberá excluir los puntos conocidos de las regiones de Voronoi para obtener la segmentacion propuesta.
 
 \begin{figure}[H]
   \center
@@ -520,7 +529,7 @@ Un ejemplo de esta segmentacion se muestra en la figura \ref{fig:ejemploCoordCen
   \caption{Ejemplo de la segmentación propuesta en \cite{Lopez-Perez2018} y extraído de misma fuente.}\label{fig:ejemploCoordCenter}
 \end{figure} 
 
-Una vez calculados, cada segmento $S_i$ es asignado al robot $R_i$. En este método todo punto que perteneciente a algún segmento sera un posible objetivo de exploración, por lo que en este caso sera una excepción a la norma y los objetivos no serán las fronteras sino que será todo el espacio desconocido. Los robots solo pueden ser enviados a objetivos perecientes su segmento asignado, siendo el objetivo asignado el que alcanza el menor valor para la función de peso $f_p$ que se encuera definida en \ref{ec:weightLopez}.
+Una vez calculados, cada segmento $S_i$ es asignado al robot $R_i$. En este método todo punto que perteneciente a algún segmento sera un posible objetivo de exploración, por lo que en este caso sera una excepción a la norma y los objetivos no serán las fronteras sino que será todo el espacio desconocido. Los robots solo pueden ser enviados a objetivos perecientes su segmento asignado, siendo el objetivo asignado el que alcanza el menor valor para la función de peso $f_p$ que se encuera definida en \eqref{ec:weightLopez}.
 \begin{equation}\label{ec:weightLopez}
   f_p(c_j) = k_d.d(C_i,c_j) + k_a.\phi_i(c_j)
 \end{equation}
@@ -561,7 +570,7 @@ Cuando un robot completa un objetivo de exploración (alcanza la celda frontera 
 
 % Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
 
-La ganancia de información estimada que es utilizada en el calculo de la utilidad y en el criterio de parada que se presentara a continuación, se calcula según la ecuación \ref{ec:infGain}. 
+La ganancia de información estimada que es utilizada en el calculo de la utilidad y en el criterio de parada que se presentara a continuación, se calcula según \eqref{ec:infGain}. 
 %varios conceptos.  Para cada celda $c$ de la grilla de ocupacion las coordenadas $(x_c,y_c)$ son las correspondientes al centro de la celda $c$.
 \begin{equation}\label{ec:infGain}
   \overline{\mli{IG}}_c = \overline{\mli{IG}}_{(x_c,y_c)} = |{c_i}|
@@ -595,7 +604,7 @@ El criterio de parada propuesto en el articulo, se basa en la idea de que durant
 
 Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis necesarias para que el criterio de parada propuesto sea valido son dos. La primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. 
 
-El criterio de parada consiste en finalizar la exploración cuando todos los robots, de forma independiente, determinan concluir su participación en la exploración. El criterio que un robot individual usa para determinar cuando debe dejar de explorar, es el de tener $\eta$ predicciones acertadas. Dado un umbral de tolerancia $\chi$ una una predicción es acertada cuando, al completar objetivo $c$ la diferencia entre la estimación de ganancia de información $\overline{\mli{IG}}_c$ y la ganancia de información real $\mli{IG}_c$ es menor a $\chi$ (ecuación \ref{ec:sthit}). 
+El criterio de parada consiste en finalizar la exploración cuando todos los robots, de forma independiente, determinan concluir su participación en la exploración. El criterio que un robot individual usa para determinar cuando debe dejar de explorar, es el de tener $\eta$ predicciones acertadas. Dado un umbral de tolerancia $\chi$ una una predicción es acertada cuando, al completar objetivo $c$ la diferencia entre la estimación de ganancia de información $\overline{\mli{IG}}_c$ y la ganancia de información real $\mli{IG}_c$ es menor a $\chi$ \eqref{ec:sthit}. 
 \begin{equation}\label{ec:sthit}
   |\overline{\mli{IG}}_c - \mli{IG}_c| \leq \chi
 \end{equation}
@@ -680,7 +689,7 @@ El sistema tiene un diseño modular, este consta de 4 módulos que se encuentran
 Este modulo se encarga de distribuir a los demás robots la posición del robot al que pretence, las ubicaciones que conoce de los demás robots y su mapa $M_i$. 
 
 \paragraph{Modulo de asignación de zonas }
-El entorno es segmentado en zonas y la exploración cada una de estas es asignada a un robot. El modulo de asignación de zonas es el responsable de realizar la segmentación en zonas y su posterior asignación a los robots. La segmentación genera tantas zonas $E_i$ como robots $R_i$ que $E_i$ se define en la ecuación \ref{ec:zones} a partir de la posición $C_i$ de $R_i$. .
+El entorno es segmentado en zonas y la exploración cada una de estas es asignada a un robot. El modulo de asignación de zonas es el responsable de realizar la segmentación en zonas y su posterior asignación a los robots. La segmentación genera tantas zonas $E_i$ como robots $R_i$ que $E_i$ se define en \eqref{ec:zones} a partir de la posición $C_i$ de $R_i$. .
 \begin{equation}\label{ec:zones}
   E_i=\{c_j:d_g(C_i,c_j)\leq d_g(V_i(k),c_j) \forall i \neq k , c_j \in U_i\}
 \end{equation}
@@ -694,7 +703,7 @@ El propósito de este es el de actualizar el mapa $M_i$ de el robot $R_i$ según
 \paragraph{Modulo de exploración}\label{par:estar:moduloexp}
 El modulo de exploración esta compuesto por tres submódulos. 
 
-El primero de ellos es el submódulo de asignación de objetivos, como su nombre lo indica, este se encarga de seleccionar un objetivo de todos los pertenecientes a la zona asignada $E_i$ para asignarlo al robot $R_i$. El objetivo seleccionado $G_i$ es el que alcanza el menor valor para la función de peso $f_p$ que se computa como \ref{ec:weight}.
+El primero de ellos es el submódulo de asignación de objetivos, como su nombre lo indica, este se encarga de seleccionar un objetivo de todos los pertenecientes a la zona asignada $E_i$ para asignarlo al robot $R_i$. El objetivo seleccionado $G_i$ es el que alcanza el menor valor para la función de peso $f_p$ que se computa como \eqref{ec:weight}.
 \begin{equation}\label{ec:weight}
   f_p(c_j) = k_d.d_g(C_i,c_j) + k_a.\phi_i(c_j)
 \end{equation}
