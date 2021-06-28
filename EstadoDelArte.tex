@@ -203,7 +203,7 @@ En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos
 \subsection{Construcción de un GVD}\label{subsec:constGVD}
 Existen dos tipos principales de métodos para la construcción de un GVD los basados en sensores y los basados en grillas. En el contexto del trabajo desarrollado serán relevantes los métodos de construcción basados en grillas. 
 
-La idea más intuitiva para generar un GVD en un espacio representado con una grilla es la de adaptar la definición original de GVD que considera espacios continuos, para que en su lugar considere espacios discretizados en celdas, y luego celda a celda, determinar según la nueva definición si estas pertenecen o no al GVD. La definición adaptada una grilla consiste en que una celda pertenece al GVD si tiene dos o mas celdas obstaculizadas a una misma distancia, siendo la distancia entre celdas la distancia entre sus centros. Sin embargo, esta técnica genera resultados erróneos al no considerar los efectos causados por la discretización. Por ejemplo, en corredores cuya discretización resulta en una cantidad par de celdas entre sus paredes, según este método ninguna celda debería pertenecer al GVD dado que ninguna  tendría una misma distancia a dos celdas obstaculizadas (paredes del corredor). Esto se considera incorrecto porque el GVD construido en un espacio discretizado debe asemejarse al GVD que se construiría en el mismo espacio si fuera continuo y  en el caso continuo los puntos del centro de un corredor siempre pertenecen al GVD. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
+La idea más intuitiva para generar un GVD en un espacio representado con una grilla es la de adaptar la definición original de GVD que considera espacios continuos, para que en su lugar considere espacios discretizados en celdas, y luego celda a celda, determinar según la nueva definición si estas pertenecen o no al GVD. La definición adaptada una grilla consiste en que una celda pertenece al GVD si tiene dos o mas celdas obstaculizadas a una misma distancia, siendo la distancia entre celdas la distancia entre sus centros. Sin embargo, esta técnica genera resultados erróneos al no considerar los efectos causados por la discretización. Por ejemplo, en corredores cuya discretización resulta en una cantidad par de celdas entre sus paredes, según este método ninguna celda debería pertenecer al GVD dado que ninguna  tendría una misma distancia a dos celdas obstaculizadas (paredes del corredor). Esto se considera incorrecto porque el GVD construido en un espacio discretizado debe corresponder al GVD que se construiría en el mismo espacio si fuera continuo y  en el caso continuo los puntos del centro de un corredor siempre pertenecen al GVD. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
 
 En \cite{wurm2008coordinated} se propone un método que logra construir un GVD evitando los problemas de discretización mencionados. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda esta ocupada o libre , resultando en un mapa que contiene para cada celda la distancia al obstáculo mas cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. Finalmente GVD se obtiene aplicando un algoritmo de esqueletización \cite{wan2008distance} al mapa de distancia construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}.
 % que consiste en erosionar las celdas mas cercanas a los obstáculos hasta llegar a las celdas mas distantes a estos siendo estas ultimas las celdas que se asignan al GVD construido. Un ejemplo de este proceso se puede ver en la figur
@@ -390,7 +390,7 @@ Esto se logra partiendo de un mapa de distancias parcialmente correcto brushfire
   \caption{Ejemplo de brushfire dinámico. (A) Ultimo mapa de distancias calculado. (B) Un obstáculo es eliminado (contorno rojo) lo cual causa ondas inconsistentes que comienza a reiniciar los valores de distancia inválidos, a su vez un obstáculo es insertado (contorno azul) y generando ondas consistentes que propagan las nuevas distancias. (C) Cuando las ondas inconsistentes chocan contra celdas con un obstáculo más cercano válido estas se detienen y en ese mismo lugar inicia una onda consistente para restaurar los valores de distancia reiniciados. (D) Después que todas las ondas se detienen, la actualización se completa. Extraído de \cite{Lau2013}.}\label{fig:wavesBrushDyn}
 \end{figure} 
 
-Con esto se tiene una definición de brushfire dinámico que calcula un mapa de distancia. De forma análoga a lo realizado en algoritmo brushfire original, brushfire dinámico se puede adaptar para lograr construir un GVD, pero en este caso de forma incremental. Las ondas consistentes causan la pertenecía al GVD de las celdas en donde estas se detienen y las celdas que causaron que se detengan, siempre y cuando ambas tengan identificadores de conjuntos de obstáculos conexos distintos. Por otro lado las ondas inconsistentes remueven del GVD a todas las celdas cuya pertenencia al GVD involucra a celdas previamente obstaculizadas que pasaron a ser libres. Un ejemplo de como agregar y remover un obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}. 
+Con esto se tiene una definición de brushfire dinámico que calcula un mapa de distancia. De forma análoga a lo realizado en algoritmo brushfire original, brushfire dinámico se puede adaptar para lograr construir un GVD, pero en este caso de forma incremental. Las ondas consistentes en su expansion remueven las celdas del GVD, adicionalmente causan la pertenecía al GVD de las celdas en donde estas se detienen y las celdas que causaron que se detengan, siempre y cuando ambas tengan identificadores de conjuntos de obstáculos conexos distintos. Por otro lado las ondas inconsistentes remueven del GVD a todas las celdas cuya pertenencia al GVD involucra a celdas previamente obstaculizadas que pasaron a ser libres. Un ejemplo de como agregar y remover un obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}. 
 
 \begin{figure}[H]
   \center
@@ -399,13 +399,16 @@ Con esto se tiene una definición de brushfire dinámico que calcula un mapa de 
 \end{figure} 
 
 
-De esta forma se logra la construcción incremental de un GVD. Sin embargo en \cite{Lau2013} Lau \textit{et al.} destacan algunas problemáticas de brushfire dinámico, principalmente que el GVD generado tiene lineas de dos celdas de ancho y que por generar celdas pertenecientes al GVD en los choques de olas originados en distintos conjuntos conexos de obstáculos, no genera pertenencia al GVD en el interior de conjuntos conexos de obstáculos cóncavos como lo son habitaciones con una sola entrada. Estos problemas se pueden ver a la izquierda de la figura \ref{fig:lauPalo}.
+De esta forma se logra la construcción incremental de un GVD. Sin embargo en \cite{Lau2013} Lau \textit{et al.} destacan algunas problemáticas de brushfire dinámico, principalmente que el GVD generado tiene lineas de dos celdas de ancho y que no genera pertenencia al GVD en el interior de obstáculos cóncavos como lo son habitaciones con una sola entrada, lo cual es critico en entornos estructurados.Los problemas se mencionados se pueden ver a la izquierda de la figura \ref{fig:lauPalo}.
+
+Para solucionar las problemáticas planteadas Lau \textit{et al.} proponen cambios al algoritmo de brushfire dinámico. El problema de generación de GVD en obstáculos cóncavos se relaciona a como los conjuntos conexos de obstáculos que son utilizados para determinar la pertenencia de celdas al GVD. Dado esto la solución propuesta consiste en dejar de utilizar identificadores para los conjuntos conexos de obstáculos, en su lugar utilizar un identificador para cada celda obstaculizada. Luego al chocar dos olas las celdas donde se da el choque pertenecen al GVD si (1) sus identificadores de obstáculo a minima distancia son distintos, (2) las celdas obstaculizadas correspondientes a los identificadores no son adyacentes en la grilla. Este cambio soluciona la generación del GVD en obstáculos cóncavos. Con respecto a las lineas de dos celdas de ancho la propuesta consiste en aplicar técnicas que permitan eliminar las celdas redundantes, estas son la celdas del GVD que son adyacentes a mas de una celda perteneciente al GVD (no son hojas) y que su remoción no desconecta al GVD. A la derecha de la figura \ref{fig:lauPalo} se muestra el resultado de aplicar estos cambios.
 % Nuestro enfoque genera líneas de Voronoi delgadas, de modo que diferentes caminos en el GVD corresponden a rutas topológicamente diferentes.
 \begin{figure}[H]
   \center
   \includegraphics[width=0.75\linewidth]{imagenes/lauPalo.png}
   \caption{GVD calculado con el algoritmo de brushfire dinámico original a la izquierda y el calculado por el brushfire dinámico modificado de Lau \textit{et al.} a la derecha. Las elipses marcan los lugares en donde el acercamiento de Kalra \textit{et al.} falla al no generar celdas pertenecientes al GVD. Extraído de \cite{Lau2013}.}\label{fig:lauPalo}
 \end{figure} 
+
 
 % Sin
 % En el caso anterior la onda solo puede reducir la distancia $d_{c'}$ de una celda $c'$, esta es la principal diferencia con las ondas que provienen de una celda que pasa de estar ocupada a estar libre, en este caso se tendra una onda que aumentara la distancia  
@@ -777,120 +780,120 @@ El ultimo es el submódulo de ejecución de trayectoria que se encarga de genera
 
 % Obtienen buenos resultados, la version incremental permite tiempo real, solo tiene un parámetro a tunear (maxima convexidad, usado en el DuDe\_segment), flexible para entornos estructurados y no estructurados. Y es independiente del tamaño de la grid, solo importan las proporciones del contorno.
 
-\subsection{Comunicación en la exploración multirobot}
-Hasta ahora se omitió un aspecto fundamental a considerar en cualquier sistema multirobot autónomo que resuelve una tarea, que es la comunicación %aunque es usualasumen una comunicacion perfeta, esto implica a b y c. Aunque 
+% \subsection{Comunicación en la exploración multirobot}
+% Hasta ahora se omitió un aspecto fundamental a considerar en cualquier sistema multirobot autónomo que resuelve una tarea, que es la comunicación %aunque es usualasumen una comunicacion perfeta, esto implica a b y c. Aunque 
 
-\subsubsection{Resumen}
-Se presentan y evalúan paquetes de ROS para la exploración multi-robot coordinada. Estos paquetes tienen el objetivo de ofrecer funcionalidades básicas para tener una solución completa pero simple para el problema de la exploración multi-robot permitiendo una configuración completamente distribuida, apuntando a que grupos de investigación puedan utilizarlos. Los paquetes son:
-\begin{itemize}
-  \item ad hoc communication between robots,
-  \item construction of global maps from local maps
-  \item exploration of unknown environments
-\end{itemize}
+% \subsubsection{Resumen}
+% Se presentan y evalúan paquetes de ROS para la exploración multi-robot coordinada. Estos paquetes tienen el objetivo de ofrecer funcionalidades básicas para tener una solución completa pero simple para el problema de la exploración multi-robot permitiendo una configuración completamente distribuida, apuntando a que grupos de investigación puedan utilizarlos. Los paquetes son:
+% \begin{itemize}
+%   \item ad hoc communication between robots,
+%   \item construction of global maps from local maps
+%   \item exploration of unknown environments
+% \end{itemize}
 
-\subsubsection{Notas}
-\paragraph{WIRELESS AD HOC COMMUNICATION}
+% \subsubsection{Notas}
+% \paragraph{WIRELESS AD HOC COMMUNICATION}
 
-ROS permite comunicación ínter proceso local a través de un maestro usando el patron de comunicación duplicación/subscripción. El maestro se encarga de manejar los publicadores y los subscriptores a  tópicos de ROS ( canales de comunicación entre procesos ). Para hacer un sistema multi-robot en este caso seria necesario que todos los robots se conecten inalámbricamente a un solo maestro y solo este maestro es el encargado de establecer canales de comunicación entre procesos. Esto significa que dos procesos deben comunicarse con el maestro para poder luego comunicarse entre si y en el caso de desconectarse deben recaer nuevamente en el maestro para lograr una re conexión. Esto es malo ya que el maestro es un punto único de fallo y porque dos procesos que corren localmente en un robot deben comunicarse con el maestro para poder comunicarse entre ellos.
+% ROS permite comunicación ínter proceso local a través de un maestro usando el patron de comunicación duplicación/subscripción. El maestro se encarga de manejar los publicadores y los subscriptores a  tópicos de ROS ( canales de comunicación entre procesos ). Para hacer un sistema multi-robot en este caso seria necesario que todos los robots se conecten inalámbricamente a un solo maestro y solo este maestro es el encargado de establecer canales de comunicación entre procesos. Esto significa que dos procesos deben comunicarse con el maestro para poder luego comunicarse entre si y en el caso de desconectarse deben recaer nuevamente en el maestro para lograr una re conexión. Esto es malo ya que el maestro es un punto único de fallo y porque dos procesos que corren localmente en un robot deben comunicarse con el maestro para poder comunicarse entre ellos.
 
-La solución presentada por el articulo es tener un maestro por robot para manejar la comunicación ínter proceso local y manejar la comunicación global entre robots con un paquete propuesto por ellos. 
+% La solución presentada por el articulo es tener un maestro por robot para manejar la comunicación ínter proceso local y manejar la comunicación global entre robots con un paquete propuesto por ellos. 
 
-Su paquete se basa en generar una red Ad-Hoc usando un protocoló similar a AODV (protocolo conocido para generar redes ad-hoc). Sus features son:
-\begin{itemize}
-\item Routing: allows robots to communicate via multiple hops to other robots which are not in the immediate neighbor-hood.
-\item Multicast: allows to transmit from one robot to multiple robots, especially useful for dissemination of map data, for example.
-\item ARQ: stands for automatic repeat request. If a frame is not acknowledged within a specified time, the sender will automatically repeat the transmission. The Ad Hoc Communication package supports both hop-by-hop ARQ and end-to-end ARQ.
-\item Segmentation: allows to split data packets into multiple frames of smaller size. The IEEE 802.11a/$g$/$n$ MAC layer supports payloads up to 2304 octets [12]. At the receiver side the frames are ordered and combined.
-\item Ordering: ensures that frames and packets are delivered in the correct order.
-\end{itemize}
+% Su paquete se basa en generar una red Ad-Hoc usando un protocoló similar a AODV (protocolo conocido para generar redes ad-hoc). Sus features son:
+% \begin{itemize}
+% \item Routing: allows robots to communicate via multiple hops to other robots which are not in the immediate neighbor-hood.
+% \item Multicast: allows to transmit from one robot to multiple robots, especially useful for dissemination of map data, for example.
+% \item ARQ: stands for automatic repeat request. If a frame is not acknowledged within a specified time, the sender will automatically repeat the transmission. The Ad Hoc Communication package supports both hop-by-hop ARQ and end-to-end ARQ.
+% \item Segmentation: allows to split data packets into multiple frames of smaller size. The IEEE 802.11a/$g$/$n$ MAC layer supports payloads up to 2304 octets [12]. At the receiver side the frames are ordered and combined.
+% \item Ordering: ensures that frames and packets are delivered in the correct order.
+% \end{itemize}
 
-El uso de este paquete es:
-Cuando un robot A se quiere comunicar con un robot B no lo hacen de forma directa si no que utilizan el un service call del paquete que debe incluir:
-\begin{itemize}
-  \item destino, datos, tópico en el cual publicar el dato al llegar al destino
-\end{itemize}
+% El uso de este paquete es:
+% Cuando un robot A se quiere comunicar con un robot B no lo hacen de forma directa si no que utilizan el un service call del paquete que debe incluir:
+% \begin{itemize}
+%   \item destino, datos, tópico en el cual publicar el dato al llegar al destino
+% \end{itemize}
 
-Esto causa que el paquete envié el dato junto a los metadatos necesarios en un frame MAC a través de un raw socket hasta B
+% Esto causa que el paquete envié el dato junto a los metadatos necesarios en un frame MAC a través de un raw socket hasta B
 
-B al recibir el frame el paquete lo interpreta y lo publica en el tópico indicado en los metadatos.
+% B al recibir el frame el paquete lo interpreta y lo publica en el tópico indicado en los metadatos.
 
-De esta manera se conserva parcialmente el manejo de tópicos de ros. Hay transparencia en la subscripción pero no me queda claro si hay transparencia en la publicación (es la service call implícita al publicar en un tópico)
+% De esta manera se conserva parcialmente el manejo de tópicos de ros. Hay transparencia en la subscripción pero no me queda claro si hay transparencia en la publicación (es la service call implícita al publicar en un tópico)
 
-\paragraph{MAP MERGER}
+% \paragraph{MAP MERGER}
 
-El map merger es el encargado de recolectar mapas locales de los robots y combinarlos en un solo mapa global. El mapa global es utilizado por los robots para navegar, explorar y coordinar.
+% El map merger es el encargado de recolectar mapas locales de los robots y combinarlos en un solo mapa global. El mapa global es utilizado por los robots para navegar, explorar y coordinar.
 
-El Map merger puede ser centralizado o distribuido:
-\begin{itemize}
-\item si es centralizado los mapas locales deben enviarse a la central, ser combinados ahí y luego distribuirse el mapa global resultante a los robots
-\item si no es centralizado los mapas locales deben enviarse a todos los robots para que cada uno de estos lo combine y obtenga su propio mapa global
-\end{itemize}
+% El Map merger puede ser centralizado o distribuido:
+% \begin{itemize}
+% \item si es centralizado los mapas locales deben enviarse a la central, ser combinados ahí y luego distribuirse el mapa global resultante a los robots
+% \item si no es centralizado los mapas locales deben enviarse a todos los robots para que cada uno de estos lo combine y obtenga su propio mapa global
+% \end{itemize}
 
-Este modulo esta inspirado en $map\_stich$ pero extiende y mejora varios aspectos.
+% Este modulo esta inspirado en $map\_stich$ pero extiende y mejora varios aspectos.
 
-Proceso de combinado
-\begin{itemize}
-  \item El paquete combina dos mapas $M_1$ y $M_2$ en un solo mapa global juntando dichos mapas de forma de maximizar la areas que se solapan.
+% Proceso de combinado
+% \begin{itemize}
+%   \item El paquete combina dos mapas $M_1$ y $M_2$ en un solo mapa global juntando dichos mapas de forma de maximizar la areas que se solapan.
 
-  \item La transformación entre los sistemas de coordenadas que debe hacerse para juntar los mapas se calcula con OpenCV:
-  \begin{itemize}
-    \item Se convierten las grillas de ocupación en bitmaps
-    \item Se utiliza la función de OpenCV $estimateRigitTrasnform$ que intenta emparejar patrones entre los mapas.
-  \end{itemize}
-\end{itemize}
+%   \item La transformación entre los sistemas de coordenadas que debe hacerse para juntar los mapas se calcula con OpenCV:
+%   \begin{itemize}
+%     \item Se convierten las grillas de ocupación en bitmaps
+%     \item Se utiliza la función de OpenCV $estimateRigitTrasnform$ que intenta emparejar patrones entre los mapas.
+%   \end{itemize}
+% \end{itemize}
 
-Al basarse en solapamientos se requiere asumir que los robots van a empezar en la misma posición (por ejemplo una entrada) para que los mapas locales solapen desde un principio.
+% Al basarse en solapamientos se requiere asumir que los robots van a empezar en la misma posición (por ejemplo una entrada) para que los mapas locales solapen desde un principio.
 
-Features:
-\begin{itemize}
-\item Map updates are triggered if changes in local maps are detected.
-\item New robots are added and maps are exchanged automatically if the Ad Hoc Communication package reports a new robot in the system.
-\item Robot positions are transmitted in regular intervals. The package automatically converts other robots’ positions to the correct coordinate system.
-\item Integration Ad Hoc Communication package allows the wireless exchange of maps between robots right out of the box. All topics are preconfigured.
-\end{itemize}
+% Features:
+% \begin{itemize}
+% \item Map updates are triggered if changes in local maps are detected.
+% \item New robots are added and maps are exchanged automatically if the Ad Hoc Communication package reports a new robot in the system.
+% \item Robot positions are transmitted in regular intervals. The package automatically converts other robots’ positions to the correct coordinate system.
+% \item Integration Ad Hoc Communication package allows the wireless exchange of maps between robots right out of the box. All topics are preconfigured.
+% \end{itemize}
 
-\paragraph{EXPLORATION}
+% \paragraph{EXPLORATION}
 
-Este paquete:
-\begin{enumerate}
-\item Identifica fronteras basado en el mapa (global) actual.
-  \begin{itemize}
-     \item No se explica como, seguramente est en la referencia que mencionan (5)
-  \end{itemize}
-\item Selecciona fronteras a ser exploradas ( la exploración termina si no hay mas fronteras para explorar ).
-\
-  \begin{itemize}
-     \item Las fronteras objetivo se priorizan según la distancia euclídea entre la pos del robot y la frontera 
-     \item Las fronteras se agrupan
-     \item Menciona que usar un camino real seria un drawback por consumir mas recursos y que es propenso errores con los path planners de ros actuales?
-  \end{itemize}
-\item Los robots deben coordinarse para reducir el tiempo de exploración.
-  \begin{itemize}
-     \item se hace una subasta para determinar que robot sigue que objetivo a través del método húngaro (igual que Wurm)
-  \end{itemize}
-\end{enumerate}
+% Este paquete:
+% \begin{enumerate}
+% \item Identifica fronteras basado en el mapa (global) actual.
+%   \begin{itemize}
+%      \item No se explica como, seguramente est en la referencia que mencionan (5)
+%   \end{itemize}
+% \item Selecciona fronteras a ser exploradas ( la exploración termina si no hay mas fronteras para explorar ).
+% \
+%   \begin{itemize}
+%      \item Las fronteras objetivo se priorizan según la distancia euclídea entre la pos del robot y la frontera 
+%      \item Las fronteras se agrupan
+%      \item Menciona que usar un camino real seria un drawback por consumir mas recursos y que es propenso errores con los path planners de ros actuales?
+%   \end{itemize}
+% \item Los robots deben coordinarse para reducir el tiempo de exploración.
+%   \begin{itemize}
+%      \item se hace una subasta para determinar que robot sigue que objetivo a través del método húngaro (igual que Wurm)
+%   \end{itemize}
+% \end{enumerate}
 
-Features:
-\begin{itemize}
-\item Integration Ad Hoc Communication package and
-\item Integration Map Merger package allow out of the box deployment. All topics and settings are pre-configured.
-\item Coordination exploration including frontier identification and coordinated assignment as described above.
-\item Bid interpolation aims to interpolates bids of other robots which did not send their bids for an auctioned cluster.
-\end{itemize}
+% Features:
+% \begin{itemize}
+% \item Integration Ad Hoc Communication package and
+% \item Integration Map Merger package allow out of the box deployment. All topics and settings are pre-configured.
+% \item Coordination exploration including frontier identification and coordinated assignment as described above.
+% \item Bid interpolation aims to interpolates bids of other robots which did not send their bids for an auctioned cluster.
+% \end{itemize}
 
-\subsubsection{Definiciones}
-Ad-hoc network: An ad hoc network is one that is spontaneously formed when devices connect and communicate with each other. The term ad hoc is a Latin word that literally means "for this," implying improvised or impromptu. Ad hoc networks are mostly wireless local area networks (LANs).The devices communicate with each other directly instead of relying on a base station or access points as in wireless LANs for data transfer co-ordination. Each device participates in routing activity, by determining the route using the routing algorithm and forwarding data to other devices via this route. 
+% \subsubsection{Definiciones}
+% Ad-hoc network: An ad hoc network is one that is spontaneously formed when devices connect and communicate with each other. The term ad hoc is a Latin word that literally means "for this," implying improvised or impromptu. Ad hoc networks are mostly wireless local area networks (LANs).The devices communicate with each other directly instead of relying on a base station or access points as in wireless LANs for data transfer co-ordination. Each device participates in routing activity, by determining the route using the routing algorithm and forwarding data to other devices via this route. 
 
 
-\subsubsection{Ideas}
-Los paquetes presentados pueden ser útiles:
-\begin{itemize}
-\item WIRELESS AD HOC COMMUNICATION: es una solución al funcionamiento centralizado del sistema de tópicos de ROS.
-\item MAP MERGER se presenta como una solución a la combinación de mapas cuyo código puede llegar a resultar útil dependiendo de que tan bien se pueda adaptar la solución actual
-\item EXPLORATION resulta simple en comparación a las funcionalidades que provee nuestro paquete pero de igual, resaltando el uso de el método húngaro para la resolución de subastas el cual seria interesante considerar para nuestro paquete (comparar ordenes del método actual).
-\end{itemize}
+% \subsubsection{Ideas}
+% Los paquetes presentados pueden ser útiles:
+% \begin{itemize}
+% \item WIRELESS AD HOC COMMUNICATION: es una solución al funcionamiento centralizado del sistema de tópicos de ROS.
+% \item MAP MERGER se presenta como una solución a la combinación de mapas cuyo código puede llegar a resultar útil dependiendo de que tan bien se pueda adaptar la solución actual
+% \item EXPLORATION resulta simple en comparación a las funcionalidades que provee nuestro paquete pero de igual, resaltando el uso de el método húngaro para la resolución de subastas el cual seria interesante considerar para nuestro paquete (comparar ordenes del método actual).
+% \end{itemize}
 
-El código no se actualiza hace 5 años y no hay releases para versiones recientes de ros, de igual manera es posible extraer código para reutilizar en nuestro proyecto.
+% El código no se actualiza hace 5 años y no hay releases para versiones recientes de ros, de igual manera es posible extraer código para reutilizar en nuestro proyecto.
 
 % \subsection[Distributed matroid constrained submodular maximization for multi-robot exploration: theory and practice]{Distributed matroid constrained submodular maximization for multi-robot exploration: theory and\\ practice}
 % \subsubsection{Resumen}
