@@ -3,6 +3,8 @@
 \documentclass{report}
 
 % = Packages =
+\usepackage{todonotes}
+
 % == silence warnings ==
 \usepackage{silence}
 
@@ -53,6 +55,7 @@
 \DeclareMathOperator*{\argmin}{argmin}
 \newcommand{\mli}[1]{\mathit{#1}}
 \usepackage{amssymb}
+
 % == CODE ==
 \usepackage[ruled,vlined,spanish,onelanguage,linesnumbered]{algorithm2e}
 \usepackage{listings}
@@ -174,7 +177,8 @@ Tutor: Facundo Benavides%
 
 % == BIBLOGRAPHY ==
 \begingroup
-\bibliographystyle{IEEEtran}
+%\bibliographystyle{IEEEtran}   %facundo
+\bibliographystyle{apalike}    %facundo
 \raggedright
 
 \bibliography{references}
