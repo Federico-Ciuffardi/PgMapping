@@ -1,40 +1,34 @@
 \section{Formalización del problema}
-\todo{revisar ortografía y algún error de redacción}
+\todoremark{Falta?|\\revisar ortografía y algún error de redacción}
 
 \subsection{Exploración}
-La exploración de un entorno desconocido es problema clásico de la robótica móvil que consiste en utilizar un robot con el objetivo de obtener información de un entorno desconocido con el propósito de generar\todo{sacaría 'con el propósito de generar', colocaría 'generando'} un mapa que lo represente. La exploración es fundamental en tareas de búsqueda y rescate \cite{Liu2015} y misiones extra planetarias \cite{schuster2019towards}, tareas normalmente llevadas a cabo en escenarios donde puede ser ineficiente o directamente inviable teleoperar a un robot. Por lo tanto que el robot pueda explorar el entorno de forma autónoma es una característica deseable\todo{hay más escenarios donde explorar es una parte central de la misión}.
+La exploración de un entorno desconocido es un problema clásico de la robótica móvil que consiste en utilizar un robot con el objetivo de obtener información de un entorno desconocido generando\todo{OK|\\sacaría 'con el propósito de generar', colocaría 'generando'} un mapa que lo represente. La exploración es fundamental en tareas de búsqueda y rescate \cite{Liu2015}, misiones extra planetarias \cite{schuster2019towards}, entre otras tareas que son llevadas a cabo en escenarios donde puede ser ineficiente o directamente inviable teleoperar a un robot. Por lo tanto que el robot pueda explorar el entorno de forma autónoma es una característica deseable\todo{Cuales?|\\hay más escenarios donde explorar es una parte central de la misión}.
 
-Uno de los principales aspectos de la exploración autónoma es el problema de la asignación de tareas de exploración que suele separarse en dos partes principales, (i) identificar posibles objetivos de exploración y (ii) asignar al\todo{cada?} robot a una de dichos objetivos \cite{amorin2019novel}. Para determinar potenciales objetivos de exploración, un método popular es el propuesto en \cite{yamauchi1998frontier} que consiste en identificar las fronteras entre el espacio conocido y desconocido, y utilizarlas como potenciales objetivos. Asignar un robot a uno de los posibles objetivos consiste en determinar cual de estos es el mas conveniente, para esto se suele hacer un balance entre el costo y el beneficio de completar el objetivo. El costo normalmente involucra aspectos como la distancia del recorrido que el robot debe hacer para llegar al objetivo, y cual será dificultad de recorrerlo\todo{energía también}, por otro lado beneficio usualmente se asocia al tamaño de la porción explorada al completar el objetivo\todo{conectividad también aunque aplica sólo en mrs}. 
+Uno de los principales aspectos de la exploración autónoma es el problema de la asignación de tareas de exploración. Este suele separarse en dos partes principales, (i) identificar posibles objetivos de exploración y (ii) asignar al\todo{Todavia no multirobot|\\cada?} robot a uno de dichos objetivos \cite{amorin2019novel}. Para determinar potenciales objetivos de exploración, un método popular es el propuesto en \cite{yamauchi1998frontier} que consiste en identificar las fronteras entre el espacio conocido y desconocido, y utilizarlas como potenciales objetivos. Por otro lado asignar un robot a uno de los posibles objetivos consiste en determinar cual de estos es el mas conveniente, para esto se suele hacer un balance entre el costo y el beneficio de completar el objetivo. El costo normalmente involucra aspectos como la distancia del recorrido que el robot debe hacer para llegar al objetivo, la dificultad de recorrerlo y el costo energético que implica\todo{OK|\\energía también}, por otro lado beneficio usualmente se asocia al tamaño de la porción explorada al completar el objetivo\todo{mrs?\\|conectividad también aunque aplica sólo en mrs}. 
 
-\subsection{Exploración multi-robot}\label{subsec:expmutirob}
-La exploración multi-robot consiste en utilizar una flota robótica para resolver el problema de la exploración,\todo{.?} por las razones antes mencionadas la exploración multirobot autónoma es de interés\todo{está rara la frase}.  
+\subsection{Exploración multirobot}\label{subsec:expmutirob}
+La exploración multirobot consiste en utilizar una flota robótica para resolver el problema de la exploración.\todo{OK|\\.?}
 
-Una de las ventajas de utilizar varios robots es la introduce redundancia, aumento la tolerancia a fallos que esto implica. A su vez la exploración suele ser altamente paralelizable, al ser usual que en un mismo instante de tiempo hallan varios lugares en los cuales un robot puede obtener información, por lo que es esperable que al aumentar la cantidad de recursos roboticos se experimente una reducción los tiempos de exploración \cite{cao1997cooperative}, \cite{dudek1996taxonomy}, \cite{guzzoni1997many}. 
+Una de las ventajas del uso de varios robots es la introducción redundancia y aumento de tolerancia a fallos que esto implica. A su vez la exploración suele ser una tarea altamente paralelizable, al ser usual que en un mismo instante de tiempo existan varios lugares de los cuales un robot puede obtener información, por lo tanto que es esperable que al aumentar la cantidad de recursos robóticos se experimente una reducción los tiempos de exploración \cite{cao1997cooperative}, \cite{dudek1996taxonomy}, \cite{guzzoni1997many}. 
 
-Sin embargo el aumento del numero de robots en una flota de exploración no es proporcional a la reducción de tiempo de exploración. En primer lugar el numero de objetivos es finito durante todo el proceso de exploración, siempre que el numero de robots sea mayor a el numero de objetivos de exploración, se tendrá recursos desaprovechados. De forma similar si varios robots son enviados a objetivos de exploración cercanos entre si existe la posibilidad de que los sensores que estos utilizan para explorar recolecten información sobre una misma parte del entorno y por lo tanto realicen trabajo redundante. Adicionalmente al existir un mayor numero de robots aumenta el riesgo de que estos se interfieran entre si, causando perdidas de tiempo en desvíos para evitar colisiones \cite{guzzoni1997many}, \cite{goldberg1997interference}. %% Esto determina que existe un numero optimo de robots en una flota, en el cual se logra un balance entre la capacidad de explotar el paralelismo en la exploración y el tiempo perdido por interferencias. 
-Las problemáticas mencionadas pueden ser mitigadas realizando la asignación de objetivos debe se de forma coordinada buscando explotar el paralelismo en la exploración y reducir el tiempo perdido por interferencias \cite{nieto2014coordination}. Básicamente, la exploración coordinada consiste en resolver el problema de la asignación de tareas de forma de que se maximice la relación costo-beneficio, no de un solo robot, si no que \todo{sobra el que, y si no va junto} de la flota entera.
+Sin embargo el aumento del numero de robots en una flota de exploración no es proporcional a la reducción de tiempo de exploración. En primer lugar el numero  siempre que el numero de robots sea mayor que el numero de objetivos de exploración, se tendrán recursos desaprovechados. De forma similar si varios robots son enviados a objetivos de exploración cercanos entre si existe la posibilidad de que los sensores que estos utilizan para explorar recolecten información sobre una misma porción del entorno y por lo tanto realicen trabajo redundante. Adicionalmente al existir un mayor numero de robots aumenta el riesgo de que estos se interfieran entre si, causando perdidas de tiempo en desvíos para evitar colisiones \cite{guzzoni1997many}, \cite{goldberg1997interference}. %% Esto determina que existe un numero optimo de robots en una flota, en el cual se logra un balance entre la capacidad de explotar el paralelismo en la exploración y el tiempo perdido por interferencias. 
+Las problemáticas mencionadas pueden ser mitigadas asignando objetivos de forma coordinada buscando explotar el paralelismo en la exploración y reducir el tiempo perdido por interferencias \cite{nieto2014coordination}. La idea detrás de la exploración coordinada es la de resolver el problema de la asignación de tareas maximizando la relación costo-beneficio, no de cada robot por separado, sino \todo{OK|\\sobra el que, y si no va junto} de la flota entera.
 
- % que consiste en asignar los robots a objetivos de exploración de forma inteligente 
+% que consiste en asignar los robots a objetivos de exploración de forma inteligente 
 
 % El numero optimo mencionado coordinación que logre evitar interferencias suele ser un factor critico en la exploración multirobot porque permite lograr el balance anteriormente mencionado con una cantidad de robots mayor al que se podría tener sin coordinar\cite{nieto2014coordination}.
 
-
 % Los probas anteriormente mencionados pueden ser mitigados con el uso de una buena estrategia de coordinación.
 
-
-
 % No se bien si esta sección va como parte del estado del arte o seria parte de la intro. Algunas cosas que se pueden incluir en esta son:
+%   * Descripción genérica del problema
+%   * Aspectos a considerar
+%   * Problemas relacionados
+%   * Soluciones posibles a alto nivel
 
-%   Descripción genérica del problema
-
-%   Aspectos a considerar
-  
-%   Problemas relacionados
-
-%   Soluciones posibles a alto nivel
-
-\subsection{Mapas}\todo{primera vez que aparece el concepto mapa. debió mencionarse antes. falta decir que el resultado de la exploración normalmente incluye un mapa. ahí está el link}\label{subsec:mapas}
-Un mapa consiste en un modelo de un entorno,\todo{.?} en el contexto de la robótica los mapas se pueden dividir en dos categorías, \emph{mapas métricos} y \emph{mapas topológicos} \cite{Thrun1998}, \cite{choset2005principles}.
+% >>> Hasta aca revisado
+\subsection{Mapas}\todo{Se menciono antes en el primer parrafo, que le falta hacer?|\\ primera vez que aparece el concepto mapa. debió mencionarse antes. falta decir que el resultado de la exploración normalmente incluye un mapa. ahí está el link}\label{subsec:mapas}
+Un mapa consiste en un modelo de un entorno.\todo{OK|\\.?} En el contexto de la robótica los mapas se pueden dividir en dos categorías, \emph{mapas métricos} y \emph{mapas topológicos} \cite{Thrun1998}, \cite{choset2005principles}.
 
 Los \emph{mapas métricos} son mapas principalmente caracterizados por representar la geometría de todo el entorno, incluyendo a su vez una escala que permite asociar las dimensiones representadas dentro del mapa con las dimensiones reales.
 
