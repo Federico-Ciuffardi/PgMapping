@@ -100,70 +100,70 @@ Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inici
 
 % \cite{choset2005principles}, \cite{Thrun1998}, \cite{Liu2015}.
 \subsection{Diagrama de Voronoi}\label{sec:DV}
-Dado un espacio $W \subseteq R^2$, $S \subset W$ es un conjunto de puntos llamados \emph{sitios}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia desde $p$ a otro punto \tododone{OK| entre p y otro punto de W, no? es decir, no son dos puntos cualesquiera} en $W$. 
+Dado un espacio $W \subseteq R^2$, $G \subset W$ es un conjunto de puntos llamados \emph{generadores}. Sea $p\in W$, la función $d_p : W \rightarrow R$ computa la distancia desde $p$ a otro punto \tododone{OK| entre p y otro punto de W, no? es decir, no son dos puntos cualesquiera} en $W$. 
 
-% Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos mas cercanos a un sitio $s_i\in S$ particular: 
+% Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos mas cercanos a un generador $s_i\in G$ particular: 
 % \begin{equation}
-%   R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:regV}
+%   R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in G,s_j \neq s_i\}\label{eq:regV}
 % \end{equation}
-Los \emph{puntos bases} de $p$, $BP_p \subseteq S$ es el conjunto de sitios mas cercanos a un punto $p \in W$ :
+Los \emph{puntos bases} de $p$, $BP_p \subseteq G$ son el conjunto de generadores mas cercanos a un punto $p \in W$ :
 \begin{equation}
-  \mli{BP}_p =\{s_i \in S: d_p(s_i) \leq d_p(s_j), \forall s_j\in S,s_j \neq s_i\}\label{eq:bases}
+  \mli{BP}_p =\{s_i \in G : d_p(s_i) \leq d_p(s_j), \forall s_j\in G,s_j \neq s_i\}\label{eq:bases}
 \end{equation}
-\tododone[inline]{OK| $\forall s_j\in S$?}
-Un \emph{diagrama de Voronoi} $\mli{VD}\subset W$ se define como todos los puntos con dos o mas sitios a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base: 
+\tododone[inline]{OK| $\forall s_j\in G$?}
+Un \emph{diagrama de Voronoi} $\mli{VD}\subset W$ se define como todos los puntos con dos o mas generadores a una misma minima distancia, o lo que es equivalente, que tienen dos o mas puntos base: 
 \begin{equation}
   \mli{VD} = \{p \in W : |\mli{BP}_p| \geq 2\}\label{eq:DV}
 \end{equation}
 
 % Notar que las fronteras de las regiones de Voronoi forman parte del diagrama de Voronoi por lo que es posible decir que un diagrama de Voronoi secciona el espacio en regiones de Voronoi. 
-% Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el serán máximos locales no estrictos de distancia a los sitios. Esta propiedad es útil en el contexto de la robótica porque permite asegurar que los caminos en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios son seguros en tanto mantienen la mayor distancia posible a los obstáculos.
+% Una propiedad de los diagramas de Voronoi es que los puntos que pertenecen a el serán máximos locales no estrictos de distancia a los generadores. Esta propiedad es útil en el contexto de la robótica porque permite asegurar que los caminos en un diagrama de Voronoi generado con el conjunto de obstáculos como generadores son seguros en tanto mantienen la mayor distancia posible a los obstáculos.
 
-En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Voronoi, con $S=\{A_i | 0\leq i \leq 10\}$\tododone{OK| $0<i\leq10$?} como sitios\todo{sigue sin gustarme nada la palabra sitio, por qué no usar puntos generadores?}.
+En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Voronoi, con $G=\{A_i | 0\leq i \leq 10\}$\tododone{OK| $0<i\leq10$?} como generadores\tododone{OK| sigue sin gustarme nada la palabra sitio, por qué no usar puntos generadores?}.
 \begin{figure}[H]
   \center
   \includegraphics[width=5.5cm]{imagenes/VD.png}
-  \caption{Diagrama de Voronoi (en violeta) con diez sitios. Generado con \cite{voronoigeo}.}\label{fig:ejemploVoronoi}
+  \caption{Diagrama de Voronoi (en violeta) con diez generadores. Generado con \cite{voronoigeo}.}\label{fig:ejemploVoronoi}
 \end{figure} 
 \tododone[inline]{OK| sacar Ejemplo de un en el caption}
 
-Una propiedad de los diagramas de Voronoi es que los caminos sobre este tipo de diagramas mantienen a lo largo de ellos la mayor distancia posible al sitio mas cercano.
-Esta propiedad es útil en el contexto de la robótica porque dado un diagrama de Voronoi generado con el conjunto de obstáculos como sitios, los caminos sobre este se consideran caminos de máxima seguridad\todoremark{Era cambiar "seguros" por caminos de máxima seguridad, no? |caminos de máxima seguridad} en tanto mantienen al robot lo mas alejado posible de los obstáculos durante el recorrido.
+Una propiedad de los diagramas de Voronoi es que los caminos sobre este tipo de diagramas mantienen a lo largo de ellos la mayor distancia posible al generador mas cercano.
+Esta propiedad es útil en el contexto de la robótica porque dado un diagrama de Voronoi generado con el conjunto de obstáculos como generadores, los caminos sobre este se consideran caminos de máxima seguridad\todoremark{Era cambiar "seguros" por caminos de máxima seguridad, no? |caminos de máxima seguridad} en tanto mantienen al robot lo mas alejado posible de los obstáculos durante el recorrido.
 
-% Una propiedad de los diagramas de Voronoi  es que los caminos sobre este tipo de diagramas aseguran mantener la mayor distancia posible a los sitios. Esta propiedad es util en el contexto de la robotica porque permite asegurar por lo tanto en un diagrama de Voronoi generado con el conjunto de obstáculos como sitios se puede decir que los caminos sobre este serán seguros en tanto mantienen la mayor distancia posible a los obstáculos.
+% Una propiedad de los diagramas de Voronoi  es que los caminos sobre este tipo de diagramas aseguran mantener la mayor distancia posible a los generadores. Esta propiedad es util en el contexto de la robotica porque permite asegurar por lo tanto en un diagrama de Voronoi generado con el conjunto de obstáculos como generadores se puede decir que los caminos sobre este serán seguros en tanto mantienen la mayor distancia posible a los obstáculos.
 
  % \cite{choset2005principles}, \cite{latombe1991}, \cite{wurm2008coordinated}
 \subsection{Diagrama generalizado de Voronoi}
-Recordando que los sitios en un diagrama de Voronoi son puntos, se tiene un problema al querer utilizar obstáculos como sitios. El problema radica en que normalmente los obstáculos ocupan un área y por lo tanto \tododone{OK| tienen área y} no pueden representarse como puntos en el espacio, para solucionar esto se generaliza la definición de diagrama de Voronoi para poder definirlo a partir de sitos de mayor orden, como lo son lineas, o polígonos. A esta generalización se la denomina como \emph{diagrama generalizado de Voronoi} (GVD) y los sitios de mayor orden o sitios generalizados son representados como conjuntos conexos de puntos del espacio de trabajo, siendo $\mli{GS}\subset P(W)$\todoremark{Con $2^W$ quise decir: el conjunto de los todos posibles conjuntos de elementos de W. Según lo que encontré esto en realidad se representa como $P(conjunto)$| esta representación es binaria:libre/ocupado? habría que explicitarla, no?} el conjunto de todos los sitios generalizados.
+Recordando que los generadores en un diagrama de Voronoi son puntos, se tiene un problema al querer utilizar obstáculos como generadores. El problema radica en que normalmente los obstáculos ocupan un área y por lo tanto \tododone{OK| tienen área y} no pueden representarse como puntos en el espacio, para solucionar esto se generaliza la definición de diagrama de Voronoi para poder definirlo a partir de generadores de mayor orden, como lo son lineas, o polígonos. A esta generalización se la denomina como \emph{diagrama generalizado de Voronoi} (GVD), y los generadores de mayor orden o generadores generalizados son representados como conjuntos conexos de puntos del espacio de trabajo, siendo $\mli{GG}\subset P(W)$\todoremark{Con $2^W$ quise decir: el conjunto de los todos posibles conjuntos de elementos de W. Según lo que encontré esto en realidad se representa como $P(conjunto)$| esta representación es binaria:libre/ocupado? habría que explicitarla, no?} el conjunto de todos los generadores generalizados.
 
-% Las nuevas definiciones generalizadas son en su mayoría análogas a las originales, siendo el principal cambio la substitución de la función de distancia $d_p$ por una función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los sitios generalizados. La función $\mli{gd}_p$ se define a partir de $d_p$ como se muestra en la ecuación \ref{eq:dg}.
+% Las nuevas definiciones generalizadas son en su mayoría análogas a las originales, siendo el principal cambio la substitución de la función de distancia $d_p$ por una función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los generadores generalizados. La función $\mli{gd}_p$ se define a partir de $d_p$ como se muestra en la ecuación \ref{eq:dg}.
 
-Las definiciones relacionadas a los GVD se basan en las definiciones planteadas en la sección \ref{sec:DV} \tododone{OK| en la Sec.ref, sacar para los DV} pero considerando sitios generalizados en lugar de sitios puntuales. Una parte fundamental de las definiciones del GVD es la llamada función de distancia generalizada $\mli{gd}_p : P(W) \rightarrow R$ que considera las formas de los sitios generalizados, esta se define a partir de la distancia puntual $d_p$ como se muestra en \eqref{eq:dg}.
+Las definiciones relacionadas a los GVD se basan en las definiciones planteadas en la sección \ref{sec:DV} \tododone{OK| en la Sec.ref, sacar para los DV} pero considerando generadores generalizados en lugar de generadores puntuales. Una parte fundamental de las definiciones del GVD es la llamada función de distancia generalizada $\mli{gd}_p : P(W) \rightarrow R$ que permite obtener la distancia entre $p$ y un generador generalizado, esta se define a partir de la distancia puntual $d_p$ como se muestra en \eqref{eq:dg}.
 \begin{equation}
   \mli{gd}_p(s_i) = \min_{p'\in s_i}\{d_p(p')\} \label{eq:dg}
 \end{equation}
-La generalización hace necesaria la introducción del concepto de sitios base generalizados $\mli{GBS}_p\subseteq GS$ que son los sitios mas cercanos a un punto $p$ \eqref{eq:GBS}, los cuales se utilizan para la definición de los puntos base generalizados de un punto $p$ $\mli{GBP}_p$ que son los puntos pertenecientes a los sitios de $\mli{GBS}_p$\todo[inline]{En la def de GBP si en la U se usa GS entonces por cada conjunto de puntos que compone obstaculo $s_i$ en $GS$ se tiene al menos un punto base (argmin se aplica a cada obstaculo individualmente) entoces si hay dos obstaculos ya se tiene que todo punto pertenece al GVD, restingir la U a solo los obstaculos a minima distancia soluciona esto. Otra solucion es redefinir GBP para decir algo como: los puntos a minima distancia de cualquier obstaculo, pero me parece mas claro usar GBS y la U de argmin| para mi GBS no es necesario, con GS alcanza. sacaría} mas cercanos a $p$ \eqref{eq:GBP} . 
-La definición diagrama de Voronoi $\mli{GVD}$ es similar a su contra parte no generalizada y se define según se muestra en \eqref{eq:GVD}. 
+Para definir $\mli{GVD}$ es util la introducción del concepto de generadores base generalizados $\mli{GBG}_p\subseteq GG$ que son los generadores mas cercanos a un punto $p$ \eqref{eq:GBS}, a partir de los cuales se puede definir los puntos base generalizados $\mli{GBP}_p$ de un punto $p$ como los puntos pertenecientes a los generadores de $\mli{GBG}_p$\todo[inline]{En la def de GBP si en la U se usa GG entonces por cada conjunto de puntos que compone obstaculo $s_i$ en $GG$ se tiene al menos un punto base (argmin se aplica a cada obstaculo individualmente) entoces si hay dos obstaculos ya se tiene que todo punto pertenece al GVD, restingir la U a solo los obstaculos a minima distancia soluciona esto. Otra solucion es redefinir GBP para decir algo como: los puntos a minima distancia de cualquier obstaculo, pero me parece mas claro usar GBG y la U de argmin. Cambie el principio del parrafo para indicar que es util mas que necesario, igual lo hablamos a ver que es mejor de las alternativas| para mi GBG no es necesario, con GG alcanza. sacaría} que son mas cercanos a $p$ \eqref{eq:GBP} . 
+La definición $\mli{GVD}$ es analoga a su contra parte no generalizada y se define según se muestra en \eqref{eq:GVD}. 
 % Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de Voronoi $\mli{GVD}$ son las definiciones mas similares a sus contra partes no generalizadas y se definen según se muestra en \eqref{eq:GR} y \eqref{eq:GVD} respectivamente. 
 
 
-% Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los sitios generalizados mas cercanos $\mli{GBS}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
+% Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los generadores generalizados mas cercanos $\mli{GBG}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
 
 
 \begin{equation}
-  \mli{GBS}_p = \{s_i : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), \forall s_i,s_j\in S,s_j \neq s_i\}\label{eq:GBS}
+  \mli{GBG}_p = \{s_i \in \mli{GG}: \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), \forall s_j\in \mli{GG}, s_j \neq s_i\}\label{eq:GBS}
 \end{equation}
 % \begin{equation}
-%   \mli{GBP}_p =\{p' \in W : d_p(p') \leq d_p(p''), p' \in s_i, p'' \in s_j, s_i,s_j \in S,p' \neq p''\}
+%   \mli{GBP}_p =\{p' \in W : d_p(p') \leq d_p(p''), p' \in s_i, p'' \in s_j, s_i,s_j \in \mli{GG},p' \neq p''\}
 % \end{equation}
 \begin{equation}
-  \mli{GBP}_p =\bigcup_{s_i \in \mli{GBS}_p} \argmin_{p'\in s_i}\{d_p(p')\}\label{eq:GBP}
+  \mli{GBP}_p =\bigcup_{s_i \in \mli{GBG}_p} \argmin_{p'\in s_i}\{d_p(p')\}\label{eq:GBP}
 \end{equation}
 \begin{equation}
   \mli{GVD}  = \{p \in W : |GBP_p| \geq 2\}\label{eq:GVD}
 \end{equation}
 % \begin{equation}
-%   \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in S,s_j \neq s_i\}\label{eq:GR}
+%   \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in \mli{GG},s_j \neq s_i\}\label{eq:GR}
 % \end{equation}
 
 En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio libre se marca con blanco, las lineas negras identifican al GVD y los polígonos negros representan obstáculos. 
@@ -172,16 +172,16 @@ En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio li
 % Para referirse a la segunda forma, mas compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
 Los GVD suelen ser representados con un grafo en el cual los vertices son los puntos $p$ pertenecientes al GVD que son adyacentes a obstáculos o que cumplen con $|\mli{GBP}_p|\geq 3$, mientras que las aristas se encuentran entre los vertices que se encuentran conectados por caminos disjuntos formados por puntos pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo asociado al GVD de la figura \ref{fig:ejemploGVD}, donde los círculos azules son los vertices del grafo y las lineas negras las aristas (aunque no son visibles existen aristas entre los vertices correspondientes a puntos que son tan cercanos que se solapan).
 
-En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como sitios cumplen con las 3 propiedades necesarias para ser mapas de carreteras (sección \ref{subsec:mapacarr}), lo cual justifica su uso para la navegación. Esto junto a la capacidad de generar caminos seguros ya mencionada y a otras características como su utilidad para la coordinación y para generar mapas topológicos basados en regiones que se tratarán mas adelante, hacen que los GVD que utilizan obstáculos como sitios, sean\tododone{OK|sean?} estructuras de gran útilidad en el contexto de la robótica. De ahora en mas al hablar de GVD se hace referencia a GVD generado considerando a los\tododone{OK| a un GVD generado considerando...}obstáculos como sitios.
+En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como generadores cumplen con las 3 propiedades necesarias para ser mapas de carreteras (sección \ref{subsec:mapacarr}), lo cual justifica su uso para la navegación. Esto junto a la capacidad de generar caminos seguros ya mencionada y a otras características como su utilidad para la coordinación y para generar mapas topológicos basados en regiones que se tratarán mas adelante, hacen que los GVD que utilizan obstáculos como generadores, sean\tododone{OK|sean?} estructuras de gran útilidad en el contexto de la robótica. De ahora en mas al hablar de GVD se hace referencia a GVD generado considerando a los \tododone{OK| a un GVD generado considerando...}obstáculos como generadores.
 
-% Otra definición alternativa de GVD se muestra en \eqref{eq:GVDalt}, esta definición es mas restrictiva que la anterior en tanto no permite que un punto pertenezca si tiene mas de dos puntos bases pero estos pertenecen a un mismo sitio. Esta definición trae problemas ya que distintas formas de separar a los obstáculos en sitios puede causar distintos GVD. Por ejemplo si se considera u sitio como un conjunto conexo de puntos obstaculizados se tiene que en el interior de las habitaciones con una entrada no se generara GVD, ya que sus paredes por estar conectadas serán un solo sitio, y por lo tanto los puntos $p$ interiores a la habitación aunque pueden cumplir con $|GBP_p| \geq 2$ no cumplirán con $|GBS_p| \geq 2$.
+% Otra definición alternativa de GVD se muestra en \eqref{eq:GVDalt}, esta definición es mas restrictiva que la anterior en tanto no permite que un punto pertenezca si tiene mas de dos puntos bases pero estos pertenecen a un mismo generador. Esta definición trae problemas ya que distintas formas de separar a los obstáculos en generadores puede causar distintos GVD. Por ejemplo si se considera u generador como un conjunto conexo de puntos obstaculizados se tiene que en el interior de las habitaciones con una entrada no se generara GVD, ya que sus paredes por estar conectadas serán un solo generador, y por lo tanto los puntos $p$ interiores a la habitación aunque pueden cumplir con $|GBP_p| \geq 2$ no cumplirán con $|GBS_p| \geq 2$.
 % \begin{equation}
 %   \mli{GVD}  = \{p \in W : |GBS_p| \geq 2\}\label{eq:GVDalt}
 % \end{equation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Esto  necesita asumir que los obstáculos son convexos para poder entenderse porque por ejemplo si se considera las 4 paredes de una habitación como un único obstáculo eso seria un único sitio generalizado y no formaría un GVD.
+% Esto  necesita asumir que los obstáculos son convexos para poder entenderse porque por ejemplo si se considera las 4 paredes de una habitación como un único obstáculo eso seria un único generador generalizado y no formaría un GVD.
 
 % En la def que use también es necesario  porque podrían darse pequeñas imperfecciones en un espacio continuo que generen que lo que a escala macroscópica es una pared a escala microscópica sean tenga pequeñas hendiduras circulares que causen puntos pertenecientes al GVD en lugares no deseados. Esto se evita considerando obstáculos convexos. 
 
@@ -523,7 +523,7 @@ Otro método es el que se describe en \cite{Lopez-Perez2018}, en este caso la se
 \end{equation}
 
 
-Un ejemplo de esta segmentacion se muestra en la figura \ref{fig:ejemploCoordCenter} para un entrono completamente desconocido, donde se puede visualizar las posiciones de los robots y con colores se indican los distintos segmentos. Notar que por la definición de segmento cada robot $R_i$ se encuentra dentro del segmento $S_i$ que fue definido a partir de su ubicación $C_i$. %Otra cosa a notar sobre esta técnica de segmentacion es que en este caso, donde todo el espacio es desconocido, los segmentos se corresponden directamente a las regiones de un diagrama de Voronoi generado con las posiciones de los robots como sitios y para los casos en donde el espacio no es completamente desconocido se deberá excluir los puntos conocidos de las regiones de Voronoi para obtener la segmentacion propuesta.
+Un ejemplo de esta segmentacion se muestra en la figura \ref{fig:ejemploCoordCenter} para un entrono completamente desconocido, donde se puede visualizar las posiciones de los robots y con colores se indican los distintos segmentos. Notar que por la definición de segmento cada robot $R_i$ se encuentra dentro del segmento $S_i$ que fue definido a partir de su ubicación $C_i$. %Otra cosa a notar sobre esta técnica de segmentacion es que en este caso, donde todo el espacio es desconocido, los segmentos se corresponden directamente a las regiones de un diagrama de Voronoi generado con las posiciones de los robots como generadores y para los casos en donde el espacio no es completamente desconocido se deberá excluir los puntos conocidos de las regiones de Voronoi para obtener la segmentacion propuesta.
 
 \begin{figure}[H]
   \center
@@ -637,9 +637,9 @@ El trabajo propone asignar tareas a partir de la division el entorno desconocido
 Finalmente, la planificación del camino del robot es realizada en el interior de los polígonos libres, cosa que se puede hacer a partir de la aplicación de cualquier algoritmo de descomposición celular, por ejemplo el que se explica en \cite{schachter1978decomposition}.
    
 \subsubsection{Particionamiento basado en polígonos}\label{subsubsec:particionamientovoronoi}
-El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como sitios, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. 
+El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como generadores, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. 
 
-Sea $n$ numero de robots, el resultado deseado es obtener un conjunto de $K=n$ celdas de Voronoi para las cuales, sus centroides (centros de masa) y sus sitios estén a una distancia menos que cierta tolerancia $\varepsilon$. % cerradas que están globalmente delimitadas por el polígono a dividir
+Sea $n$ numero de robots, el resultado deseado es obtener un conjunto de $K=n$ celdas de Voronoi para las cuales, sus centroides (centros de masa) y sus generadores estén a una distancia menos que cierta tolerancia $\varepsilon$. % cerradas que están globalmente delimitadas por el polígono a dividir
 
 La generación de estas celdas se realiza a partir del algoritmo \ref{alg:particionamientovoronoi} que adapta, utilizado diagramas de Voronoi, al algoritmo K-Means utilizado en la implantación base, que no es compatible con una representación poligonal.
 
