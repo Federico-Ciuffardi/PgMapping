@@ -6,11 +6,10 @@
 La exploración de un entorno desconocido es un problema clásico de la robótica
 móvil autónoma que consiste en utilizar un robot con el objetivo de obtener
 información de un entorno desconocido generando un mapa que lo represente. La
-exploración es fundamental en tareas de limpieza\cite{luo2002real}, operaciones
+exploración es fundamental en tareas de limpieza \cite{luo2002real}, operaciones
 de búsqueda y rescate \cite{Liu2015}, misiones extra planetarias
 \cite{schuster2019towards}, entre otras tareas en las cuales se desconozca
-previamente el entorno y sea ineficiente o directamente inviable teleoperar a
-un robot.
+el entorno y sea ineficiente o directamente inviable teleoperar a un robot.
 %Por lo tanto en
 %dicho tipo de tareas que el robot pueda explorar el entorno de forma autónoma
 %es una característica deseable.
@@ -89,7 +88,7 @@ La simplicidad de los mapas topológicos es útil para nosotros los humanos al f
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/metroBsAs.png}
-  \caption{Mapa de sistema de transporte subterráneo de Buenos Aires, Argentina. Extraído de \cite{metroBsAs}.}\label{fig:metroBsAs}
+  \caption[Mapa del sistema de transporte subterráneo de Buenos Aires, Argentina.]{Mapa del sistema de transporte subterráneo de Buenos Aires, Argentina. Extraído de \cite{metroBsAs}.}\label{fig:metroBsAs}
 \end{figure} 
 
 La simplicidad mencionada también tiene ventajas computacionales, ya que para un mismo entorno los mapas topológicos suelen\todo{pueden?} ser varios ordenes de magnitud mas pequeños que los mapas métricos y por lo tanto, mas allá de la memoria que se ahorra también se tiene una planificación mas eficiente. Sin embargo la falta de detalle en la representación también pude ser una desventaja en tanto hace que los planes de navegación obtenidos de un mapa topológico suelan ser peores\todo{vago, subjetivo!} que los obtenidos en mapas métricos.
@@ -118,7 +117,7 @@ Un \emph{mapa de carreteras} (del ingles roadmap) \cite{choset2005principles} es
 \begin{figure}[H]
   \center
   \includegraphics[width=0.9\linewidth]{imagenes/uruguayvialMarcado.png}
-  \caption{Mapa de carreteras de Uruguay, con amarillo se resalta un camino entre ubicaciones de Montevideo y Paysandú. Extraído de \cite{googlemaps}.}\label{fig:ejemplovial}
+  \caption[Mapa de carreteras de Uruguay.]{Mapa de carreteras de Uruguay. Con amarillo se resalta un camino entre ubicaciones de Montevideo y Paysandú. Extraído de \cite{googlemaps}.}\label{fig:ejemplovial}
 \end{figure} 
 
 Para considerarse un mapa de carreteras, un mapa topológico debe estar
@@ -163,7 +162,7 @@ En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Vo
 \begin{figure}[H]
   \center
   \includegraphics[width=5.5cm]{imagenes/VD.png}
-  \caption{Diagrama de Voronoi (en violeta) con diez generadores. Generado con \cite{voronoigeo}.}\label{fig:ejemploVoronoi}
+  \caption[Diagrama de Voronoi.]{Diagrama de Voronoi. Con negro se indican los generadores, mientras que con violeta se indican los puntos pertenecientes al diagrama de Voronoi. Generado con \cite{voronoigeo}.}\label{fig:ejemploVoronoi}
 \end{figure} 
 
 Una propiedad de los diagramas de Voronoi es que los caminos sobre este tipo de diagramas mantienen a lo largo de ellos la mayor distancia posible al generador mas cercano.
@@ -232,7 +231,7 @@ En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos
   \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/GVD2.png}\label{fig:ejemploGVD}}
   \qquad
   \subfloat[Grafo asociado al GVD.]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/GVDGraph.png}\label{fig:ejemploGVDgrafo}}
-  \caption{Diagrama generalizado de Voronoi. Extraído de \cite{Wallgrun2005}}
+  \caption[Diagrama generalizado de Voronoi.]{Diagrama generalizado de Voronoi. Extraído de \cite{Wallgrun2005}}
   \label{cleanup}
 \end{figure}
 
@@ -251,7 +250,7 @@ En \cite{wurm2008coordinated} se propone un método que logra construir un GVD e
   \subfloat[Mapa original y mapa de distancia (oscuridad proporcional a la distancia al obstáculo más cercano)]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/wurmSeg/b.png}\label{fig:ejWurmB}}
   \qquad
   \subfloat[Mapa original y GVD (resultante de la esqueletización)]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/wurmSeg/c.png}\label{fig:ejWurmC}}
-  \caption{Método de construcción de un GVD. Extraído de \cite{wurm2008coordinated}.}\label{fig:wurmGVD}
+  \caption[Método de construcción de un GVD.]{Método de construcción de un GVD. Extraído de \cite{wurm2008coordinated}.}\label{fig:wurmGVD}
 \end{figure}
 % \todo[inline]{uniformizar captions, sacar 'Ejemplo de'. además reescribiría los captions b) y c): Mapa original y mapa de distancias (color proporcional a la distancia al obstáculo más cercano). Mapa original y GVD (resultante de la esqueletización)}
 % \begin{figure}[H]
@@ -294,7 +293,7 @@ El algoritmo comienza determinando el estado (ocupado o libre) para cada celda d
   \subfloat[Regiones]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/c.png}\label{fig:ejThrunTopC}}
   \qquad
   \subfloat[Mapa topologico]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/d.png}\label{fig:ejThrunTopD}}
-  \caption{Método de construcción de un mapa topológico. Los números de las figuras (c) y (d) son identificadores arbitrarios de regiones. Extraído de \cite{Thrun1998}.}\label{fig:ejThrunTop}
+  \caption[Método de construcción de un mapa topológico.]{Método de construcción de un mapa topológico. Los números de las figuras (c) y (d) son identificadores arbitrarios de regiones. Extraído de \cite{Thrun1998}.}\label{fig:ejThrunTop}
 \end{figure}
 % \todo[inline]{sacar 'Ejemplo de', además hay que editar estas imgs limpiando los fondos blancos. a y b seguro, la c capaz se puede dejar}
 
@@ -326,9 +325,9 @@ Se cumple que $A_i \leq H_i$ siendo iguales cuando la region es convexa, por lo 
   \hspace{2cm}
   \qquad
   \subfloat[c=0.56]{\includegraphics[clip=true, height=0.25\linewidth]{imagenes/liuConv/b.png}}
-  \caption[Regiones convexas.]{Dos regiones con su valor de convexidad asociado, las líneas solidas delimitan la region y las líneas punteadas delimitan su envolvente convexa. Extraído de \cite{Liu2015}.}\label{fig:ejemplConvexidad}
+  \caption[Regiones convexas y su valor de convexidad asociado.]{Regiones convexas y su valor de convexidad asociado. Las líneas sólidas delimitan las regiones y las punteadas sus envolventes convexas. Extraído de \cite{Liu2015}.}\label{fig:ejemplConvexidad}
 \end{figure}
-\todo[inline]{conviene utilizar captions más cortos. ej. Regiones convexas. Las líneas sólidas delimitan las regiones y las punteadas sus envolventes convexas. además, delante de la llaves, en la defición del caption, conviene agregar entre paréntesis rectos el 'nombre' de la figura. esto será tomado para generar el índice de figuras de modo que no te queden entradas quilométricas}
+% \todo[inline]{conviene utilizar captions más cortos. ej. Regiones convexas. Las líneas sólidas delimitan las regiones y las punteadas sus envolventes convexas. además, delante de la llaves, en la defición del caption, conviene agregar entre paréntesis rectos el 'nombre' de la figura. esto será tomado para generar el índice de figuras de modo que no te queden entradas quilométricas}
 
 \paragraph{Compacidad}
 % Cuanto mas cercanos son los puntos que componen una region a su centro mas compacta sera la region.
@@ -413,7 +412,7 @@ El nombre de este algoritmo proviene de como este determina las distancias comen
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesBrush2Rows.png}
-  \caption{Algoritmo brushfire. (A) Los valores de distancia se inicializan con 0 (negro) para celdas ocupadas e infinito (blanco) para celdas vacías. (B) y (C) Las celdas ocupadas generan ondas que asignan distancias crecientes a medida que se propagan, indicadas por el aumento de brillo de las celdas. (D) Las ondas se detienen al no poderse reducir más valores de distancia. Una vez que se han detenido todas las ondas, se obtiene el mapa de distancia completo. Extraído de \cite{Lau2013}.}\label{fig:wavesBrush}
+  \caption[Algoritmo brushfire.]{Algoritmo brushfire. (A) Los valores de distancia se inicializan con 0 (negro) para celdas ocupadas e infinito (blanco) para celdas vacías. (B) y (C) Las celdas ocupadas generan ondas que asignan distancias crecientes a medida que se propagan, indicadas por el aumento de brillo de las celdas. (D) Las ondas se detienen al no poderse reducir más valores de distancia. Una vez que se han detenido todas las ondas, se obtiene el mapa de distancia completo. Extraído de \cite{Lau2013}.}\label{fig:wavesBrush}
 \end{figure} 
 \todo[inline]{mucho, recortar y colocar en el texto}
 
@@ -429,7 +428,7 @@ Esto se logra partiendo de un mapa de distancias parcialmente correcto brushfire
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesBrushDinClean2Rows.png}
-  \caption{Algoritmo brushfire dinámico. (A) Último mapa de distancias calculado. (B) Un obstáculo es eliminado (contorno rojo) lo cual causa ondas inconsistentes que comienza a reiniciar los valores de distancia inválidos, a su vez un obstáculo es insertado (contorno azul) y generando ondas consistentes que propagan las nuevas distancias. (C) Cuando las ondas inconsistentes chocan contra celdas con un obstáculo más cercano válido estas se detienen y en ese mismo lugar inicia una onda consistente para restaurar los valores de distancia reiniciados. (D) Después que todas las ondas se detienen, la actualización se completa. Extraído de \cite{Lau2013}.}\label{fig:wavesBrushDyn}
+  \caption[Algoritmo brushfire dinámico.]{Algoritmo brushfire dinámico. (A) Último mapa de distancias calculado. (B) Un obstáculo es eliminado (contorno rojo) lo cual causa ondas inconsistentes que comienza a reiniciar los valores de distancia inválidos, a su vez un obstáculo es insertado (contorno azul) y generando ondas consistentes que propagan las nuevas distancias. (C) Cuando las ondas inconsistentes chocan contra celdas con un obstáculo más cercano válido estas se detienen y en ese mismo lugar inicia una onda consistente para restaurar los valores de distancia reiniciados. (D) Después que todas las ondas se detienen, la actualización se completa. Extraído de \cite{Lau2013}.}\label{fig:wavesBrushDyn}
 \end{figure} 
 \todo[inline]{ídem fig anterior, recortar y colocar en el texto.}
 
@@ -438,7 +437,7 @@ Con esto se tiene una definición de brushfire dinámico que calcula un mapa de 
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesKalra.png}
-  \caption{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda obstaculizada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al detenerse genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda obstaculizada que paso a ser libre mientras que al al llegar a cedas con una distancia minima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
+  \caption[Olas de brushfire dinámico.]{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda obstaculizada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al detenerse genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda obstaculizada que paso a ser libre mientras que al al llegar a cedas con una distancia minima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
 \end{figure} 
 
 
@@ -449,7 +448,7 @@ Para solucionar las problemáticas planteadas Lau \textit{et al.} proponen cambi
 \begin{figure}[H]
   \center
   \includegraphics[width=0.75\linewidth]{imagenes/lauPalo.png}
-  \caption{GVD calculado con el algoritmo de brushfire dinámico original a la izquierda y el calculado por el brushfire dinámico modificado de Lau \textit{et al.} a la derecha. Las elipses marcan los lugares en donde el acercamiento de Kalra \textit{et al.} falla al no generar celdas pertenecientes al GVD. Extraído de \cite{Lau2013}.}\label{fig:lauPalo}
+  \caption[Resultados de brushfire dinámico original y la variante propuesta por Lau \textit{et al.}]{Resultados de brushfire dinámico original (a la izquierda) y la variante propuesta por Lau \textit{et al.} (a la derecha). Las elipses marcan los lugares en donde el acercamiento de Kalra \textit{et al.} falla al no generar celdas pertenecientes al GVD. Extraído de \cite{Lau2013}.}\label{fig:lauPalo}
 \end{figure} 
 
 \section{Coordinación en la exploración multirobot}
@@ -514,7 +513,7 @@ Existen métodos de coordinación que se basan en segmentar el espacio sin consi
 \begin{figure}[H]
   \center
   \includegraphics[width=5.5cm]{imagenes/coordGrillCM.png}
-  \caption{Segmentación propuesta en \cite{Solanas2004}. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
+  \caption[Segmentación propuesta en \cite{Solanas2004}.]{Segmentación propuesta en \cite{Solanas2004}. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
 \end{figure} 
 
 Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no obstaculizado mas corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ esta en el rango de sensado de algún robot.
@@ -540,7 +539,7 @@ Un ejemplo de esta segmentacion se muestra en la figura \ref{fig:ejemploCoordCen
 \begin{figure}[H]
   \center
   \includegraphics[width=5.5cm]{imagenes/centerCoord.png}
-  \caption{Segmentación propuesta en \cite{Lopez-Perez2018} y extraído de misma fuente.}\label{fig:ejemploCoordCenter}
+  \caption[Segmentación propuesta en \cite{Lopez-Perez2018}]{Segmentación propuesta en \cite{Lopez-Perez2018}, extraído de la misma fuente.}\label{fig:ejemploCoordCenter}
 \end{figure} 
 
 Una vez calculados, cada segmento $S_i$ es asignado al robot $R_i$. En este método todo punto que perteneciente a algún segmento sera un posible objetivo de exploración, por lo que en este caso sera una excepción a la norma y los objetivos no serán las fronteras sino que será todo el espacio desconocido. Los robots solo pueden ser enviados a objetivos perecientes su segmento asignado, siendo el objetivo asignado el que alcanza el menor valor para la función de peso $f_p$ que se encuera definida en \eqref{ec:weightLopez}.
@@ -575,7 +574,7 @@ Para determinar los potenciales objetivos de exploración se utiliza el concepto
   \qquad
   \subfloat[Se obtienen las celdas frontera significativas de cada $F_i$ indicados con verde.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/c.png}}
 
-  \caption{Proceso de extracción de fronteras representativas, donde cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Extraído de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
+  \caption[Proceso de extracción de fronteras representativas.]{Proceso de extracción de fronteras representativas. Cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Extraído de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
 \end{figure}
 
 La asignación de objetivos de exploración se resuelve organizando una subasta entre robots, con la estación central como mediadora, es decir, encargada de dar inicio a la subasta, recibir las ofertas de los robots, determinar los resultados de la subasta e informárselos a los robots. A continuación se detallan las etapas de una subasta.
@@ -608,7 +607,7 @@ Siendo el valor $\delta$ igual a la mitad de longitud diagonal de una celda, por
   \qquad
   \subfloat[La celda con su centro indicado en azul \textbf{no} se puede precibir, esta dentro del rango del sensor pero existe un obstaculo que la obstruye.]{\includegraphics[clip=true, width=0.47\linewidth]{imagenes/oclusion/b.png}}
 
-  \caption{Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información. Lo representado por las celdas blancas, grises, negras, verdes y amarillas coincide con lo que estas representan en la figura \ref{fig:ejemploFrontSig}. Las condiciones se comprueban tomando la celda cuyo centro se marca con un punto negro como la celda $c$ y las celdas que cumplen con las condiciones se colorean con naranja. Extraído de \cite{Amorin2019}.}\label{fig:ejemploOclusionAm}
+  \caption[Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información.]{Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información. Lo representado por las celdas blancas, grises, negras, verdes y amarillas coincide con lo que estas representan en la figura \ref{fig:ejemploFrontSig}. Las condiciones se comprueban tomando la celda cuyo centro se marca con un punto negro como la celda $c$ y las celdas que cumplen con las condiciones se colorean con naranja. Extraído de \cite{Amorin2019}.}\label{fig:ejemploOclusionAm}
 \end{figure}
 
 
