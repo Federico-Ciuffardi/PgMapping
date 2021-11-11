@@ -3,7 +3,7 @@
 \todo[inline]{agregaría un párrafo introductorio}
 \todo[inline]{revisar ortografía (marqué algunas pero hay más) y redacción (cosas raras, omisión de artículos, repetición de palabras)}
 \section{Exploración}
-La exploración de un entorno desconocido es un problema clásico de la robótica
+La exploración es un problema clásico de la robótica
 móvil autónoma que consiste en utilizar un robot con el objetivo de obtener
 información de un entorno desconocido generando un mapa que lo represente. La
 exploración es fundamental en tareas de limpieza \cite{luo2002real}, operaciones
@@ -29,6 +29,25 @@ debe hacer para llegar al objetivo, el tiempo y la dificultad de recorrerlo,
 como también el costo energético que implica. Por otro lado el beneficio
 usualmente se asocia al tamaño de la porción explorada al completar el
 objetivo. %\todowarn{la importancia/prioridad de la tarea si la tuvieran}.
+
+Otro aspecto fundamental es el denominado criterio de parada según el cual se
+determina cuando la exploración se considera finalizada.  Uno de los criterios
+de parada tomados usualmente es de detener la exploración cuando el mapa
+construido alcanza cierto un porcentaje de cubrimiento del entorno
+\cite{Yan2015}, auque este es usualmente utilizado para evaluaciones de
+rendimiento no es útil en práctica, ya que para utilizarse se requiere tener
+conocimiento previo de las dimensiones del entorno a explorar, de lo contrario
+es imposible saber el porcentaje de cubrimiento. Otro posible criterio que si
+es aplicable en la practica es el de explorar el entorno hasta que no quede
+ninguna posibilidad de obtener nueva información de el, osea que no exista
+ningún espacio desconocido que sea accesible. La desventaja de este criterio es
+que se fuerza a una exploration exhaustiva del entorno, lo cual puede ser
+indeseable por cuestiones de costos, tanto temporales, como de recursos como la
+energía de los robots, o su desgaste.  En \cite{amorin2019novel} se propone un
+criterio de parada cuyo uso es factible en la practica y que a su vez evita una
+exploración exhaustiva, la idea subyacente de este criterio es que es posible
+determinar cuando los robots recopilan suficiente información de un entrono
+como para estimar el resto de forma precisa.
 
 \subsection{Exploración multirobot}\label{subsec:expmutirob}
 La exploración multirobot consiste en utilizar una flota robótica para resolver
@@ -60,6 +79,10 @@ de la exploración coordinada es la de resolver el problema de la asignación de
 tareas maximizando la relación costo-beneficio, no de cada robot por separado,
 sino de la flota entera.
 
+% En \cite{Lopez-Perez2018} se propone una solución completamente distribuida al problema de exploración multirobot. Este tipo de resolución implica descentralización, lo que aumenta tanto la robustez del sistema como su autonomía en tanto solo se requiere del equipo robótico para explorar el entorno, sin depender de una entidad central para coordinar ningún aspecto de la solución. %, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
+
+
+
 \section{Mapas}\label{subsec:mapas} %\todo{la pasaría a sec}
 Un mapa consiste en un modelo de un entorno. En el contexto de la robótica los mapas se pueden dividir en dos categorías, \emph{mapas métricos} y \emph{mapas topológicos} \cite{Thrun1998,choset2005principles}.
 
@@ -67,7 +90,7 @@ Los \emph{mapas métricos} son mapas principalmente caracterizados por represent
 
 Un tipo de mapa métrico es el denominado \emph{mapa geométrico}, los mapas de este tipo utilizan primitivas geométricas para representar al entorno, aunque es usual el uso de segmentos de recta como primitiva, es posible utilizar otras primitivas de ser conveniente. Un ejemplo de este tipo de mapa se puede ver en la figura \ref{fig:ejMapMetrico}, siendo las primitivas utilizadas rectángulos.
 
-Una \emph{grilla de ocupación} es otro tipo de mapa métrico que consiste en una representación del espacio teselado\todo{ajustar redacción} celdas, conformando así una grilla donde cada celda almacena una estimación probabilística de su estado (libre u ocupado). En la figura \ref{fig:ejGrillaOc} se muestra una grilla de ocupación en la que cada celda se encuentra coloreada según su probabilidad de encontrarse en un estado ocupado o libre, los colores oscuros indican una mayor probabilidad del estado ocupado y los mas claros una mayor intensidad de estar libres.
+Una \emph{grilla de ocupación} es otro tipo de mapa métrico que consiste en representar el espacio teselado en celdas cuadradas\todo{ajustar redacción}, que conforman una grilla donde cada celda almacena una estimación probabilística de su estado (libre u ocupado). En la figura \ref{fig:ejGrillaOc} se muestra una grilla de ocupación en la que cada celda se encuentra coloreada según su probabilidad de encontrarse en un estado ocupado o libre, los colores oscuros indican una mayor probabilidad del estado ocupado y los mas claros una mayor intensidad de estar libres.
 
 Los \emph{mapas topológicos} por otro lado son mapas simplificados al punto de solo incluir lugares topológicamente distintivos y conexiones entre estos. Normalmente se representan mediante grafos donde los lugares se modelan como vértices y la adyacencia entre lugares como aristas. Dependiendo del contexto es posible que los mapas topológicos contengan información adicional en los vértices y aristas, por ejemplo información métrica como lo puede ser el tamaño de la region para un vértice o la distancia entre regiones para las aristas.
 
@@ -96,19 +119,55 @@ La simplicidad mencionada también tiene ventajas computacionales, ya que para u
 Dadas las ventajas y desventajas mencionadas existen trabajos \cite{Thrun1998,wurm2008coordinated,Liu2015} que proponen el uso simultáneo de mapas topológicos y métricos para \say{ganar lo mejor de los dos mundos} al tener disponible abstracción y detalle a la vez. Un ejemplo de cómo combinar las ventajas de ambos tipos de mapa es la planificación jerárquica descrita en \cite{Thrun1998} donde se utiliza un mapa topológico y uno métrico de un mismo entorno para generar planes para navegar en el entorno. El mapa topológico es utilizado para generar un plan de navegación topológico que consiste en una secuencia de corredores y habitaciones que se deben atravesar para llegar a un objetivo, plan que aunque es fácil de generar no posee suficiente detalle como para traducirse directamente en acciones que el robot pueda realizar para llegar al objetivo. Por lo tanto se introduce una segunda etapa de planificación que consiste en utilizar la representación métrica del entono para generar planes métricos que permitan al robot moverse entre los segmentos que componen al plan topológico. En este acercamiento se hace un único plan topológico sobre todo el entorno y varios planes métricos sobre porciones reducidas del entorno, lo cual resulta en una reducción del costo computacional en comparación a hacer un único plan métrico sobre el entorno entero.
 
 Los tres trabajos antes mencionados utilizan una misma estrategia para lograr construir un mapa topológico y uno métrico, asegurando que estos son congruentes entre si. La estrategia consiste en construir una grilla de ocupación a partir de los datos obtenidos por los sensores de los robots. Dicha grilla de ocupación es utilizada tanto como mapa métrico, como para generar una estructura intermedia llamada \emph{grafo generalizado de Voronoi}, con el cual es posible detectar los segmentos y conexiones entre estos que constituyen un mapa topológico basado en regiones. Este proceso es una parte fundamental del trabajo desarrollado en este proyecto y se detallará a lo largo de las siguientes secciones.%\todo{durante este proyecto?} 
-% Los tres trabajos antes mencionados aunque cada uno tiene sus aportes particulares, tienen en común que logran utilizar mapas topológicos y métricos a la vez construyendo una grilla de ocupación a partir de los datos obtenidos de los sensores, para luego a partir de la grilla de ocupación generar una estructura intermedia llamada \emph{grafo generalizado de Voronoi} a partir del cual es posible detectar los segmentos que compondrán a\todo{sacar} un mapa topológico basado en regiones. Este proceso es una parte fundamental del trabajo desarrollado y se detallará a lo largo de las siguientes secciones.
 
-% 
-% En esta sección se debe tratar:
+%\subsection{Mapa métrico basado en polígonos}
+%Las grillas de ocupación son los mapas métricos mas utilizadas en el contexto de exploración multirobot, sin embargo, estas grillas no son apropiadas para entornos que son muy grandes o cuyos límites no están bien delimitados desde el comienzo de la exploración. En contraste, las representaciones poligonales no tienen tales limitaciones.
 
-% que es una grilla de ocupación.
+%El artículo \cite{wu2007voronoi} propone utilizar una representación poligonal en la cual el mapa consiste en la union de conjunto de polígonos cerrados de forma y tamaño arbitrario, que pueden estar libres, no explorados u ocupados. 
 
-% Para que sirve en general
+%Para comprobar y validar la representación propuesta se adapta la estrategia de exploración multirobot presentada en \cite{Solanas2004} (cuya técnica de coordinación fue mencionada en \ref{subsec:coordNoTop}) que originalmente se basa en grillas de ocupación, para que funcione utilizando una representación poligonal.
 
-% Se puede construir un GVD a partir de una grilla de ocupación. (quizás después?)
+%De las pruebas realizadas los autores concluyen que una representación poligonal es más compacta, flexible y logra aumentar significativamente la eficiencia.
 
-% \subsection{Representación poligonal}
-% Las representaciones poligonales son mapas métricos propuestos como alternativas a las grillas de ocupación, que busca
+%\subsubsection{Representación poligonal}
+%Inicialmente, todo el mapa estará constituido por un solo polígono desconocido. A partir de lo sensado por cada robot, se incluye nueva información sobre entorno a la representación agregando polígonos libres y ocupados que son substraídos de los polígonos desconocidos a los que pertenecían.
+
+%Los objetivos de exploración se determinan a partir de las aristas entre polígonos desconocidos y polígonos libres denominadas como aristas frontera que son análogas a las celdas frontera de las grillas de ocupación.
+
+%El trabajo propone asignar tareas a partir de la division el entorno desconocido en tantas regiones como robots existan en la flota, para luego asignar a cada robot la tarea de explorar una region diferente. El entorno se divide a partir de un algoritmo que adapta al algoritmo K-Means para funcionar a partir de la representación poligonal propuesta, este algoritmo se explica en la sección\ref{subsubsec:particionamientovoronoi}.  \todo{agregar img}
+
+%%La division del entorno se logra adaptando el algoritmo K-means para funcionar en utilizado para encontrar los centroides correspondientes a las agrupaciones de áreas desconocidas, ya que se asume que estos serán los puntos más provechosos para que los robots exploren.
+
+%Finalmente, la planificación del camino del robot es realizada en el interior de los polígonos libres, cosa que se puede hacer a partir de la aplicación de cualquier algoritmo de descomposición celular, por ejemplo el que se explica en \cite{schachter1978decomposition}.
+   
+%\subsubsection{Particionamiento basado en polígonos}\label{subsubsec:particionamientovoronoi}
+%El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como generadores, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. \todo{este párrafo bebería escribirse pensando en las definiciones que ya se realizaron. referenciarlas y destacar qué agrega}
+
+%Sea $n$ numero de robots, el resultado deseado es obtener un conjunto de $K=n$ celdas de Voronoi para las cuales, sus centroides (centros de masa) y sus generadores estén a una distancia menos que cierta tolerancia $\varepsilon$. % cerradas que están globalmente delimitadas por el polígono a dividir
+
+%La generación de estas celdas se realiza a partir del algoritmo \ref{alg:particionamientovoronoi} que adapta, utilizado diagramas de Voronoi, al algoritmo K-Means utilizado en la implantación base, que no es compatible con una representación poligonal.
+
+%\begin{algorithm}
+%\SetAlgoLined
+%    Elegir aleatoriamente $K$ puntos $C_i$, $1 \leq i \leq K$, contenidos en los polígonos correspondientes a las regiones desconocidas actuales en el mapa.\\
+%    Calcular el diagrama de Voronoi asociado con el conjunto actual de $C_i$.\\
+%    Restringir las celdas del diagrama de Voronoi a los polígonos desconocidos actuales.\\
+%    Determinar el centro de masa $M_i$ de cada celda Voronoi restringida.\\
+%    \eIf{$C_i - M_i < \varepsilon\ \forall i$}{
+%        Saltar al paso 11.\\
+%    }{
+%        Sustituir cada $C_i$ por su $M_i$ correspondiente.\\ Volver al paso 2.\\
+%    }
+    
+%    Dividir el conjunto de polígonos desconocidos en $K$ regiones disjuntas según las celdas de Voronoi restringidas encontradas.\\
+%    \caption{Particionamiento basado en Voronoi}
+%    \label{alg:particionamientovoronoi}
+    
+%\end{algorithm}
+
+%Notar que el algoritmo trabaja con celdas de Voronoi restringidas, estas son las celdas resultantes de un diagrama de Voronoi restringidas a los limites del mapa conocidos por hipótesis.\todo{agregaría una img que ayude a entender cómo funciona}
+
+
 
 \subsection{Mapa de carreteras}\label{subsec:mapacarr}
 % Un \emph{mapa de carreteras} (del ingles road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos ubicaciónes distantes, por ejemplo dos depatamentos distintos, en lugar de considerar cada camino posible, normalemte planificamos primero un camino hacia una red de carreteras, luego a lo largo de la red de carreteras y, finalmente, desde la red de carreteras hacia el destino. %(ver figura \ref{fig:ejemplovial}). 
@@ -122,7 +181,7 @@ Un \emph{mapa de carreteras} (del ingles roadmap) \cite{choset2005principles} es
 
 Para considerarse un mapa de carreteras, un mapa topológico debe estar
 representado con un grafo $\mli{MC}=(V_{MC},E_{MC})$ en el cual sus vértices $V_{MC}$
-corresponden a puntos no obstaculizados del entorno y sus aristas $E_{MC}$ implican
+corresponden a puntos no ocupados del entorno y sus aristas $E_{MC}$ implican
 la existencia de caminos disjuntos entre los vértices. Adicionalmente, dicho
 grafo $\mli{MC}$ debe cumplir con 3 propiedades fundamentales, a partir de las
 cuales es posible asegurar que se puede planificar caminos a partir del mapa de
@@ -206,13 +265,25 @@ La definición $\mli{GVD}$ es analoga a su contra parte no generalizada y se def
 
 En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD, el espacio libre se marca con blanco, las líneas negras identifican al GVD y los polígonos negros representan obstáculos. 
 
+\begin{figure}[H]
+  \centering
+  % \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/GVD2.png}\label{fig:ejemploGVD}}
+  % \qquad
+  % \subfloat[Grafo asociado al GVD.]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/GVDGraph.png}\label{fig:ejemploGVDgrafo}}
+  % \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/GVD2.png}\label{fig:ejemploGVD}}
+  \includegraphics[width=0.45\linewidth]{imagenes/GVD2.png}
+  \caption[Diagrama generalizado de Voronoi.]{Diagrama generalizado de Voronoi. Extraído de \cite{Wallgrun2005}}\label{fig:ejemploGVD}
+  \label{cleanup}
+\end{figure}
+
+
 % vértices son los puntos pertenecientes al GVD, y las aristas están entre los vértices adyacentes en el espacio. Por otro lado otra forma mas compacta es que los 
 % Para referirse a la segunda forma, mas compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
-Los GVD suelen ser representados con un grafo en el cual los vértices son los puntos $p$ pertenecientes al GVD que son adyacentes a obstáculos o que cumplen con $|\mli{GBP}_p|\geq 3$, mientras que las aristas\todo{muy entreverado. en un grafo las aristas conectan vértices. de hecho, ahora que lo observo, lo de la fig.1.5b no es un grafo. las aristas no son curvas ya que no modelan dicha información.} se encuentran entre los vértices que se encuentran conectados por caminos disjuntos formados por puntos pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo asociado al GVD de la figura \ref{fig:ejemploGVD}, donde los círculos azules son los vértices del grafo y las líneas negras las aristas. %(aunque no son visibles existen aristas entre los vértices correspondientes a puntos que son tan cercanos que se solapan)\todo{no creo que este paréntesis aporte}.
+% Los GVD suelen ser representados con un grafo en el cual los vértices son los puntos $p$ pertenecientes al GVD que son adyacentes a obstáculos o que cumplen con $|\mli{GBP}_p|\geq 3$, mientras que las aristas\todo{muy entreverado. en un grafo las aristas conectan vértices. de hecho, ahora que lo observo, lo de la fig.1.5b no es un grafo. las aristas no son curvas ya que no modelan dicha información.} se encuentran entre los vértices que se encuentran conectados por caminos disjuntos formados por puntos pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo asociado al GVD de la figura \ref{fig:ejemploGVD}, donde los círculos rojos son los vértices del grafo y las líneas negras las aristas. %(aunque no son visibles existen aristas entre los vértices correspondientes a puntos que son tan cercanos que se solapan)\todo{no creo que este paréntesis aporte}.
 
 En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos como generadores cumplen con las 3 propiedades necesarias para ser mapas de carreteras (sección \ref{subsec:mapacarr}), lo cual justifica su uso para la navegación. Esto junto a la capacidad de generar caminos seguros ya mencionada y a otras características como su utilidad para la coordinación y para generar mapas topológicos basados en regiones que se tratarán mas adelante, hacen que los GVD que utilizan obstáculos como generadores, sean estructuras de gran útilidad en el contexto de la navegación robótica. De ahora en mas al hablar de GVD se hace referencia a GVD generado considerando a los obstáculos como generadores.
 
-% Otra definición alternativa de GVD se muestra en \eqref{eq:GVDalt}, esta definición es mas restrictiva que la anterior en tanto no permite que un punto pertenezca si tiene mas de dos puntos bases pero estos pertenecen a un mismo generador. Esta definición trae problemas ya que distintas formas de separar a los obstáculos en generadores puede causar distintos GVD. Por ejemplo si se considera u generador como un conjunto conexo de puntos obstaculizados se tiene que en el interior de las habitaciones con una entrada no se generara GVD, ya que sus paredes por estar conectadas serán un solo generador, y por lo tanto los puntos $p$ interiores a la habitación aunque pueden cumplir con $|GBP_p| \geq 2$ no cumplirán con $|GBS_p| \geq 2$.
+% Otra definición alternativa de GVD se muestra en \eqref{eq:GVDalt}, esta definición es mas restrictiva que la anterior en tanto no permite que un punto pertenezca si tiene mas de dos puntos bases pero estos pertenecen a un mismo generador. Esta definición trae problemas ya que distintas formas de separar a los obstáculos en generadores puede causar distintos GVD. Por ejemplo si se considera u generador como un conjunto conexo de puntos ocupados se tiene que en el interior de las habitaciones con una entrada no se generara GVD, ya que sus paredes por estar conectadas serán un solo generador, y por lo tanto los puntos $p$ interiores a la habitación aunque pueden cumplir con $|GBP_p| \geq 2$ no cumplirán con $|GBS_p| \geq 2$.
 % \begin{equation}
 %   \mli{GVD}  = \{p \in W : |GBS_p| \geq 2\}\label{eq:GVDalt}
 % \end{equation}
@@ -226,19 +297,10 @@ En \cite{choset2005principles} se demuestra que los GVD que utilizan obstáculos
 % La ventaja de la forma que use es que no requiere entrar en los asuntos de obstáculos convexos para un entendimiento superficial, mientras que en la otra si.
 
 % \end{figure} 
-\begin{figure}[H]
-  \centering
-  \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/GVD2.png}\label{fig:ejemploGVD}}
-  \qquad
-  \subfloat[Grafo asociado al GVD.]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/GVDGraph.png}\label{fig:ejemploGVDgrafo}}
-  \caption[Diagrama generalizado de Voronoi.]{Diagrama generalizado de Voronoi. Extraído de \cite{Wallgrun2005}}
-  \label{cleanup}
-\end{figure}
-
 \subsection{Construcción de un GVD}\label{subsec:constGVD}
-Existen dos tipos principales de métodos para la construcción de un GVD los basados en sensores y los basados en grillas\todo{colocaría una cita al lado de cada una. también, discutiría un poco sus diferencias, bondades y debilidades. como para fundamentar un poco la elección.}. En el contexto del trabajo desarrollado serán relevantes los métodos de construcción basados en grillas.
+% Existen dos tipos principales de métodos para la construcción de un GVD\cite{choset2005principles} los basados en sensores y los basados en grillas\todo{colocaría una cita al lado de cada una. también, discutiría un poco sus diferencias, bondades y debilidades. como para fundamentar un poco la elección.}. En el contexto del trabajo desarrollado serán relevantes los métodos de construcción basados en grillas.
 
-La idea más intuitiva para generar un GVD en un espacio representado con una grilla es la de adaptar la definición original de GVD que considera espacios continuos, para que en su lugar considere espacios discretizados en celdas, y luego celda a celda, determinar según la nueva definición si estas pertenecen o no al GVD. La definición adaptada una grilla consiste en que una celda pertenece al GVD si tiene dos o mas celdas obstaculizadas a una misma distancia, siendo la distancia entre celdas la distancia entre sus centros. Sin embargo, esta técnica genera resultados erróneos al no considerar los efectos causados por la discretización. Por ejemplo, en corredores cuya discretización resulta en una cantidad par de celdas entre sus paredes, según este método ninguna celda debería pertenecer al GVD dado que ninguna  tendría una misma distancia a dos celdas obstaculizadas (paredes del corredor). Esto se considera incorrecto porque el GVD construido en un espacio discretizado debe corresponder al GVD que se construiría en el mismo espacio si fuera continuo y  en el caso continuo los puntos del centro de un corredor siempre pertenecen al GVD. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
+La idea más intuitiva para generar un GVD en un espacio representado con una grilla es la de adaptar la definición original de GVD que considera espacios continuos, para que en su lugar considere espacios discretizados en celdas, y luego celda a celda, determinar según la nueva definición si estas pertenecen o no al GVD. La definición adaptada una grilla consiste en que una celda pertenece al GVD si tiene dos o mas celdas ocupadas a una misma distancia, siendo la distancia entre celdas la distancia entre sus centros. Sin embargo, esta técnica genera resultados erróneos al no considerar los efectos causados por la discretización. Por ejemplo, en corredores cuya discretización resulta en una cantidad par de celdas entre sus paredes, según este método ninguna celda debería pertenecer al GVD dado que ninguna  tendría una misma distancia a dos celdas ocupadas (paredes del corredor). Esto se considera incorrecto porque el GVD construido en un espacio discretizado debe corresponder al GVD que se construiría en el mismo espacio si fuera continuo y  en el caso continuo los puntos del centro de un corredor siempre pertenecen al GVD. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
 
 En \cite{wurm2008coordinated} se propone un método que logra construir un GVD evitando los problemas de discretización mencionados. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda esta ocupada o libre, resultando en un mapa que contiene para cada celda la distancia al obstáculo mas cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. Finalmente GVD se obtiene aplicando un algoritmo de esqueletización \cite{wan2008distance} al mapa de distancia construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}. La pieza clave en la solución de los problemas de discretización es el uso del algoritmo de esqueletización, que retrae el mapa de distancias a un esqueleto discreto que se aproxima al GVD que se generaría en el espacio continuo.   
 
@@ -261,7 +323,7 @@ En \cite{wurm2008coordinated} se propone un método que logra construir un GVD e
 % \end{figure} 
 
 % La esqueletización es usada en lugar de s
-% Este método evita problemas que se pueden dar al generar un GVD discretizado a partir de la definición de pertenencia al GVD directamente adaptada a un espacio discretizado en celdas, donde una celda pertenece al GVD si tiene dos o mas celdas obstaculizadas a una misma distancia. Un ejemplo de este tipo de problemas es el que se genera en los corredores cuya discretización tiene una cantidad par de celdas entre sus paredes, en este caso si se aplica la definición de GVD a las celdas ninguna debería pertenecer al GVD dado que ninguna celda tendría una misma distancia a dos celdas obstaculizadas (paredes del corredor). Este comportamiento no es deseable ya que se debe a una discretización particular del espacio, si el tamaño de las celdas fuera otro y en lugar de ser un numero par fuera uno impar se tendría un GVD a lo largo del centro del corredor, y mas importante aun, un GVD sobre un corredor en un espacio continuo siempre genera una linea sobre el centro del corredor. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
+% Este método evita problemas que se pueden dar al generar un GVD discretizado a partir de la definición de pertenencia al GVD directamente adaptada a un espacio discretizado en celdas, donde una celda pertenece al GVD si tiene dos o mas celdas ocupadas a una misma distancia. Un ejemplo de este tipo de problemas es el que se genera en los corredores cuya discretización tiene una cantidad par de celdas entre sus paredes, en este caso si se aplica la definición de GVD a las celdas ninguna debería pertenecer al GVD dado que ninguna celda tendría una misma distancia a dos celdas ocupadas (paredes del corredor). Este comportamiento no es deseable ya que se debe a una discretización particular del espacio, si el tamaño de las celdas fuera otro y en lugar de ser un numero par fuera uno impar se tendría un GVD a lo largo del centro del corredor, y mas importante aun, un GVD sobre un corredor en un espacio continuo siempre genera una linea sobre el centro del corredor. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
 
 % \begin{figure}
 %   \centering
@@ -272,11 +334,10 @@ En \cite{wurm2008coordinated} se propone un método que logra construir un GVD e
 %   \caption{Entornos}
 % \end{figure}
 
-
-\subsection{Mapa topológico basado en regiones a partir de un GVD}\label{subsec:mapaTopGVD}
+\subsection{Generación de mapas topológicos basados en regiones a partir de un GVD}\label{subsec:mapaTopGVD}
 En \cite{Thrun1998} se propone un método que permite, a partir de un GVD generado a través de una grilla de ocupación, segmentar el entorno en habitaciones y corredores, con el objetivo de generar un mapa topológico cuyas regiones de interés serán los segmentos reconocidos. La idea principal del algoritmo de segmentación es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos.
 
-Para describir el método de segmentación es necesario introducir tres nuevos conceptos\todo{colocaría estos 3 conceptos en un diagrama/figura donde se aprecien claramente cada uno de ellos} asociados al $GVD$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que es igual a la distancia del punto $p$ al punto obstaculizado mas cercano, y que de ser $p \in \mli{GVD}$ equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia de $p$ \eqref{eq:GBP}). El segundo es el de los \emph{puntos críticos} $C \subset W_{libre}$ de un GVD, que son los puntos pertenecientes al GVD y que a su vez son mínimos locales según el despeje, esta definición se formaliza en \eqref{eq:crit} donde $Ady(p)$ son los vértices adyacentes a $p$ en el GVD. 
+Para describir el método de segmentación es necesario introducir tres nuevos conceptos\todo{colocaría estos 3 conceptos en un diagrama/figura donde se aprecien claramente cada uno de ellos} asociados al $GVD$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que es igual a la distancia del punto $p$ al punto ocupado mas cercano, y que de ser $p \in \mli{GVD}$ equivale a la distancia entre $p$ y alguno de sus puntos base generalizados $\mli{GBP}_p$ (recordar que todos están a una misma minima distancia de $p$ \eqref{eq:GBP}). El segundo es el de los \emph{puntos críticos} $C \subset W_{libre}$ de un GVD, que son los puntos pertenecientes al GVD y que a su vez son mínimos locales según el despeje, esta definición se formaliza en \eqref{eq:crit} donde $Ady(p)$ son los vértices adyacentes a $p$ en el GVD. 
 \begin{equation}
   p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) \label{eq:crit}
 \end{equation}
@@ -293,7 +354,7 @@ El algoritmo comienza determinando el estado (ocupado o libre) para cada celda d
   \subfloat[Regiones]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/c.png}\label{fig:ejThrunTopC}}
   \qquad
   \subfloat[Mapa topologico]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/d.png}\label{fig:ejThrunTopD}}
-  \caption[Método de construcción de un mapa topológico.]{Método de construcción de un mapa topológico. Los números de las figuras (c) y (d) son identificadores arbitrarios de regiones. Extraído de \cite{Thrun1998}.}\label{fig:ejThrunTop}
+  \caption[Método de construcción de un mapa topológico basado en regiones a partir de un GVD.]{Método de construcción de un mapa topológico basado en regiones a partir de un GVD. Los números de las figuras (c) y (d) son identificadores arbitrarios de regiones. Extraído de \cite{Thrun1998}.}\label{fig:ejThrunTop}
 \end{figure}
 % \todo[inline]{sacar 'Ejemplo de', además hay que editar estas imgs limpiando los fondos blancos. a y b seguro, la c capaz se puede dejar}
 
@@ -303,80 +364,201 @@ La idea subyacente de este algoritmo es que, por definición, los puntos crític
 
 En \cite{wurm2008coordinated} los autores argumentan que la propuesta original de Thrun tiene el problema de generar gran cantidad de puntos críticos que no se encuentran en un pasaje entre segmentos, considerados como falsos positivos que generan una segmentación excesiva del entorno (un ejemplo de este problema se puede ver en la cantidad de segmentos generados en los corredores de la figura \ref{fig:ejThrunTopC}). Entonces, con el motivo de evitar los mencionados falsos positivos y mejorar la segmentación generada agregan condiciones adicionales a la definición de punto crítico original, estas son que el vértice asociado a un punto crítico en el grafo que representa GVD debe ser de grado 2 y tener un vecino de grado 3 (un vértice de intersección entre varios caminos)\todo{convendría colocar una imagen que muestre la mejora}. 
 
-\subsection[Generación de mapas topológicos basada en contornos]{Generación de mapas topológicos basada en\\ contornos}\todo{así como está, queda como medio descolgado. enseguida se sigue hablando de regiones. consideraría mencionarlo al comienzo y decir que sólo se profundizará en las estrategias basadas en regiones}
-Existen alternativas a la generación de mapas topológicos basada en grafos generalizados de Voronoi. Una de estas es la generación de mapas topológicos basada en contornos presentada en \cite{Fermin-Leon2017}. Esta se basa en representar a la grilla de ocupación como una imagen, extraer sus contornos los cuales se representan como polígonos y a partir de su convexidad se segmentar el espacio, obteniendo así un mapa topológico.
+\subsection[Alternativas para la generación de mapas topológicos basados en regiones]{Alternativas para la generación de mapas topológicos basados en regiones}\todo{así como está, queda como medio descolgado. enseguida se sigue hablando de regiones. consideraría mencionarlo al comienzo y decir que sólo se profundizará en las estrategias basadas en regiones}\label{subsec:mapaTopAlt}
 
-\subsection{Criterios de calidad de un mapa topológico basado en regiones}
-Según \cite{Liu2015} un mapa topológico basado en regiones se considera útil si representa la estructura del entorno de manera correcta y eficiente. Para ello, consideran dos criterios principales, la calidad asociada a cada region y la topología la segmentación. Los criterios propuestos se basan principalmente en intuiciones geométricas. 
+Existen alternativas para generar mapas topológicos basados en regiones, que no
+involucran el uso de un GVD.
 
-\subsubsection{Calidad de una region}
-Los autores determinan que existen dos aspectos que intervienen en la calidad de una region, la convexidad $c_i$ y la compacidad $s_i$, específicamente, definiendo la calidad de una region como $q_i = c_i - s_i$. Adicionalmente se menciona que tanto $c_i$ como $s_i$ pueden ser multiplicados por pesos en el calculo de $q_i$ para  para hacer énfasis en una u otra característica.
+En \cite{Fermin-Leon2017} la generación se logra interpretando la grilla de
+ocupación como una imagen binaria, para luego extraer sus contornos los cuales
+se representan como polígonos. Finalmente se aplica un algoritmo que segmenta
+el espacio según la convexidad de dichos contornos, obteniendo así un mapa
+topológico basado en regiones.
 
-\paragraph{Convexidad}
-% Convexity: A polygon is considered convex if for any pair of points inside the polygon, every point on the straight line segment that joins them is also inside the polygon.
-Esta se puede representar como el cociente entre el área de la region y el área de su envolvente convexa. La envolvente convexa de una region se define como el polígono convexo de menor área que contiene a la region. Un polígono convexo cumple que para cualquier par de puntos que pertenecen a la frontera del polígono, el segmento de recta que los conecta estará contenido en dicho polígono. Entonces sea $A_i$ el área de la region $R_i$ y $H_i$ el área de su envolvente convexa, la convexidad para esta region sera:
-\begin{equation}
-  c_i=\frac{A_i}{H_i}
-\end{equation}
-Se cumple que $A_i \leq H_i$ siendo iguales cuando la region es convexa, por lo tanto $c_i$ sera igual a uno cuando la region es convexa, y su valor disminuirá entre más difiera el área de la region con la de su componente convexa. En la figura \ref{fig:ejemplConvexidad} se muestra a modo de ejemplo el valor de convexidad $c$ asociado a dos regiones con distinta convexidad.
+Por otro lado en \cite{zivkovic2006hierarchical} se interpreta la grilla de
+ocupación como un grafo donde cada celda libre es un nodo y las aristas se
+encuentran entre nodos cuyas celdas asociadas son adyacentes en la grilla.
+Usando un método de particionamiento de grafos se obtienen agrupaciones de
+nodos que corresponden a las regiones del mapa topológico construido.
+
+En \cite{martinez2006semantic} se presenta un método de generación basado en
+aprendizaje automático. En cada celda libre de la grilla de ocupación se
+determina el valor de atributos geométricos asociados a la distancia de la
+celda a los obstáculos que tiene a su alrededor. Estos atributos se utilizan
+para entrenar un modelo de clasificación denominado \emph{AdaBoost}
+\cite{schapire1999improved} que es usado para clasificar celdas libres en
+categorías semánticas como por ejemplo puerta, habitación o corredor. Luego en
+la practica a partir de los valores de los atributos y el modelo entrenado se
+clasifica cada celda libre. Las regiones que conforman el mapa topológico se
+obtienen agrupando las celdas con una misma categoría. La figura
+\ref{fig:ejMartinezTop} muestra un ejemplo de la clasificación y su posterior
+segmentación.
+
 \begin{figure}[H]
   \centering
-  \subfloat[c=0.88]{\includegraphics[clip=true, height=0.25\linewidth]{imagenes/liuConv/a.png}}
-  \hspace{2cm}
+  \subfloat[Clasificación]{\includegraphics[clip=true, width=0.2\linewidth]{imagenes/aa_clas.png}}
   \qquad
-  \subfloat[c=0.56]{\includegraphics[clip=true, height=0.25\linewidth]{imagenes/liuConv/b.png}}
-  \caption[Regiones convexas y su valor de convexidad asociado.]{Regiones convexas y su valor de convexidad asociado. Las líneas sólidas delimitan las regiones y las punteadas sus envolventes convexas. Extraído de \cite{Liu2015}.}\label{fig:ejemplConvexidad}
+  \subfloat[Mapa topológico]{\includegraphics[clip=true, width=0.7\linewidth]{imagenes/aa_topo.png}}
+  \caption[Método de construcción de un mapa topológico basado en regiones a partir de aprendizaje automático.]{Método de construcción de un mapa topológico basado en regiones a partir de aprendizaje automático. Las celdas tienen un color correspondiente a su clasificación, amarillo corresponde a puerta, azul a habitación y rojo a corredores. Extraído de \cite{martinez2006semantic}.}\label{fig:ejMartinezTop}
 \end{figure}
-% \todo[inline]{conviene utilizar captions más cortos. ej. Regiones convexas. Las líneas sólidas delimitan las regiones y las punteadas sus envolventes convexas. además, delante de la llaves, en la defición del caption, conviene agregar entre paréntesis rectos el 'nombre' de la figura. esto será tomado para generar el índice de figuras de modo que no te queden entradas quilométricas}
 
-\paragraph{Compacidad}
-% Cuanto mas cercanos son los puntos que componen una region a su centro mas compacta sera la region.
-La compacidad de una region mide la distribución una region con respecto a su centro de masa. La compacidad $s_i$\todo{$s_i$ ya se usaba para los generadores de V} de una region $R_i$ se calcula a partir de una discretization de dicha region en celdas de dimensiones y peso uniforme, llamadas elementos de masa. En \eqref{ec:compacidad} se define la compacidad $s_i$ para un region $R_i$, donde $x_j$ e $y_j$ son las coordenadas $x$ e $y$ de los elementos de masa\todo{qué sería un elemento de masa? una molécula? un átomo?} de $R_i$, $M_i$ es igual a la cantidad de dichos elementos de masa y $x_0$ e $y_0$ son las coordenadas del centro de gravedad\todo{de masa?} de $R_i$.
-\begin{equation}
-  s_i=\frac{1}{M_iA_i}\sum_j \frac{(x_j-x_0)^2 + (y_j-y_0)^2}{A_i} \label{ec:compacidad}
-\end{equation}
-\todo[inline]{si $M_i$ es igual a la suma de esos elementos, los elementos tienen masa elemental/unitaria. pero eso es menos genérico que considerar que cada elemento podría tener masa $m_i$ distinta y que $M_i=\sum m_i$. en ese caso, la masa $m_i$ debería multiplicar a cada término de la sumatoria. lo que nos lleva a una definición muy alineada con la de centro de masa. por otro lado, $A_i$ ya está dividiendo afuera, no creo que vaya también en la sumatoria. además, unidades no cierran. asumo que la compacidad no tiene unidad y para ello falta que aparezca la masa en el numerardor. finalmente, me parece raro que no aparezca el volumen. o en realidad, no se para qué aparece la masa.}
-Notar que cuanto mas compacta sea una region menor sera su valor $s_i$ (si se entiende por region compacta una region en la cual sus puntos interiores son cercanos al centro de masa).
+Un comentario relevante sobre los métodos basados en aprendizaje automático es
+que para obtener buenos resultados los clasificadores deben ser entrenados con
+cantidades suficientes de datos representativos de los entornos a segmentar. Lo
+cual puede ser un inconveniente si se segmentan nuevos entornos que no se
+parecen a los utilizados para entrenar. 
 
-\subsubsection{Calidad de segmentación}
-Para determinar la calidad general de la segmentación, sera necesaria, ademas de la calidad de cada region, la calidad de las características globales de la segmentación. Para lograr determinar dichas características se definen varios indicadores que se mencionarán a continuación.
+\subsection{Criterios de calidad de un mapa topológico basado en regiones}
+\subsubsection{Criterio de calidad basado en intuiciones geométricas}
+% un mapa topológico basado en regiones se considera útil si
+% representa la estructura del entorno de manera correcta y eficiente.
+En \cite{Liu2015} se plantea un criterio para cuantificar la calidad de un mapa
+topológico basado en regiones mediante indicadores que surgen de intuiciones
+geométricas. El criterio considera tanto la calidad de cada región de forma
+independiente, como la calidad de la segmentación formada por todas las
+regiones en su conjunto.\\
 
-\paragraph{Cobertura}
-En el caso ideal cada punto del entorno esta asociado a una region en el mapa topológico, pero por diversas razones este puede no ser el caso. Dado esto se define la cobertura $C$ de una segmentación como el cociente del área representada por el mapa topológico y el área del mapa:
-\begin{equation}
-C=\frac{\sum^N_{i=1} A_i}{A_m}
-\end{equation}
-Donde $A_m$ es el área total del mapa y $N$ es el numero de regiones.
+La \textbf{calidad de una región} se calcula tomando en cuenta dos indicadores
+la convexidad y la compacidad. 
 
-\paragraph{Validez}
-La validez $V$ de una segmentación se define como el cociente entre el numero de regiones validas y el numero total de todas las regiones:
-\begin{equation}
-  V=\frac{\#regiones\ validas}{\#total\ de\ regiones}
-\end{equation}
-Se considera que una region valida debe ser accesible por los robots utilizados. Teniendo esto en cuenta una region será valida si cubre un área mayor a $A_{min}$ y tiene al menos una entrada de ancho mínimo $l_{min}$, siendo los valores $l_{min}$ y $A_{min}$ definidos a partir las dimensiones de los robots utilizados.\todo{entiendo entonces, que según este indicador, un alg de segmentación es mejor si logra 'filtrar' segmentos inaccesibles}
+La \emph{convexidad} indica la similitud entre la región y su envolvente
+convexa. Se calcula como el cociente entre el área de la región y el área de
+su envolvente convexa. 
 
-\paragraph{Simplicidad}
-Una de las ventajas principales de los mapas topológicos es su simplicidad, que permite ayudar a una navegación y planificación eficiente. Los autores\todo{cuáles?} consideran que es de utilidad penalizar a los mapas topológicos que tengan una cantidad elevada de regiones, considerando dicha cantidad como un indicador de complejidad. 
+La \emph{compacidad} mide la distribución de una región con respecto
+a su centro de masa. A menor valor de compacidad mayor es la concentración de
+una región sobre su centro de masa.\\
 
-La simplicidad $S$ de una segmentación se define en \eqref{ec:simp} donde $\hat{N}$ es el numero esperado de regiones y $\phi$ refleja el impacto que tiene la diferencia entre el numero de regiones esperado y el obtenido. $\hat{N}$ y $\phi$ son parámetros a definir dependiendo de la aplicación.
+La \textbf{calidad de segmentación} se compone de varios indicadores de
+calidad sobre ciertas características globales de la segmentación. Estos indicadores son la
+cobertura, validez y simplicidad.
 
-\begin{equation}
-  S=e^{-\frac{|N-\hat{N}|}{\phi}} \label{ec:simp}
-\end{equation}
+% En el caso ideal cada punto del entorno esta asociado a una región en el mapa
+% topológico, pero por diversas razones este puede no ser el caso. Dado esto se define
+La \emph{cobertura} de una segmentación se define como el cociente entre la
+suma de las áreas de cada región y el área total del mapa.
+
+La \emph{validez} indica la proporción de regiones validas en la segmentación, siendo valida una
+región cuando esta es accesible por los robots utilizados.
+
+% Por lo tanto, es útil penalizar las soluciones con
+% un gran número de regiones. Por otro lado, si el número de regiones es
+% demasiado pequeño, la segmentación no tendrá sentido.
+
+La \emph{simplicidad} es un valor que busca penalizar a las segmentaciones que
+sean demasiado complejas o demasiado simples, esto se logra midiendo la
+diferencia entre la cantidad de regiones de la segmentación generada y la 
+cantidad de regiones esperada para el entrono actual.\\
+
+Finalmente la \textbf{calidad de un mapa topológico basado en regiones} se
+reduce a combinar aritméticamente la calidad de cada región y los indicadores
+de calidad de la segmentación.
 
 
-\subsubsection{Calidad general}
-Finalmente, evaluar la calidad general $Q$ de una segmentación, se reduce a combinar la calidad cada región y los indicadores de calidad de la segmentación, según la siguiente ecuación:
-\begin{equation}
-Q=\frac{CV}{N}\sum^N_{i=1}{q_i+\lambda S}
-\end{equation}
+\subsubsection{Criterio de calidad basado en la segmentación humana}
+En \cite{bormann2016room} se propone que la calidad de una segmentación
+corresponde a su semejanza a la segmentación humana y se proporciona un metodo
+para medirla.  
 
-Donde $\lambda$ es un peso que determinara la importancia de la simplicidad de la segmentación en cálculo calidad general de la segmentación.
+En el contexto del articulo la segmentación humana se aproxima como la
+segmentación que un humano genera para dicho entrono. Luego para cuantificar la
+semejanza se definen dos indicadores, exhaustividad y precision. 
 
-% \subsubsection{Evaluación humana}
-% Otra criterio de evaluación es el utilizado en \cite{Fermin-Leon2017} el cual compara la segmentación a evaluar $R_{seg}$ contra segmentaciones realizadas por humanos $R_{human}$. La comparación consiste en para cada pixel comprobar si este esta asignado a una misma region en ambas segmentaciones, lo cual se considera como un verdadero positivo $vp$, los falsos positivos $fp$ son los pixeles que están en la segmentación a evaluar pero no en la humana, o no, que se considera  
+La \emph{exhaustividad} se define como el área correspondiente a la mayor 
+superposición entre una región de la segmentación humana y una región de la
+segmentación evaluada, dividida por el área de la región de la segmentación
+humana. La exhaustividad es alta si las regiones de la segmentación humana
+están completamente contenidas en las regiones de la segmentación evaluada. 
 
-\subsection{Eficiencia en la construcción del GVD y de mapas topológicos a partir de un GVD}
+La \emph{precisión} de manera similar se define como el área correspondiente a
+la mayor superposición entre una región de la segmentación humana y una región
+de la segmentación evaluada, dividida por el área de la región de la
+segmentación evaluada. La precisión es alta si las regiones de la segmentación
+evaluada están completamente contenidas en las regiones de la segmentación
+humana . 
+
+En la subsegmentación, la exhaustividad es alta y la precisión es baja,
+mientras que en la sobresegmentación, la precisión es alta y la exhaustividad
+es baja.  Solo si ambas medidas son altas, la segmentación evaluada se ajusta
+bien a la segmentación humana.  
+
+Este criterio es utilizado en \cite{bormann2016room} y \cite{Fermin-Leon2017}
+para comparar las segmentaciones resultantes de distintos acercamientos para la
+construcción de mapas topológicos basados en regiones, incluyendo el método
+descrito en \ref{subsec:mapaTopGVD} y algunos de los mencionados en
+\ref{subsec:mapaTopAlt}, siendo la segmentación a partir de un GVD la que
+obtiene mejores resultados en general.  
+
+% \subsection{Criterios de calidad de un mapa topológico basado en regiones}
+% Según \cite{Liu2015} un mapa topológico basado en regiones se considera útil si representa la estructura del entorno de manera correcta y eficiente. Para ello, consideran dos criterios principales, la calidad asociada a cada region y la topología la segmentación. Los criterios propuestos se basan principalmente en intuiciones geométricas. 
+
+% \subsubsection{Calidad de una region}
+% Los autores determinan que existen dos aspectos que intervienen en la calidad de una region, la convexidad $c_i$ y la compacidad $s_i$, específicamente, definiendo la calidad de una region como $q_i = c_i - s_i$. Adicionalmente se menciona que tanto $c_i$ como $s_i$ pueden ser multiplicados por pesos en el calculo de $q_i$ para  para hacer énfasis en una u otra característica.
+
+% \paragraph{Convexidad}
+% Esta se puede representar como el cociente entre el área de la region y el área de su envolvente convexa. La envolvente convexa de una region se define como el polígono convexo de menor área que contiene a la region. Un polígono convexo cumple que para cualquier par de puntos que pertenecen a la frontera del polígono, el segmento de recta que los conecta estará contenido en dicho polígono. Entonces sea $A_i$ el área de la region $R_i$ y $H_i$ el área de su envolvente convexa, la convexidad para esta region sera:
+% \begin{equation}
+%   c_i=\frac{A_i}{H_i}
+% \end{equation}
+% Se cumple que $A_i \leq H_i$ siendo iguales cuando la region es convexa, por lo tanto $c_i$ sera igual a uno cuando la region es convexa, y su valor disminuirá entre más difiera el área de la region con la de su componente convexa. En la figura \ref{fig:ejemplConvexidad} se muestra a modo de ejemplo el valor de convexidad $c$ asociado a dos regiones con distinta convexidad.
+% \begin{figure}[H]
+%   \centering
+%   \subfloat[c=0.88]{\includegraphics[clip=true, height=0.25\linewidth]{imagenes/liuConv/a.png}}
+%   \hspace{2cm}
+%   \qquad
+%   \subfloat[c=0.56]{\includegraphics[clip=true, height=0.25\linewidth]{imagenes/liuConv/b.png}}
+%   \caption[Regiones convexas y su valor de convexidad asociado.]{Regiones convexas y su valor de convexidad asociado. Las líneas sólidas delimitan las regiones y las punteadas sus envolventes convexas. Extraído de \cite{Liu2015}.}\label{fig:ejemplConvexidad}
+% \end{figure}
+% % \todo[inline]{conviene utilizar captions más cortos. ej. Regiones convexas. Las líneas sólidas delimitan las regiones y las punteadas sus envolventes convexas. además, delante de la llaves, en la defición del caption, conviene agregar entre paréntesis rectos el 'nombre' de la figura. esto será tomado para generar el índice de figuras de modo que no te queden entradas quilométricas}
+
+% \paragraph{Compacidad}
+% % Cuanto mas cercanos son los puntos que componen una region a su centro mas compacta sera la region.
+% La compacidad de una region mide la distribución una region con respecto a su centro de masa. La compacidad $s_i$\todo{$s_i$ ya se usaba para los generadores de V} de una region $R_i$ se calcula a partir de una discretization de dicha region en celdas de dimensiones y peso uniforme, llamadas elementos de masa. En \eqref{ec:compacidad} se define la compacidad $s_i$ para un region $R_i$, donde $x_j$ e $y_j$ son las coordenadas $x$ e $y$ de los elementos de masa\todo{qué sería un elemento de masa? una molécula? un átomo?} de $R_i$, $M_i$ es igual a la cantidad de dichos elementos de masa y $x_0$ e $y_0$ son las coordenadas del centro de gravedad\todo{de masa?} de $R_i$.
+% \begin{equation}
+%   s_i=\frac{1}{M_iA_i}\sum_j \frac{(x_j-x_0)^2 + (y_j-y_0)^2}{A_i} \label{ec:compacidad}
+% \end{equation}
+% \todo[inline]{si $M_i$ es igual a la suma de esos elementos, los elementos tienen masa elemental/unitaria. pero eso es menos genérico que considerar que cada elemento podría tener masa $m_i$ distinta y que $M_i=\sum m_i$. en ese caso, la masa $m_i$ debería multiplicar a cada término de la sumatoria. lo que nos lleva a una definición muy alineada con la de centro de masa. por otro lado, $A_i$ ya está dividiendo afuera, no creo que vaya también en la sumatoria. además, unidades no cierran. asumo que la compacidad no tiene unidad y para ello falta que aparezca la masa en el numerardor. finalmente, me parece raro que no aparezca el volumen. o en realidad, no se para qué aparece la masa.}
+% Notar que cuanto mas compacta sea una region menor sera su valor $s_i$ (si se entiende por region compacta una region en la cual sus puntos interiores son cercanos al centro de masa).
+
+% \subsubsection{Calidad de segmentación}
+% Para determinar la calidad general de la segmentación, sera necesaria, ademas de la calidad de cada region, la calidad de las características globales de la segmentación. Para lograr determinar dichas características se definen varios indicadores que se mencionarán a continuación.
+
+% \paragraph{Cobertura}
+% En el caso ideal cada punto del entorno esta asociado a una region en el mapa topológico, pero por diversas razones este puede no ser el caso. Dado esto se define la cobertura $C$ de una segmentación como el cociente del área representada por el mapa topológico y el área del mapa:
+% \begin{equation}
+% C=\frac{\sum^N_{i=1} A_i}{A_m}
+% \end{equation}
+% Donde $A_m$ es el área total del mapa y $N$ es el numero de regiones.
+
+% \paragraph{Validez}
+% La validez $V$ de una segmentación se define como el cociente entre el numero de regiones validas y el numero total de todas las regiones:
+% \begin{equation}
+%   V=\frac{\#regiones\ validas}{\#total\ de\ regiones}
+% \end{equation}
+% Se considera que una region valida debe ser accesible por los robots utilizados. Teniendo esto en cuenta una region será valida si cubre un área mayor a $A_{min}$ y tiene al menos una entrada de ancho mínimo $l_{min}$, siendo los valores $l_{min}$ y $A_{min}$ definidos a partir las dimensiones de los robots utilizados.\todo{entiendo entonces, que según este indicador, un alg de segmentación es mejor si logra 'filtrar' segmentos inaccesibles}
+
+% \paragraph{Simplicidad}
+% Una de las ventajas principales de los mapas topológicos es su simplicidad, que permite ayudar a una navegación y planificación eficiente. Los autores\todo{cuáles?} consideran que es de utilidad penalizar a los mapas topológicos que tengan una cantidad elevada de regiones, considerando dicha cantidad como un indicador de complejidad. 
+
+% La simplicidad $S$ de una segmentación se define en \eqref{ec:simp} donde $\hat{N}$ es el numero esperado de regiones y $\phi$ refleja el impacto que tiene la diferencia entre el numero de regiones esperado y el obtenido. $\hat{N}$ y $\phi$ son parámetros a definir dependiendo de la aplicación.
+
+% \begin{equation}
+%   S=e^{-\frac{|N-\hat{N}|}{\phi}} \label{ec:simp}
+% \end{equation}
+
+
+% \subsubsection{Calidad general}
+% Finalmente, evaluar la calidad general $Q$ de una segmentación, se reduce a combinar la calidad cada región y los indicadores de calidad de la segmentación, según la siguiente ecuación:
+% \begin{equation}
+% Q=\frac{CV}{N}\sum^N_{i=1}{q_i+\lambda S}
+% \end{equation}
+
+% Donde $\lambda$ es un peso que determinara la importancia de la simplicidad de la segmentación en cálculo calidad general de la segmentación.
+
+% % \subsubsection{Evaluación humana}
+% % Otra criterio de evaluación es el utilizado en \cite{Fermin-Leon2017} el cual compara la segmentación a evaluar $R_{seg}$ contra segmentaciones realizadas por humanos $R_{human}$. La comparación consiste en para cada pixel comprobar si este esta asignado a una misma region en ambas segmentaciones, lo cual se considera como un verdadero positivo $vp$, los falsos positivos $fp$ son los pixeles que están en la segmentación a evaluar pero no en la humana, o no, que se considera  
+
+\subsection{Eficiencia en la construcción del GVD}
 % A lo largo de la exploración el mapa construido recibirá, de forma frecuente, actualizaciones que solo modifican una pequeña porción del mismo. Dado esto, por motivos de eficiencia, se busca que los algoritmos que utilizan al mapa como una entrada eviten recomputarse completamente en cada actualización y que en su lugar actualicen el último resultado obtenido para que sea consistente con la última version del mapa.
 
 % Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la última entrada son llamados \emph{algoritmos incrementales}.
@@ -391,14 +573,14 @@ La idea se basa en que, como se mencionó anteriormente, las actualizaciones son
 % Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la última entrada son llamados \emph{algoritmos incrementales}.
 Los algoritmos que actualizan el resultado anterior a partir de los cambios experimentados son llamados \emph{algoritmos incrementales}, en consecuencia los que algoritmos que al cambiar parte de la entrada descartan el último resultado y recomputando el nuevo resultado desde cero se denominan como \emph{algoritmos no incrementales}.
 
-En las secciones \ref{subsec:constGVD} y \ref{subsec:mapaTopGVD} los algoritmos presentados son no incrementales, dado el problema de eficiencia que esto implica son de interés sus variantes incrementales que se explicarán a continuación.
+En la sección \ref{subsec:constGVD} el algoritmo presentado no es incremental, su uso no es adecuado cuando se desea mantener GVD asociado a un entorno actualizado en tiempo real mientras este es explorado, para esto lo ideal es un algoritmo incremental. A continuación se describe el algoritmo no incremental \emph{brushfire} y la variante incremental de este denominada \emph{brushfire dinámico}.
 % Los algoritmos de generación de GVD, y de segmentación a partir de un GVD presentados anteriormente no son incrementales, dado el problema de eficiencia que esto implica son de interés las variantes incrementales que se explicarán a continuación.
 
 % , y por lo tanto su uso resulta ineficiente, por esto fueron desarrolladas variantes incrementales para los mismos.
-\subsubsection{Construcción incremental del GVD}
+% \subsubsection{Construcción incremental del GVD}
 % El algoritmo incremental para la construcción de un GVD que se presentara en esta sección es conocido como \emph{brushfire dinámico}, formulado originalmente por \textit{et al.} en \cite{kalra2009incremental}. Este algoritmo se basa en el algoritmo no incremental \emph{brushfire}
 
-El algoritmo \emph{brushfire} permite determinar el mapa de distancia a los obstáculos, asociado a una grilla donde cada celda tiene asociado un estado libre u ocupado. Este algoritmo se puede ver como una variante con multiples fuentes y sin destino del conocido algoritmo de Dijkstra, en el que las fuentes son los obstáculos y la distancia calculada es la minima distancia hacia un obstáculo. Se comienza inicializando las distancias de las celdas libres con $\infty$ y las obstaculizadas con $0$. Adicionalmente, las celdas obstaculizadas se insertan en una cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que las cola de prioridad este vacía se remueve la celda mas prioritaria $c$ y para cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $dt_{c'}$ según \eqref{ec:dtBrushFire} que remplaza la distancia actual $d_{c'}$ de la celda $c'$ si $dt_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en la cola de prioridad. 
+El algoritmo \emph{brushfire} permite determinar el mapa de distancia a los obstáculos, asociado a una grilla donde cada celda tiene asociado un estado libre u ocupado. Este algoritmo se puede ver como una variante con multiples fuentes y sin destino del conocido algoritmo de Dijkstra, en el que las fuentes son los obstáculos y la distancia calculada es la minima distancia hacia un obstáculo. Se comienza inicializando las distancias de las celdas libres con $\infty$ y las ocupadas con $0$. Adicionalmente, las celdas ocupadas se insertan en una cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que las cola de prioridad este vacía se remueve la celda mas prioritaria $c$ y para cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $dt_{c'}$ según \eqref{ec:dtBrushFire} que remplaza la distancia actual $d_{c'}$ de la celda $c'$ si $dt_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en la cola de prioridad. 
 
 \begin{equation}\label{ec:dtBrushFire}
   dt_{c'} = d_c+||c'-c||_2
@@ -416,14 +598,14 @@ El nombre de este algoritmo proviene de como este determina las distancias comen
 \end{figure} 
 \todo[inline]{mucho, recortar y colocar en el texto}
 
-En \ref{subsec:constGVD} se muestra un método de construcción que requiere primero encontrar un mapa de distancia y luego aplicar un algoritmo de esqueletización, pero brushfire puede ser adaptado para construir el GVD sin el paso intermedio de esqueletización. La idea se basa en asignar identificadores a cada conjunto conexo de celdas obstaculizadas y luego según la interpretación de brushfire como ondas, las ondas provenientes de celdas obstaculizadas con identificadores distintos colisionan en las celdas que deben pertenecer al GVD. 
+En \ref{subsec:constGVD} se muestra un método de construcción que requiere primero encontrar un mapa de distancia y luego aplicar un algoritmo de esqueletización, pero brushfire puede ser adaptado para construir el GVD sin el paso intermedio de esqueletización. La idea se basa en asignar identificadores a cada conjunto conexo de celdas ocupadas y luego según la interpretación de brushfire como ondas, las ondas provenientes de celdas ocupadas con identificadores distintos colisionan en las celdas que deben pertenecer al GVD. 
 
-El algoritmo de brushfire descrito hasta el momento no es incremental, pero en \cite{kalra2009incremental} se presenta una variante nombrada \emph{brushfire dinámico} que si lo es.
+El algoritmo \emph{brushfire dinámico} es una variante incremental del algoritmo brushfire descrito hasta el momento presentada en \cite{kalra2009incremental}.
 
-% Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la última ejecución, y a partir de estos modificar solo las porciones del último resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser obstaculizado a ser libre (se quita una celda obstaculizada) o viceversa (se agrega una celda obstaculizada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios alteran la distancia minima a un obstáculo calculada previamente. Cuando se quita una celda obstaculizada, son aquellas celdas que estaban más cerca de esta que de otra. Mientras que cuando se agrega una celda de obstaculizada, los cambios se dan en las celdas que pasan a tener esta nueva celda obstaculizada mas cerca que las demás.
-Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la última ejecución, y a partir de estos modificar solo las porciones del último resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser obstaculizado\todo{en algún momento empezás a utilizar obstaculizada en lugar de ocupada. uniformizar} a ser libre (se quita una celda obstaculizada) o viceversa (se agrega una celda obstaculizada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios deben modificar su distancia minima a un obstáculo calculada previamente al ser ahora invalida. Específicamente, al quitarse una celda obstaculizada, son aquellas celdas que definían su minima distancia a un obstáculo según esta celda que ahora se encuentra libre. Mientras que al agregarse una celda de obstaculizada, los cambios se dan en las celdas que pasan a tener esta nueva celda obstaculizada mas cerca que las demás, necesitando disminuir su mini coma\todo{?} distancia a un obstáculo.\todo{este párrafo y el sgte están enredados. hay que amenizarlos. escribir frases cortas y agregar alguna img que ayude a identificar las 2 situaciones descritas y los procedimientos de actualización de los valores de distancias. como la fig 10 pero sería ideal considerar cada caso por separado}
+% Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la última ejecución, y a partir de estos modificar solo las porciones del último resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser ocupado a ser libre (se quita una celda ocupada) o viceversa (se agrega una celda ocupada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios alteran la distancia minima a un obstáculo calculada previamente. Cuando se quita una celda ocupada, son aquellas celdas que estaban más cerca de esta que de otra. Mientras que cuando se agrega una celda de ocupada, los cambios se dan en las celdas que pasan a tener esta nueva celda ocupada mas cerca que las demás.
+Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la última ejecución, y a partir de estos modificar solo las porciones del último resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser ocupado a ser libre (se quita una celda ocupada) o viceversa (se agrega una celda ocupada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios deben modificar su distancia minima a un obstáculo calculada previamente al ser ahora invalida. Específicamente, al quitarse una celda ocupada, son aquellas celdas que definían su minima distancia a un obstáculo según esta celda que ahora se encuentra libre. Mientras que al agregarse una celda de ocupada, los cambios se dan en las celdas que pasan a tener esta nueva celda ocupada mas cerca que las demás, necesitando disminuir su mini coma\todo{?} distancia a un obstáculo.\todo{este párrafo y el sgte están enredados. hay que amenizarlos. escribir frases cortas y agregar alguna img que ayude a identificar las 2 situaciones descritas y los procedimientos de actualización de los valores de distancias. como la fig 10 pero sería ideal considerar cada caso por separado}
 
-Esto se logra partiendo de un mapa de distancias parcialmente correcto brushfire dinámico y propagando los cambios ocurridos en forma de ondas. Las celdas $o$ que pasan a estar obstaculizadas emiten una onda \say{consistente} que establece la distancia $dt_c$ recorrida por la onda a la distancia $d_c$ asociada a la celda $c$ si $dt_{c}<d_{c}$, si la distancia se modifica se establece a $o$ como el obstáculo a minima distancia de $c$. En el caso de las celdas $l$ que pasan a estar libres emanan una onda \say{inconsistente} que reinicia a $\infty$ (invalida) las distancias $d_c$ de las celdas $c$ que tienen a $l$ como obstáculo a minima distancia, esta onda se expande hasta llegar a una celda $c'$ que tiene obstáculo valido a minima distancia, al suceder esto desde $c'$ se resume la onda \say{consciente} que causo su valor de distancia actual (y valido) de forma de restablecer la distancia de las celdas reiniciadas. En la figura \ref{fig:wavesBrushDyn} se muestra gráficamente el funcionamiento de brushfire dinámico.
+Esto se logra partiendo de un mapa de distancias parcialmente correcto brushfire dinámico y propagando los cambios ocurridos en forma de ondas. Las celdas $o$ que pasan a estar ocupadas emiten una onda \say{consistente} que establece la distancia $dt_c$ recorrida por la onda a la distancia $d_c$ asociada a la celda $c$ si $dt_{c}<d_{c}$, si la distancia se modifica se establece a $o$ como el obstáculo a minima distancia de $c$. En el caso de las celdas $l$ que pasan a estar libres emanan una onda \say{inconsistente} que reinicia a $\infty$ (invalida) las distancias $d_c$ de las celdas $c$ que tienen a $l$ como obstáculo a minima distancia, esta onda se expande hasta llegar a una celda $c'$ que tiene obstáculo valido a minima distancia, al suceder esto desde $c'$ se resume la onda \say{consciente} que causo su valor de distancia actual (y valido) de forma de restablecer la distancia de las celdas reiniciadas. En la figura \ref{fig:wavesBrushDyn} se muestra gráficamente el funcionamiento de brushfire dinámico.
 
 \begin{figure}[H]
   \center
@@ -432,18 +614,18 @@ Esto se logra partiendo de un mapa de distancias parcialmente correcto brushfire
 \end{figure} 
 \todo[inline]{ídem fig anterior, recortar y colocar en el texto.}
 
-Con esto se tiene una definición de brushfire dinámico que calcula un mapa de distancia. De forma análoga a lo realizado en algoritmo brushfire original, brushfire dinámico se puede adaptar para lograr construir un GVD, pero en este caso de forma incremental. Las ondas consistentes en su expansion remueven las celdas del GVD, adicionalmente causan la pertenecía al GVD de las celdas en donde estas se detienen y las celdas que causaron que se detengan, siempre y cuando ambas tengan identificadores de conjuntos de obstáculos conexos distintos. Por otro lado las ondas inconsistentes remueven del GVD a todas las celdas cuya pertenencia al GVD involucra a celdas previamente obstaculizadas que pasaron a ser libres. Un ejemplo de como agregar y remover un obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}. 
+Con esto se tiene una definición de brushfire dinámico que calcula un mapa de distancia. De forma análoga a lo realizado en algoritmo brushfire original, brushfire dinámico se puede adaptar para lograr construir un GVD, pero en este caso de forma incremental. Las ondas consistentes en su expansion remueven las celdas del GVD, adicionalmente causan la pertenecía al GVD de las celdas en donde estas se detienen y las celdas que causaron que se detengan, siempre y cuando ambas tengan identificadores de conjuntos de obstáculos conexos distintos. Por otro lado las ondas inconsistentes remueven del GVD a todas las celdas cuya pertenencia al GVD involucra a celdas previamente ocupadas que pasaron a ser libres. Un ejemplo de como agregar y remover un obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}. 
 
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesKalra.png}
-  \caption[Olas de brushfire dinámico.]{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda obstaculizada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al detenerse genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda obstaculizada que paso a ser libre mientras que al al llegar a cedas con una distancia minima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
+  \caption[Olas de brushfire dinámico.]{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al detenerse genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre mientras que al al llegar a cedas con una distancia minima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
 \end{figure} 
 
 
 De esta forma se logra la construcción incremental de un GVD. Sin embargo en \cite{Lau2013} se destaca algunas problemáticas de brushfire dinámico, principalmente que el GVD generado tiene líneas de dos celdas de ancho y que no genera pertenencia al GVD en el interior de obstáculos cóncavos como lo son habitaciones con una sola entrada, lo cual es crítico en entornos estructurados. Los problemas mencionados se pueden ver a la izquierda de la figura \ref{fig:lauPalo}.
 
-Para solucionar las problemáticas planteadas Lau \textit{et al.} proponen cambios al algoritmo de brushfire dinámico. El problema de generación de GVD en obstáculos cóncavos se relaciona con el uso de conjuntos conexos de obstáculos para determinar la pertenencia de celdas al GVD. Dado esto la solución propuesta consiste en dejar de utilizar identificadores para los conjuntos conexos de obstáculos, en su lugar utilizar un identificador para cada celda obstaculizada. Y al chocar dos olas, las celdas en donde se da el choque pertenecen al GVD si sus identificadores de obstáculo a minima distancia son distintos y las celdas obstaculizadas correspondientes a dichos identificadores no son adyacentes en la grilla. Este cambio soluciona la generación del GVD en obstáculos cóncavos. Con respecto a las líneas de dos celdas de ancho la propuesta consiste en aplicar técnicas que permitan eliminar las celdas redundantes, estas son la celdas del GVD que son adyacentes a mas de una celda perteneciente al GVD (no son hojas) y que su remoción no desconecta al GVD. A la derecha de la figura \ref{fig:lauPalo} se muestra el resultado de aplicar estos cambios.
+Para solucionar las problemáticas planteadas Lau \textit{et al.} proponen cambios al algoritmo de brushfire dinámico. El problema de generación de GVD en obstáculos cóncavos se relaciona con el uso de conjuntos conexos de obstáculos para determinar la pertenencia de celdas al GVD. Dado esto la solución propuesta consiste en dejar de utilizar identificadores para los conjuntos conexos de obstáculos, en su lugar utilizar un identificador para cada celda ocupada. Y al chocar dos olas, las celdas en donde se da el choque pertenecen al GVD si sus identificadores de obstáculo a minima distancia son distintos y las celdas ocupadas correspondientes a dichos identificadores no son adyacentes en la grilla. Este cambio soluciona la generación del GVD en obstáculos cóncavos. Con respecto a las líneas de dos celdas de ancho la propuesta consiste en aplicar técnicas que permitan eliminar las celdas redundantes, estas son la celdas del GVD que son adyacentes a mas de una celda perteneciente al GVD (no son hojas) y que su remoción no desconecta al GVD. A la derecha de la figura \ref{fig:lauPalo} se muestra el resultado de aplicar estos cambios.
 
 \begin{figure}[H]
   \center
@@ -471,11 +653,11 @@ Para asignar los objetivos a los robots primero estos son asignados a los segmen
   \forall s,s' \in S, |\#Robots(s) - \#Robots(s')| <= 1
 \end{equation}
 
-Para resolver la asignación se propone el uso del método húngaro\cite{kuhn1955hungarian} de una forma particular que permite cumplir con la restricción \eqref{ec:uniform}. Para ejecutar el método húngaro es necesario calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la celda frontera más cercana del segmento $s \in S$ con el robot $i$ y descontando un valor constante en caso de que el robot ya se encuentre en el segmento. 
+Para resolver la asignación se propone el uso del método húngaro \cite{kuhn1955hungarian} de una forma particular que permite cumplir con la restricción \eqref{ec:uniform}. Para ejecutar el método húngaro es necesario calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la celda frontera más cercana del segmento $s \in S$ con el robot $i$ y descontando un valor constante en caso de que el robot ya se encuentre en el segmento. 
 
 La técnica de coordinación explicada en esta sección se resume en el algoritmo \ref{alg:asignacionobjetivos}.
 
-\begin{algorithm}
+\begin{algorithm}[H]
 \SetAlgoLined
     Determinar segmentos $S = \{s_{1} , ..., s_{n} \}$ del mapa\\
     Determinar el conjunto de fronteras objetivo para cada segmento\\
@@ -509,14 +691,14 @@ La técnica de coordinación explicada en esta sección se resume en el algoritm
 % Incluir acá a wurm la parte de coordinacion
 
 \subsection{Coordinación a partir de segmentaciones no topológicas}\label{subsec:coordNoTop}
-Existen métodos de coordinación que se basan en segmentar el espacio sin considerar su topología, uno de estos es el propuesto en \cite{Solanas2004}. En este la segmentación se basa en agrupar el espacio desconocido en tantos grupos como robots se utilizan para explorar. Las agrupaciones se determinan utilizando el algoritmo K-Means\cite{hartigan1979ak}. A continuación, cada robot se asigna a segmento cuyo centro de masa sea más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$. En la figura \ref{fig:ejemploCoodGrill} se muestra un ejemplo de esta segmentacion segmentacion con K = 8, en blanco se indica el espacio libre, con negro el espacio ocupado, y con colores se indica el espacio desconocido, donde cada color indica un segmento diferente dentro de los cuales se indica con tonalidades mas oscuras los obstáculos todavía no explorados y con amarillo su centro de masa\todo{típicamente, la codificación de colores se coloca en el caption de la figura}.
+Existen métodos de coordinación que se basan en segmentar el espacio sin considerar su topología, uno de estos es el propuesto en \cite{Solanas2004}. En este la segmentación se basa en agrupar el espacio desconocido en tantos grupos como robots se utilizan para explorar. Las agrupaciones se determinan utilizando el algoritmo K-Means\cite{hartigan1979ak}. A continuación, cada robot se asigna a segmento cuyo centro de masa sea más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$. En la figura \ref{fig:ejemploCoodGrill} se muestra un ejemplo de esta segmentacion segmentacion con K = 8. %\todo{típicamente, la codificación de colores se coloca en el caption de la figura}.
 \begin{figure}[H]
   \center
   \includegraphics[width=5.5cm]{imagenes/coordGrillCM.png}
-  \caption[Segmentación propuesta en \cite{Solanas2004}.]{Segmentación propuesta en \cite{Solanas2004}. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
+  \caption[Segmentación propuesta en \cite{Solanas2004}.]{Segmentación propuesta en \cite{Solanas2004}. En blanco se indica el espacio libre, con negro el espacio ocupado, y con colores se indica el espacio desconocido, donde cada color indica un segmento diferente dentro de los cuales se indica con tonalidades mas oscuras los obstáculos todavía no explorados y con amarillo su centro de masa. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
 \end{figure} 
 
-Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no obstaculizado mas corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ esta en el rango de sensado de algún robot.
+Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no ocupado mas corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ esta en el rango de sensado de algún robot.
 
 \begin{equation}\label{ec:costsolanas}
 costo_{ij} = 
@@ -551,519 +733,125 @@ Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada 
 % \section{ Trabajos relacionados }
 % A lo largo de esta sección se describen diferentes acercamientos para solucionar el problema de exploración multirobot. El primero es el presentado en \cite{amorin2019novel} en el cual se define un criterio para detener la exploracion multirobot basado en el concepto de ganacia de información. El siguiente, articulo \cite{wu2007voronoi} en el cual se 
 
-\subsection{Criterio de parada}
-Uno de los aspectos no mencionados hasta el momento sobre el problema de exploración es el denominado criterio de parada según el cual se determina cuando la exploración se considera finalizada. 
-Una de los criterios de parada tomados usualmente es de detener la exploración cuando el mapa construido alcanza cierto un porcentaje de cubrimiento del entorno, por ejemplo 99\% \cite{Yan2015}. Esta es usualmente utilizada para evaluaciones de rendimiento donde el entorno explorado es conocido, pero no suele ser útil en práctica, ya que para utilizarse se requiere tener conocimiento previo de las dimensiones del entorno a explorar, de lo contrario es imposible saber el porcentaje de cubrimiento.
+%\subsection{Criterio de parada}
+%Uno de los aspectos no mencionados hasta el momento sobre el problema de exploración es el denominado criterio de parada según el cual se determina cuando la exploración se considera finalizada. 
+%Una de los criterios de parada tomados usualmente es de detener la exploración cuando el mapa construido alcanza cierto un porcentaje de cubrimiento del entorno, por ejemplo 99\% \cite{Yan2015}. Esta es usualmente utilizada para evaluaciones de rendimiento donde el entorno explorado es conocido, pero no suele ser útil en práctica, ya que para utilizarse se requiere tener conocimiento previo de las dimensiones del entorno a explorar, de lo contrario es imposible saber el porcentaje de cubrimiento.
 
-Otro posible criterio es el de explorar el entorno hasta que no quede ninguna posibilidad de obtener nueva información de el, osea que no exista ningún espacio desconocido que sea accesible. La desventaja de este criterio es que se fuerza a una exploration exhaustiva del entorno, lo cual puede ser indeseable por cuestiones de costos, tanto temporales, como de recursos como la energía de los robots, o su desgaste.
+%Otro posible criterio es el de explorar el entorno hasta que no quede ninguna posibilidad de obtener nueva información de el, osea que no exista ningún espacio desconocido que sea accesible. La desventaja de este criterio es que se fuerza a una exploration exhaustiva del entorno, lo cual puede ser indeseable por cuestiones de costos, tanto temporales, como de recursos como la energía de los robots, o su desgaste.
 
-En \cite{amorin2019novel} se propone un criterio de parada que carece de la necesidad de conocer las dimensiones del entorno de antemano, haciendo factible su uso en la práctica y que a su vez evita una exploración exhaustiva. El criterio se basa en el concepto de ganancia de información que hace referencia a la cantidad de información que el robot agrega al mapa construido al completar un objetivo de exploración. 
+%En \cite{amorin2019novel} se propone un criterio de parada que carece de la necesidad de conocer las dimensiones del entorno de antemano, haciendo factible su uso en la práctica y que a su vez evita una exploración exhaustiva. El criterio se basa en el concepto de ganancia de información que hace referencia a la cantidad de información que el robot agrega al mapa construido al completar un objetivo de exploración. 
 
-Para experimentar y describir con detalle al criterio de parada este se define integrado a una solución en particular del problema de exploración multirobot, los aspectos de dicha solución se describen a continuación con el propósito de explicar el criterio de parada, pero también por su relevancia como ejemplo de una posible solución al problema de exploración multirobot.
+%Para experimentar y describir con detalle al criterio de parada este se define integrado a una solución en particular del problema de exploración multirobot, los aspectos de dicha solución se describen a continuación con el propósito de explicar el criterio de parada, pero también por su relevancia como ejemplo de una posible solución al problema de exploración multirobot.
 
-El mapa es representado como una grilla de ocupación, en este contexto la ganancia de información hace referencia a las celdas del mapa cuyo contenido es determinado luego de que un objetivo es completado. 
+%El mapa es representado como una grilla de ocupación, en este contexto la ganancia de información hace referencia a las celdas del mapa cuyo contenido es determinado luego de que un objetivo es completado. 
 
-La flota se compone de $N$ robots móviles circulares rígidos con capacidad para percibir toda la circunferencia alrededor con un radio $r$. Existe una estación central encargada de la tarea de reconocimiento de objetivos y asignación de los mismos. Los robots serán quienes recopilen la información del entorno y la central la encargada de crear un mapa global a partir de esta. Se consideran comunicaciones ideales, suponiendo que los robots no tienen restricciones de comunicación (por ejemplo, sin errores ni pérdidas con ancho de banda y alcance ilimitados). %Cabe aclarar que las comunicaciones inalámbricas son importantes en el contexto de exploración multi-robot.
+%La flota se compone de $N$ robots móviles circulares rígidos con capacidad para percibir toda la circunferencia alrededor con un radio $r$. Existe una estación central encargada de la tarea de reconocimiento de objetivos y asignación de los mismos. Los robots serán quienes recopilen la información del entorno y la central la encargada de crear un mapa global a partir de esta. Se consideran comunicaciones ideales, suponiendo que los robots no tienen restricciones de comunicación (por ejemplo, sin errores ni pérdidas con ancho de banda y alcance ilimitados). %Cabe aclarar que las comunicaciones inalámbricas son importantes en el contexto de exploración multi-robot.
 
-Para determinar los potenciales objetivos de exploración se utiliza el concepto de fronteras, que aplicado a una grilla de ocupación se asocia a las denominadas celdas fronteras son las celdas consideradas como libres y a su vez adyacentes a celdas desconocidas. Sin embargo, se argumenta que tratar todas las celdas frontera como tareas de exploración diferentes podría ser computacionalmente prohibitivo. Por lo tanto, para reducir el costo computacional, se intenta reducir los objetivos de exploración a las celdas frontera mas representativas. Para determinar que celdas frontera serán las mas representativas, primero, las fronteras se dividen en conjuntos disjuntos $F_i$. Luego, las fronteras mas representativas de cada conjunto $F_i$ se obtienen agrupando las celdas fronteras con el algoritmo k-means con $k=\frac{|F_i|}{2r}$ donde $r$ es el radio de sensado del robots. Este proceso busca reducir los objetivos de exploración de forma de que cada frontera sea perceptible desde al menos uno de los objetivos y a su vez minimizar las celdas frontera que pueden ser percibidas desde mas de un objetivo. La figura \ref{fig:ejemploFrontSig} contiene un ejemplo de las distintas partes del proceso de extracción de fronteras significativas con $r=6.l$ siendo $l$ el largo de un lado de celda.
-\begin{figure}[H]
-  \centering
-  \subfloat[Se identifican las celdas frotneras,  marcadas con amarillo.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/a.png}}
-  \qquad
-  \subfloat[Se Determinan los conjuntos de fornteras disjuntos $F_i$, cada color distinto representa un $i$ distinto.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/b.png}}
-  \qquad
-  \subfloat[Se obtienen las celdas frontera significativas de cada $F_i$ indicados con verde.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/c.png}}
+%Para determinar los potenciales objetivos de exploración se utiliza el concepto de fronteras, que aplicado a una grilla de ocupación se asocia a las denominadas celdas fronteras son las celdas consideradas como libres y a su vez adyacentes a celdas desconocidas. Sin embargo, se argumenta que tratar todas las celdas frontera como tareas de exploración diferentes podría ser computacionalmente prohibitivo. Por lo tanto, para reducir el costo computacional, se intenta reducir los objetivos de exploración a las celdas frontera mas representativas. Para determinar que celdas frontera serán las mas representativas, primero, las fronteras se dividen en conjuntos disjuntos $F_i$. Luego, las fronteras mas representativas de cada conjunto $F_i$ se obtienen agrupando las celdas fronteras con el algoritmo k-means con $k=\frac{|F_i|}{2r}$ donde $r$ es el radio de sensado del robots. Este proceso busca reducir los objetivos de exploración de forma de que cada frontera sea perceptible desde al menos uno de los objetivos y a su vez minimizar las celdas frontera que pueden ser percibidas desde mas de un objetivo. La figura \ref{fig:ejemploFrontSig} contiene un ejemplo de las distintas partes del proceso de extracción de fronteras significativas con $r=6.l$ siendo $l$ el largo de un lado de celda.
+%\begin{figure}[H]
+%  \centering
+%  \subfloat[Se identifican las celdas frotneras,  marcadas con amarillo.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/a.png}}
+%  \qquad
+%  \subfloat[Se Determinan los conjuntos de fornteras disjuntos $F_i$, cada color distinto representa un $i$ distinto.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/b.png}}
+%  \qquad
+%  \subfloat[Se obtienen las celdas frontera significativas de cada $F_i$ indicados con verde.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/c.png}}
 
-  \caption[Proceso de extracción de fronteras representativas.]{Proceso de extracción de fronteras representativas. Cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Extraído de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
-\end{figure}
+%  \caption[Proceso de extracción de fronteras representativas.]{Proceso de extracción de fronteras representativas. Cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Extraído de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
+%\end{figure}
 
-La asignación de objetivos de exploración se resuelve organizando una subasta entre robots, con la estación central como mediadora, es decir, encargada de dar inicio a la subasta, recibir las ofertas de los robots, determinar los resultados de la subasta e informárselos a los robots. A continuación se detallan las etapas de una subasta.
+%La asignación de objetivos de exploración se resuelve organizando una subasta entre robots, con la estación central como mediadora, es decir, encargada de dar inicio a la subasta, recibir las ofertas de los robots, determinar los resultados de la subasta e informárselos a los robots. A continuación se detallan las etapas de una subasta.
 
-Cuando un robot completa un objetivo de exploración (alcanza la celda frontera significativa asignada) este envía una notificación a la estación central que indica que se debe iniciar una subasta. Para dar comienzo a la subasta la estación central notifica a todos los robots sin objetivos, los cuales durante un corto período de tiempo, pueden enviar una oferta a la misma. Cada oferta consiste en una lista de pares objetivo-utilidad, donde la utilidad de un objetivo $c$ es igual a $\frac{\overline{\mli{IG}}_c}{\mli{PC}_c}$ donde $\overline{\mli{IG}}_c$ es una estimación de ganancia de información al alcanzar $c$ que se explicara más adelante y $\mli{PC}_c$ es el costo asociado a la ruta necesaria para llegar a $c$, es decir su distancia. Finalmente la central, a partir de las ofertas de todos los postores, resuelve la subasta de forma voraz, para luego notificar a cada robot su tarea asignada.
+%Cuando un robot completa un objetivo de exploración (alcanza la celda frontera significativa asignada) este envía una notificación a la estación central que indica que se debe iniciar una subasta. Para dar comienzo a la subasta la estación central notifica a todos los robots sin objetivos, los cuales durante un corto período de tiempo, pueden enviar una oferta a la misma. Cada oferta consiste en una lista de pares objetivo-utilidad, donde la utilidad de un objetivo $c$ es igual a $\frac{\overline{\mli{IG}}_c}{\mli{PC}_c}$ donde $\overline{\mli{IG}}_c$ es una estimación de ganancia de información al alcanzar $c$ que se explicara más adelante y $\mli{PC}_c$ es el costo asociado a la ruta necesaria para llegar a $c$, es decir su distancia. Finalmente la central, a partir de las ofertas de todos los postores, resuelve la subasta de forma voraz, para luego notificar a cada robot su tarea asignada.
 
-% Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
+%% Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
 
-La ganancia de información estimada que es utilizada en el calculo de la utilidad y en el criterio de parada que se presentara a continuación, se calcula según \eqref{ec:infGain}. 
-%varios conceptos.  Para cada celda $c$ de la grilla de ocupacion las coordenadas $(x_c,y_c)$ son las correspondientes al centro de la celda $c$.
-\begin{equation}\label{ec:infGain}
-  \overline{\mli{IG}}_c = \overline{\mli{IG}}_{(x_c,y_c)} = |{c_i}|
-\end{equation}
-Donde toda celda $c_i$ cumple con:
-\begin{enumerate}[label=(\roman*)]
-  \item $c_i$ es una celda desconocida.
-  \item $c_i$ se puede percibir desde $c$:
-  \begin{itemize}
-    \item $c_i$ esta en rango del sensor desde $c$: $\sqrt{(x_c - x_{c_i})^2 + (y_c - y_{c_i})^2}\leq r$
-    \item No existe celda $c_o$ obstaculizada que obstruya a $c_i$ desde $c$:\\
-      $\nexists\ c_o \ obstaculizada \ \land \ \frac{ |(\frac{y_{c_o}-y_c}{x_{c_o}-x_c})(x_{c_i}-x_c) - y_{c_i} - y_{c}| }{\sqrt{(\frac{y_{c_o}-y_c}{x_{c_o}-x_c})+1}}\leq \delta $
-  \end{itemize}
-\end{enumerate}
+%La ganancia de información estimada que es utilizada en el calculo de la utilidad y en el criterio de parada que se presentara a continuación, se calcula según \eqref{ec:infGain}. 
+%%varios conceptos.  Para cada celda $c$ de la grilla de ocupacion las coordenadas $(x_c,y_c)$ son las correspondientes al centro de la celda $c$.
+%\begin{equation}\label{ec:infGain}
+%  \overline{\mli{IG}}_c = \overline{\mli{IG}}_{(x_c,y_c)} = |{c_i}|
+%\end{equation}
+%Donde toda celda $c_i$ cumple con:
+%\begin{enumerate}[label=(\roman*)]
+%  \item $c_i$ es una celda desconocida.
+%  \item $c_i$ se puede percibir desde $c$:
+%  \begin{itemize}
+%    \item $c_i$ esta en rango del sensor desde $c$: $\sqrt{(x_c - x_{c_i})^2 + (y_c - y_{c_i})^2}\leq r$
+%    \item No existe celda $c_o$ ocupada que obstruya a $c_i$ desde $c$:\\
+%      $\nexists\ c_o \ ocupada \ \land \ \frac{ |(\frac{y_{c_o}-y_c}{x_{c_o}-x_c})(x_{c_i}-x_c) - y_{c_i} - y_{c}| }{\sqrt{(\frac{y_{c_o}-y_c}{x_{c_o}-x_c})+1}}\leq \delta $
+%  \end{itemize}
+%\end{enumerate}
 
-Siendo el valor $\delta$ igual a la mitad de longitud diagonal de una celda, por ser este la maxima distancia que puede existir entre una celda obstaculizada $c_o$ y el segmento de recta definido entre $c$ y $c_i$ sin que $c_o$ obstruya a $c_i$ desde $c$. En la figura \ref{fig:ejemploOclusionAm} se muestra un ejemplo de celdas que cumplen con las condiciones antes mencionadas y celdas que las cumplen, haciendo énfasis en dos celdas particulares una obstruida y otra no obstruida.
+%Siendo el valor $\delta$ igual a la mitad de longitud diagonal de una celda, por ser este la maxima distancia que puede existir entre una celda ocupada $c_o$ y el segmento de recta definido entre $c$ y $c_i$ sin que $c_o$ obstruya a $c_i$ desde $c$. En la figura \ref{fig:ejemploOclusionAm} se muestra un ejemplo de celdas que cumplen con las condiciones antes mencionadas y celdas que las cumplen, haciendo énfasis en dos celdas particulares una obstruida y otra no obstruida.
 
-\begin{figure}[H]
-  \centering
-  \subfloat[La celda con sus centro indicado en azul se puede precibir, esta dentro del rango del sensor y no existe un obstaculo que la obstruya.]{\includegraphics[clip=true, width=0.47\linewidth]{imagenes/oclusion/a.png}}
-  \qquad
-  \subfloat[La celda con su centro indicado en azul \textbf{no} se puede precibir, esta dentro del rango del sensor pero existe un obstaculo que la obstruye.]{\includegraphics[clip=true, width=0.47\linewidth]{imagenes/oclusion/b.png}}
+%\begin{figure}[H]
+%  \centering
+%  \subfloat[La celda con sus centro indicado en azul se puede precibir, esta dentro del rango del sensor y no existe un obstaculo que la obstruya.]{\includegraphics[clip=true, width=0.47\linewidth]{imagenes/oclusion/a.png}}
+%  \qquad
+%  \subfloat[La celda con su centro indicado en azul \textbf{no} se puede precibir, esta dentro del rango del sensor pero existe un obstaculo que la obstruye.]{\includegraphics[clip=true, width=0.47\linewidth]{imagenes/oclusion/b.png}}
 
-  \caption[Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información.]{Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información. Lo representado por las celdas blancas, grises, negras, verdes y amarillas coincide con lo que estas representan en la figura \ref{fig:ejemploFrontSig}. Las condiciones se comprueban tomando la celda cuyo centro se marca con un punto negro como la celda $c$ y las celdas que cumplen con las condiciones se colorean con naranja. Extraído de \cite{Amorin2019}.}\label{fig:ejemploOclusionAm}
-\end{figure}
+%  \caption[Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información.]{Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información. Lo representado por las celdas blancas, grises, negras, verdes y amarillas coincide con lo que estas representan en la figura \ref{fig:ejemploFrontSig}. Las condiciones se comprueban tomando la celda cuyo centro se marca con un punto negro como la celda $c$ y las celdas que cumplen con las condiciones se colorean con naranja. Extraído de \cite{Amorin2019}.}\label{fig:ejemploOclusionAm}
+%\end{figure}
 
 
 
- % esto mejora sus habilidades para predecirlo de forma continua hasta que sus habilidades de predicción serán lo suficientemente buenas
-El criterio de parada propuesto en el articulo, se basa en la idea de que durante la exploración los robots obtienen conocimiento sobre el entorno, y que llegado un punto su conocimiento sobre el entorno sera lo suficientemente bueno como para estimar el estado de las zonas desconocidas del mapa de forma precisa.
+% % esto mejora sus habilidades para predecirlo de forma continua hasta que sus habilidades de predicción serán lo suficientemente buenas
+%El criterio de parada propuesto en el articulo, se basa en la idea de que durante la exploración los robots obtienen conocimiento sobre el entorno, y que llegado un punto su conocimiento sobre el entorno sera lo suficientemente bueno como para estimar el estado de las zonas desconocidas del mapa de forma precisa.
 
-Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis necesarias para que el criterio de parada propuesto sea valido son dos. La primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. 
+%Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis necesarias para que el criterio de parada propuesto sea valido son dos. La primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. 
 
-El criterio de parada consiste en finalizar la exploración cuando todos los robots, de forma independiente, determinan concluir su participación en la exploración. El criterio que un robot individual usa para determinar cuando debe dejar de explorar, es el de tener $\eta$ predicciones acertadas. Dado un umbral de tolerancia $\chi$ una una predicción es acertada cuando, al completar objetivo $c$ la diferencia entre la estimación de ganancia de información $\overline{\mli{IG}}_c$ y la ganancia de información real $\mli{IG}_c$ es menor a $\chi$ \eqref{ec:sthit}. 
-\begin{equation}\label{ec:sthit}
-  |\overline{\mli{IG}}_c - \mli{IG}_c| \leq \chi
-\end{equation}
-La idea subyacente de este criterio es al experimentar $\eta$ predicciones acertadas un robot tiene la suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, y por lo tanto podrá detenerse.
-
-% \subsection[Voronoi-Based Space Partitioning for Coordinated Multi-Robot Exploration]{Voronoi-Based Space Partitioning for Coordinated\\ Multi-Robot Exploration} 
-\subsection{Mapa métrico basado en polígonos}
-% Este artículo describe y evalúa la extensión de un algoritmo de exploración multi-robot y muestra que al reemplazar el modelo de mapa original (una grilla de ocupación) con una representación poligonal más compacta y flexible, el nuevo enfoque aumenta significativamente la eficiencia de la etapa más costosa del algoritmo original, que es la división de áreas desconocidas en tantas regiones como robots. El algoritmo de agrupación K-Means original se sustituye por un algoritmo de partición basado en Voronoi aplicado a polígonos.
-Las grillas de ocupación son los mapas métricos mas utilizadas en el contexto de exploración multirobot, sin embargo, estas grillas no son apropiadas para entornos que son muy grandes o cuyos límites no están bien delimitados desde el comienzo de la exploración. En contraste, las representaciones poligonales no tienen tales limitaciones.
-
-El artículo \cite{wu2007voronoi} propone utilizar una representación poligonal en la cual el mapa consiste en la union de conjunto de polígonos cerrados de forma y tamaño arbitrario, que pueden estar libres, no explorados u obstaculizados. 
-
-Para comprobar y validar la representación propuesta se adapta la estrategia de exploración multirobot presentada en \cite{Solanas2004} (cuya técnica de coordinación fue mencionada en \ref{subsec:coordNoTop}) que originalmente se basa en grillas de ocupación, para que funcione utilizando una representación poligonal.
-
-De las pruebas realizadas los autores concluyen que una representación poligonal es más compacta, flexible y logra aumentar significativamente la eficiencia.
-
-% El desempeño de la representación propuesta se comprueba a partir de implementar una estrategia de exploración multirobot que adapta  una estrategia de exploración multirobot que hace uso de grillas de ocupación\cite{Solanas2004}, de lo cual se concluye que una representación poligonal es más compacta, flexible y logra aumentar significativamente la eficiencia.
-
-\subsubsection{Representación poligonal}
-Inicialmente, todo el mapa estará constituido por un solo polígono desconocido. A partir de lo sensado por cada robot, se incluye nueva información sobre entorno a la representación agregando polígonos libres y ocupados que son substraídos de los polígonos desconocidos a los que pertenecían.
-
-Los objetivos de exploración se determinan a partir de las aristas entre polígonos desconocidos y polígonos libres denominadas como aristas frontera que son análogas a las celdas frontera de las grillas de ocupación.
-
-El trabajo propone asignar tareas a partir de la division el entorno desconocido en tantas regiones como robots existan en la flota, para luego asignar a cada robot la tarea de explorar una region diferente. El entorno se divide a partir de un algoritmo que adapta al algoritmo K-Means para funcionar a partir de la representación poligonal propuesta, este algoritmo se explica en la sección\ref{subsubsec:particionamientovoronoi}.  \todo{agregar img}
-
-%La division del entorno se logra adaptando el algoritmo K-means para funcionar en utilizado para encontrar los centroides correspondientes a las agrupaciones de áreas desconocidas, ya que se asume que estos serán los puntos más provechosos para que los robots exploren.
-
-Finalmente, la planificación del camino del robot es realizada en el interior de los polígonos libres, cosa que se puede hacer a partir de la aplicación de cualquier algoritmo de descomposición celular, por ejemplo el que se explica en \cite{schachter1978decomposition}.
-   
-\subsubsection{Particionamiento basado en polígonos}\label{subsubsec:particionamientovoronoi}
-El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como generadores, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. \todo{este párrafo bebería escribirse pensando en las definiciones que ya se realizaron. referenciarlas y destacar qué agrega}
-
-Sea $n$ numero de robots, el resultado deseado es obtener un conjunto de $K=n$ celdas de Voronoi para las cuales, sus centroides (centros de masa) y sus generadores estén a una distancia menos que cierta tolerancia $\varepsilon$. % cerradas que están globalmente delimitadas por el polígono a dividir
-
-La generación de estas celdas se realiza a partir del algoritmo \ref{alg:particionamientovoronoi} que adapta, utilizado diagramas de Voronoi, al algoritmo K-Means utilizado en la implantación base, que no es compatible con una representación poligonal.
-
-\begin{algorithm}
-\SetAlgoLined
-    Elegir aleatoriamente $K$ puntos $C_i$, $1 \leq i \leq K$, contenidos en los polígonos correspondientes a las regiones desconocidas actuales en el mapa.\\
-    Calcular el diagrama de Voronoi asociado con el conjunto actual de $C_i$.\\
-    Restringir las celdas del diagrama de Voronoi a los polígonos desconocidos actuales.\\
-    Determinar el centro de masa $M_i$ de cada celda Voronoi restringida.\\
-    \eIf{$C_i - M_i < \varepsilon\ \forall i$}{
-        Saltar al paso 11.\\
-    }{
-        Sustituir cada $C_i$ por su $M_i$ correspondiente.\\ Volver al paso 2.\\
-    }
-    
-    Dividir el conjunto de polígonos desconocidos en $K$ regiones disjuntas según las celdas de Voronoi restringidas encontradas.\\
-    \caption{Particionamiento basado en Voronoi}
-    \label{alg:particionamientovoronoi}
-    
-\end{algorithm}
-
-Notar que el algoritmo trabaja con celdas de Voronoi restringidas, estas son las celdas resultantes de un diagrama de Voronoi restringidas a los limites del mapa conocidos por hipótesis.\todo{agregaría una img que ayude a entender cómo funciona}
-
+%El criterio de parada consiste en finalizar la exploración cuando todos los robots, de forma independiente, determinan concluir su participación en la exploración. El criterio que un robot individual usa para determinar cuando debe dejar de explorar, es el de tener $\eta$ predicciones acertadas. Dado un umbral de tolerancia $\chi$ una una predicción es acertada cuando, al completar objetivo $c$ la diferencia entre la estimación de ganancia de información $\overline{\mli{IG}}_c$ y la ganancia de información real $\mli{IG}_c$ es menor a $\chi$ \eqref{ec:sthit}. 
+%\begin{equation}\label{ec:sthit}
+%  |\overline{\mli{IG}}_c - \mli{IG}_c| \leq \chi
+%\end{equation}
+%La idea subyacente de este criterio es al experimentar $\eta$ predicciones acertadas un robot tiene la suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, y por lo tanto podrá detenerse.
 
 %%%%%%%
 % Desde acá proyecto de grado redactado
 %%%%%%%
 
 % \subsection[Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection]{Distributed Multi-robot Exploration Based on\\ Scene Partitioning and Frontier Selection}
-\subsection{Exploración multirobot distribuida} \todo{esta sección iría arriba, luego de exploración multirobot pero hay que ver bien qué se espera. es decir, el tema es vasto pero se nombra sólo una ref. tendrá algo de especial. pensaría bien cuál es el objetivo y vería}
-% Al considerase una solución para el problema de exploración hay dos aspectos centrales a resolver, identificar posibles objetivos de exploración y como priorizar estos objetivos de forma de priorizar los mas relevantes.
+% \subsection{Exploración multirobot distribuida} \todo{esta sección iría arriba, luego de exploración multirobot pero hay que ver bien qué se espera. es decir, el tema es vasto pero se nombra sólo una ref. tendrá algo de especial. pensaría bien cuál es el objetivo y vería}
+% % Al considerase una solución para el problema de exploración hay dos aspectos centrales a resolver, identificar posibles objetivos de exploración y como priorizar estos objetivos de forma de priorizar los mas relevantes.
 
-En \cite{Lopez-Perez2018} se propone una solución completamente distribuida al problema de exploración multirobot. Este tipo de resolución implica descentralización, lo que aumenta tanto la robustez del sistema como su autonomía en tanto solo se requiere del equipo robótico para explorar el entorno, sin depender de una entidad central para coordinar ningún aspecto de la solución. %, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
+% En \cite{Lopez-Perez2018} se propone una solución completamente distribuida al problema de exploración multirobot. Este tipo de resolución implica descentralización, lo que aumenta tanto la robustez del sistema como su autonomía en tanto solo se requiere del equipo robótico para explorar el entorno, sin depender de una entidad central para coordinar ningún aspecto de la solución. %, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
 
-\subsubsection{Formulación del problema}
-La variante del problema de exploración multi-robot tratada en este articulo es la de explorar un entorno desconocido $W\in R^2$ utilizando un conjunto de robots $R={R_1,R_2,...,R_n}$. Se utiliza una grill  de ocupación, por lo que el entorno se descompone en un conjunto de celdas $C={c_1,c_2,...,c_n}$. Cada robot $R_i$ posee: 
-\begin{enumerate}
-  \item Un mapa $M_i \in CxL$ donde $L$ son las diferentes estados en los que puede estar una celda. 
-  \item Una posición inicial $q_{init}^{i}\in R^2 \times [-\pi,\pi]$. 
-  \item Un sensor $S_i$ para explorar el entorno desconocido.
-\end{enumerate}
-
-Adicionalmente se asume que existe siempre un cuadro delimitador de $W$ que puede ser establecido, aunque sea de forma aproximada, antes de que la exploración comience, comunicación perfecta (sin perdida y de rango infinito) y que cada robot tiene acceso a su posición respecto a un marco de referencia común.
-
-\subsubsection{Descripción del sistema}
-El sistema tiene un diseño modular, este consta de 4 módulos que se encuentran replicados en cada robot, el modulo de distribución de información, el modulo de asignación de zonas, el modulo de adquisición de información y el modulo de exploración. Estos se describen en las siguientes secciones. 
-
-\paragraph{Modulo de distribución de información}
-Este modulo se encarga de distribuir a los demás robots la posición del robot al que pretence, las ubicaciones que conoce de los demás robots y su mapa $M_i$. 
-
-\paragraph{Modulo de asignación de zonas }
-El entorno es segmentado en zonas y la exploración cada una de estas es asignada a un robot. El modulo de asignación de zonas es el responsable de realizar la segmentación en zonas y su posterior asignación a los robots. La segmentación genera tantas zonas $E_i$ como robots $R_i$ que $E_i$ se define en \eqref{ec:zones} a partir de la posición $C_i$ de $R_i$. .
-\begin{equation}\label{ec:zones}
-  E_i=\{c_j:d_g(C_i,c_j)\leq d_g(V_i(k),c_j) \forall i \neq k , c_j \in U_i\}
-\end{equation}
-Donde $U_i \subset M_i$ son la celdas desconocidas del mapa asociado al robot $R_i$ y $d_g(c',c'')$ es la distancia geodésica, que indica el camino compuesto de centros de celdas mas corto entre dos celdas $c'$ y $c''$ que respecta la conectividad entre las celdas que lo componen.
-
-Cada zona $E_i$ es asignada al robot $R_i$ y este explorara las celdas de $E_i$ según lo determine el \hyperref[par:estar:moduloexp]{modulo de exploración}.
-
-\paragraph{Modulo de adquisición de información}
-El propósito de este es el de actualizar el mapa $M_i$ de el robot $R_i$ según la información obtenida por su sensor $S_i$ y su posición $C_i$.
-
-\paragraph{Modulo de exploración}\label{par:estar:moduloexp}
-El modulo de exploración esta compuesto por tres submódulos. 
-
-El primero de ellos es el submódulo de asignación de objetivos, como su nombre lo indica, este se encarga de seleccionar un objetivo de todos los pertenecientes a la zona asignada $E_i$ para asignarlo al robot $R_i$. El objetivo seleccionado $G_i$ es el que alcanza el menor valor para la función de peso $f_p$ que se computa como \eqref{ec:weight}.
-\begin{equation}\label{ec:weight}
-  f_p(c_j) = k_d.d_g(C_i,c_j) + k_a.\phi_i(c_j)
-\end{equation}
-Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada sumando, $d_g(C_i,c_j)$ hace referencia a la distancia geodésica mencionada anteriormente, $\phi_i(c_j)$ es el angulo entre la orientación del robot y el vector con origen en la posiciones del robot $C_i$, y fin en el centro de celda $c_j$. 
-
-Luego esta el submódulo de planificación de ruta, este se encarga de generar una ruta que le permita al robot llegar al objetivo asignado. Esto se logra a partir del algoritmo $A*$, para la ejecución de este se asume que las celdas desconocidas son libres. En el caso de encontrarse un obstáculo en la ruta planificada se replanifica ejecutando nuevamente el algoritmo $A*$ en la version mas reciente del mapa.
-
-El último es el submódulo de ejecución de trayectoria que se encarga de generar los comandos de actuación para seguir una ruta planeada.
-
-% \subsection[semi-structured]{Incremental Topological Segmentation for Semi-\\structured Environments using discretized GVG}
-
-% Este articulo se centra en la descripción de un método de segmentación incremental del entorno que se basa en la propuesta por Thrun \cite{Thrun1998}. Para lograr la incrementalidad se desarrollaron variantes incrementales para la generación del GVD y para la detección de segmentos.
-
-% El algoritmo de generación incremental del GVD se basa en el desarrollado en \cite{kalra2009incremental}. 
-
-% La detección incremental de puntos críticos se hace solo considerando la definición básica de Thrun, sin considerar las técnicas de remoción de falsos positivos propuestas por Wurm \cite{wurm2008coordinated}, esto facilita la tarea de detección pero impacta negativamente los resultados. Para lograr la mencionada detección incremental de puntos críticos, se recalculan los mínimos locales según los cambios del GVD (nuevos nodos, nodos removidos, cambios de despeje) de cada incremento, específicamente se recalcula en los cambios y sus vecinos de primer y segundo grado. Al detectar nuevo punto crítico se calcula la linea critica asociada.
-
-% Finalmente es necesario, a partir de las líneas criticas, determinar de forma incremental a que segmento pertenece cada celda. Para esto, se elije una celda de todas las celdas afectadas en el incremento y se la agrega a una nueva region, sus celdas vecinas que estén dentro del mapa, no estén ocupadas y no sean cruzadas por una linea critica serán agregada...
-
-% % \begin{algorithm}
-% % \SetAlgoLined
-% %     Determinar segmentos $S = \{s_{1} , ..., s_{n} \}$ del mapa\\
-% %     Determinar el conjunto de fronteras objetivo para cada segmento\\
-% %     \For{cada robot $i$}{
-% %         \For{cada segmento $s \in S$}{
-% %                 Computar el costo $C_{s}^{i}$\\
-% %                 Descontar al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
-% %             }
-% %     }
-% %     Asignar robots a los segmentos usando el método húngaro\\
-% %     \For{cada segmento $s \in S$}{
-% %         Asignar robots a las fronteras objetivas en $s$ utilizando el método húngaro\\
-% %     }
-% %     \caption{Asignación de objetivos}
-% %     \label{alg:asignacionobjetivos}
-    
-% % \end{algorithm}
-
-
-% hasta acá redactado
-
-
-% \subsection[Incremental contour-based topological segmentation for robot exploration]{Incremental contour-based topological\\ segmentation for robot exploration}
-% \subsubsection{Resumen}
-% Habla de mapas topológicos, estos son los mapas que se generan a partir de la segmentación del entorno. 
-% Específicamente se centra en describir y evaluar un algoritmo de segmentación para la contracción de mapas topológicos en 2D: Segmentación topológica basada en el contorno de los obstáculos del mapa (Contour Based Topological Segmentation).
-% También se describe una variante incremental para poder usarse en tiempo real para la exploración multi-robot.
-
-% \subsubsection{Notas generales}
-% Interesante tener en cuenta la existencia de diferentes métodos para segmentar el espacio.
-
-% Este se evalúa contra la segmentación humana.
-
-% Se describe una variante incremental para poder usarse en tiempo real para la exploración multi-robot.
-
-% En la parte de trabajos relacionados habla de la segmentación basada en GVD. <- importante
-
-% Interesante el trabajo relacionado por describir los tipos de segmentación
-
-% Funcionamiento:
+% \subsubsection{Formulación del problema}
+% La variante del problema de exploración multi-robot tratada en este articulo es la de explorar un entorno desconocido $W\in R^2$ utilizando un conjunto de robots $R={R_1,R_2,...,R_n}$. Se utiliza una grill  de ocupación, por lo que el entorno se descompone en un conjunto de celdas $C={c_1,c_2,...,c_n}$. Cada robot $R_i$ posee: 
 % \begin{enumerate}
-%   \item De grid 2D based map a un conjunto de polígonos:
-%   \begin{enumerate}
-%      \item De grid a imagen binaria
-%      \item A partir de esa imagen usando el modo árbol de la función de la biblioteca OpenCV $findCountours$ que devuelve hacer jerarquía de contornos según que contornos (padres) contienen a otros (hijos)
-%   \end{enumerate}
-% \item Luego se usa la función DuDe\_segment toma los polígonos del paso anterior para obtener la descomposición del espacio en segmentos. Esto se hace para cada polígono encontrado en 1. Y el resultado final es la union de estas segmentaciones. La descomposición DuDe se explica en: 
-
-%   \url{http://masc.cs.gmu.edu/wiki/Dude2D}
+%   \item Un mapa $M_i \in CxL$ donde $L$ son las diferentes estados en los que puede estar una celda. 
+%   \item Una posición inicial $q_{init}^{i}\in R^2 \times [-\pi,\pi]$. 
+%   \item Un sensor $S_i$ para explorar el entorno desconocido.
 % \end{enumerate}
 
-% Obtienen buenos resultados, la version incremental permite tiempo real, solo tiene un parámetro a tunear (maxima convexidad, usado en el DuDe\_segment), flexible para entornos estructurados y no estructurados. Y es independiente del tamaño de la grid, solo importan las proporciones del contorno.
+% Adicionalmente se asume que existe siempre un cuadro delimitador de $W$ que puede ser establecido, aunque sea de forma aproximada, antes de que la exploración comience, comunicación perfecta (sin perdida y de rango infinito) y que cada robot tiene acceso a su posición respecto a un marco de referencia común.
 
-% \subsection{Comunicación en la exploración multirobot}
-% Hasta ahora se omitió un aspecto fundamental a considerar en cualquier sistema multirobot autónomo que resuelve una tarea, que es la comunicación %aunque es usualasumen una comunicacion perfeta, esto implica a b y c. Aunque 
+% \subsubsection{Descripción del sistema}
+% El sistema tiene un diseño modular, este consta de 4 módulos que se encuentran replicados en cada robot, el modulo de distribución de información, el modulo de asignación de zonas, el modulo de adquisición de información y el modulo de exploración. Estos se describen en las siguientes secciones. 
 
-% \subsubsection{Resumen}
-% Se presentan y evalúan paquetes de ROS para la exploración multi-robot coordinada. Estos paquetes tienen el objetivo de ofrecer funcionalidades básicas para tener una solución completa pero simple para el problema de la exploración multi-robot permitiendo una configuración completamente distribuida, apuntando a que grupos de investigación puedan utilizarlos. Los paquetes son:
-% \begin{itemize}
-%   \item ad hoc communication between robots,
-%   \item construction of global maps from local maps
-%   \item exploration of unknown environments
-% \end{itemize}
+% \paragraph{Modulo de distribución de información}
+% Este modulo se encarga de distribuir a los demás robots la posición del robot al que pretence, las ubicaciones que conoce de los demás robots y su mapa $M_i$. 
 
-% \subsubsection{Notas}
-% \paragraph{WIRELESS AD HOC COMMUNICATION}
+% \paragraph{Modulo de asignación de zonas }
+% El entorno es segmentado en zonas y la exploración cada una de estas es asignada a un robot. El modulo de asignación de zonas es el responsable de realizar la segmentación en zonas y su posterior asignación a los robots. La segmentación genera tantas zonas $E_i$ como robots $R_i$ que $E_i$ se define en \eqref{ec:zones} a partir de la posición $C_i$ de $R_i$. .
+% \begin{equation}\label{ec:zones}
+%   E_i=\{c_j:d_g(C_i,c_j)\leq d_g(V_i(k),c_j) \forall i \neq k , c_j \in U_i\}
+% \end{equation}
+% Donde $U_i \subset M_i$ son la celdas desconocidas del mapa asociado al robot $R_i$ y $d_g(c',c'')$ es la distancia geodésica, que indica el camino compuesto de centros de celdas mas corto entre dos celdas $c'$ y $c''$ que respecta la conectividad entre las celdas que lo componen.
 
-% ROS permite comunicación ínter proceso local a través de un maestro usando el patron de comunicación duplicación/subscripción. El maestro se encarga de manejar los publicadores y los subscriptores a  tópicos de ROS ( canales de comunicación entre procesos ). Para hacer un sistema multi-robot en este caso seria necesario que todos los robots se conecten inalámbricamente a un solo maestro y solo este maestro es el encargado de establecer canales de comunicación entre procesos. Esto significa que dos procesos deben comunicarse con el maestro para poder luego comunicarse entre si y en el caso de desconectarse deben recaer nuevamente en el maestro para lograr una re conexión. Esto es malo ya que el maestro es un punto único de fallo y porque dos procesos que corren localmente en un robot deben comunicarse con el maestro para poder comunicarse entre ellos.
+% Cada zona $E_i$ es asignada al robot $R_i$ y este explorara las celdas de $E_i$ según lo determine el \hyperref[par:estar:moduloexp]{modulo de exploración}.
 
-% La solución presentada por el articulo es tener un maestro por robot para manejar la comunicación ínter proceso local y manejar la comunicación global entre robots con un paquete propuesto por ellos. 
+% \paragraph{Modulo de adquisición de información}
+% El propósito de este es el de actualizar el mapa $M_i$ de el robot $R_i$ según la información obtenida por su sensor $S_i$ y su posición $C_i$.
 
-% Su paquete se basa en generar una red Ad-Hoc usando un protocoló similar a AODV (protocolo conocido para generar redes ad-hoc). Sus features son:
-% \begin{itemize}
-% \item Routing: allows robots to communicate via multiple hops to other robots which are not in the immediate neighbor-hood.
-% \item Multicast: allows to transmit from one robot to multiple robots, especially useful for dissemination of map data, for example.
-% \item ARQ: stands for automatic repeat request. If a frame is not acknowledged within a specified time, the sender will automatically repeat the transmission. The Ad Hoc Communication package supports both hop-by-hop ARQ and end-to-end ARQ.
-% \item Segmentation: allows to split data packets into multiple frames of smaller size. The IEEE 802.11a/$g$/$n$ MAC layer supports payloads up to 2304 octets [12]. At the receiver side the frames are ordered and combined.
-% \item Ordering: ensures that frames and packets are delivered in the correct order.
-% \end{itemize}
+% \paragraph{Modulo de exploración}\label{par:estar:moduloexp}
+% El modulo de exploración esta compuesto por tres submódulos. 
 
-% El uso de este paquete es:
-% Cuando un robot A se quiere comunicar con un robot B no lo hacen de forma directa si no que utilizan el un service call del paquete que debe incluir:
-% \begin{itemize}
-%   \item destino, datos, tópico en el cual publicar el dato al llegar al destino
-% \end{itemize}
+% El primero de ellos es el submódulo de asignación de objetivos, como su nombre lo indica, este se encarga de seleccionar un objetivo de todos los pertenecientes a la zona asignada $E_i$ para asignarlo al robot $R_i$. El objetivo seleccionado $G_i$ es el que alcanza el menor valor para la función de peso $f_p$ que se computa como \eqref{ec:weight}.
+% \begin{equation}\label{ec:weight}
+%   f_p(c_j) = k_d.d_g(C_i,c_j) + k_a.\phi_i(c_j)
+% \end{equation}
+% Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada sumando, $d_g(C_i,c_j)$ hace referencia a la distancia geodésica mencionada anteriormente, $\phi_i(c_j)$ es el angulo entre la orientación del robot y el vector con origen en la posiciones del robot $C_i$, y fin en el centro de celda $c_j$. 
 
-% Esto causa que el paquete envié el dato junto a los metadatos necesarios en un frame MAC a través de un raw socket hasta B
+% Luego esta el submódulo de planificación de ruta, este se encarga de generar una ruta que le permita al robot llegar al objetivo asignado. Esto se logra a partir del algoritmo $A*$, para la ejecución de este se asume que las celdas desconocidas son libres. En el caso de encontrarse un obstáculo en la ruta planificada se replanifica ejecutando nuevamente el algoritmo $A*$ en la version mas reciente del mapa.
 
-% B al recibir el frame el paquete lo interpreta y lo publica en el tópico indicado en los metadatos.
-
-% De esta manera se conserva parcialmente el manejo de tópicos de ros. Hay transparencia en la subscripción pero no me queda claro si hay transparencia en la publicación (es la service call implícita al publicar en un tópico)
-
-% \paragraph{MAP MERGER}
-
-% El map merger es el encargado de recolectar mapas locales de los robots y combinarlos en un solo mapa global. El mapa global es utilizado por los robots para navegar, explorar y coordinar.
-
-% El Map merger puede ser centralizado o distribuido:
-% \begin{itemize}
-% \item si es centralizado los mapas locales deben enviarse a la central, ser combinados ahí y luego distribuirse el mapa global resultante a los robots
-% \item si no es centralizado los mapas locales deben enviarse a todos los robots para que cada uno de estos lo combine y obtenga su propio mapa global
-% \end{itemize}
-
-% Este modulo esta inspirado en $map\_stich$ pero extiende y mejora varios aspectos.
-
-% Proceso de combinado
-% \begin{itemize}
-%   \item El paquete combina dos mapas $M_1$ y $M_2$ en un solo mapa global juntando dichos mapas de forma de maximizar la áreas que se solapan.
-
-%   \item La transformación entre los sistemas de coordenadas que debe hacerse para juntar los mapas se calcula con OpenCV:
-%   \begin{itemize}
-%     \item Se convierten las grillas de ocupación en bitmaps
-%     \item Se utiliza la función de OpenCV $estimateRigitTrasnform$ que intenta emparejar patrones entre los mapas.
-%   \end{itemize}
-% \end{itemize}
-
-% Al basarse en solapamientos se requiere asumir que los robots van a empezar en la misma posición (por ejemplo una entrada) para que los mapas locales solapen desde un principio.
-
-% Features:
-% \begin{itemize}
-% \item Map updates are triggered if changes in local maps are detected.
-% \item New robots are added and maps are exchanged automatically if the Ad Hoc Communication package reports a new robot in the system.
-% \item Robot positions are transmitted in regular intervals. The package automatically converts other robots’ positions to the correct coordinate system.
-% \item Integration Ad Hoc Communication package allows the wireless exchange of maps between robots right out of the box. All topics are preconfigured.
-% \end{itemize}
-
-% \paragraph{EXPLORATION}
-
-% Este paquete:
-% \begin{enumerate}
-% \item Identifica fronteras basado en el mapa (global) actual.
-%   \begin{itemize}
-%      \item No se explica como, seguramente est en la referencia que mencionan (5)
-%   \end{itemize}
-% \item Selecciona fronteras a ser exploradas ( la exploración termina si no hay mas fronteras para explorar ).
-% \
-%   \begin{itemize}
-%      \item Las fronteras objetivo se priorizan según la distancia euclídea entre la pos del robot y la frontera 
-%      \item Las fronteras se agrupan
-%      \item Menciona que usar un camino real seria un drawback por consumir mas recursos y que es propenso errores con los path planners de ros actuales?
-%   \end{itemize}
-% \item Los robots deben coordinarse para reducir el tiempo de exploración.
-%   \begin{itemize}
-%      \item se hace una subasta para determinar que robot sigue que objetivo a través del método húngaro (igual que Wurm)
-%   \end{itemize}
-% \end{enumerate}
-
-% Features:
-% \begin{itemize}
-% \item Integration Ad Hoc Communication package and
-% \item Integration Map Merger package allow out of the box deployment. All topics and settings are pre-configured.
-% \item Coordination exploration including frontier identification and coordinated assignment as described above.
-% \item Bid interpolation aims to interpolates bids of other robots which did not send their bids for an auctioned cluster.
-% \end{itemize}
-
-% \subsubsection{Definiciones}
-% Ad-hoc network: An ad hoc network is one that is spontaneously formed when devices connect and communicate with each other. The term ad hoc is a Latin word that literally means "for this," implying improvised or impromptu. Ad hoc networks are mostly wireless local area networks (LANs).The devices communicate with each other directly instead of relying on a base station or access points as in wireless LANs for data transfer co-ordination. Each device participates in routing activity, by determining the route using the routing algorithm and forwarding data to other devices via this route. 
-
-
-% \subsubsection{Ideas}
-% Los paquetes presentados pueden ser útiles:
-% \begin{itemize}
-% \item WIRELESS AD HOC COMMUNICATION: es una solución al funcionamiento centralizado del sistema de tópicos de ROS.
-% \item MAP MERGER se presenta como una solución a la combinación de mapas cuyo código puede llegar a resultar útil dependiendo de que tan bien se pueda adaptar la solución actual
-% \item EXPLORATION resulta simple en comparación a las funcionalidades que provee nuestro paquete pero de igual, resaltando el uso de el método húngaro para la resolución de subastas el cual seria interesante considerar para nuestro paquete (comparar ordenes del método actual).
-% \end{itemize}
-
-% El código no se actualiza hace 5 años y no hay releases para versiones recientes de ros, de igual manera es posible extraer código para reutilizar en nuestro proyecto.
-
-% \subsection[Distributed matroid constrained submodular maximization for multi-robot exploration: theory and practice]{Distributed matroid constrained submodular maximization for multi-robot exploration: theory and\\ practice}
-% \subsubsection{Resumen}
-% Este articulo describe el problema de exploración multi-robot y se centra en la descripción de "distributed sequential greedy assignment (DSGA)", un algoritmo que resuelve de forma eficiente la asignación de objetivos de exploración de forma distribuida.
-
-% \subsubsection{Notas}
-% Informative planning problems of this form are known to be NP-Hard 
-
-% \url{https://www.jmlr.org/papers/volume9/krause08a/krause08a.pdf}
-
-% Entonces rather than attempt to find an optimal solution in possibly exponential time, we seek approximate solutions with bounded suboptimality that can be found efficiently in practice.
-
-% Para probar la eficiencia hacen un modelo que considera la incertidumbre del entorno y la modela, siendo el objetivo de la exploración reducir la entropía del mapa (concepto que cuantifica la incertidumbre).
-
-% Se tratan conceptos como la entropía, las funciones submodulares.
-
-% \url{https://www.youtube.com/watch?v=yEnYXCAj4WY}
-
-% Y matroides
-
-% \url{https://www.youtube.com/watch?v=XcSzR_tpHYE}
-
-% Me costo bastante entender las partes iniciales, pero logre entender por arriba, parece que la complejidad crece en las siguientes partes.
-
-% \subsection{Communication - Efficient Planning and Mapping for Multi - Robot Exploration in Large Environments}
-% \subsubsection{Resumen}
-% El aspecto principal es la utilización de una representación alternativa a las grillas de ocupación llamada "Gaussian mixture model (GMM)". Dicha representación es mas eficiente en tamaño que las grillas de ocupación, por lo que se usan para los mapas globales y para que los robots compartan la información global del mapa. Por otro lado cada robot usa el GMM para mantener un mapa local denso (grilla de ocupación) para usar en el planning. 
-
-% \subsubsection{Notas}
-
-% The perception system uses a Gaussian mixture model (GMM) that accurately represents detailed geometry and efficiently captures empty volumes and surfaces. 
-
-% The resulting GMM has a small memory footprint and communicating updates across a network of robots requires relatively little bandwidth compared to the volume of novel data.
-
-% Samples from the GMM are, in turn, used to maintain a dense local map for use in planning.
-
-% A receding horizon planner maximizes information gain over sequences of camera views, and a terminal cost based on distances to highly informative views provides global spatial reasoning and ensures complete exploration.
-
-% Robots maintain a library of such views by sampling and updating views locally and share updates with the rest of the team. 
-
-% Para planificar se clasifican vistas ("over sequences of camera views") según su ganancia de información, estas vistas son compartidas entre los robots para tener un modelo global. Las vistas consideradas son las "vistas informativas" (son significativamente informativas).
-% Los robots se mueven a las fronteras o vistas basados en criterios como la distancia y la información. Aunque también toma encenta en la secuencia de observaciones del trayecto.
-% Se define un costo terminal basado en el camino mas corto a una vista informativa para mantener una compatibilidad con el mapa local que los robot extraen del GMM para el planning.
-
-% El trabajo no aplica coordinación entre los robots.
-
-% Seria interesante entender como funciona la representación alternativa
-
-% "Gaussian mixture model (GMM)" y como esta puede ser utilizada para tener comunicaciones eficientes.
-
-% \subsection[Learning to Cooperate via an Attention-Based Communication Neural Network in Decentralized Multi-Robot Exploration]{Learning to Cooperate via an Attention-Based\\ Communication Neural Network in Decentralized Multi-Robot Exploration}
-
-% \subsubsection{Resumen}
-% En el marco de la exploración multi robot, este trabajo se centra en la parte de la cooperación/coordinación. 
-
-% Según los autores en muchos entornos del mundo-real, en especial los altamente dinámicos, son muy complejos para que los humanos diseñen estrategias eficientes y descentralizadas.
-
-% Dicho esto, presentan un método de coordinación basado en redes neuronales con mecanismos de atención. Le llaman Attention-based Communication neural network ($CommAttn$). Esta les permite a los robot aprender estrategias de cooperación a través de la comunicación explicita. El mecanismo de atención se introduce para que los robots puedan determinar con que otros robots es necesario comunicarse.
-
-% \subsubsection{Notas}
-% Interesante pero no seria el foco del proyecto
-% %% aca arranco a hablar articulo por articulo
-
-
-% \subsection{Learning metric-topological maps for indoor mobile robot navigation}
-% En este articulo se propone un método de segmentación del espacio a partir de mapa representado con una grilla de ocupación. El concepto de segmento es equivalente al de habitaciones y corredores en entornos estructurados, como lo son las casas y oficinas. La idea principal del algoritmo de segmentación presentado es que las entradas y salidas de los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos. En este caso el objetivo de segmentar el espacio en habitaciones y corredores, es el de generar un mapa topológico.
-
-% \subsubsection{Mapas topológicos}
-% Los mapas topológicos son mapas simplificados al punto de solo incluir regiones de interés y conexiones entre estas. En este caso las regiones de interés serán los segmentos. 
-
-% La simplicidad de los mapas topológicos es útil para ayudar a los humanos a entender un entorno (por esto es usual ver mapas topológicos de sistemas de transporte) y permiten instrucciones que nos resultan naturales, por ejemplo, "ir a la habitación A". Otra ventaja es que por su simplicidad estos suelen ser mas compactos y por lo tanto pueden utilizarse para desarrollar técnicas de planificación eficiente.
-
-% \subsubsection{Algoritmo de segmentación}
-% Para introducir el algoritmo de segmentación se definen algunos conceptos fundamentales que se se mencionaran a lo largo del informe:
-% \begin{enumerate}
-%   \item Puntos base: Dado un punto en el espacio, los puntos base es el conjunto de los puntos de espacio ocupado que están a la misma minima distancia.
-%   \item Despeje: Es la distancia de un punto en el espacio a sus puntos base.
-%   \item Diagrama Generalizado de Voronoi (GVD): Conjunto de puntos del espacio libre que tienen al menos dos puntos base.
-%   \item Puntos críticos: Puntos pertenecientes al GVD que a su vez son mínimos locales según el despeje.
-%   \item líneas criticas: Segmentos de linea que conectan a un punto crítico con sus puntos base.
-% \end{enumerate}
-
-% Como trabaja sobre una grilla de ocupación por lo que se trabaja con celdas en lugar de con puntos. El algoritmo comienza por la construcción del GVD asociado la grilla de ocupación, posteriormente se encuentran los puntos críticos los cuales se ubican en el centro de pasajes estrechos, para luego obtener las líneas criticas asociadas a cada punto crítico. Las líneas criticas estarán ubicadas a lo largo de cada pasaje estrecho y por lo tanto serán los limites entre cada segmento obteniendo así la segmentación deseada.
-
-% \begin{enumerate}
-%   \item Puntos base: Dado un punto en el espacio, los puntos base es el conjunto de los puntos de espacio ocupado que están a la misma minima distancia.
-%   \item Despeje: Es la distancia de un punto en el espacio a sus puntos base.
-%   \item Puntos críticos: Puntos pertenecientes al GVD que a su vez son mínimos locales según el despeje.
-%   \item líneas criticas: Segmentos de linea que conectan a un punto crítico con sus puntos base.
-% \end{enumerate}
-%https://docs.google.com/document/d/1yFqYCa47JHWA1tYXfWRbPnJMDWjv4nsER7b-64Yx2YM/edit#heading=h.w7bvjvihzhqy
-%https://docs.google.com/document/d/1pxqyMlNkoJkrIP6SBvMu3rOycAUBt72uPNH_S8o-HYw/edit#heading=h.l9jal9qqz7kt
-%%%%%%%
-% Desde acá TSCF
-%%%%%%%
-% \subsection{No se bien como nombrar esto}
-% Se puede incluir cosas mas genericas de la exploracion multirobot, esto puede incluir la solucion de guillermo y su criterio de parada anticipado. Y tambien podria incluir las soluciones propuestas en el paper que describe paquetes de exploracion, que entre otras cosas permite mencionar el paquete ad-hoc y el problema de las comunicaciones no perfetas que esto intenta solucionar.
-
-%\subsection[Coordinated Multi-Robot Exploration using a Segmentation of the Environment]{Coordinated Multi-Robot Exploration using a\\ Segmentation of the Environment}
-
-%\cite{wurm2008coordinated}
-%El articulo describe y analiza un enfoque de coordinación para la exploración multi-robot que se basa en la distribución eficiente de los robots al explorar el entorno, teniendo en cuenta la estructura de dicho entorno. Para lograr la distribución el entorno se divide en segmentos, por ejemplo, correspondientes a habitaciones y corredores. Luego, las asignaciones de robots a objetivos se hacen considerando que los robots deben ser distribuidos de forma uniforme sobre los segmentos identificados. 
-
-%% Y en lugar de considerar todas las fronteras entre áreas desconocidas y exploradas como ubicaciones objetivo, se envían los robots a los segmentos individuales con la tarea de explorar el área correspondiente.
-%En el articulo se describen dos tareas principales: la segmentación del mapa y la asignación de objetivos a los robots.
-
-%\subsubsection{Segmentación del mapa}
-%% La segmentación de mapas se basada en la partición de un grafo.  
-%% , como lo son los grafos de Voronoi
-%En el articulo el mapa es representado como un grafo de Voronoi, para calcular el grafo de Voronoi $G(m) = (V, E)$ asociado a un mapa $m$, se considera el conjunto $O_p (m)$ que contiene para cada punto $p$ en el espacio libre $C$ de $m$ el conjunto de puntos de obstáculos más cercanos. El conjunto $V$ de nodos del grafo de Voronoi es definido como el conjunto de puntos $p$ en $C$ para los cuales hay al menos dos puntos de obstáculo a distancia mínima, existiendo una arista entre dos nodos si sus puntos correspondientes en $m$ son adyacentes:
-%\[
-%V = \{p \in C : |O_p (m)| \geq 2\}
-%\]
-%\[
-%E = \{(p, q) : p, q \in V, p \text{ adjacent } q \text{ in } m\}
-%\]
-
-%El grafo de Voronoi se puede generar a partir de una grilla de ocupación, aplicándole la transformación de distancia euclidiana\cite{meijster2002general} se obtiene como resultado un mapa de distancia que mantiene para cada celda de la grilla la distancia al obstáculo más cercano, a partir del cual es posible determinar $V$ y $E$ como se describió anteriormente.
-%% (o de interés para explorar, normalmente corredores o puertas)
-%%, los cuales normalmente se ubican en puertas 
-
-%La segmentación de mapas se basa en la partición del grafo utilizado para representar el mapa, y se realiza a partir de los denominados puntos críticos, definidos como puntos que cumplen con ser mínimos locales según la distancia a los obstáculos. La idea es utilizar los puntos críticos para reconocer pasajes entre dos habitaciones o entre habitaciones y corredores. Dado que la forma de los pasajes suelen generar puntos críticos en ellos, el problema pasa a ser el de evitar reconocer falsos positivos (puntos críticos que no estén en un pasaje). Con el motivo de evitar falsos positivos los puntos críticos se restringen a los nodos del grafo que sean mínimos locales según la distancia a los obstáculos, de grado 2 (tengan dos aristas), que tengan un vecino de grado 3 (un nodo de intersección entre varios caminos) y que conduzcan a áreas desconocidas.
-%Finalmente los pasajes reconocidos determinan una partición del grafo que a su vez determina los segmentos, que por estar entre pasajes serán corredores y habitaciones.
-
-%\subsubsection{Asignación de objetivos}
-%% Los entornos interiores son en general estructurados, por ejemplo, los edificios generalmente se dividen en habitaciones a las que se puede llegar por pasillos.
-%Los objetivos serán, como es usual, las fronteras entre las partes desconocidas y conocidas del mapa.
-
-%Asignar más de un robot a un mismo segmento en muchos casos, puede ser una desventaja, ya que el segmento podría ser demasiado pequeño para que un segundo robot acelere su exploración, aunque inicialmente haya más de una frontera en el mismo o, por otro lado, al terminar la exploración de un segmento, los robots pueden incluso bloquearse entre sí mientras intentan abandonarlo, lo que aumentará el tiempo de exploración. Por lo tanto, el objetivo es distribuir uniformemente a los robots sobre los segmentos.
-
-%Para resolver la asignación se propone utilizar el método húngaro, a partir de los costos $C_{s}^{i}$ definidos como el costo de llegar a la celda frontera más cercana del segmento $s$ con el robot $i$, descontando un valor constante en caso de que el robot ya se encuentre en el segmento. El método húngaro da soluciones que evitan tener más de un robot por segmento mientras esto sea posible, y asigna más de un robot a un segmento en el caso de que haya más robots que segmentos. Esta descripción corresponde al algoritmo \ref{alg:asignacionobjetivos}.
-
-%\begin{algorithm}
-%\SetAlgoLined
-%    Determinar segmentos $S = \{s_{1} , ..., s_{n} \}$ del mapa\\
-%    Determinar el conjunto de fronteras objetivo para cada segmento\\
-%    \For{cada robot $i$}{
-%        \For{cada segmento $s \in S$}{
-%                Computar el costo $C_{s}^{i}$\\
-%                Descontar al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
-%            }
-%    }
-%    Asignar robots a los segmentos usando el método húngaro\\
-%    \For{cada segmento $s \in S$}{
-%        Asignar robots a las fronteras objetivas en $s$ utilizando el método húngaro\\
-%    }
-%    \caption{Asignación de objetivos}
-%    \label{alg:asignacionobjetivos}
-    
-%\end{algorithm}
-
-%Usando este enfoque, cada uno de los corredores es explorado completamente por uno de los robots revelando rápidamente la estructura de un edificio, mientras que se asignarán otros robots a las habitaciones accesibles desde los corredores a medida que estas se vayan detectando.
-
-
-
-% \section{Investigación previa}
-% Con el motivo de introducirnos y orientar el trabajo, se investigaron cuatro artículos relacionados al problema de la exploración multi-robot. A continuación se describirá cada uno de los artículos, haciendo especial énfasis en las características de los mismos que se relacionan con el trabajo realizado.
-
-%%%%%%%
-% Desde acá modulo taller (redactado)
-%%%%%%%
-% hasta acá redactado
-
+% El último es el submódulo de ejecución de trayectoria que se encarga de generar los comandos de actuación para seguir una ruta planeada.
