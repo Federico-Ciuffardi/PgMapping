@@ -32,16 +32,16 @@ objetivo. %\todowarn{la importancia/prioridad de la tarea si la tuvieran}.
 
 Otro aspecto fundamental es el denominado criterio de parada según el cual se
 determina cuando la exploración se considera finalizada.  Uno de los criterios
-de parada tomados usualmente es de detener la exploración cuando el mapa
+de parada tomados usualmente es de\todo{sacar 'de'} detener la exploración cuando el mapa
 construido alcanza cierto un porcentaje de cubrimiento del entorno
-\cite{Yan2015}, auque este es usualmente utilizado para evaluaciones de
-rendimiento no es útil en práctica, ya que para utilizarse se requiere tener
+\cite{Yan2015}, auque\todo{. Aunque} este es usualmente utilizado para evaluaciones de
+rendimiento no es útil en \todo{la}práctica, ya que para utilizarse se requiere tener
 conocimiento previo de las dimensiones del entorno a explorar, de lo contrario
 es imposible saber el porcentaje de cubrimiento. Otro posible criterio que si
 es aplicable en la practica es el de explorar el entorno hasta que no quede
-ninguna posibilidad de obtener nueva información de el, osea que no exista
+ninguna posibilidad de obtener nueva información de el\todo{él}, osea que no exista
 ningún espacio desconocido que sea accesible. La desventaja de este criterio es
-que se fuerza a una exploration exhaustiva del entorno, lo cual puede ser
+que se fuerza a una exploration\todo{exploración?} exhaustiva del entorno, lo cual puede ser
 indeseable por cuestiones de costos, tanto temporales, como de recursos como la
 energía de los robots, o su desgaste.  En \cite{amorin2019novel} se propone un
 criterio de parada cuyo uso es factible en la practica y que a su vez evita una
@@ -571,7 +571,7 @@ La idea se basa en que, como se mencionó anteriormente, las actualizaciones son
  % hecho de que las actualizaciones solo modificaron una  que e 
 
 % Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la última entrada son llamados \emph{algoritmos incrementales}.
-Los algoritmos que actualizan el resultado anterior a partir de los cambios experimentados son llamados \emph{algoritmos incrementales}, en consecuencia los que algoritmos que al cambiar parte de la entrada descartan el último resultado y recomputando el nuevo resultado desde cero se denominan como \emph{algoritmos no incrementales}.
+Los algoritmos que actualizan el resultado anterior a partir de los cambios experimentados son llamados \emph{algoritmos incrementales}, en consecuencia los que\todo{sacar 'que'} algoritmos que al cambiar parte de la entrada descartan el último resultado y recomputando\todo{tiempo verbal!} el nuevo resultado desde cero se denominan como \emph{algoritmos no incrementales}.
 
 En la sección \ref{subsec:constGVD} el algoritmo presentado no es incremental, su uso no es adecuado cuando se desea mantener GVD asociado a un entorno actualizado en tiempo real mientras este es explorado, para esto lo ideal es utilizar un algoritmo incremental. A continuación se describe el algoritmo no incremental conocido como \emph{brushfire} y posteriormente la variante incremental de este denominada \emph{brushfire dinámico}.
 % Los algoritmos de generación de GVD, y de segmentación a partir de un GVD presentados anteriormente no son incrementales, dado el problema de eficiencia que esto implica son de interés las variantes incrementales que se explicarán a continuación.
