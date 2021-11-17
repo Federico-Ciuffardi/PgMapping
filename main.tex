@@ -45,7 +45,8 @@
 
 % == PDF, URL AND HYPERLINK ***
 \usepackage{verbatim}
-\usepackage{hyperref}
+\usepackage[breaklinks=true]{hyperref}
+\usepackage{breakcites}
 \hypersetup{
     colorlinks,
     citecolor=black,
@@ -60,6 +61,7 @@
 \DeclareMathOperator*{\argmin}{argmin}
 \newcommand{\mli}[1]{\mathit{#1}}
 \usepackage{amssymb}
+\usepackage{ upgreek }
 
 % == CODE ==
 \usepackage[ruled,vlined,spanish,onelanguage,linesnumbered]{algorithm2e}
