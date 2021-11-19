@@ -1,7 +1,7 @@
+% \todo[inline]{agregaría un párrafo introductorio}
+\todo[inline]{revisar ortografía (marqué algunas pero hay más) y redacción (cosas raras, omisión de artículos, repetición de palabras)}
 \section{Introducción}
 ...
-\todo[inline]{agregaría un párrafo introductorio}
-\todo[inline]{revisar ortografía (marqué algunas pero hay más) y redacción (cosas raras, omisión de artículos, repetición de palabras)}
 \section{Exploración}\label{sec:exploracion}
 La exploración es un problema clásico de la robótica
 móvil autónoma que consiste en utilizar un robot con el objetivo de obtener
@@ -38,7 +38,7 @@ construido alcanza cierto porcentaje de cubrimiento del entorno
 rendimiento no es útil en la práctica cuando se desconocen las dimensiones del
 entorno a explorar, ya que esta información es necesaria para el cálculo del
 porcentaje de cubrimiento.
-Otro posible criterio que si es aplicable en la práctica, cuando el entrono es
+Otro posible criterio que si es aplicable en la práctica, cuando el entorno es
 cerrado, es el de explorar el entorno hasta que no quede ninguna posibilidad de
 obtener nueva información de él, osea que no exista ningún espacio desconocido
 que sea accesible. La desventaja de este criterio es que se fuerza a una
@@ -48,11 +48,13 @@ su desgaste. En \cite{amorin2019novel} se propone un criterio de parada cuyo
 uso es factible para la exploración de entornos cerrados y que a
 su vez evita una exploración exhaustiva. La idea subyacente de este criterio es
 que es posible determinar cuando los robots recopilan suficiente información de
-un entrono como para estimar el resto de forma precisa.
+un entorno como para estimar el resto de forma precisa.
 
-Hasta ahora se ha discutido el problema de exploración utilizando un único
-robot para explorar, a continuación se comentaran las similitudes, ventajas y
-problemas asociados a utilizar multiples robots.
+% Hasta ahora se ha discutido aspectos de la exploración que no estan asociados necesariam
+
+% problema de exploración utilizando un único
+% robot para explorar, a continuación se comentaran las similitudes, ventajas y
+% problemas asociados a utilizar multiples robots.
 
 \subsection{Exploración multirobot}\label{subsec:expmutirob}
 La exploración multirobot consiste en utilizar una flota robótica para resolver
@@ -119,7 +121,7 @@ La simplicidad de los mapas topológicos es útil para nosotros los humanos al f
   \caption[Mapa del sistema de transporte subterráneo de Buenos Aires, Argentina.]{Mapa del sistema de transporte subterráneo de Buenos Aires, Argentina. Extraído de \cite{metroBsAs}.}\label{fig:metroBsAs}
 \end{figure} 
 
-La simplicidad mencionada también tiene ventajas computacionales, ya que para un mismo entorno los mapas topológicos suelen ser ordenes de magnitud más pequeños que los mapas métricos y por lo tanto, más allá de la memoria ahorrada, también se tiene una planificación más eficiente. Sin embargo la falta de detalle en la representación es también una desventaja en tanto hace que los caminos planificados con un mapa topológico suelan ser más largos\todo{quedo?|vago, subjetivo!} que los obtenidos en mapas métricos \cite{Thrun1998}.
+La simplicidad mencionada también tiene ventajas computacionales, ya que para un mismo entorno los mapas topológicos suelen ser ordenes de magnitud más pequeños que los mapas métricos y por lo tanto, más allá de la memoria ahorrada, también se tiene una planificación más eficiente. Sin embargo la falta de detalle en la representación es también una desventaja en tanto hace que los caminos planificados con un mapa topológico suelan ser más largos que los obtenidos en mapas métricos \cite{Thrun1998}.
 
 Dadas las ventajas y desventajas mencionadas existen trabajos \cite{Thrun1998,wurm2008coordinated,Liu2015} que proponen el uso simultáneo de mapas topológicos y métricos para \say{ganar lo mejor de los dos mundos} al tener disponible abstracción y detalle a la vez. Un ejemplo de cómo combinar las ventajas de ambos tipos de mapa es la planificación jerárquica descrita en \cite{Thrun1998} donde se utiliza un mapa topológico y uno métrico de un mismo entorno para generar planes para navegar en el entorno. El mapa topológico es utilizado para generar un plan de navegación topológico que consiste en una secuencia de corredores y habitaciones que se deben atravesar para llegar a un objetivo, plan que aunque es fácil de generar no posee suficiente detalle como para traducirse directamente en acciones que el robot pueda realizar para llegar al objetivo. Por lo tanto se introduce una segunda etapa de planificación que consiste en utilizar la representación métrica del entono para generar planes métricos que permitan al robot moverse entre los segmentos que componen al plan topológico. En este acercamiento se hace un único plan topológico sobre todo el entorno y varios planes métricos sobre porciones reducidas del entorno, lo cual resulta en una reducción del costo computacional en comparación a hacer un único plan métrico sobre el entorno entero.
 
@@ -176,7 +178,7 @@ Los tres trabajos antes mencionados utilizan una misma estrategia para lograr co
 
 \subsection{Mapa de carreteras}\label{subsec:mapacarr}
 % Un \emph{mapa de carreteras} (del ingles road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos ubicaciónes distantes, por ejemplo dos depatamentos distintos, en lugar de considerar cada camino posible, normalemte planificamos primero un camino hacia una red de carreteras, luego a lo largo de la red de carreteras y, finalmente, desde la red de carreteras hacia el destino. %(ver figura \ref{fig:ejemplovial}). 
-Un \emph{mapa de carreteras} (del ingles roadmap) \cite{choset2005principles} es una clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un roadmap asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente planificar un camino desde la red de carreteras (Ruta 3) hacia el destino (ver figura \ref{fig:ejemplovial}). 
+Un \emph{mapa de carreteras} (del ingles \emph{roadmap}) \cite{choset2005principles} es una clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un \emph{roadmap} asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente planificar un camino desde la red de carreteras (Ruta 3) hacia el destino (ver figura \ref{fig:ejemplovial}). 
 
 \begin{figure}[H]
   \center
@@ -184,13 +186,13 @@ Un \emph{mapa de carreteras} (del ingles roadmap) \cite{choset2005principles} es
   \caption[Red de carreteras de Uruguay.]{Red de carreteras de Uruguay. Con amarillo se resalta un camino entre ubicaciones de Montevideo y Paysandú. Extraído de \cite{googlemaps}.}\label{fig:ejemplovial}
 \end{figure} 
 
-Para considerarse un roadmap, un mapa topológico debe estar representado
+Para considerarse un \emph{roadmap}, un mapa topológico debe estar representado
 con un grafo $\mli{RM}=(V_{RM},E_{RM})$ en el cual sus vértices $V_{RM}$
 corresponden a puntos no ocupados del entorno y sus aristas $E_{RM}$
 implican la existencia de al menos un camino disjunto entre los
 vértices. Adicionalmente, dicho grafo $\mli{RM}$ debe cumplir con 3
 propiedades fundamentales, a partir de las cuales es posible asegurar
-que se puede planificar caminos a partir del roadmap. Sea $W$ el entorno
+que se puede planificar caminos a partir del \emph{roadmap}. Sea $W$ el entorno
 y $W_{libre} \subset W$ el espacio libre del entorno, las tres
 propiedades son:
 
@@ -406,7 +408,7 @@ El nombre de este algoritmo proviene de como este determina las distancias comen
   \includegraphics[width=1\linewidth]{imagenes/wavesBrush2Rows.png}
   \caption[Algoritmo brushfire.]{Algoritmo brushfire. (A) Los valores de distancia se inicializan con 0 (negro) para celdas ocupadas e infinito (blanco) para celdas vacías. (B) y (C) Las celdas ocupadas generan ondas que asignan distancias crecientes a medida que se propagan, indicadas por el aumento de brillo de las celdas. (D) Las ondas se detienen al no poderse reducir más valores de distancia. Una vez que se han detenido todas las ondas, se obtiene el mapa de distancia completo. Extraído de \cite{Lau2013}.}\label{fig:wavesBrush}
 \end{figure} 
-\todo[inline]{mucho, recortar y colocar en el texto}
+% \todo[inline]{mucho, recortar y colocar en el texto}
 
 La ventaja sobre el método propuesto en \cite{wurm2008coordinated} es
 que brushfire logra construir el GVD evitando el paso intermedio de
@@ -480,7 +482,7 @@ dinámico.
   \includegraphics[width=1\linewidth]{imagenes/wavesBrushDinClean2Rows.png}
   \caption[Algoritmo brushfire dinámico.]{Algoritmo brushfire dinámico. (A) Último mapa de distancias calculado. (B) Un obstáculo es eliminado (contorno rojo) lo cual causa ondas inconsistentes que comienza a reiniciar los valores de distancia inválidos, a su vez un obstáculo es insertado (contorno azul) y generando ondas consistentes que propagan las nuevas distancias. (C) Cuando las ondas inconsistentes chocan contra celdas con un obstáculo más cercano válido estas se detienen y en ese mismo lugar inicia una onda consistente para restaurar los valores de distancia reiniciados. (D) Después que todas las ondas se detienen, la actualización se completa. Extraído de \cite{Lau2013}.}\label{fig:wavesBrushDyn}
 \end{figure} 
-\todo[inline]{ídem fig anterior, recortar y colocar en el texto.}
+% \todo[inline]{ídem fig anterior, recortar y colocar en el texto.}
 
 %Con esto se tiene una definición de brushfire dinámico que calcula un mapa de distancia.
 Al igual que en el algoritmo brushfire original, en brushfire dinámico la
@@ -551,7 +553,7 @@ hojas) y que su remoción no desconecta al GVD. A la derecha de la figura
 \subsection{Generación de mapas topológicos basados en regiones a partir de un GVD}\label{subsec:mapaTopGVD}
 En \cite{Thrun1998} se propone un método que permite, a partir de un GVD generado a través de una grilla de ocupación, segmentar el entorno en habitaciones y corredores, con el objetivo de generar un mapa topológico cuyas regiones de interés serán los segmentos reconocidos. La idea principal del algoritmo de segmentación es que las entradas y salidas entre los segmentos son pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite delimitar segmentos.
 
-Para describir el método de segmentación es necesario introducir tres nuevos conceptos\todo{colocaría estos 3 conceptos en un diagrama/figura donde se aprecien claramente cada uno de ellos} asociados al $\mli{GVD}$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que corresponde a la distancia del punto $p$ al punto ocupado más cercano. De de ser $p \in \mli{GVD}$ el despeje equivale a la distancia entre $p$ y alguno de sus generadores base generalizados $\mli{GBG}_p$ (recordar que todos están a una misma mínima distancia de $p$ \eqref{eq:GBG}). El segundo es el concepto de \emph{puntos críticos} $C \subset \mli{GVD}$, que son los puntos pertenecientes al GVD que minimizan el despeje localmente en el GVD, esta definición se formaliza en \eqref{eq:crit}, donde $d_p(p')$ es la distancia entre $p$ y $p'$. 
+Para describir el método de segmentación es necesario introducir tres nuevos conceptos asociados al $\mli{GVD}$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que corresponde a la distancia del punto $p$ al punto ocupado más cercano. De de ser $p \in \mli{GVD}$ el despeje equivale a la distancia entre $p$ y alguno de sus generadores base generalizados $\mli{GBG}_p$ (recordar que todos están a una misma mínima distancia de $p$ \eqref{eq:GBG}). El segundo es el concepto de \emph{puntos críticos} $C \subset \mli{GVD}$, que son los puntos pertenecientes al GVD que minimizan el despeje localmente en el GVD, esta definición se formaliza en \eqref{eq:crit}, donde $d_p(p')$ es la distancia entre $p$ y $p'$. 
 \begin{equation}
   % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
   C = \{p\ \in \mli{GVD} : \exists \upvarepsilon > 0, \forall p' \in \mli{GVD}, d_p(p') \leq \upvarepsilon, D(p) < D(p') \} \label{eq:crit}
@@ -674,7 +676,7 @@ región cuando esta es accesible por los robots utilizados.
 La \emph{simplicidad} es un valor que busca penalizar a las segmentaciones que
 sean demasiado complejas o demasiado simples, esto se logra midiendo la
 diferencia entre la cantidad de regiones de la segmentación generada y la 
-cantidad de regiones esperada para el entrono actual.
+cantidad de regiones esperada para el entorno actual.
 
 Finalmente la \textbf{calidad de un mapa topológico basado en regiones} se
 reduce a combinar aritméticamente la calidad de cada región y los indicadores
@@ -687,7 +689,7 @@ corresponde a su semejanza a la segmentación humana y se proporciona un metodo
 para medirla.  
 
 En el contexto del articulo la segmentación humana se aproxima como la
-segmentación que un humano genera para dicho entrono. Luego para cuantificar la
+segmentación que un humano genera para dicho entorno. Luego para cuantificar la
 semejanza se definen dos indicadores, exhaustividad y precision. 
 
 La \emph{exhaustividad} se define como el área correspondiente a la mayor 
@@ -867,7 +869,7 @@ Otro método es el que se describe en \cite{Lopez-Perez2018}, en este caso la se
 \end{equation}
 
 
-Un ejemplo de esta segmentación se muestra en la figura \ref{fig:ejemploCoordCenter} para un entrono completamente desconocido, donde se puede visualizar las posiciones de los robots y con colores se indican los distintos segmentos. Notar que por la definición de segmento cada robot $R_i$ se encuentra dentro del segmento $S_i$ que fue definido a partir de su ubicación $C_i$. %Otra cosa a notar sobre esta técnica de segmentacion es que en este caso, donde todo el espacio es desconocido, los segmentos se corresponden directamente a las regiones de un diagrama de Voronoi generado con las posiciones de los robots como generadores y para los casos en donde el espacio no es completamente desconocido se deberá excluir los puntos conocidos de las regiones de Voronoi para obtener la segmentacion propuesta.
+Un ejemplo de esta segmentación se muestra en la figura \ref{fig:ejemploCoordCenter} para un entorno completamente desconocido, donde se puede visualizar las posiciones de los robots y con colores se indican los distintos segmentos. Notar que por la definición de segmento cada robot $R_i$ se encuentra dentro del segmento $S_i$ que fue definido a partir de su ubicación $C_i$. %Otra cosa a notar sobre esta técnica de segmentacion es que en este caso, donde todo el espacio es desconocido, los segmentos se corresponden directamente a las regiones de un diagrama de Voronoi generado con las posiciones de los robots como generadores y para los casos en donde el espacio no es completamente desconocido se deberá excluir los puntos conocidos de las regiones de Voronoi para obtener la segmentacion propuesta.
 
 \begin{figure}[H]
   \center
@@ -1149,7 +1151,7 @@ superior en todos los casos. Con respecto al rendimiento, en casos simples
 (pocos robots o entorno simple) ARGoS es mejor, mientras que Gazebo es mejor en
 casos complejos (muchos robots y entorno complejo).
 
-Dada la información presentada hasta el es posible descartar a ARGoS como
+Dada la información presentada hasta el momento es posible descartar a ARGoS como
 opción dado que su simulación se considera poco realista y por su falta de
 integración con ROS. Por su licenciamiento propietario, bajo rendimiento y alta
 utilización de recursos, se descarta a CoppeliaSim como posibilidad. Entre los
@@ -1176,11 +1178,11 @@ por cinco minutos.
 El proceso de replicar el escenario en cada simulador utilizando ROS será el
 insumo para evaluar su usabilidad, mientras que para evaluar el rendimiento se
 ejecutará una vez ambas simulaciones acelerando el tiempo tanto como sea
-posible, siendo el $R$ \ref{ec:R} el indicador de rendimiento el resultado de
+posible, siendo $R_{sim}$ (\ref{ec:R}) el indicador de rendimiento resultado de
 dividir el tiempo dentro de simulación $ts$ entre el tiempo real que tome
-ejecutarla $tr$. A mayor $R$ mayor rendimiento.
+ejecutarla $tr$. A mayor $R_{sim}$ mayor rendimiento.
 \begin{equation}\label{ec:R}
- R = \frac{ts}{tr} 
+ R_{sim} = \frac{ts}{tr} 
 \end{equation}
 
 El software utilizado fue Ubuntu \emph{20.04}, ROS \emph{Noetic}, Gazebo \emph{11.4.0} y Webots \emph{R2021a}. 
@@ -1193,19 +1195,19 @@ Las implementaciones del escenario de prueba en Gazebo y Webots se encuentran
 disponible en \cite{gazebo_benchmark} y \cite{webots_benchmark}
 respectivamente.
 
-La constricción del entorno fue similar en ambos simuladores siendo
+La construcción del entorno fue similar en ambos simuladores siendo
 más cómoda en Webots ya que este dispone por defecto del modelo de robot a
 utilizar, por otro lado en Gazebo fue necesario usar un modelo creado por un
 tercero.
 
-En términos de integración con ROS, en Gazebo se logro sin inconvenientes,
-Webots requirió más trabajo en tanto no integra aspectos que permiten el uso
-de facilidades para el control de robots. Por ejemplo Webots no soporta el uso
-del paquete de ROS \emph{diff\_drive\_controller} \cite{diff_drive_controller}
-que simplifica el control de movimiento de robots diferenciales, mientras que
-Gazebo si.  \todowarn{Hay otros aspectos que Detecte como malos de Webots, como
-  necesidad de usar servicios para activar los tópicos, en vez de que estén
-activos por defecto pero me parece que es complicado de explicar en alto nivel}
+En términos de integración con ROS, en Gazebo se logró sin inconvenientes,
+Webots requirió más trabajo en tanto no integra facilidades para el control de
+robots. Por ejemplo, Webots no soporta el uso del paquete de ROS
+\emph{diff\_drive\_controller} \cite{diff_drive_controller} que simplifica el
+control de movimiento de robots diferenciales, mientras que Gazebo sí.
+\todowarn{Hay otros aspectos que Detecte como malos de Webots, como necesidad
+  de usar servicios para activar los tópicos, en vez de que estén activos por
+defecto pero me parece que es complicado de explicar en alto nivel}
 
 Otro aspecto que complejizó el uso de Webots es que su sistema de coordenadas
 por defecto (NUE) difiere del utilizado por ROS y Gazebo (ENU). Fue posible
@@ -1229,7 +1231,7 @@ que se tuvieron integrando con ROS y debido a su sistema de coordenadas por
 defecto. Gazebo resulto tener una mejor usabilidad al no presentar dichos
 inconvenientes.
 
-Por el lado del rendimiento aunque las pruebas no so
+Por el lado del rendimiento aunque las pruebas no relevancia estadistac
 
 % Como a nivel de simulacion:
 % - Los robots se tambalean hacia adelante y hacia atras mientras se mueven.
