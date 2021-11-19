@@ -1006,3 +1006,524 @@ Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada 
 % Luego esta el submódulo de planificación de ruta, este se encarga de generar una ruta que le permita al robot llegar al objetivo asignado. Esto se logra a partir del algoritmo $A*$, para la ejecución de este se asume que las celdas desconocidas son libres. En el caso de encontrarse un obstáculo en la ruta planificada se replanifica ejecutando nuevamente el algoritmo $A*$ en la version mas reciente del mapa.
 
 % El último es el submódulo de ejecución de trayectoria que se encarga de generar los comandos de actuación para seguir una ruta planeada.
+\section{Simuladores}
+
+% Introducción sobre porque simular esta bueno.
+
+La simulación es una herramienta de gran utilidad en el contexto de la robótica
+y fundamental en el desarrollo de este proyecto. 
+
+Los simuladores robóticos modelan la realidad con el propósito de %poder
+reproducir computacionalmente los aspectos de esta que son relevantes para la
+robótica. Específicamente un simulador robótico debe proporcionar un modelo de
+las interacciones físicas (gravedad, colisiones, iluminación, viento, entre
+otros) como permitir representaciones realistas de robots incluyendo sus
+sensores, actuadores y transductores.
+
+La utilidad principal de los simuladores es que permiten realizar pruebas sin
+necesidad de robots, ni de entornos reales. Esto permite validar de forma
+rápida y económica soluciones a problemas complejos. Pero no es un remplazo
+para  pruebas en la realidad, ya que los modelos utilizados realizan
+simplificaciones que pueden causar cambios con respecto al comportamiento
+real.
+
+Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
+cuatro como candidatos para utilizar en el proyecto, Gazebo \cite{gazebo},
+CoppeliaSim \cite{coppeliasim} (antes conocido como V-Rep), ARGoS \cite{argos}
+y Webots \cite{webots}.
+
+En las siguientes secciones se realiza un análisis comparativo de los simuladores
+candidatos que concluye con la elección de uno de ellos para su uso en el
+proyecto.
+
+%Esto en primer lugar permite concentrarse en los aspectos
+%más fundamentales de lo que se prueba ya que permite facilidades que en la realidad no son posibles como evitar aspectos de comunicación, 
+
+% Las principales ventajas asociadas a la simulación se derivan del 
+
+% tienen como propósito replicar escenarios 
+
+% permite realizar experimentos evitando   e una alternativa que permite validar propuestas de forma
+
+
+\subsection{Características}
+% Presentar tabla. Describir características, basado en articulos. 
+
+Existen varios estudios comparativos de simuladores robóticos que incluyen
+alguno de los candidatos \cite{Nogueira2014, SantosPessoadeMelo2019,
+ramli2015overview, Pitonakova2018}. 
+%Con el propósito de conocer más acerca de cada uno y de poder determinar cual es una buena elección para el proyecto se
+Se analizó dichos artículos y se estudió la información que se encuentra pública
+en las páginas oficiales en busca de características consideradas de utilidad, los resultados se resumen en la  
+en la tabla \ref{tab:sims}. 
+
+\begin{table}[H]
+\hbadness = 10000
+\tolerance=9999
+\emergencystretch=10pt
+\hyphenpenalty=10000
+\exhyphenpenalty=100
+\begin{center}
+  \begin{tabularx}{\textwidth}{|X|X|X|X|X|}
+
+
+\hline
+                      & Gazebo                          & CoppeliaSim                      & Webots                          & ARGoS                               \\ \hline
+Multiples robots      & \cellcolor{green!25}Si          & \cellcolor{green!25}Si           & \cellcolor{green!25}Si          & \cellcolor{green!25}Si              \\ \hline
+Simuladores físicos disponibles &                                                                                                                                         
+  %gazebo
+  \cellcolor{green!25}Bullet, ODE, Sim-body y DART  & 
+  %copelia
+  \cellcolor{green!25}Bullet, ODE, Vortex y Newton  &
+  %webots                                           
+  \cellcolor{green!25}ODE                           &
+  %argos                                            
+  \cellcolor{yellow!25} Propios                     \\ \hline
+Integración con ROS   & \cellcolor{green!25}Si          & \cellcolor{green!25}Si           & \cellcolor{green!25}Si          & \cellcolor{red!25}Inactiva \\ \hline 
+Aceleración de tiempo & \cellcolor{green!25}Si          & \cellcolor{green!25}Si           & \cellcolor{green!25}Si          & \cellcolor{green!25}Si     \\ \hline
+Modo headless         & \cellcolor{green!25}Si          & \cellcolor{green!25}Si           & \cellcolor{red!25}No            & \cellcolor{green!25}Si     \\ \hline
+Licencia              & \cellcolor{green!25}Apache 2.0  & \cellcolor{yellow!25}Propietaria & \cellcolor{green!25}Apache 2.0  & \cellcolor{green!25}MIT    \\ \hline
+  \end{tabularx}
+  \caption{Comparación entre simuladores.}
+  \label{tab:sims}
+\end{center}
+
+\end{table}
+% Pre conclusion segun las caracteristicas, introducir necesidad de experimentar
+
+Todos los simuladores candidatos permiten simular varios robots simultáneamente
+lo cual es esencial en el marco del proyecto. 
+
+Webots solo dispone de ODE \cite{ode} para la simulación física,
+mientras que Gazebo y CoppeliaSim disponen de varias alternativas entre las
+cuales se incluyen ODE y Bullet \cite{bullet}. Tanto ODE como Bullet son conocidos
+motores de físicas cuyas capacidades han sido estudiadas en diversos artículos
+\cite{bzhikhatlov2017research,erez2015simulation,ronnau2013evaluation}.
+ARGoS por su parte dispone de un simuladores 2D y 3D personalizados que según
+\cite{Pitonakova2018} son mucho más simples que los utilizados por Gazebo y
+CoppeliaSim. Esta simplicidad se comenta que esta asociada con capacidades
+limitadas, pero también es posible que sea un factor que influye positivamente
+en la eficiencia.
+
+
+ROS \cite{ros} es un middleware de control robótico, que provee facilidades que
+permiten evitar \say{reinventar la rueda} y dedicarse a los aspectos
+principales de un proyecto. 
+%Otro aspecto importante es que implementar con ROS
+%puede facilitar la migración de la implementación desarrollado en el
+%simulador para en la realidad.
+De los simuladores candidatos
+todos menos ARGoS proveen de soporte oficial para ROS. Para ARGoS existe una
+extension \cite{argos_bridge} que permite conectar a ROS con ARGoS que se
+encuentra inactiva. %hace cinco años.
+\todoremark{La introducción a ros, no se si deberia estar aca. La parte de migrar se entiende? deberia fundamentar mas? sacarla?}
+
+%utilizando las
+%facilidades estándar (por ejemplo el stack de navegación) es que el código
+%desarrollado para funcionar en el simulador se migre para funcio
+
+La posibilidad de acelerar el tiempo se encuentra presente en todos los
+simuladores, lo cual es deseable para reducir el tiempo real que lleva ejecutar
+una simulación, siempre y cuando el hardware que corra la simulaciones sea lo
+suficientemente potente para permitirlo. 
+
+Ejecutar en modo \say{headless} es ejecutar sin una interfaz gráfica, esto es
+útil porque permite dedicar más recursos computacionales a la simulación.
+Esto se permite en todos los simuladores estudiados, menos en Webots.
+
+Con respecto a las licencias Gazebo, Webots y ARGoS tienen licencias
+libres \cite{fsf}, mientras que CoppeliaSim tiene una licencia propietaria.
+Aunque la licencia de CoppeliaSim permite su uso no comercial de forma gratuita
+con propósitos educacionales, es deseable el uso de alternativas libres.
+
+En \cite{Pitonakova2018} se presenta un estudio comparativo de eficiencia entre
+CoppeliaSim, Gazebo y ARGoS. El estudio se basa en experimentos que consisten
+en distintas cantidades de robots (1, 5, 10 y 50) que se mueven en linea recta por un minuto
+evitando obstáculos en tiempo real. Esto se repitió en dos entornos distintos
+uno simple y otro complejo. Los experimentos evaluaron el rendimiento (a través
+de la aceleración de tiempo) y el uso de recursos (RAM y CPU). CoppeliaSim
+consistentemente presenta los peores resultados en uso de recursos y
+rendimiento, considerándose inviable la ejecución de las pruebas que utilizan
+50 robots. Entre ARGoS y Gazebo en términos de uso de recursos ARGoS resulta
+superior en todos los casos. Con respecto al rendimiento, en casos simples
+(pocos robots o entorno simple) ARGoS es mejor, mientras que Gazebo es mejor en
+casos complejos (muchos robots y entorno complejo).
+
+Dada la información presentada hasta el es posible descartar a ARGoS como
+opción dado que su simulación se considera poco realista y por su falta de
+integración con ROS. Por su licenciamiento propietario, bajo rendimiento y alta
+utilización de recursos, se descarta a CoppeliaSim como posibilidad. Entre los
+restantes Gazebo y Webots la información disponible dificulta tomar una
+decisión. Se busco sin éxito estudios de rendimiento y/o uso de recursos sobre
+Webots. Dado esto se decidió realizar un pequeño estudio comparativo propio
+entre Webots y Gazebo, cuyo objetivo sea evaluar el rendimiento y usabilidad de
+ambos.
+
+\subsection{Experimentación}
+% Haber introducido la necesidad de experimentar o introducirla acá.
+
+% Quizás puedo resumir los resultados y poner el resto en un anexo, o no, ver.
+\subsubsection{Método}
+El experimento se basa en replicar un mismo escenario en Gazebo y Webots una
+consiste en dos paredes de $20m$ paralelas que están a $10m$ una de la otra.
+Entremedio de estas se ubican 3 robots diferenciales pioneer 3-DX uno alineado
+con el centro de las paredes, uno a la izquierda y otro a la derecha ambos a
+$5m$ del que se encuentra en el centro. Al ejecutarse la simulación los robots
+deben avanzar hasta una de las paredes cuando se encuentran a un metro de esta
+(utilizando un LiDAR) estos cambian de dirección repitiendo el comportamiento
+por cinco minutos.
+
+El proceso de replicar el escenario en cada simulador utilizando ROS será el
+insumo para evaluar su usabilidad, mientras que para evaluar el rendimiento se
+ejecutará una vez ambas simulaciones acelerando el tiempo tanto como sea
+posible, siendo el $R$ \ref{ec:R} el indicador de rendimiento el resultado de
+dividir el tiempo dentro de simulación $ts$ entre el tiempo real que tome
+ejecutarla $tr$. A mayor $R$ mayor rendimiento.
+\begin{equation}\label{ec:R}
+ R = \frac{ts}{tr} 
+\end{equation}
+
+El software utilizado fue Ubuntu \emph{20.04}, ROS \emph{Noetic}, Gazebo \emph{11.4.0} y Webots \emph{R2021a}. 
+
+El hardware consiste de un procesador Intel Core i3-9100F, un procesador
+gráfico GeForce GTX 660 y 16GB de memoria RAM.
+
+\subsubsection{Resultados}
+Las implementaciones del escenario de prueba en Gazebo y Webots se encuentran
+disponible en \cite{gazebo_benchmark} y \cite{webots_benchmark}
+respectivamente.
+
+La constricción del entorno fue similar en ambos simuladores siendo
+más cómoda en Webots ya que este dispone por defecto del modelo de robot a
+utilizar, por otro lado en Gazebo fue necesario usar un modelo creado por un
+tercero.
+
+En términos de integración con ROS, en Gazebo se logro sin inconvenientes,
+Webots requirió más trabajo en tanto no integra aspectos que permiten el uso
+de facilidades para el control de robots. Por ejemplo Webots no soporta el uso
+del paquete de ROS \emph{diff\_drive\_controller} \cite{diff_drive_controller}
+que simplifica el control de movimiento de robots diferenciales, mientras que
+Gazebo si.  \todowarn{Hay otros aspectos que Detecte como malos de Webots, como
+  necesidad de usar servicios para activar los tópicos, en vez de que estén
+activos por defecto pero me parece que es complicado de explicar en alto nivel}
+
+Otro aspecto que complejizó el uso de Webots es que su sistema de coordenadas
+por defecto (NUE) difiere del utilizado por ROS y Gazebo (ENU). Fue posible
+configurar Webots para utilizar ENU pero se requirió hacer algunos cambios
+como rotar los elementos manualmente del entorno.
+% - Diferentes estandares en los sistemas coordenadas entre ROS("ENU") y Webots("NUE") que aunque Webots permite cambiarlo esto solo altera las traslaciones pero no las rotaciones, por lo tanto, ademas de tener que rotar todos los objetos en el mapa, otras consideraciones pueden ser necesarias. El ejemplo que se presenteo durante el desarrollo del bechmark fue la necesidad rotar los frames de referencia de los datos un lidar para visulaizarlos correctamente en rviz.
+
+Al ejecutar las simulaciones en Gazebo el comportamiento fue el esperado, en
+Webots los robots se balanceaban notoriamente de adelante hacia atrás al
+moverse, mientras que las medidas provistas por el LiDAR no se corresponden con
+las ubicaciones de la pared.
+
+Los resultados de rendimiento fueron para Webots $R=2.20$, para Gazebo $R=3.58$
+en su modo normal y $R=4.70$ haciendo uso del modo headless que Webots no dispone.
+
+\subsection{Conclusiones}
+
+Con respecto a la usabilidad, la ventaja que Webots presenta es la de tener
+disponible el modelo deseado, pero esto queda opacado por los inconvenientes
+que se tuvieron integrando con ROS y debido a su sistema de coordenadas por
+defecto. Gazebo resulto tener una mejor usabilidad al no presentar dichos
+inconvenientes.
+
+Por el lado del rendimiento aunque las pruebas no so
+
+% Como a nivel de simulacion:
+% - Los robots se tambalean hacia adelante y hacia atras mientras se mueven.
+% - Las medidas del lidar estan levenemente inclinadas horizontalmente.
+
+% Mientras que en gazebo dichos problemas no estuvieron presentes.
+
+% Por lo tanto se tomo la decicion de utlizar gazebo.
+
+% == Pruebas ==
+% Se hicieron 2 pruebas a maxima velocidad para corroborar que la performance de webots no amerite solucionar las problematicas antes mencionadas.
+
+% == Webots ==
+% Se ejecuto el benchmark de webots por 5 minutos, deteniendolo a mano, corroborando el tiempo real segun el comando time de linux y el tiempo simulado a travez de la interfaz.
+% `time roslaunch webots_benchmark benchmark.launch`
+% 111.91s user 63.17s system 55% cpu 5:13.42 total
+
+% Y en dicho timepo real se alcanzo un tiempo de simulacion de 11 minutos y 30.4.
+% por lo tanto la aceleracion de tiempo fue de (60*11+30.4)/(5*60+13.42) = 2.20279497160359900453 
+
+% == Gazebo ==
+% Se ejecuto el benchmark de gazebo por 5 minutos, deteniendolo a mano, corroborando el tiempo real segun el comando time de linux y el tiempo simulado a travez de la interfaz.
+% `time roslaunch gazebo_benchmark benchmark.launch`
+% entregando los siguientes resultados
+% 357.46s user 168.51s system 161% cpu 5:26.20 total
+
+% Y en dicho timepo real alcanzo un tiepo de simulacion de 19 minutos y 39.882 segundos
+% por lo tanto la aceleracion de tiempo fue de (19*60+30.882)/(60*5+26.20) = 3.58946045370938074801 
+
+% == Gazebo Headless ==
+% Se ejecuto el benchmark de gazebo En modo headless por 5 minutos, deteniendolo a mano, corroborando el tiempo real segun el comando time de linux y el tiempo simulado con el comando `gz stats`.
+
+% `time roslaunch gazebo_benchmark benchmark.launch`
+% entregando los siguientes resultados
+% 405.09s user 212.40s system 203% cpu 5:04.04 total
+
+% Y en dicho timepo real alcanzo un tiempo de simulacion de 1429.75 segundos
+% por lo tanto la aceleracion de tiempo fue de 1429.75/(5*60+4.04) = 4.70250624917773977108
+
+% == Webots Headless ==
+% No tiene modo headless
+
+% == Juicio de rendimiento ==
+% Gazebo obtuvo un rendimiento superior que webots (1.6 veces mas rapido). Adicionalmente gazebo tiene un modo headless que le permite correr la simulacion sin necesidad e un interfaz grafica (GUI) mientras que webots no tiene dicho modo, lo cual hace la diferencia de rendimiento aun mas grande (2.1 mas rapido).
+
+% flata de modo headless y rendimiento peor que gazebo siendo mucho peor si se compara con gazebo corriendo en modo headless
+
+% == Jucio final ==
+% Dadas los problemas expermientados en webots tanto a nivel de implementacion como a nivel de simulacion sumado a que segun las pruebas realizadas su rendimiento es peor que el de Gazebo, se tomo la decicion de utilizar a gazebo como el simulador del proyecto.
+
+
+
+% \subsection{Benchmark}
+% Dado un mapa con las siguientes características:
+% \begin{itemize}
+%   \item Piso sin textura
+%   \item 2 paredes sin textura de 20m de largo, paralelas entre si con 10m entre medio de ellas
+%   \item 3 robots pionieer 3dx con un sensor lidar de 360 grados, que:
+%   \begin{itemize}
+%       \item se encontraran equidistantes a las paredes (a 5m de ambas)
+%       \item las orientaciones de las ruedas de los robots serán perpendiculares a la pared
+%       \item el robot p3dx\_2 se encuentra en el $(0,0,0)$ y los demás estarán separados 5m entre si, habiendo un robot a cada lado de p3dx\_2  
+%   \end{itemize}
+% \end{itemize}
+
+% Los robots entonces deberán avanzar hasta estar a 1 metro de la pared, para luego cambiar el sentido de su movimiento hasta estar nuevamente a 1 metro de una pared, repitiendo este comportamiento hasta pasar cierto tiempo u otra condición (por ejemplo cierto desviamiento de la linea de movimiento ideal).
+
+% Los objetivos que pensé para el benchmark son probar:
+% \begin{itemize}
+%   \item la aceleración del tiempo 
+%   \begin{itemize}
+%     \item que tanto acelera (valor que puedo mirar a ojo o buscar si se puede obtener el valor de forma programática y promediar o algo así)
+%     \begin{itemize}
+%       \item Maxima velocidad (sin degradar)
+%       \begin{itemize}
+%         \item para ver resultados grabar el tiempo de simulación total para un tiempo real fijo
+%       \end{itemize}
+%       \item ver si se puede forzar a una velocidad (degradando)
+%       \begin{itemize}
+%         \item concentrarse en la evaluación la precision
+%       \end{itemize}
+%     \end{itemize}
+%     \item la precision, algunas posibilidades:
+%     \begin{itemize}
+%       \item mirar el desviamiento de los robots de la linea de movimiento ideal
+%       \item reducir la distancia de cambio de movimiento de forma de dar poco margen de cambio de dirección y forzar a que si la simulación 
+%            es imprecisa los robots se choquen, contar estos choques con perturbaciones de la altura o de la rotación
+%       \item distancia recorrida (mas distancia peor precision)
+%       \item grabar todo con un bag para luego hacer un estudio posterior
+%     \end{itemize}
+%   \end{itemize}
+
+%   \item Simular usando robots iguales (mismos tipos de sensores y características de los mismos) y trabajar con ros para poder predecir que problemas que se pueden tener al adaptar
+    
+%   \item Lograr tener la misma información que se tenia en el trabajo anterior:
+%   \begin{itemize}
+%     \item la Pose del robot
+%     \item la misma info provista por los sensores en el mismo formato
+%   \end{itemize}
+
+%   \item poder visualizar todo en rviz 
+
+%   \item considerar que tan automatizarle es la simulación, se puede correr con un comando? Se puede parametrize para por ejemplo indicar el numero de robots a simular? 
+%   \begin{itemize}
+%     \item ver de poder reiniciar la simulación dentro de la misma  
+%   \end{itemize}
+% \end{itemize}
+
+
+% \subsubsection{Proceso}
+% \paragraph{Gazebo}
+% \begin{enumerate}
+%   \item Instalar ros desktop full (incluye a gazebo)
+    
+%      En mi distro (arch): yay -S ros-noetic-desktop-full
+
+%   \item descargar modelo pionieer 3dx: \href{https://github.com/mario-serna/pioneer_p3dx_model}{link}
+%   \item modificar características de lidar en
+
+%         $p3dx\_description/urdf/pioneer3dx.gazebo$
+%   \begin{itemize}
+%        \item rango  
+%        \item min\_angle y max\_angle  
+%        \item ver bien en git 
+%   \end{itemize}
+%   \item Como levantar el entorno a simular con los robots
+%   \begin{enumerate}
+%     \item hacer paquete gazebo\_benchmark con launch que permite indicar:
+%     \begin{itemize}
+%        \item Que se utilizara gazebo, algunos parámetros para este y el mundo que debe cargar
+%        \item Los robots a utilizar y sus posiciones
+%     \end{itemize}
+%     \item también es posible correr el launch correspondiente a un mundo de gazebo sin robots y de forma independiente correr los launch de los robots a utilizar
+%     \item NOTA: Esto hace fácil hacer un script que posicione un numero arbitrario de robots en un mapa
+%   \end{enumerate}
+%   \item El mundo correspondiente al benchmark fue generado a partir de el mundo vació por defecto, siendo las paredes posicionadas con la herramienta `building editor` que permite generar las paredes como si se tratara de un plano (también permite puertas, ventanas y hasta escaleras que llevan a distintas plantas)
+% \end{enumerate}
+
+% \paragraph{Webots}
+% \begin{enumerate}
+%   \item Instalar webots
+%      en mi distro (arch): yay -S webots
+
+%   \item Modelo del robot ya incluido
+%   \item Al modelo le falta lidar pioneer3dx en este simulador por defecto viene con 16 sonares como se indica en \href{https://cyberbotics.com/doc/guide/pioneer-3dx}{link} por lo tanto el lidar debió ser agregado a mano:
+%   \begin{itemize}
+%     \item Descomponer el nodo que correspondiente al robot 
+%     \item agregando un sensor lidar de los incluidos
+%     \item Descomponer el nodo correspondiente al sensor
+%     \item Cambiar el nombre (se utiliza para la integración con ros)
+%   \end{itemize}
+%   \item compatibilidad con ros:
+%   \begin{enumerate}
+%     \item Cambiar el controlador del robot al controlador estándar de ROS, que esta disponible para todos los modelos robots y levanta un nodo que actúa como una capa de compatibilidad entre ros y webots. (provee servicios y tópicos para interacción webots-ros)
+%     \item establecer  el argumento name de este controlador para indicar el identificador del robot dentro del namespace de ros
+%     \item Instalar el paquete $webots\_ros$
+%   \end{enumerate}
+%   \item Como levantar el entorno a simular con los robots
+%   \begin{enumerate}
+%     \item Es necesario configurar cada robot a mano en la interfaz lo mas rápido es:
+%     \begin{itemize}
+%       \item hacer uno y luego copiar lo las veces que se requiera
+%       \item cambiando el argumento name del controlador y su posición
+%     \end{itemize}
+%     \item dado que el formato en el que se guarda un mundo es de texto plano existe la posibilidad de hacer un script que genere a partir de un mapa vació un mapa con n robots copiando descripciones bas del robot (texto plano) en las cuales se permita establecer el argumento name el controlador y posición en un mundo. 
+%     \item NOTA: la scriptiablidad es cuestionable habría que indagar que tan factible es lo descripto en 5.b 
+%   \end{enumerate}
+%   \item El mundo correspondiente al benchmark fue generado a partir de el mundo vació por defecto, las paredes se agregan de igual manera que se agrega el robot, luego su posición y dimensiones se modifican dentro del programa, se debe agregar el piso, y también modificar sus dimensiones.
+% \end{enumerate}
+
+% \subsubsection{Juicio sobre implementación}
+% \paragraph{webots} La integración con ros parece ser buena pero la documentación no es es muy buena, a pesar de esto a partir de los ejemplos que se encuentran en el paquete de ros $webots\_ros$ (que es necesario instalar para poder crear un nodo de ros que se integre con ros), se puede lograr llegar deducir ciertos aspectos que no son incluidos en la documentación:
+% \begin{itemize}
+%   \item Por ejemplo cada sensor debe ser encendido a partir de un servicio con le formato $[robot]/[sensor]/enable$ y esto no esta indicado en la documentación de como integrar con ROS (en esta se especifica el estándar a partir del cual se nombran los tópicos y servicios) y a partir de este enable se activan los tópicos que dan la información pertinente de los sensores. (esto se encuentra en la referencia que explica cada función de los sensores que también incluye los servicio y tópicos de cada sensor)
+%   \item En el código no se explica ciertas cosas que se hacen. Por ejemplo el control del tiempo.
+% \end{itemize}
+
+
+% Después de leer la documentación mas a fondo (cosas que no son de ros) comencé a ver una correspondencia entre el código de $webots\_ros$ y los ejemplos/conceptos que se documentan para las librerías "nativas" de we bots. Que me facilito la búsqueda de información, esto es porque puede buscar conceptos genéricos de webots para luego relacionarlos con los de webots-ro así solucione las dudas anteriores (enable de los sensores/actuadores y el control de tiempo).
+
+% Los motores se comandan a partir de servicios (uno para cada motor) y donde es posible establecer la velocidad angular para cada uno.
+
+% Algunos errores en $webots\_ros$ por ejemplo
+% \begin{itemize}
+%   \item usan names relativos para cosas que son globales
+%   \item si se ejecutaba la llamada de un servicio muy ripio este falla, esto no se contemplaba matando a los nodos incorrectamente
+% \end{itemize}
+
+% Funcionamiento de la integración con ros:
+
+% $NODOS\_ROS$
+
+% $<->$ (tópicos/servicios)
+
+% $CONTROLADOR\_WEBOTS\_ROS$
+
+% $<->$ (librería de webots en c++)
+
+% $WEBOTS$ 
+
+% TODO: explicar como es maso el flujo
+
+
+% \paragraph{Gazebo}
+% La integracion con ros es buena y simple, 
+
+%   - los topicos de los sensores se encuentran desde el principio activos sin necesidad de ser activados con un llamado a un servicio como en webots.
+
+%   - Existe un topico $cmd\_vel$ donde  se publica la velocidad lineal y angular que se desea que el robot tenga y esa informacion llegara a un controlador diferencial que movera los motores de forma de lograr dichas velocidades.
+
+% \paragraph{Conclusion}
+% En comparacion el uso de topicos ante servicios en el caso de los motores y el hecho de que los topicos estan activos desde un principio hacen que el codigo en el  caso gazebo sea mas simple.
+
+
+% \subsubsection{Adaptando la velocidad}
+% \begin{itemize}
+%   \item gazebo usa $m/s$
+%   \item webots usa $rad/s$ (wb\_motor\_set\_velocity(motor, 6.28);  // 1 rotation per second)
+% \end{itemize}
+
+% para lograr la correspondecia busque las dimiensiones de las ruedas en la documentacion del oficial del robot (esperando que el simulador sea realista en las dimensiones) \href{https://www.generationrobots.com/media/Pioneer3DX-P3DX-RevA.pdf}{link}. La informacion que encontre en dicha documentacion es que el diametro de las ruedas es de $0.195$ metros.
+
+% Y esto lo pude confirmar en el simulador, en la composicion del robot indica que para cualquiera de las ruedas el BoundingObjec (que indica las dimensiones para determinar colisiones) de las mismas es el grupo BOUNDING\_WHEEL y este consiste de un cilindro de radio 0.0975, osea diametro 0.195 siendo la unidade de estos valores metros.
+
+% \subsubsection{Obteniendo pose}
+% \paragraph{Gazebo}
+
+% \href{http://docs.ros.org/en/electric/api/gazebo_plugins/html/group__GazeboRosP3D.html}{GazeboRosP3D}
+
+% Es un plugin de gazebo que permite publicar la pose del robot a partir de un mensaje nav\_msgs::Odometry, configurandolo publique esta info en /[nombre\_robot]/pose
+
+% Notar que no es un mensaje de tivo geometry\_msgs::Pose pero se podria convertir en uno extrayendo la pose del mensaje de odometrai
+
+% \paragraph{Webots}
+% Para publicar la pose del robot se modifico el controlador intermedio entre webots y ros esta decicion se tomo porque de las otras alternativas que fuer on descartadas:
+% \begin{itemize}
+%   \item usar servicios de ROS ya provistos, fue descartada porque era necesario utilizar varios servicos y luego ensamblar la Pose:
+%   \begin{itemize}
+%     \item uno para obtener un ID a partir de un nombre
+%     \item otro para obtener la posicion a partir del ID 
+%     \item otro para obtener la orientacion a partir de la ID
+%     \item luego pasar la orientacion de matriz de rotaciones a quaterniones
+%     \item combinar posicion y orientacion en una Pose 
+%   \end{itemize}
+% \item usar un GPS, esto podria generar un punto extra de falla, por lo que intento primero modificar el controlador 
+% \end{itemize}
+
+% Para modificar el controlador se copio el original y se agrego al proyecto, dentro de la carpeta controllers.
+
+% Para lograr la publicar la pose en el cotnrolador se hizo un proceso similar al necesario al utilizar servicos de ROS provsitos por webots, la diferencia es que esto se hace de forma interna en el controlador utilizando funciones de la biblioteca de webots evitando asi el overhead del uso de servicios  y el codigo extra necesario para que nodo utilizando los servicois compile una pose.
+
+% Es darle al controlador la capacidad de proveer de forma nativa la pose como la queremos.
+
+% \subsubsection{rviz}
+% \paragraph{Gazebo}
+% El paquete que permite generar robots p3dx ya publica los tf que son marcos de referecia, que permiten ubicar a los robots en el mundo (?), necesarios para lograr visualizar al robot en rviz.
+
+% Fue necesartrio cambiar el parametro <frameName>map</frameName>\\ recomendado por la doc a el siguiente valor <frameName>/map</frameName>\\ (esto es porque solo map es un camino relativo y esto causa que al usar muchos robots se haga referencia a `/robot\_name/map` en lugar de `/map` como se deberia)
+
+% Para evitar warnigs de tf repetidos (TF\_REPEATED\_DATA) se cambio a false la parametro	<publishWheelTF>  del plugin diff\_drive de gazebo, porque hay un nodo que ya publica el tf de las ruedas
+
+% Observaciones: A pesar de esto quedan warnings de tf repetidos, en tiempo real son ocacionales (antes eran constantes) y en tiempo acelerado son constanes.
+
+% \paragraph{Webots}
+% En este caso los tf deben ser publicados a mano, para esto se modifico nuevamente el controlador de ros, para publicar los tf haciendo algo similar a los motrado en el siguiente tutorial:
+% \url{http://wiki.ros.org/tf/Tutorials/Writing%20a%20tf%20broadcaster%20%28C%2B%2B%29}
+
+% para lo cual fue necesario agregar la flag `-ltf` a la variable LIBRARIES del makefile del controlador de webots-ROS (si no el linker no encontraba las funiciones de tf)
+
+% Al lograr visualizar por primera vez en rviz se noto que los ejes estaban cambiados, esto es porque el sistema de coordenadas de webots estaba configurada como "NUE" mientras que "ENU" es la convencion mas usada en ros
+
+% Para esto fue de utilidad un script provisto por webots \url{https://github.com/cyberbotics/webots/tree/master/scripts/converter} que permite rotar el entorno de simulacion entero para que este quede bien al cambiar de una convencion a otra (para visualizar, si no se rotara la gravedad seria se veria horizontal)
+
+% La misma rotacion fue necesaria en la orientacion del robot, ya que el cambio de NUE a ENU no altero la forma de medir rotaciones
+
+% Observaciones: Se nota que el lidar capta la pared levenmente inclinada aunque no deberia, probe a rotarlo de forma que el lidar pueda sensar al piso y siguio pasando algo similar. Inspeccionanod el topico tambien se puede notar la diferencia entre las medidas de una parte de la "simetria" y la otra
+% Observaciones: El robot se mece (fisicamente se inclina hacia adelante y hacia atras mientras se mueve)
+
+
+
+% Cuidado con obteniend pose y tf en webots. En julio 16 (yo probe antes por lo que no pude aprovechar, capaz la wiki cambio) el \href{https://www.cyberbotics.com/doc/reference/changelog-r2021?tab-language=ros}{change log} dice esto:
+
+% Integrated ros\_control (activated through the --use-ros-control flag) to allow the usage of a $diff\_drive\_controller$ and $joint\_state\_controller$ from the $ros\_controllers package$.
+
+% Con lo que se propria facilitar el proceso de interactuar con el robot y obtener tf y pose/odom
+
+% También menciona la flag --auto-publish  que arranca todos los servicios de una.
+
+% Muy bueno, hace que webots se ponga interesante.
+
+% \subsection{No olvidarse de pasar lo que quedo en las notas}
+% == Jucio de usabilidad ==
+
+% En webots se experimentaron problemas, tanto a nivel de implementacion debido a las dificultades que dio con la integracion de ros:
+% - La documentacion sobre la integracion con ROS es brave, mas que nada menciona como cargar el controlador estandar de ros en un robot, menciona el estandar que dicho controlador utiliza nombrar topicos y servicios, y dirige al usuario a ejemplos de codigo que estan disponibles en github. Ademas de esto se cuenta con el Manual de Refencia que cuenta con las funciones de webots que, aunque tiene como foco el uso de C tambien se muestran las funciones correspondientes en varios otros lenguajes y adicionalmente el topico/servicio de ROS que provee la misma funcionalidad de la funcion.
+% Como punto final de la documentacion se menciona la posibilidad de un controlador personalizado dada la posibilidad de que con dicho controlado no sea posible cumplir con alguna tarea o que el cumplirla sea muy ineficiente.
+
