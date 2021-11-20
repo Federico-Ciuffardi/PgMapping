@@ -1,7 +1,12 @@
 % \todo[inline]{agregaría un párrafo introductorio}
-\todo[inline]{revisar ortografía (marqué algunas pero hay más) y redacción (cosas raras, omisión de artículos, repetición de palabras)}
-\section{Introducción}
-...
+% \todo[inline]{revisar ortografía (marqué algunas pero hay más) y redacción (cosas raras, omisión de artículos, repetición de palabras)}
+% \section{Introducción}
+Este capitulo tiene como objetivo introducir aspectos que conforman la base del
+trabajo desarrollado. A lo largo de este se tratan tanto problemas relevantes,
+como algunas de sus soluciones presentes en el estado del arte, finalizando con
+una discusión sobre una herramienta fundamental para el proyecto, la
+simulación.
+
 \section{Exploración}\label{sec:exploracion}
 La exploración es un problema clásico de la robótica
 móvil autónoma que consiste en utilizar un robot con el objetivo de obtener
@@ -336,7 +341,7 @@ En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD que es posible
 
 En \cite{choset2005principles} se demuestra que los GVD que utilizan los
 conjuntos conexos y convexos de puntos obstaculizados como generadores cumplen
-con las 3 propiedades necesarias para ser mapas de carreteras (sección
+con las 3 propiedades necesarias para ser \emph{roadmaps} (sección
 \ref{subsec:mapacarr}), lo cual justifica su uso para la navegación. Esto junto
 a la capacidad de generar caminos seguros ya mencionada y a otras
 características como su utilidad para la coordinación y para generar mapas
@@ -1030,9 +1035,14 @@ simplificaciones que pueden causar cambios con respecto al comportamiento
 real.
 
 Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
-cuatro como candidatos para utilizar en el proyecto, Gazebo \cite{gazebo},
-CoppeliaSim \cite{coppeliasim} (antes conocido como V-Rep), ARGoS \cite{argos}
-y Webots \cite{webots}.
+cuatro como candidatos para utilizar en el proyecto, Gazebo\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/gazebo_benchmark}},
+CoppeliaSim\footnote{\url{http://www.coppeliarobotics.com}} (antes conocido como V-Rep), ARGoS\footnote{\url{http://www.argos-sim.info}}
+y Webots\footnote{\url{http://cyberbotics.com}}.
+% Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
+% cuatro como candidatos para utilizar en el proyecto, Gazebo \cite{gazebo},
+% CoppeliaSim \cite{coppeliasim} (antes conocido como V-Rep), ARGoS \cite{argos}
+% y Webots \cite{webots}.
+
 
 En las siguientes secciones se realiza un análisis comparativo de los simuladores
 candidatos que concluye con la elección de uno de ellos para su uso en el
@@ -1096,9 +1106,10 @@ Licencia              & \cellcolor{green!25}Apache 2.0  & \cellcolor{yellow!25}P
 Todos los simuladores candidatos permiten simular varios robots simultáneamente
 lo cual es esencial en el marco del proyecto. 
 
-Webots solo dispone de ODE \cite{ode} para la simulación física,
+% \cite{ode} \cite{bullet}
+Webots solo dispone de ODE \footnote{\url{http://www.ode.org}} para la simulación física,
 mientras que Gazebo y CoppeliaSim disponen de varias alternativas entre las
-cuales se incluyen ODE y Bullet \cite{bullet}. Tanto ODE como Bullet son conocidos
+cuales se incluyen ODE y Bullet \footnote{\url{http://pybullet.org}}. Tanto ODE como Bullet son conocidos
 motores de físicas cuyas capacidades han sido estudiadas en diversos artículos
 \cite{bzhikhatlov2017research,erez2015simulation,ronnau2013evaluation}.
 ARGoS por su parte dispone de un simuladores 2D y 3D personalizados que según
@@ -1129,7 +1140,7 @@ simuladores, lo cual es deseable para reducir el tiempo real que lleva ejecutar
 una simulación, siempre y cuando el hardware que corra la simulaciones sea lo
 suficientemente potente para permitirlo. 
 
-Ejecutar en modo \say{headless} es ejecutar sin una interfaz gráfica, esto es
+Ejecutar en modo \emph{headless} es ejecutar sin una interfaz gráfica, esto es
 útil porque permite dedicar más recursos computacionales a la simulación.
 Esto se permite en todos los simuladores estudiados, menos en Webots.
 
@@ -1170,20 +1181,28 @@ El experimento se basa en replicar un mismo escenario en Gazebo y Webots una
 consiste en dos paredes de $20m$ paralelas que están a $10m$ una de la otra.
 Entremedio de estas se ubican 3 robots diferenciales pioneer 3-DX uno alineado
 con el centro de las paredes, uno a la izquierda y otro a la derecha ambos a
-$5m$ del que se encuentra en el centro. Al ejecutarse la simulación los robots
-deben avanzar hasta una de las paredes cuando se encuentran a un metro de esta
-(utilizando un LiDAR) estos cambian de dirección repitiendo el comportamiento
-por cinco minutos.
+$5m$ del que se encuentra en el centro. En la figura \ref{fig:impsim} se
+muestra el escenario de simulación implementado en los simuladores a evaluar.
+
+\begin{figure}[H]
+  \centering
+  \subfloat[Gazebo.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/sim/gazebo1.png}}
+  \qquad
+  \subfloat[Webots.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/sim/webots1.png}}
+  \caption{Implementaciones del escenario de simulación.}\label{fig:impsim}
+\end{figure}
+
+Al ejecutarse la simulación los robots deben avanzar hasta una de las paredes
+cuando se encuentran a un metro de esta (información obtenida usando un LiDAR)
+estos cambian de dirección repitiendo el comportamiento por cinco minutos.
 
 El proceso de replicar el escenario en cada simulador utilizando ROS será el
-insumo para evaluar su usabilidad, mientras que para evaluar el rendimiento se
-ejecutará una vez ambas simulaciones acelerando el tiempo tanto como sea
-posible, siendo $R_{sim}$ (\ref{ec:R}) el indicador de rendimiento resultado de
-dividir el tiempo dentro de simulación $ts$ entre el tiempo real que tome
-ejecutarla $tr$. A mayor $R_{sim}$ mayor rendimiento.
-\begin{equation}\label{ec:R}
- R_{sim} = \frac{ts}{tr} 
-\end{equation}
+insumo para evaluar su usabilidad, mientras que para evaluar el rendimiento y
+comportamiento se ejecutará una vez ambas simulaciones acelerando el tiempo
+tanto como sea posible, siendo $R_{sim}$ (\ref{ec:R}) el indicador de
+rendimiento resultado de dividir el tiempo dentro de simulación $ts$ entre el
+tiempo real que tome ejecutarla $tr$. A mayor $R_{sim}$ mayor rendimiento.
+\begin{equation}\label{ec:R} R_{sim} = \frac{ts}{tr} \end{equation}
 
 El software utilizado fue Ubuntu \emph{20.04}, ROS \emph{Noetic}, Gazebo \emph{11.4.0} y Webots \emph{R2021a}. 
 
@@ -1191,9 +1210,10 @@ El hardware consiste de un procesador Intel Core i3-9100F, un procesador
 gráfico GeForce GTX 660 y 16GB de memoria RAM.
 
 \subsubsection{Resultados}
+%\cite{gazebo_benchmark}
 Las implementaciones del escenario de prueba en Gazebo y Webots se encuentran
-disponible en \cite{gazebo_benchmark} y \cite{webots_benchmark}
-respectivamente.
+disponible en linea\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/gazebo_benchmark}}
+\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/webots_benchmark}}. 
 
 La construcción del entorno fue similar en ambos simuladores siendo
 más cómoda en Webots ya que este dispone por defecto del modelo de robot a
@@ -1209,10 +1229,10 @@ control de movimiento de robots diferenciales, mientras que Gazebo sí.
   de usar servicios para activar los tópicos, en vez de que estén activos por
 defecto pero me parece que es complicado de explicar en alto nivel}
 
-Otro aspecto que complejizó el uso de Webots es que su sistema de coordenadas
-por defecto (NUE) difiere del utilizado por ROS y Gazebo (ENU). Fue posible
-configurar Webots para utilizar ENU pero se requirió hacer algunos cambios
-como rotar los elementos manualmente del entorno.
+Otro aspecto que complejizó la integración de ROS en Webots es que su sistema
+de coordenadas por defecto (NUE) difiere del utilizado por ROS y Gazebo (ENU).
+Fue posible configurar Webots para utilizar ENU pero se requirió hacer algunos
+cambios como rotar los elementos  del entorno manualmente.
 % - Diferentes estandares en los sistemas coordenadas entre ROS("ENU") y Webots("NUE") que aunque Webots permite cambiarlo esto solo altera las traslaciones pero no las rotaciones, por lo tanto, ademas de tener que rotar todos los objetos en el mapa, otras consideraciones pueden ser necesarias. El ejemplo que se presenteo durante el desarrollo del bechmark fue la necesidad rotar los frames de referencia de los datos un lidar para visulaizarlos correctamente en rviz.
 
 Al ejecutar las simulaciones en Gazebo el comportamiento fue el esperado, en
@@ -1220,18 +1240,26 @@ Webots los robots se balanceaban notoriamente de adelante hacia atrás al
 moverse, mientras que las medidas provistas por el LiDAR no se corresponden con
 las ubicaciones de la pared.
 
-Los resultados de rendimiento fueron para Webots $R=2.20$, para Gazebo $R=3.58$
-en su modo normal y $R=4.70$ haciendo uso del modo headless que Webots no dispone.
+Los resultados de rendimiento fueron para Webots $R_{sim}=2.20$, para Gazebo $R_{sim}=3.58$
+en su modo normal y $R_{sim}=4.70$ haciendo uso del modo \emph{headless} que Webots no dispone.
 
 \subsection{Conclusiones}
 
-Con respecto a la usabilidad, la ventaja que Webots presenta es la de tener
+Con respecto a la usabilidad, Webots presenta la ventaja de tener
 disponible el modelo deseado, pero esto queda opacado por los inconvenientes
-que se tuvieron integrando con ROS y debido a su sistema de coordenadas por
-defecto. Gazebo resulto tener una mejor usabilidad al no presentar dichos
+experimentados al integrar con ROS\footnote{La version R2021b de
+Webots agrega soporte para \emph{diff\_drive\_controller}}. Gazebo resulto tener una mejor usabilidad al no presentar dichos
 inconvenientes.
 
-Por el lado del rendimiento aunque las pruebas no relevancia estadistac
+La simulación en Gazebo no presenta diferencias visibles al comportamiento esperado mientras
+que en Webots se detecto una a nivel de actuación y otra a nivel de sensado.
+
+En términos de rendimiento, aunque las resultados no tienen relevancia estadística,
+dan indicios de que el rendimiento de Gazebo es mejor que el de Webots,
+principalmente al hacer uso del modo \emph{headless}.
+
+Por estas razones se decidió que el simulador más adecuado para utilizar en el
+proyecto es Gazebo.
 
 % Como a nivel de simulacion:
 % - Los robots se tambalean hacia adelante y hacia atras mientras se mueven.
