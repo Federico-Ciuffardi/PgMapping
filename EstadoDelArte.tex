@@ -22,7 +22,7 @@ el entorno y sea ineficiente o directamente inviable teleoperar a un robot.
 Uno de los principales aspectos de la exploración autónoma es el problema de la
 asignación de tareas de exploración. Este suele separarse en dos partes
 principales, (i) identificar posibles objetivos de exploración y (ii) asignar
-al robot a uno de dichos objetivos \cite{amorin2019novel}. Para determinar
+al robot a uno de dichos objetivos \cite{wurm2008coordinated}. Para determinar
 potenciales objetivos de exploración, un método popular es el propuesto en
 \cite{yamauchi1998frontier} que consiste en identificar las fronteras entre el
 espacio conocido y desconocido, y utilizarlas como potenciales objetivos. Por
@@ -795,7 +795,7 @@ obtiene mejores resultados en general.
 Como fue mencionado en la sección \ref{subsec:expmutirob}, la coordinación es un aspecto crítico en problema de exploración multirobot, por lo tanto a lo largo del tiempo fuero desarrolladas varias propuestas para una exploración multirobot coordinada. A continuación se describen técnicas de coordinación que consisten en primero segmentar el espacio, asignar segmentos a los robots, para finalmente establecer los objetivos de exploración de robots teniendo en cuenta el segmento asignado y el segmento al que pertenece el objetivo. Las propuestas se dividen en las que segmentan el espacio considerando la topología del mismo los que segmentan según criterios no topológicos.
  % para la coordinación de una flota robótica durante la tarea de exploración de un entorno desconocido
 % para la exploración multi-robot 
-\subsection{Coordinación a partir de mapas topológicos}
+\subsection{Coordinación a partir de mapas topológicos} \label{subsec:wurmCoord}
 % En \cite{wurm2008coordinated} se describe y analiza un enfoque de coordinación que se basa en la distribución eficiente de los robots durante la exploración, teniendo en cuenta la estructura del entorno a partir del uso de mapas topológicos.
 
 En \cite{wurm2008coordinated} se describe y analiza un enfoque de coordinación que tiene en cuenta la estructura del entorno a partir del uso de mapas topológicos. La estrategia de coordinación consiste en la distribución uniforme de los robots sobre las habitaciones y corredores (segmentos), que componen a un entorno estructurado. Esto se basa, en primera instancia, en que asignar más de un robot a un mismo segmento en muchos casos puede ser una desventaja ya que este podría ser demasiado pequeño para que un segundo robot acelere su exploración aunque exista más de un objetivo de exploración en el mismo, e incluso al terminar la exploración de un segmento los robots pueden bloquearse entre sí mientras intentan abandonarlo. Por otro lado las tareas de exploración de segmentos diferentes suelen en su mayor parte ser independientes entre si. Considerando esto, distribuir los robots sobre los segmentos a explorar debería lograr una reducción del trabajo redundante y de las interferencias entre los mismos, llevando a una reducción del tiempo de exploración.
@@ -849,13 +849,14 @@ La técnica de coordinación explicada en esta sección se resume en el algoritm
 % Incluir acá a wurm la parte de coordinacion
 
 \subsection{Coordinación a partir de segmentaciones no topológicas}\label{subsec:coordNoTop}
-Existen métodos de coordinación que se basan en segmentar el espacio sin considerar su topología, uno de estos es el propuesto en \cite{Solanas2004}. En este la segmentación se basa en agrupar el espacio desconocido en tantos grupos como robots se utilizan para explorar. Las agrupaciones se determinan utilizando el algoritmo K-Means\cite{hartigan1979ak}. A continuación, cada robot se asigna a segmento cuyo centro de masa sea más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$. En la figura \ref{fig:ejemploCoodGrill} se muestra un ejemplo de esta segmentación con K = 8. %\todo{típicamente, la codificación de colores se coloca en el caption de la figura}.
+Existen métodos de coordinación que se basan en segmentar el espacio sin considerar su topología, uno de estos es el propuesto en \cite{Solanas2004}. En este la segmentación se basa en agrupar el espacio desconocido en tantos grupos como robots se utilizan para explorar. Las agrupaciones se determinan utilizando el algoritmo K-Means\cite{hartigan1979ak}. En la figura \ref{fig:ejemploCoodGrill} se muestra un ejemplo de esta segmentación con K = 8.  %\todo{típicamente, la codificación de colores se coloca en el caption de la figura}.
 \begin{figure}[H]
   \center
   \includegraphics[width=5.5cm]{imagenes/coordGrillCM.png}
   \caption[Segmentación propuesta en \cite{Solanas2004}.]{Segmentación propuesta en \cite{Solanas2004}. En blanco se indica el espacio libre, con negro el espacio ocupado, y con colores se indica el espacio desconocido, donde cada color indica un segmento diferente dentro de los cuales se indica con tonalidades más oscuras los obstáculos todavía no explorados y con amarillo su centro de masa. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
 \end{figure} 
 
+Cada robot esta asignado al segmento cuyo centro de masa sea más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$.
 Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no ocupado más corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ esta en el rango de sensado de algún robot.
 
 \begin{equation}\label{ec:costsolanas}
@@ -1119,9 +1120,9 @@ limitadas, pero también es posible que sea un factor que influye positivamente
 en la eficiencia.
 
 
-ROS \cite{ros} es un middleware de control robótico, que provee facilidades que
-permiten evitar \say{reinventar la rueda} y dedicarse a los aspectos
-principales de un proyecto. 
+ROS \cite{ros} es un framework que facilita el desarrollo de aplicaciones
+robóticas, utlizarlo evita \say{reinventar la rueda} y permite dedicarse
+a los aspectos principales de un proyecto. 
 %Otro aspecto importante es que implementar con ROS
 %puede facilitar la migración de la implementación desarrollado en el
 %simulador para en la realidad.

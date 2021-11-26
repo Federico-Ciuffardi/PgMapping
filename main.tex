@@ -78,6 +78,7 @@
 
 % = DEFINITIONS =
 \hyphenation{op-tical net-works semi-conduc-tor}
+\renewcommand\_{\textunderscore\allowbreak}
 
 \definecolor{mBlack}{rgb}{0,0,0}
 \definecolor{mGreen}{rgb}{0,0.6,0}
@@ -194,6 +195,10 @@ Tutor: Facundo Benavides%
 \include{Simuladores}
 
 \chapter{Parte Central}
+\hfuzz=10pt 
+\minitoc
+\hfuzz=0pt 
+
 \include{ParteCentral}
 
 % == BIBLOGRAPHY ==

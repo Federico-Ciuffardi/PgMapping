@@ -1,15 +1,317 @@
-\section{Hipotesis de trabajo}
-\begin{enumerate}
-  \item La comunicaciones son sin perdida y de rango infinito
-  \item Cada robot conoce en todo momento su ubicacion (posicion y orientacion).
-  \item El entrorno a explorar es cerrado.
+\section{Solución desarrollada}
+Durante el proyecto se desarrollo una solución al problema de exploración
+multirobot. Esto requiere la soluciones para una gran cantidad de problemas
+relacionados a diversos aspectos de la exploración multirobot, este proyecto se
+concentrara en algunos de ellos.
+
+% se a partir de la información sensorial de los
+El problema construir un mapa de forma cooperativa robots se soluciona construyendo una grilla de ocupación con
+el algoritmo de actualización presentado en \cite{stachniss2009robotic}.
+
+% Se presenta una solución para las dos partes asociadas al
+
+Con respecto al problema de asignación de tareas (sección
+\ref{sec:exploracion}) se presentan soluciones para cada una de sus partes.
+Para la identificación de objetivos se propone una técnica novedosa que
+determina \todo{estaria bueno aca poner un adjetivo que resuma como es el
+algorimo que desarrolle. De forma: determinista, geometrica, otro?} como
+objetivos a un subconjunto de los puntos fronterizos. Con respecto a la
+asignación de objetivos a robots, esta se resuelve de forma coordinada
+aplicando una variante de lo presentado en la sección \ref{subsec:wurmCoord}.
+
+La asignación requiere de la construcción de un mapa topológico, para esto se
+implementa la técnica descrita en la sección \ref{subsec:mapaTopGVD},
+construyendo el GVD de forma incremental con una variante del algoritmo
+\emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}).
+
+Luego de asignado a un objetivo el robot deberá llegar hasta el, para esto es
+necesario solucionar el este problema de planificación. La solución desarrollada 
+aplica las ideas de planificación jerárquica presentadas en la sección
+\ref{subsec:mapas}, con el motivo de permitir una planificación eficiente sin
+resultar en caminos innecesariamente largos.
+
+
+\section{Principales aportes}
+
+Propuesta y estudio de un algoritmo novedoso para identificación de objetivos que no se basa en un algoritmo de clasificación no supervisada (p.e. K-Means).
+
+Estudiar la coordinación que se propone en \cite{wurm2008coordinated} utilizando una construcción incremental del GVD.
+
+Propuesta y estudio de un algoritmo de construcción incremental de un GVD basado en \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando principalmente la forma de determinar las celdas pertenecientes al GVD.
+
+Adicionalmente se estudia un aspecto critico que no esta explicito en el estado del arte\todo{Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}, el problema asociado a como se tratan las celdas de estado desconocido en la construcción del GVD. Para este problema se comentan posibles alternativas, pasando por la que esta presente en el estado del arte y una técnica novedosa que permite una mayor eficiencia.
+
+% Proponer un algoritmo novedoso para la simplificacion de conjuntos de fronteras que ... (no se que poner aca, pongo)
+% Estudiar la coordinacion propuesta une wurm utilizando un  GVD incremental ya que de lo contrario no es escalable.
+% Y que adicionalemtente se implemento una construiccion de GVD novedosa que basa su construiccion en sources y pseudosources (la idea intuitiva pero considerando los potenciales problemas de discretizacion)
+% Llamado de atencion al problema de conectividad de un GVD al explorar donde en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas desconocidas, las cuales no se consideran en los articulos del estado del arte. Estos se asume (no se explicita pero en Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien) que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo desconocido es libre. En este trabajo se propone una tecnica novedosa que soluciona este problema de forma mas eficiente evitando procesar todo el espacio desconocido mientras se va explorando.
+
+\section{Hipótesis de trabajo}
+La solución desarrollada tomara las siguientes hipótesis de trabajo.
+\begin{enumerate}[label=(\roman*)]
+  \item Cada robot conoce en todo momento su ubicación (posición y orientación).
+  \item La comunicaciones son sin perdida y de rango infinito.
+  \item El entorno a explorar es cerrado.
+  % \item El entorno es estático.
 \end{enumerate}
 
+Estas hipótesis tienen el motivo de simplificar algunos aspectos del
+problema de exploración permitiendo que el trabajo se pueda enfocar en otros.
 
-\section{mejora sobre wurm}
-Wurm aparentemente no considera que el numero de robots asigandos a un segmento debe ser menor que el numero de fronteras que tiene ya que no tiene sentido asignar a un robot  a un segmento si eseete no tiene objetivos disponibles. Habria que ver bien como funciona el metodo hungaro, pero creo que es una asignacion robot-segmento que no considera otra cosa que el costo, por lo tanto el num de fronteras de un segmento no se estaria considerando
+La hipótesis I resuelve trivialmente el problema de localización. La hipótesis
+II simplifica la coordinación al no tener que considerarse en esta los posibles
+problemas de comunicación que pueden haber de asignar robots a objetivos muy
+distantes o con obstrucciones entre si. Finalmente la hipótesis III es útil
+principalmente para poder aplicar el criterio de parada que consiste en detener
+la exploración al no tener más objetivos restantes (sección
+\ref{sec:exploracion}).
+
+\section{Arquitectura}
+La arquitectura se divide en dos partes robots y unidad central.  Cada una de
+estas partes esta asociado a un hardware especifico, siendo los robots móviles
+y la estación central estática. Los robots pueden ser uno o más mientras que la
+estación central es única. Cada parte se compone de módulos los cuales cuales se
+encargan de tareas específicas. 
+
+En la figura \ref{fig:arquitectura} se resume la arquitectura en un diagrama en
+el cual es posible ver los componentes, sus módulos dichos módulos, como se
+distribuyen entre los componentes y una simplificación de las comunicaciones
+que ocurren entre ellos.
+
+
+\begin{figure}[H]
+  \center
+  \includegraphics[width=1\linewidth]{imagenes/arquitectura.png}
+  \caption[Arquitectura de la solucion propuesta.]{Arquitectura de la solución propuesta. El modulo coloreado con azul es provisto por ROS. Los módulos no coloreados fueron  implementados en esta propuesta.}
+  \label{fig:arquitectura}
+\end{figure} 
+
+En lo que resta de esta sección se comentará cada modulo, tanto sus tareas y como sus interacciones con el resto de los módulos.
+
+\subsection{Move Base}
+El modulo \emph{Move Base} consiste en una instancia del nodo ROS
+\emph{move\_base} \cite{ROS-move_base} que provee una interfaz para configurar,
+ejecutar y interactuar con el \emph{stack de navegación} de ROS
+\cite{ROS-navigation}. 
+
+El stack de navegación de ROS es un conjunto de nodos que tienen como propósito
+que un robot pueda navegar el entorno hacia objetivos dentro del mismo. En la
+figura \ref{fig:move_base} se muestra un diagrama que repesenta a los nodos que
+componen al stack de navegación de ROS y sus interacciones.
+
+\begin{figure}[H]
+  \center
+  \includegraphics[width=1\linewidth]{imagenes/move_base.png}
+  \caption[Arquitectura del stack de navegación de ROS.]{Arquitectura del stack de navegación de ROS. Extraída de \cite{ROS-move_base}.}
+  \label{fig:move_base}
+\end{figure} 
+
+Cuando se establece un objetivo de navegación este se trasmite al nodo
+\emph{global\_planner} este se encarga de generar un plan de alto nivel
+consistente de un numero de subobjetivos, que de seguirse en secuencia llevan
+al robot al objetivo sin colisiones.
+
+El camino generado por el \emph{global\_planner} es enviado al nodo
+\emph{local\_planner} que se encarga de tomar el plan en alto nivel y
+traducirlo a la secuencia las velocidades lineales y angulares que un robot
+debe tener a lo largo del tiempo para seguir el global. A dicha secuencia de
+velocidades se le conoce como plan local.
+
+El stack de navegación permite utilizar distintas implementaciones de
+\emph{global\_planner} y \emph{local\_planner}. En el trabajo desarrollado se
+hace uso del \emph{global\_planner}\cite{ROS-global_planner} valga la
+redundancia llamado \emph{global\_planner} y el \emph{local\_planner} llamado
+\emph{teb\_local\_planner}\cite{ROS-teb_local_planner}.
+
+Para generar sus planes tanto \emph{local\_planner} como \emph{global\_planner}
+requieren de un mapa, de esto se encargan los nodos \emph{local\_costmap} (mapa
+local) y \emph{global\_costmap} (mapa global) respectivamente. Ambos dos son
+una instancia de una misma clase de nodo llamada \emph{costmap\_2d}
+\cite{ROS-costmap_2d}, que dentro de sus funcionalidades esta la de de
+construir una grilla de ocupación a partir de los datos sensoriales provistos
+por los robots. Las principales diferencias entre el mapa global y el local son su
+tamaño de celda (pequeño en el local y grande en el global), sus dimensiones
+del mapa (el mapa global es el mapa completo mientras que el local es solo una
+porción) y sus marcos de referencia (el mapa global suele estar fijo, el local se
+centra en el robot).
+
+El nodo \emph{recovery\_behaviors} permite ejecutar comportamientos de
+recuperación de detectarse que el robot no esta avanzando de forma correcta al
+objetivo. Para la solucion desarrollada solo se hace uso del comportamientos de
+recuperación que consite en que el robot rote en el lugar.
+%en el lugar y forzar que recalculen porciones del mapa.
+
+% El \emph{global\_planner} hace uso de un mapa global, este mapa es provisto por 
+
+
+% lograr esto cuando se establece un objetivo de navegación,
+
+
+% de permitir que un robot pueda mover que a partir de información sobre la ubicación, sensores del robot, v 
+
+
+\subsection{Combinador de mapas}
+El modulo \emph{Combinador de mapas} es el encargado de mantener el mapa del entorno
+explorado. Este recibe las actualizaciónes de los mapas globales que son
+generados por el nodo \emph{global\_costmap} del stack de navegacion de cada
+robot y las combina en un unico mapa que contenga toda la información
+recopilada del entorno. Cuando el mapa combinado global se actualiza este
+retrasmite lo actualizado a diversos componentes del sistema (ver figura
+\ref{fig:arquitectura}) que utlizan el mapa del entorno explorado para llevar a
+cabo alguna de sus tareas. 
+
+\subsection{Controlador central}
+
+El modulo \emph{Controlador central} lleva a cabo la identificacion de objetivos, es decir detectar en
+el mapa actual los potenciales objetivos de exploracion. 
+
+A su vez es el principal responsable de realizar la asignacion de objetivos.
+Específicamente la asignacion de objetivos consiste en una subasta en la cual
+este modulo actua como subastador. La subasta se puede resumir de la siguiente
+manera, los objetivos de exploracion identificados son transmitidos desde el
+controlador central a los robots los cuales valuan a dichos objetivos segun que
+tan conveniente les es llegar a ellos. Los robots envian sus valuaciones a la
+central la cual aplica una algorimo para determinar que objetivo le corresponde
+a cada robot y posteriormente le informa a cada robot que objetivo le
+corresponde.
+
+% tiene el
+% siguiente funciona en la cual  de objetivos consite en tomar los objetivos
+% identificados y coordinar
+
+% La prinicpal es la de llevar a cabo la identificación de tareas y ser el 
+
+% e encarga de coordinar las subastas de segmentos, es decir, genera la
+% información necesaria para esta, decide cuando comienza la subasta y cuando
+% termina el plazo para ofertar, computa los resultados y se encarga de las
+% comunicaciones necesarias para llevarla a cabo.
+
+\subsection{Controlador de movimiento}
+El modulo \emph{Contrador de movimiento} es como su nombre lo indica el modulo
+que se encarga de controlar el movimiento del robot. Específicamente recibe
+caminos compuesto por celdas de la grilla de ocupacion que en secuencia llevan
+a un objetivo de exploracion, y se encarga de ir enviando objetivos de
+navegacion al modulo \emph{Move Base} para que el camino sea ejecutado de forma
+rapida evitando maniobras innecesarias.
+
+Tambien lleva a cabo una capa superior de comportamientos de recuperacion sobre los provistos por el modulo \emph{Move Base}.
+
+\subsection{Controlador del robot}
+El \emph{Controlador del robot} es el modulo que se encarga de valuar los
+objetivos cuando ocurre una subasta. A su vez se encarga de procesar las
+asignaciones de objetivos determinadno el camino que lleva al objetivo y
+enviandolo al modulo \emph{Controlador de movimiento}. 
+
+% \section{Ciclo de robot}
+
+% \section{Ciclo de la central}
+\section{Definiciones}
+\subsection{Grillas de ocupacion}
+En el contexto de este trabajo se utlizara las siguientes definiciones referentes a
+grillas de ocupacion.
+
+El conjunto $C\subseteq R^2$ esta conformado de los centros de cada celda de la
+grilla de ocupacion. Las celdas se repreresentan segun sus centros y viceversa
+sin ambigüedad, por lo tanto en lo que resta de este informe se usaran ambos
+terminos de forma indistinta.
+
+Se dice que cada celda $c\in C$ tiene asociada una probabilidad $P(c|m(1:k))$
+de estar ocupada, donde $m(1:k)$ es el conjunto de medidas resultantes de algun
+sensor desde el comienzo de la exploarcion.
+
+La funcion $e : C \rightarrow E$ dado un centro de celda, devuelve uno de los
+tres estados posibles $E=\{libre, ocupado, desconocido\}$ segun la probabilidad
+asociada a $c$. En el contexto de este proyecto la funcion $e$ se define segun
+(\ref{eq:estado}).
+\begin{equation} 
+  e(c)= 
+  \left \{ 
+    \begin{aligned}
+       libre       &\ \ \ \text{ si}& P(c|m(1:k)) < 0.5 \\
+       desconocido &\ \ \ \text{ si}& P(c|m(1:k)) = 0.5 \\
+       ocupado     &\ \ \ \text{ si}& P(c|m(1:k)) > 0.5
+    \end{aligned}
+  \right .
+  \label{eq:estado}
+\end{equation}
+
+La funcion $Ady : C \rightarrow P(C)$ dada una celda devuelve el conjunto de
+celdas adyacentes a la misma. La definicion de $Ady$ utlizada en el contexto de
+este proyecto se presenta en (\ref{eq:vecinos}) donde $n_1, n_2, ..., n_8$ se
+corresponden a vecinos diagonales y horizontales de $c$ segun se muestran en la
+figura \ref{fig:vecinos}.
+
+\begin{equation} 
+ Ady(c)=\{n_i : 1\leq i \leq 8, n_i \in C\}
+ \label{eq:vecinos}
+\end{equation} 
+
+\begin{figure}[H]
+  \center
+  \includegraphics[width=0.3\linewidth]{imagenes/vecinosSharp.png}
+  \caption[Vecinos de una celda en una grilla de ocupación.]{Vecinos de una celda en una grilla de ocupación.}
+  \label{fig:vecinos}
+\end{figure} 
+
+% This map is obtained from the occupancy probability grid by a simple clipping operation with a threshold of 0.5. The gray areas of the maximum-likelihood map correspond to cells that have not been sensed by the robot.
 
 
 
-- Mencionar el uso de las fronteras seignificativsa de \cite{amorin2019novel} como heuristica de coordinacion y que para evitar acumular robots en segmentos
+
+\section{Identificación de objetivos}
+El problema de identificación de objetivos consiste en determinar los puntos
+del espacio a los cuales es conveniente enviar robots para recolectar nueva
+informacion sobre el entorno explorado. Estos puntos son los llamdos objetivos
+de exploración. 
+% En el contexto del trabajo desarrollado al utlizarse una grilla de ocupacion
+% como mapa los 
+% se hablara de celdas en lugar de puntos, existiendo una correspondencia entre
+% cada celda y un unico punto en el espacio, su centro.
+
+En \cite{yamauchi1998frontier} se propone que los lugares que permiten
+recolectar la mayor cantidad de nueva informacion sobre el entorno son las
+fronteras entre el espacio conocido y desconocido. Y que por lo tanto dichas
+fornteras deben ser los objetivos de exploración.
+Al utlizar una grilla de ocupacion como mapa, las fronteras se definen como las
+celdas cuyo estado asociado es $libre$ y son adyacentes a una celda cuyo estado
+asociado es $desconocido$ (figura \ref{fig:fronteras}).
+Por lo tanto segun Yamauchi los objetivos de exploración seran las celdas
+fronteras $F$ segun se definen en (\ref{eq:fronteras}).
+\begin{equation} 
+  F = \{ c \in C : e(c) = libre, \exists n \in Ady(c), e(n) = desconocido  \}
+  \label{eq:fronteras}
+\end{equation}
+
+
+\begin{figure}[H]
+  \centering
+  \subfloat[Se identifican las celdas frotneras,  marcadas con amarillo.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/a.png}\label{fig:fronteras}}
+  \qquad
+  \subfloat[Se Determinan los conjuntos de fornteras disjuntos $F_i$, cada color distinto representa un $i$ distinto.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/b.png}}
+  \qquad
+  \subfloat[Se obtienen las celdas frontera significativas de cada $F_i$ indicados con verde.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/c.png}}
+
+  \caption[Proceso de extracción de fronteras representativas.]{Proceso de extracción de fronteras representativas. Cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Extraído de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
+\end{figure}
+
+
+% - Mencionar el uso de las fronteras seignificativsa de \cite{amorin2019novel} como heuristica de coordinacion y que para evitar acumular robots en segmentos
+
+\section{Asignación de objetivos}
+\todo{Wurm aparentemente no considera que el numero de robots asigandos a un segmento debe ser menor que el numero de fronteras que tiene ya que no tiene sentido asignar a un robot  a un segmento si eseete no tiene objetivos disponibles. Habria que ver bien como funciona el metodo hungaro, pero creo que es una asignacion robot-segmento que no considera otra cosa que el costo, por lo tanto el num de fronteras de un segmento no se estaria considerando}
+
+\subsection{Contruccion del GVD}
+
+\subsection{Segmentacion}
+
+
+\section{Planificación}
+
+\section{Construcción cooperativa del mapa}
+
+
+% \section{mejora sobre wurm}
+
+
+
 
