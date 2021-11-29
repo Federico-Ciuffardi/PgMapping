@@ -33,7 +33,7 @@ resultar en caminos innecesariamente largos.
 
 \section{Principales aportes}
 
-Propuesta y estudio de un algoritmo novedoso para identificación de objetivos que no se basa en un algoritmo de clasificación no supervisada (p.e. K-Means).
+Propuesta y estudio de un algoritmo novedoso para identificación de objetivos basado en la simplificacion de fronteras.% que no se basa en un algoritmo de clasificación no supervisada (p.e. K-Means).
 
 Estudiar la coordinación que se propone en \cite{wurm2008coordinated} utilizando una construcción incremental del GVD.
 
@@ -52,6 +52,7 @@ La solución desarrollada tomara las siguientes hipótesis de trabajo.
   \item Cada robot conoce en todo momento su ubicación (posición y orientación).
   \item La comunicaciones son sin perdida y de rango infinito.
   \item El entorno a explorar es cerrado.
+  \item Los robots son circulares e iguales entre sí.
   % \item El entorno es estático.
 \end{enumerate}
 
@@ -61,10 +62,10 @@ problema de exploración permitiendo que el trabajo se pueda enfocar en otros.
 La hipótesis I resuelve trivialmente el problema de localización. La hipótesis
 II simplifica la coordinación al no tener que considerarse en esta los posibles
 problemas de comunicación que pueden haber de asignar robots a objetivos muy
-distantes o con obstrucciones entre si. Finalmente la hipótesis III es útil
+distantes o con obstrucciones entre si. La hipótesis III es útil
 principalmente para poder aplicar el criterio de parada que consiste en detener
 la exploración al no tener más objetivos restantes (sección
-\ref{sec:exploracion}).
+\ref{sec:exploracion}). 
 
 \section{Arquitectura}
 La arquitectura se divide en dos partes robots y unidad central.  Cada una de
@@ -194,7 +195,11 @@ a un objetivo de exploracion, y se encarga de ir enviando objetivos de
 navegacion al modulo \emph{Move Base} para que el camino sea ejecutado de forma
 rapida evitando maniobras innecesarias.
 
-Tambien lleva a cabo una capa superior de comportamientos de recuperacion sobre los provistos por el modulo \emph{Move Base}.
+Tambien lleva a cabo una capa superior de comportamientos de recuperacion
+extendiendo los provistos por el modulo \emph{Move Base}.
+
+Indica al \emph{Controlador del robot} si se completo el camino con exito, o
+existe algun problema.
 
 \subsection{Controlador del robot}
 El \emph{Controlador del robot} es el modulo que se encarga de valuar los
@@ -202,7 +207,11 @@ objetivos cuando ocurre una subasta. A su vez se encarga de procesar las
 asignaciones de objetivos determinadno el camino que lleva al objetivo y
 enviandolo al modulo \emph{Controlador de movimiento}. 
 
-Tambien pide la subasta.\todo{explicar mejor}
+Tambien es responsable por solicitar el inicio de una subasta al
+\emph{Controlado central} cuando el \emph{Controlador de moviemiento} indica el
+exito o el fracaso en seguir el camino asignado.
+
+% Tambien pide la subasta.\todo{explicar mejor}
 
 % \section{Ciclo de robot}
 
@@ -210,7 +219,7 @@ Tambien pide la subasta.\todo{explicar mejor}
 \section{Definiciones}
 \subsection{Grillas de ocupacion}
 En el contexto de este trabajo se utlizara las siguientes definiciones referentes a
-grillas de ocupacion.
+grillas de ocupacion, introducidas en la seccion \ref{subsec:mapas}.
 
 El conjunto $C\subseteq R^2$ esta conformado de los centros de cada celda de la
 grilla de ocupacion. Las celdas se repreresentan segun sus centros y viceversa
@@ -268,6 +277,18 @@ $i\in[1,N]$ tales que:
   \item Para todo $i \in [1,N]$, para todo par $c_1,c_2 \in C_i$ se cumple que $c_1 \in ady(c_2)$.
   \item No existen $i,j \in [1,N]$ tales que existan $c_1 \in C_i$ y $c_2 \in C_j$ que cumplan con $c_1 \in ady(c_2)$ 
 \end{itemize}
+
+Un ejemplo de una descomposicion en componentes conexas se muestra en la figura \ref{fig:fronterasCompCon}.
+
+\begin{figure}[H]
+  \centering
+  \subfloat[Las celdas pertenecientes a $C$ se marcan con azul.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/compCon/a.png}}
+  \qquad
+  \subfloat[Cada componente conexa de $C$ se contornea con rojo.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/compCon/b2.png}}
+
+  \caption{Descompocicion en componentes conexas.}\label{fig:descCompCon}
+\end{figure}
+
 Es posible obtener las compnentes conexas de un conjunto cualquiera $C$ de
 celdas con el algoritmo \ref{alg:compcon}
 
@@ -306,12 +327,11 @@ celdas con el algoritmo \ref{alg:compcon}
 \end{algorithm}
 
 Este algoritmo se resume en elegir una celda $c\in C$ que no este aun en una
-componente conexa (linea 6), aplicar un dfs partiendo $c$ agregado todas las
-celdas recorridas a una misma componente conexa (lineas 7-19). Repetir dicho
-procedimiento hasta que todas las celdas pertenezcan a una componente conexa
-(linea 4), luego de lo cual se obtienen todas coas componentes conexas de $C$.
-Este algormitmo es basicamente el que esta presente en
-\cite{hopcroft1973algorithm}.
+componente conexa (linea 6), aplicar un \emph{depth-first search} (DFS)
+partiendo $c$ agregado todas las celdas recorridas a una misma componente
+conexa (lineas 7-19). Repetir dicho procedimiento hasta que todas las celdas
+pertenezcan a alguna componente conexa (linea 4). Este algormitmo es analogo al
+que esta presente en \cite{hopcroft1973algorithm}.
 
 \section{Identificación de objetivos}
 El problema de identificación de objetivos consiste en determinar los puntos
@@ -323,6 +343,7 @@ de exploración.
 % se hablara de celdas en lugar de puntos, existiendo una correspondencia entre
 % cada celda y un unico punto en el espacio, su centro.
 
+\subsection{Fronteras}
 En \cite{yamauchi1998frontier} se propone que los lugares que permiten
 recolectar la mayor cantidad de nueva informacion sobre el entorno son las
 fronteras entre el espacio conocido y desconocido. Y que por lo tanto dichas
@@ -337,50 +358,180 @@ fronteras $F$ segun se definen en (\ref{eq:fronteras}).
   \label{eq:fronteras}
 \end{equation}
 
+\subsection{Fronteras simplificadas según K-Means}
 En \cite{amorin2019novel} se argumenta que tratar todas las celdas fronteras
-como tareas de exploración diferentes podría ser computacionalmente
+como objetivos de exploración diferentes podría ser computacionalmente
 prohibitivo. Por lo tanto, para reducir el costo computacional, se intenta
 reducir los objetivos de exploración a las celdas frontera mas representativas,
-a las cules se referiran como fronteras significativas. Para determinar las
-fronteras significativas, primero, las celdas fronteras $F$ se descomponen en
-sus componentes conexas $CF$ (seccion \ref{subsec:CompComp}), un ejemplo de
-este tipo de descomposicion se puede ver en la figura
-\ref{fig:fronterasCompCon}. Luego, las fronteras mas representativas de cada
-conjunto $C_i$ se obtienen agrupando las celdas fronteras con el algoritmo
-K-Means \cite{macqueen1967some}.
+a las cuales se denominaran como fronteras significativas.
 
-con $k=\frac{|F_i|}{2r}$ donde $r$ es el radio de sensado del robots.
-Este proceso busca reducir los objetivos de exploración de forma de que cada
-frontera sea perceptible desde al menos uno de los objetivos y a su vez
-minimizar las celdas frontera que pueden ser percibidas desde mas de un
-objetivo. La figura \ref{fig:ejemploFrontSig} contiene un ejemplo de las
-distintas partes del proceso de extracción de fronteras significativas con
-$r=6.l$ siendo $l$ el largo de un lado de celda.
+Para determinar las fronteras significativas, primero, las celdas fronteras $F$
+se descomponen en sus componentes conexas $\mli{FC}=\{F_1,F_2,...F_N\}$
+(seccion \ref{subsec:CompComp}), un ejemplo de este tipo de descomposicion se
+puede ver en la figura \ref{fig:fronterasCompCon}.
+
+Luego se determinan las fronteras significativas $\mli{FS}_i$ de cada
+componente conexa $F_i\in \mli{FC}$. Esto se hace agrupando las fronteras de
+$F_i$ con el algoritmo K-Means \cite{macqueen1967some}, y determinando una
+frontera significativa por cada una de las $k$ agrupaciones, la
+frontera mas cercana de $F_i$ al centroide de la agrupacion (una arbitraria de
+las mas cercanas en el caso de que exista mas de una). Un ejemplo de las
+fronteras significativas  $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ obtenidas con
+este metodo se muestra en la figura \ref{fig:fronterasSig}.
+
+El $k$ utilizado para ejecutar K-Means es el minimo que logra que para toda
+frontera $f\in F_i$ existe $\mli{fs} \in FS_i$ tal que $d_{\mli{fs}}(f) <
+rango$ siendo $rango$ el rango de los sensores del robot. Parafraseando, el
+conjunto de fronteras significativas $\mli{FS}_i \subset F_i$ cumple con que
+cada frontera esta dentro del rango del sensado de alguna frontera
+significativa, cuando esto se cumple se dice que $\mli{FS}_i$ cubre a $F_i$, o
+que $FS_i$ logra el cubrimiento. En la figura \ref{fig:fronterasSigCub} se
+puede ver como las fronteras significativas obtenidas $FS$ logran el
+cubrimiento, ya que todas los centros de las fronteras $F$ estan contenidos en
+las circunferencias de radio $rango$ centradas en las frontera significativa
+$FS$.
+
+Para encontrar el minimo $k$ con las que se logra un $\mli{FS}_i$ que cubra a
+$F_i$, se parte con $k=1$, si el resultado no logra cubrir incrementa $k$ y se
+repite el proceso.
+
 
 \begin{figure}[H]
   \centering
-  \subfloat[Se identifican las frotneras,  marcadas con amarillo.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/a.png}\label{fig:fronteras}}
+  \subfloat[Se identifican las frotneras,  marcadas con amarillo.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/a.png}\label{fig:fronteras}}
   \qquad
-  \subfloat[Descompocicion de las fronteras en componentes conexas, cada componente conexa se indica con un color distinto.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/b.png}\label{fig:fronterasCompCon}}
+  \subfloat[Descompocicion de las fronteras en componentes conexas, cada componente conexa se indica con un color distinto.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/b.png}\label{fig:fronterasCompCon}}
   \qquad
-  \subfloat[Frontera significativas (indicadas con verde) de cada componente conexa.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/c.png}}
+  \subfloat[Frontera significativas (indicadas con verde) de cada componente conexa.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/c.png}\label{fig:fronterasSig}}
+  \qquad
+  \subfloat[Se logra el cubrimiento con un rango igual a 4 largos de celda.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/d.png}\label{fig:fronterasSigCub}}
 
-  \caption[Proceso de extracción de fronteras representativas.]{Proceso de extracción de fronteras representativas. Cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Extraído de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
+  \caption[Proceso de simplificacion de froteras según K-Means.]{Proceso de simplificacion de froteras según K-Means. Cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Basada en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
 \end{figure}
 
-% \begin{figure}[H]
-%   \centering
-%   \subfloat[Se identifican las celdas frotneras,  marcadas con amarillo.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/a.png}\label{fig:fronteras}}
-%   \qquad
-%   \subfloat[Se Determinan los conjuntos de fornteras disjuntos $F_i$, cada color distinto representa un $i$ distinto.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/b.png}\label{fig:fronterasCompCon}}
-%   \qquad
-%   \subfloat[Se obtienen las celdas frontera significativas de cada $F_i$ indicados con verde.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/c.png}}
+% En la seccion anterior se presento un metodo que soluciona el siguiente
+% problema. Dado un conjunto de  la descomposicion en componentes conexas de
+% $F$, $\mli{FC}=\{F_1,F_2,...F_N\}$ se obteniene como salida el conjunto
+% $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ que cumple con la restriccion de que
+% para todo $i \in [1,N]$ $\mli{FS}_i$ cubre a $F_i$.
 
-%   \caption[Proceso de extracción de fronteras representativas.]{Proceso de extracción de fronteras representativas. Cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Extraído de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
-% \end{figure}
+El problema descrito hasta el momento se puede resumir en el de  dado un
+conjunto de fornteras $F$, obtener un conjunto de fornteras significativas
+$\mli{FS}$ que cumplen con la restriccion de que $\mli{FS}$ cubre a $F$.
+Recordando que el proposito de usar $\mli{FS}$ como objetivos de exploracion en
+lugar de usar $F$ es reducir los objetivos de exploracion entoces es natural
+pensar que la soluciones optimas reducen al minimo el $\mli{FS}$ resultante,
+mientras mantienen la restriccion de cubrimiento.
+
+% Analizando la restriccion de cubrimiento, se puede ver que un indicador de que
+% una solucion es suboptima es que varias celdas $\mli{FS}$ se concentren,
+% solapandose las circunferencias de radio $rango$ centradas en ellas. Por
+% ejemplo 
+
+Dado esto es posible ver que en el ejemplo presentado en
+\ref{fig:ejemploFSKMMal} el resultado obtenido por el metodo presentado en esta
+seccion no es optimo ya que existen fronteras significativas innecesarias para
+el cubrimiento. 
+
+\begin{figure}[H]
+  \centering
+  \subfloat[Fronteras significativas obtenidas segun el metodo basado en K-Means, con $rango = 5.6$.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/a_sin_circ.png}}
+  \qquad
+  \subfloat[Dos de las fronteras significativas de la parte inferior derecha de (a) no son necesarias para lograr el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/b.png}}
+
+  \caption[Simplificacion de fronteras suboptima resultante del metodo basado en K-Means.]{Simplificacion de froteras suboptima resultante del metodo basado en K-Means. Extraída de implementacion desarrollada\footnotemark.}\label{fig:ejemploFSKMMal}
+\end{figure}
+\footnotetext{Podria indicar el bag y el seg}
+
+Resultados suboptimos similares se obtienen de forma consistente %al aplicarse la simplficacion 
+sobre componentes conexas con forma serpenteante \todo{no se
+  si este termino se entiende, me es dificil explicarlo bien, con forma de S?},
+  asimetricas y con un largo mayor a $rango*8$ 
+\todo[inline]{se entiende la idea del largo aplicada a esto? Creo que puede
+quedar claro mirando la foto pero tengo mis dudas. La idea en realidad seria
+decir que la solucion no es lo suficientemente simple, por ejemplo si con 1
+sola frontera sig ya se cubre todo entonces no va haber problema sin importar
+que tan serpenteante o asimetrica sea. Pero se me ocurre que por el largo puede quedar mas claro}
+, empeorando (mayor cantidad de fornteras significativas
+innecesarias para el cubrimiento) a medida que las componentes conexas de
+fronteras son mas largas y las curvas son mas intrincadas.
+
+% (comentarlos, distribuciones desparejas, acumulacion, no
+% equidistantes) 
+
+% Una explicacion posible a este comportamiento es que la distibucion de centroides en K-Means 
+
+% Algo que se repite en estas situaciones es que suele haber zonas, en donde las
+% fornteras significativas se acumulan, y zonas en las que estan muy dispersas
+% (casi a $rango$ de distancia una de la otra, el maximo). Esto lleva a pensar que K-Means se tiende a ubicar concentrar los centroides en una zona,
+
+Esto se presume que se debe principalmente a dos factores relacionados a
+K-Means. (i) K-Means no considera la restriccion de cubrimiento para generar sus
+resultados. La restriccion se fuerza ejecutando K-Means con el minimo $k$
+(obtenido con prueba y error) segun el cual las fronteras significativas
+resultantes logran el cubrimiento. (ii) Los centroides resultantes de K-Means
+no son fronteras. Estos se deben traducir a fronteras posteriormente.
+
+\todo{Hay una arbitrariedad asociada a k-means tambien lo cual puede ser criticado tambien, aunque deberia estudiar mejor el tema, quizas no criticarlo aca pero destacar que el otro metodo es menos opaco en como elige las front sig}
+% Esto es la clase de pe la idea de obtener fornteras significativas es reducir el numero
+% de objetivos de exploracion,
+
+% El metodo basado en K-Means aunque funciona bien al aplicase en componentes conexas pequeñas, 
+
+% El metodo descrito en la seccion resulta en un conjunto de fronteras
+% significativas que cubren a las fronteras, el problema que se detecto
+% experimentalmente es que en ciertos casos el resultado  la discribucion de las
+% fronteras significativas es mala, se concentran mucho en ciertas porciones y se alejan 
+
+\subsection{Fronteras simplificadas según su geometría}
+Con esto en mente se desarrolla un metodo novedoso que considera los dos puntos
+destacados anteriormente. (i) Tomando en cuenta el cubrimiento y su
+optimizacion como parte fundamental del algorimo. (ii) Dando directamente
+fronteras como resultado.
+
+El algorimo al igual que el descrito en la seccion anterior comienza
+descomponiendo a las fronteras $F$ en sus componentes conexas
+$\mli{FC}=\{F_1,F_2,...F_N\}$ para luego obtener las fronteras significativas
+$\mli{FS}_i$ para cada componente $F_i$, siendo el conjunto total de fronteras
+significativas $FS$ la union $\bigcup^N_{i=0} \mli{FS}_i$
+
+Para obtener las fronteras significativas de $F_i$ el algorimo parte mantiene
+las fronteras sigficativas determinadas $\mli{FS}_i := \emptyset$ y el conjunto
+todas las fronteras que resta cubrir $\mli{UF} := F_i$ (siglas del ingles
+\emph{uncovered frontiers}), y a grandes rasgos consiste en:
+\begin{enumerate}
+  \item Elegir una frontera de $\mli{UF}$ como frontera significativa $\mli{fs}$.
+
+  \item Actualizar $\mli{FS}$ agregando a $\mli{fs}$:
+
+    $\mli{FS} := \mli{FS} \in \{\mli{fs}\}$
+
+  \item Actualizar $\mli{UF}$ removiendo todas las fronteras cubiertas por $\mli{fs}$:
+
+    $\mli{UF} := \mli{UF} - \{ f\in F : d_{\mli{fs}}(f) < rango\}$
+
+  \item Si $\mli{UF} \neq \emptyset$ volver a 1. de lo contrario devolver $FS_i$.
+\end{enumerate}
+
+% De los pasos presentados el primero es el principal y tambien el mas complejo
+% del algorimo.
+
+Los pasos del 2 al 4 no presentan ambigüedad, siendo el primer paso en el que
+resta aclarar, especificamente resta aclarar el criterio con el que se elige la
+frontera significativa. La eleccion en un principio podria ser aleatoria y el
+algormitmo daria resultados correctos, pero esto dejaria a la suerte la
+optimalidad. La idea seria elegir una frontera significativa que cubra la mayor
+cantidad de frotneras evitando cubrir nuevametne fronteras que ya sean
+cubiertas por otra frotntera significativa.
 
 
-% - Mencionar el uso de las fronteras seignificativsa de \cite{amorin2019novel} como heuristica de coordinacion y que para evitar acumular robots en segmentos
+DESCRIBIR algo a detalle, fotitos, etc.
+
+% EL algorimo se basa en la idea de que una buena distribucion de fronteras
+% significativas deberia mantener en su mayor parte una distancia de $rango*2$
+% entre cada frontera significativa, ya que esta es la distancia maxima que se
+% puede tener para asegurar qu se cumpla el cubrimiento. 
+
 
 \section{Asignación de objetivos}
 \todo{FEDE: Wurm aparentemente no considera que el numero de robots asigandos a un segmento debe ser menor que el numero de fronteras que tiene ya que no tiene sentido asignar a un robot  a un segmento si eseete no tiene objetivos disponibles. Habria que ver bien como funciona el metodo hungaro, pero creo que es una asignacion robot-segmento que no considera otra cosa que el costo, por lo tanto el num de fronteras de un segmento no se estaria considerando}
