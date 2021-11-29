@@ -322,7 +322,7 @@ celdas con el algoritmo \ref{alg:compcon}
   }
   \Return $CC$ 
 
-  \caption{Asignación de objetivos}
+  \caption{Descomposicion en componentes conexas de $C$}
   \label{alg:compcon}
 \end{algorithm}
 
@@ -358,7 +358,7 @@ fronteras $F$ segun se definen en (\ref{eq:fronteras}).
   \label{eq:fronteras}
 \end{equation}
 
-\subsection{Fronteras simplificadas según K-Means}
+\subsection{Simplificacion de Fronteras basada en K-Means}
 En \cite{amorin2019novel} se argumenta que tratar todas las celdas fronteras
 como objetivos de exploración diferentes podría ser computacionalmente
 prohibitivo. Por lo tanto, para reducir el costo computacional, se intenta
@@ -380,7 +380,7 @@ fronteras significativas  $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ obtenidas con
 este metodo se muestra en la figura \ref{fig:fronterasSig}.
 
 El $k$ utilizado para ejecutar K-Means es el minimo que logra que para toda
-frontera $f\in F_i$ existe $\mli{fs} \in FS_i$ tal que $d_{\mli{fs}}(f) <
+frontera $f\in F_i$ existe $\mli{fs} \in FS_i$ tal que $d_{\mli{fs}}(f) \leq
 rango$ siendo $rango$ el rango de los sensores del robot. Parafraseando, el
 conjunto de fronteras significativas $\mli{FS}_i \subset F_i$ cumple con que
 cada frontera esta dentro del rango del sensado de alguna frontera
@@ -443,8 +443,8 @@ el cubrimiento.
 \end{figure}
 \footnotetext{Podria indicar el bag y el seg}
 
-Resultados suboptimos similares se obtienen de forma consistente %al aplicarse la simplficacion 
-sobre componentes conexas con forma serpenteante \todo{no se
+Resultados suboptimos similares se experimentan de forma consistente %al aplicarse la simplficacion 
+sobre componentes conexas con forma serpenteante\todo{no se
   si este termino se entiende, me es dificil explicarlo bien, con forma de S?},
   asimetricas y con un largo mayor a $rango*8$ 
 \todo[inline]{se entiende la idea del largo aplicada a esto? Creo que puede
@@ -483,7 +483,7 @@ no son fronteras. Estos se deben traducir a fronteras posteriormente.
 % experimentalmente es que en ciertos casos el resultado  la discribucion de las
 % fronteras significativas es mala, se concentran mucho en ciertas porciones y se alejan 
 
-\subsection{Fronteras simplificadas según su geometría}
+\subsection{Simplificacion de fronteras basada en el cubrimiento}
 Con esto en mente se desarrolla un metodo novedoso que considera los dos puntos
 destacados anteriormente. (i) Tomando en cuenta el cubrimiento y su
 optimizacion como parte fundamental del algorimo. (ii) Dando directamente
@@ -493,7 +493,7 @@ El algorimo al igual que el descrito en la seccion anterior comienza
 descomponiendo a las fronteras $F$ en sus componentes conexas
 $\mli{FC}=\{F_1,F_2,...F_N\}$ para luego obtener las fronteras significativas
 $\mli{FS}_i$ para cada componente $F_i$, siendo el conjunto total de fronteras
-significativas $FS$ la union $\bigcup^N_{i=0} \mli{FS}_i$
+significativas $FS = \bigcup^N_{i=0} \mli{FS}_i$
 
 Para obtener las fronteras significativas de $F_i$ el algorimo parte mantiene
 las fronteras sigficativas determinadas $\mli{FS}_i := \emptyset$ y el conjunto
@@ -502,13 +502,16 @@ todas las fronteras que resta cubrir $\mli{UF} := F_i$ (siglas del ingles
 \begin{enumerate}
   \item Elegir una frontera de $\mli{UF}$ como frontera significativa $\mli{fs}$.
 
-  \item Actualizar $\mli{FS}$ agregando a $\mli{fs}$:
+  \item Actualizar $\mli{FS_i}$ agregando $\mli{fs}$:
 
-    $\mli{FS} := \mli{FS} \in \{\mli{fs}\}$
+    $\mli{FS_i} := \mli{FS_i} \cup \{\mli{fs}\}$
 
   \item Actualizar $\mli{UF}$ removiendo todas las fronteras cubiertas por $\mli{fs}$:
 
-    $\mli{UF} := \mli{UF} - \{ f\in F : d_{\mli{fs}}(f) < rango\}$
+    $\mli{UF} := \mli{UF} - \mli{RC}$
+
+    Con $\mli{RC}=\{ f\in F_i : d_{\mli{fs}}(f) \leq rango\}$ las celdas recien
+    cubiertas.
 
   \item Si $\mli{UF} \neq \emptyset$ volver a 1. de lo contrario devolver $FS_i$.
 \end{enumerate}
@@ -516,13 +519,104 @@ todas las fronteras que resta cubrir $\mli{UF} := F_i$ (siglas del ingles
 % De los pasos presentados el primero es el principal y tambien el mas complejo
 % del algorimo.
 
-Los pasos del 2 al 4 no presentan ambigüedad, siendo el primer paso en el que
-resta aclarar, especificamente resta aclarar el criterio con el que se elige la
-frontera significativa. La eleccion en un principio podria ser aleatoria y el
-algormitmo daria resultados correctos, pero esto dejaria a la suerte la
-optimalidad. La idea seria elegir una frontera significativa que cubra la mayor
-cantidad de frotneras evitando cubrir nuevametne fronteras que ya sean
-cubiertas por otra frotntera significativa.
+Los pasos del 2 al 4 no presentan ambigüedad, siendo el paso 1 en el que resta
+aclarar, especificamente lo que resta aclarar es el criterio con el que se
+elige la frontera significativa. La eleccion en un principio podria ser
+aleatoria y el algormitmo daria resultados validos, pero esto dejaria a la
+suerte la calidad de la solucion. La idea seria elegir de forma determinista a
+una frontera significativa buscando que cubra la mayor cantidad de frotneras
+mientras se evita cubrir nuevamente fronteras que ya sean cubiertas por otra
+frotntera significativa. 
+
+La tecnica desarrollada se basa en mantener una cola FIFO en donde se guardaran
+los proximas fronteras a cubrir $\mli{FP}$, este se inicializa encolando
+arbitrariamente a las celdas fronteras adyacentes a celdas cuyo estado es
+ocupado. 
+
+El proceso para elegir una nueva forntera significativa $\mli{fs}$ consiste en
+desencolar una frontera $\mli{fp}$ de $\mli{FP}$ para posteriomente determinar
+el conjunto de fronteras significativas candidatas $\mli{FSC}$ como las
+fronteras sin cubrir desde las cuales se cubre a $\mli{fp}$ estando lo mas
+alejadas posible de esta, es decir, que $\mli{FSC}$ %$= \{f\in \mli{UC} : d_{\mli{fs}}(\mli{fp})= rango$\}
+sera el conjunto de celdas en $\mli{UC}$ que solapen con la circunferencia del
+circulo de radio $rango$ centrada en $\mli{fp}$ denotada como $\mathscr{C}(\mli{fp},rango)$.
+Para elegir una nueva frontera significativa $\mli{fs}$ se debe elegir una
+frontera de $\mli{FSC}$, que en esta propuesta se hace de forma arbitraria.
+
+Para que el criterio de eleccion propuesto funcione de forma correcta es
+necesario agregar que en el paso 2 se debe encolar a $\mli{FP}$ todas las
+fronteras del siguiente conjunto $\{ f \in \mli{UF} : \exists c \in \mli{RC}, f
+\in ady(c)\}$. Es decir, establecer como fronteras a cubrir a las que son
+adyacentes a las foronteras recien cubiertas.
+
+Ahora resta tratar dos casos bordes, el primero es la inicializacion de
+$\mli{FP}$ cuando no existen fronteras adyacentes a obstaculos, cuando esto
+sucede para inciar el algorimo basta con agregar una unica frontera arbitraria
+de $F_i$ a $\mli{FP}$. El otro caso es el que se presenta si $\mli{FSC} = \emptyset$\todo{esto esta mal, en realidad esta mal desde antes cuando se presenta FSC, FSC busca que las candidatas queden centradas. Por lo que el radio puede ser menor al rango aunque haya una (o mas) celda solapada conla circunferencia de radio rango}, es
+decir la circunferencia del circulo de radio $rango$ centrada en $\mli{fp}$ no
+se solapa con ninguna celdas en $\mli{UC}$. Cuando esto sucede lo que se hace
+es reducir el radio del circulo a $\frac{max\{ d_{\mli{fp}}(\mli{f}) :
+f\in\mli{UC} \}}{2}$ la divicion entre dos busca que la circunferencia se
+solape sobre el punto medio entre $\mli{fp}$  y la celda de $\mli{UC}$ mas
+alejada de $\mli{fp}$, quedando la nueva frontera significativa centrada
+(figura ejemplo de esto).
+
+El algormio  \ref{alg:IdObjGeo} se muestra el algorimo completo.
+
+\begin{algorithm}[H]
+\SetAlgoLined
+  $\mli{FS}_i := \emptyset$\\
+  $\mli{UC} := C$ \\
+
+  $FP :=$ Cola Vacia \\
+  \ForEach { $f\in F_i$ } {
+    \ForEach{ $\mli{fa} \in ady(f)$ } {
+      \If { $e(\mli{fa}) = ocupado$ } {
+        $\mli{FP}.encolar(f)$
+      }
+    }
+  }
+  \If{$\mli{FP}.vacia()$}{
+    $\mli{FP}.encolar($elemento arbitrario de $F_i)$
+  }
+  \While{ $\neg \mli{UC}.vacia()$ } {
+    $\mli{fp} := \mli{FP}.desencolar()$\\
+    \If{ $\mli{fp} \in \mli{UC}$}{
+      $radio := max\{ d_{\mli{fp}}(\mli{f}) : f\in\mli{UC} \}/2$\\
+      $radio := min(radio,rango)$\\
+      $\mli{FSC} :=$ celdas en $\mli{UC}$ que solapen con $\mathscr{C}(\mli{fp},radio)$\\
+      $\mli{fs} := $elemento arbitrario de $\mli{FSC}$\\
+      $\mli{FS_i} := \mli{FS_i} \cup \{\mli{fs}\}$\\
+
+      $\mli{RC}=\{ f\in F_i : d_{\mli{fs}}(f) \leq rango\}$\\
+
+      $\mli{UF} := \mli{UF} - \mli{RC}$\\
+
+      \ForEach { $\mli{fp} \in \{ f \in \mli{UF} : \exists c \in \mli{RC}, f \in ady(c)\}$}{
+        $\mli{FP}.encolar(\mli{fp})$
+      }
+    }
+  }
+  \Return $\mli{FS}_i$ 
+
+  \caption{Simplificacion de fronteras basada en el cubrimiento}
+  \label{alg:IdObjGeo}
+\end{algorithm}
+
+% Para que el criterio de eleccion propuesto funcione de forma correcta es
+% necesario agregar al paso 2 que  se deben encolar a $\mli{FP}$ todas las
+% fronteras del siguiente conjunto $\{ f \in \mli{UF} : \exists c \in \mli{FS_i}
+% - \mli{UF}, f \in ady(c)\}$ que no esten ya encoladas.
+
+% $\mil{CF}$ de las fronteras
+% cubiertas pos la nueva $\mli{fs}$, encolan a $\mil{FP}$ a las celdas de $
+
+
+% elegir
+% $\mli{fs}$ como uno de las 
+
+La condicion de distancia busca maximizar la
+cantidad de fronteras que cubre la nueva frontera significativa.
 
 
 DESCRIBIR algo a detalle, fotitos, etc.
