@@ -1,0 +1,2 @@
+mogrify -crop 900x0+110+0 *
+mogrify -bordercolor white -border 10 * 

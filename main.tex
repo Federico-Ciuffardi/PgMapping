@@ -38,6 +38,7 @@
 \dominitoc
 
 % == MISC ==
+\usepackage[toc,page]{appendix}
 \usepackage{tabularx}
 \usepackage{float}
 \usepackage{enumitem} 
@@ -71,6 +72,13 @@
 \usepackage{listings}
 
 % == FIGURE PACKAGES ==
+\makeatletter
+\newcommand*{\centerfloat}{%
+  \parindent \z@
+  \leftskip \z@ \@plus 1fil \@minus \textwidth
+  \rightskip\leftskip
+  \parfillskip \z@skip}
+\makeatother
 \usepackage{graphicx,wrapfig,lipsum}
 \usepackage[caption=false]{subfig}
 
@@ -201,6 +209,10 @@ Tutor: Facundo Benavides%
 \hfuzz=0pt 
 
 \include{ParteCentral}
+
+\begin{appendices}
+\include{Apendice}
+\end{appendices}
 
 % == BIBLOGRAPHY ==
 \begingroup

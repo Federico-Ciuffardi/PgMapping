@@ -1,0 +1,53 @@
+\chapter{Ejecuciones completas}
+\section{Simplificacion de fronteras basada en cubrimiento}\label{EXE:sfbc}
+\begin{figure}[H]
+  \centerfloat
+  \subfloat[Estado inicial.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a1.png}}
+  \subfloat[Se inicializa $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a2.png}}
+
+  \subfloat[Se obtiene $\mli{fp}$ desencolando de $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b1.png}}
+  \subfloat[Existen celdas mas alejadas que $2*rango$, los candidatos se obienen con $radio=rango$. ]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b3.png}}
+  \subfloat[Se elige el unico candidato como $\mli{fs}$, se actualiza $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b5.png}}
+ \phantomcaption
+
+\end{figure}
+
+\begin{figure}[H]
+  \setcounter{subfigure}{5}
+  \centerfloat
+  \subfloat[Se obtiene $\mli{fp}$ desencolando de $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/c1.png}}
+  \subfloat[Existen celdas mas alejadas que $rango$, los candidatos se obienen con $radio=rango$. ]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/c3.png}}
+  \subfloat[Se elige arbitrariamente un candidato como $\mli{fs}$, se actualiza $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/c5.png}}
+
+
+  \subfloat[Se obtiene $\mli{fp}$ desencolando de $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/d1.png}}
+  \subfloat[Existen celdas mas alejadas que $2*rango$, los candidatos se obienen con $radio=rango$. ]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/d3.png}}
+  \subfloat[Se elige arbitrariamente un candidato como $\mli{fs}$, se actualiza $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/d5.png}}
+
+  \subfloat[Se obtiene $\mli{fp}$ desencolando de $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/e1.png}}
+  \subfloat[Existen celdas mas alejadas que $2*rango$, los candidatos se obienen con $radio=rango$. ]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/e3.png}}
+  \subfloat[Se elige arbitrariamente un candidato como $\mli{fs}$, se actualiza $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/e5.png}}
+
+ \phantomcaption
+\end{figure}
+
+\begin{figure}[H]
+  \setcounter{subfigure}{14}
+  \centerfloat
+
+  \subfloat[Se obtiene $\mli{fp}$ desencolando de $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f1.png}}
+  \subfloat[No existen celdas mas alejadas que $2*rango$, los candidatos se obienen con $radio=3.45$ largos de celda. ]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f2_3.png}}
+  \subfloat[Se elige el unico candidato como $\mli{fs}$, se actualiza $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f4.png}}
+
+
+  \subfloat[$\mli{UC}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
+  % \subfloat[$\mli{UC}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal3.png}}
+
+  \caption[Proceso de simplificacion de fronteras según cubrimiento.]{Proceso
+    de simplificacion de fronteras según cubrimiento. Las fronteras de $F_i$ se
+    marcan con azul si pertenecen a $\mli{UC}$ y con amarillo de lo contrario.
+    Con magenta se marcan las celdas en $\mli{FP}$ siendo la numeracion su
+    orden en la cola, los candidatos $\mli{FSC}$ se idican con naranja y las
+fronteras significativas con verde.}\label{fig:ejemploFSCubComp}
+
+\end{figure}
