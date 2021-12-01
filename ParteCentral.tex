@@ -652,22 +652,29 @@ incremental \emph{brushfire dinamico} que se presentará en la seccion
 
 La asignación se lleva a cabo organizando desde la central una subasta donde
 los objetivos son subastados entre los robots. La subasta se puede separar en
-dos partes, la valuacion y la resolucion. La valuacion consite en 
+dos partes, la valuacion y la resolucion. La valuacion consite en la
+distribuicion de los objetivos de exploracion desde la central hacia los
+robots, la asignación de valores que cada robot debe hacer a cada objetivo y el
+posterior envio de estas valoraciones desde los robots hacia la central. La
+resolucion contempla la recepcion de las valoraciones por la central, la
+asignacion de objetivos a robots segun y la notificacion del objtivo asignado a
+los robots. 
 
+% Para que la subasta sea llevada a cabo se deben distribuir los objetivos de
+% exploracion entre los robots para que estos asignen valores a cada uno segun
+% que tan conveniente les es llegar a ellos. Posteriormente los robots deben
+% enviar las valuaciones realizadas a la central,
 
-Para que la subasta sea llevada a cabo se deben distribuir los objetivos de
-exploracion entre los robots para que estos asignen valores a cada uno segun
-que tan conveniente les es llegar a ellos. Posteriormente los robots deben
-enviar las valuaciones realizadas a la central, la cual debera resolver que
-objetivo le corresponde a que robot segun las valuaciones recibidas y los
-segmentos en dode se ubican los objetivos, procurando distribuir lo mas posible
-a los robots sobre los segmentos. %, el metodo utlizado para lograr este se
-describe en \ref{subsec:MiResSub}. Finalmente la central notifica a cada robot
-su objetivo asignado.
+% la cual debera resolver que
+% objetivo le corresponde a que robot segun las valuaciones recibidas y los
+% segmentos en dode se ubican los objetivos, procurando distribuir lo mas posible
+% a los robots sobre los segmentos. %, el metodo utlizado para lograr este se
+% describe en \ref{subsec:MiResSub}. Finalmente la central notifica a cada robot
+% su objetivo asignado.
 
-En resumen la subasta consiste en valuacion y resolucion. 
-valuacion: mandar los objetivos y esperar por sus valuiaciones.
-resolucion: resolucion y informar a laos robots
+% En resumen la subasta consiste en valuacion y resolucion. 
+% valuacion: mandar los objetivos y esperar por sus valuiaciones.
+% resolucion: resolucion y informar a laos robots
 
 % asignación de objetivos se puede resumir en:
 % \begin{enumerate}
