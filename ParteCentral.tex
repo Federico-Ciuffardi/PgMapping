@@ -274,7 +274,7 @@ $i\in[1,N]$ tales que:
 \begin{itemize}
   \item $\bigcup_{i=1}^{N}C_i = C$ 
   \item Para todo $i,j \in [1,N]$ $C_i\cap C_j = \emptyset$
-  \item Para todo $i \in [1,N]$, para todo par $c_1,c_2 \in C_i$ se cumple que $c_1 \in ady(c_2)$.
+  \item Para todo $i \in [1,N]$, para todo par $c_1,c_2 \in C_i$ se cumple que $c_1 \in ady(c_2)$.\todo{arrglar, seria hay camnio en $C_i$}
   \item No existen $i,j \in [1,N]$ tales que existan $c_1 \in C_i$ y $c_2 \in C_j$ que cumplan con $c_1 \in ady(c_2)$ 
 \end{itemize}
 
@@ -337,7 +337,7 @@ que esta presente en \cite{hopcroft1973algorithm}.
 El problema de identificación de objetivos consiste en determinar los puntos
 del espacio a los cuales es conveniente enviar robots para recolectar nueva
 informacion sobre el entorno explorado. Estos puntos son los llamdos objetivos
-de exploración. 
+de exploración (seccion \ref{sec:exploracion}). 
 % En el contexto del trabajo desarrollado al utlizarse una grilla de ocupacion
 % como mapa los 
 % se hablara de celdas en lugar de puntos, existiendo una correspondencia entre
@@ -381,14 +381,14 @@ este metodo se muestra en la figura \ref{fig:fronterasSig}.
 
 El $k$ utilizado para ejecutar K-Means es el minimo que logra que para toda
 frontera $f\in F_i$ existe $\mli{fs} \in FS_i$ tal que $d_{\mli{fs}}(f) \leq
-rango$ siendo $rango$ el rango de los sensores del robot. Parafraseando, el
+rango$ siendo $rango$ el alcance de los sensores del robot. Es decir, el
 conjunto de fronteras significativas $\mli{FS}_i \subset F_i$ cumple con que
 cada frontera esta dentro del rango del sensado de alguna frontera
 significativa, cuando esto se cumple se dice que $\mli{FS}_i$ cubre a $F_i$, o
 que $FS_i$ logra el cubrimiento. En la figura \ref{fig:fronterasSigCub} se
 puede ver como las fronteras significativas obtenidas $FS$ logran el
 cubrimiento, ya que todas los centros de las fronteras $F$ estan contenidos en
-las circunferencias de radio $rango$ centradas en las frontera significativa
+las circunferencias de radio $rango$ centradas en las fronteras significativas
 $FS$.
 
 Para encontrar el minimo $k$ con las que se logra un $\mli{FS}_i$ que cubra a
@@ -807,18 +807,73 @@ del GVD en la seccion anterior y lo del metodo hungaro en la siguietne}
 % robots segun y la notificacion del objtivo asignado a los robots. 
 % de exploracion a los
 % robots. 
+\subsubsection{Recepcion de valuaciones}
+La resolucion comienza con la recepcion de las valuaciones realizadas por
+los robots. Al recibirse la primera valuacion existe una ventana de tiempo en
+la que se continuara recibiendo nuevas valuaciones. Terminada esta ventana se
+ejecuta un algormitmo que resulta en la asignacion de objetivos a los robots.
 
-explicar ventana dinamica de recepcion de valuaciones
-y como estas se guardan al recibirse
+El proposito de la ventana es que en escenarios reales los robots pueden dejar
+de comunicarse por alguna razón (desconexiones de red, accidentes que dejen a
+los robots sin funcionar, entre otros), por lo tanto esperar por las
+valuaciones de todos los robots puede ser una espera infinita.
+
+Dado que el problema que los robots deben resolver para generar las valoraciones es
+similar, se asume que el tiempo se demora en generar las valoraciones tambien
+es similar, adicionalemtente dicho tiempo es proporcional al area del
+mapa que se encuentra explorada, por lo tanto se opto por utilizar una ventana
+dinámica de un tamaño que, considerando lo que demoraron las valoraciones de
+los robots en la subasta anterior, sea lo suficientemente grande como para que
+todos los robots que esten en condiciones de responder con sus valoraciones
+tengan el tiempo necesario para hacerlo.
+
+Notar que una vez que se reciben las valoraciones de todos los robots
+funcionales es innecesario continuar esperando, por lo tanto de recibirse
+dichas valoraciones la ventana de resolución es terminada prematuramente
+evitando esperas innecesarias.
+
+Siendo $tr_i$ el tiempo que paso desde la recepcion de la primera valuacion
+hasta el comienzo de la ejecucion del algormitmo de asignacion y $vr_i$ la
+duracion de la ventana $i$ definida en \ref{eq:ventanaVals}.
+
+\begin{equation} 
+  vr_i = 
+  \left \{ 
+    \begin{aligned}
+      0.5s                            \ \ \ \ \ \ \ \ & si\ i = 0\\ 
+      max(0.5s + 2tr_{i-1}, vr_{i-1}) \ \ \ \ \ \ \ \ & si\ i > 0
+    \end{aligned}
+  \right .
+  \label{eq:ventanaVals}
+\end{equation}
+
+El valor de la duracion $v_i$ resulta de asumir que de una subasta a la
+siguiente no se demorara más del doble del tiempo en obtener las valuaciones de
+todos los robots, dando un margen de error de 0.5 segundos, especialmente útil
+cuando $rt_i$ es muy pequeño. Lo asumido se corresponde con lo ocurre en las
+pruebas realizadas.
+
+% por lo que sería contraproducente no esperar por la valoración de
+% algún robot ya que dicha espera es mínima en comparación con lo que un robot
+% debe esperar en caso de no ser considerado para la resolución.
+
+% Para cumplir con el propósito propuesto se podría decir que la ventana sea de
+% un tamaño muy grande o infinita, lo cual en un entorno simulado como el que se
+% basa este trabajo no generaría problemas ya que los robots siempre pueden
 
 
-La version original de \cite{wurm2008coordinated} lleva a cabo la
-resulucion utilizando el metodo hungaro. Este logra asignar los robots de forma distribuid \todo[inline]{
-considera que el numero de robots asigandos a un segmento debe ser menor que el
-numero de fronteras que tiene ya que no tiene sentido asignar a un robot  a un
-segmento si eseete no tiene objetivos disponibles. Habria que ver bien como
-funciona el metodo hungaro, pero creo que es una asignacion robot-segmento que
-no considera otra cosa que el costo, por lo tanto el num de fronteras de un
+% y como estas se guardan al recibirse
+\subsubsection{Algoritmo de asignacion de objetivos}
+
+La version original de \cite{wurm2008coordinated} lleva a cabo la asignacion 
+utilizando el metodo hungaro. Este logra asignar los robots de forma distribuid
+
+\todo[inline]{ considera que el numero de robots asigandos a un segmento debe
+  ser menor que el numero de fronteras que tiene ya que no tiene sentido
+  asignar a un robot  a un segmento si eseete no tiene objetivos disponibles.
+  Habria que ver bien como funciona el metodo hungaro, pero creo que es una
+  asignacion robot-segmento que no considera otra cosa que el costo, por lo
+  tanto el num de fronteras de un
 segmento no se estaria considerando.}
 
 explicar el factor de descuento
