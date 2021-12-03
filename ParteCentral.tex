@@ -404,9 +404,13 @@ repite el proceso.
   \qquad
   \subfloat[Fronteras significativas (indicadas con verde) de cada componente conexa.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/c.png}\label{fig:fronterasSig}}
   \qquad
-  \subfloat[Se logra el cubrimiento con un rango igual a 4 largos de celda.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/d.png}\label{fig:fronterasSigCub}}
+  \subfloat[Se logra el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/d.png}\label{fig:fronterasSigCub}}
 
-  \caption[Proceso de simplificacion de fronteras según K-Means.]{Proceso de simplificacion de fronteras según K-Means. Las circunferencias rojas indican el cubrimiento de cada frontera significativa. \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
+  \caption[Proceso de simplificacion de fronteras según K-Means.]{Proceso de
+    simplificacion de fronteras según K-Means. Las circunferencias rojas
+    centradas en las fronteas significativas tienen radio $rango=4$ (largos de celda) indicando su
+    cubrimiento.
+  \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
   % \caption[Proceso de simplificacion de fronteras según K-Means.]{Proceso de simplificacion de fronteras según K-Means. Cada figura corresponde a un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Basada en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
 \end{figure}
 
@@ -436,11 +440,13 @@ el cubrimiento.
 
 \begin{figure}[H]
   \centering
-  \subfloat[Fronteras significativas obtenidas segun el metodo basado en K-Means, con $rango = 5.6$.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/a_sin_circ.png}}
+  \subfloat[Fronteras significativas obtenidas segun el metodo basado en K-Means.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/a_sin_circ.png}}
   \qquad
   \subfloat[Dos de las fronteras significativas de la parte inferior derecha de (a) no son necesarias para lograr el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/b.png}}
 
-  \caption[Simplificacion de fronteras suboptima resultante del metodo basado en K-Means.]{Simplificacion de fronteras suboptima resultante del metodo basado en K-Means. Extraída de implementacion desarrollada\footnotemark.}\label{fig:ejemploFSKMMal}
+  \caption[Simplificacion de fronteras suboptima resultante del metodo basado en K-Means.]{Simplificacion de fronteras suboptima resultante del metodo basado en K-Means. Las fronteras de $F_i$ se indican con azul, las fornteras significativas con verde y las
+    circunferencias rojas centradas en estas tienen radio $rango=5.6$ (largos de celda) indicando su
+    cubrimiento. Extraída de implementacion desarrollada\footnotemark.}\label{fig:ejemploFSKMMal}
 \end{figure}
 \footnotetext{Podria indicar el bag y el seg}
 
@@ -607,14 +613,15 @@ detalle.
   \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f4.png}}
 
   \subfloat[$\mli{UC}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
-  \subfloat[Resultado final mostando circulos de $radio=rango$ centrados en cada frontera significativa.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal2.png}}
+  \subfloat[Resultado final.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal2.png}}
   % \subfloat[$\mli{UC}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal3.png}}
 
   \caption[Proceso de simplificacion de fronteras según cubrimiento.]{Proceso
-    de simplificacion de fronteras según cubrimiento. Las fronteras de $F_i$ se
-    marcan con azul si pertenecen a $\mli{UC}$ y con amarillo de lo contrario.
-    Con magenta se marcan las celdas en $\mli{FP}$ siendo la numeracion su
-  orden en la cola, y las fronteras significativas con verde.}\label{fig:ejemploFSCub}
+    de simplificacion de fronteras según cubrimiento.  Las fronteras de
+    $F_i$ se indican con azul si pertenecen a $\mli{UC}$ y con amarillo de lo
+    contrario. Con magenta se indican las celdas en $\mli{FP}$ siendo la
+  numeracion su orden en la cola y $\mli{fp}$ la ultima desencolada. Las fronteras significativas se indican con
+verde, siendo las circunferencias rojas de radio $rango=5.6$ (largos de celda) centradas en estas indicadores de su cubrimiento.}\label{fig:ejemploFSCub}
 
 \end{figure}
 
@@ -626,39 +633,32 @@ Cuando un robot se encuentra ocioso este le solicita a la central que le asigne
 una nueva tarea, esto desencadena un proceso de asignacion de
 tareas que se describe a lo largo de esta seccion.
 
-Como se menciona en \ref{sec:exploracion} la asignación de tareas se puede
-dividir en dos partes, la identificion de objetivos y la asignación de objtetivos.
-
-La identificacion se lleva a cabo con el metodo descrito en la sección
-\ref{subsec:MiSimp}.
-
 La asignación de objetivos se basa en la idea presentada en
 \ref{subsec:wurmCoord}, que sostiene que es conveniente que los robots se
 asignen a los objetivos de forma que estos se distribuyan uniformemente sobre
 las habitaciones y corredores de un entorno estructurado, que se corresponden
-las regiones (tambien llamados segmentos) de un mapa topológico (seccion \ref{subsec:mapas}).
+las regiones (tambien llamados segmentos) de un mapa topológico (seccion
+\ref{subsec:mapas}).
 
-Para lograr las distribucion de los robots en segmentos es necesario un mapa
-topológico, que permita dentificar en que segmento se encuentra cada objetivo
-de exploracion. El mapa topológico se construye con la tecnica descrita en la seccion
-\ref{subsec:mapaTopGVD} que se basa en el uso de un GVD. Uno de los cambios
-principales con respecto al trabajo original de \cite{wurm2008coordinated} es
-la forma en la cual se contruye el GVD. En el trabajo original  se hace uso de
-un metodo de construccion no incremental, en este proyecto con el motivo de
-alcanzar una implementación que logre funcionar en tiempo real
-(seccion \ref{subsec:constGVDInc}) se reemplaza por una variante del algoritmo
-incremental \emph{brushfire dinamico} que se presentará en la seccion
-\ref{sec:MiConstGVD}.
+La asignación de objetivos consiste una subasta donde los objetivos de
+exploracion son subastados entre los robots. La subasta se puede separar en
+tres partes, \emph{obtencion de informacion}, \emph{valuacion} y
+\emph{resolucion}. La \emph{obtencion de informacion}, es la etapa en la cual
+todos los datos necesarios para llevar adelante la subasta (los objetivos de
+exploracion) son determinados. La \emph{valuacion} abarca la distribuicion de
+la informacion obtenida desde la central hacia los robots, el juicio de valor
+de cada robot a cada objetivo recibido y el posterior envio de estas
+valoraciones desde los robots hacia la central. La \emph{resolucion} contempla
+la recepcion de las valoraciones por la central, un postprocesamiento sobre
+estos, la asignacion de objetivos a robots segun la valoraciones y los
+segmentos a los cuales pertenece cada objetivo, finalizando con la notificacion
+del objetivo que le fue asignado a cada robot.
 
-La asignación se lleva a cabo organizando desde la central una subasta donde
-los objetivos son subastados entre los robots. La subasta se puede separar en
-dos partes, la valuacion y la resolucion. La valuacion consite en la
-distribuicion de los objetivos de exploracion desde la central hacia los
-robots, la asignación de valores que cada robot debe hacer a cada objetivo y el
-posterior envio de estas valoraciones desde los robots hacia la central. La
-resolucion contempla la recepcion de las valoraciones por la central, la
-asignacion de objetivos a robots segun y la notificacion del objtivo asignado a
-los robots. 
+Con respecto a la separacion del problema de asignación de tareas mencionada en
+la seccion \ref{sec:exploracion}, que establece dos partes, la identificacion
+de objetivos y la asignación de objetivos; la primera forma parte de la
+\emph{obtencion de informacion}, y la segunda se corresponde con el el resto de
+lo que se describe en esta seccion.
 
 % Para que la subasta sea llevada a cabo se deben distribuir los objetivos de
 % exploracion entre los robots para que estos asignen valores a cada uno segun
@@ -707,28 +707,137 @@ los robots.
 % \subsubsection{Envio de asignaciones}
 % Mandar asignaciones es casi que trivial
 
+\subsection{Obtencion de informacion}
+Como se menciono todo comienza cuando un robot ocioso solicita un tarea a la
+central, esto desencadana una nueva subasta de no encontrarse una en curso. Si
+existe una en curso el robot recibira una tarea cuando esta termine, no es
+necesario iniciar otra.
+
+La etapa de \emph{obtencion informacion} es la primera etapa en llevase a cabo
+al iniciarse la subasta. La informacion que se obtiene en esta son los
+objetivos de exploracion, un GVD y las regiones del mapa mapa topológico del
+entorno explorado que con el motivo de identificar en que segmento se encuentra
+cada objetivo de exploracion, para porsteriomente poder asignar distribuyendo a
+los robots sobre estos. 
+
+La identificacion de objetivos se lleva a cabo con el metodo descrito en la
+sección \ref{subsec:MiSimp}.
+
+El mapa topológico se construye con la tecnica descrita en la seccion
+\ref{subsec:mapaTopGVD} que se basa en el uso de un GVD. Uno de los cambios
+principales con respecto al trabajo original de \cite{wurm2008coordinated} es
+la forma en la cual se contruye el GVD. En el trabajo original se hace uso de
+un metodo de construccion no incremental, en este proyecto con el motivo de
+alcanzar una implementación que logre funcionar en tiempo real (seccion
+\ref{subsec:constGVDInc}) se reemplaza por una variante del algoritmo
+incremental \emph{brushfire dinamico} que se presentará en la seccion
+\ref{sec:MiConstGVD}.
+
+
 \subsection{Valuacion} \label{subsec:MiValSub}
 
+Luego de obtenida la informacion se da comienzo a la estapa de \emph{valuacion}
+distribuyendo dicha informacion desde la central hacia los robots. Cuando un
+robot recibe la informacion este asigna dos valores a cada objetivo, el largo
+del camino hacia a el y un costo asociado a la complejidad del camino.
+
+Calcular el largo de un camino implica determnar el camino en sí. El camino se
+calcula de forma distinta dependiendo de la clase de objetivo, existen dos,
+triviales y no triviales.
+
+Los objetivos triviales se definen como los objetivos para los cuales el
+segmento de recta que existe entre el robot y el objetivo no contiene
+obstaculos, de lo contrario el objetivo es no trivial. Para determniar esto, se
+discretiza el segmento de recta en celdas \cite{foleyphillips} y se comprueba
+en el mapa global (grilla de ocupacion) almacenado en el robot, alguna de las
+celdas tiene un estado ocupado.
+
+El camino en objetivos triviales se determina como dicho segmento de recta que
+existe entre el robot y el objetivo, que se encuentra libre de obstaculos. 
+
+En el caso de los objetivos no triviales se hace uso del GVD recibido como
+parte de la informacion de la subasta, aprovechando que este constituye un
+\emph{roadmap} (seccion \ref{subsec:mapacarr}). El GVD viene representado
+como el conjunto de celdas que abarca, el proceso para construir el camino puede dividir 
+en tres partes cada una asociada a una de las propiedades que caracterizan a un
+\emph{roadmap}: accesibilidad, conectividad y capacidad de salida. La parte asociada
+accesibilidad consiste en encontrar un camino desde el robot al GVD, lo cual se
+hace a traves de un \emph{breadth-first search} (BFS), se comienza en la celda
+asociada a la posicion del robot y se detiene apenas se visita una celda $c_1$
+perteneciente al GVD. La que se relaciona con la capacidad de salida es analoga a la
+accesibilidad pero el camino va desde el objetivo a alguna celda $c_2$ del GVD.
+Por ultimo la parte vinculada con la conectividad se basa en establecer un
+camino sobre las celdas del GVD desde $c_1$ a $c_2$, lo cual se hace aplicando
+algoritmo $A^*$. Conectando esos tres caminos se obtiene el camnino completo.
+
+El costo asociado a la complejidad en el caso de objetivos triviales se
+determina como el tiempo estimado que demora el robot en rotar de forma que su
+parte delantera apunte hacia el objetivo. Y en el caso de objetivos no
+triviales se utiliza la maxima penalizacion usada para objetivos no triviales.
+El proposito de esto es diferenciar los objetivos triviales sin beneficiar a
+los objetivos no triviales. Este costo se aplica para incentivar a que el robot
+ontinue siendo asignado a los objetivos triviales que tiene por adelante al
+explorar.
+
+Obtenidos ambos valores para cada objetivo estos se envian hacia la central
+junto a la ubicacion actual del robot.
+
+\todo[inline]{ no se si comentar aca las diferencias con wurm, es distinto pero no me
+parece muy destacable, es decir ni peor ni mejor, a diferencia de comentar lo
+del GVD en la seccion anterior y lo del metodo hungaro en la siguietne}
+% De esta
+% forma los objetivos triviales se valuan distinto segun que tanto tiene que
+% rotar el robot para llegar a ellos y los objetivos no triviales tendran un
+% costo no mayor al del peor objetivo no trivial.
+
+% como el conjunto de celdas que abarca, el proceso para construir el camino es
+% se puede dividir en encontrar tres subcaminos cada uno relacionado a una de las
+% tres propiedades de un roadmap: accesibilidad, conectividad y capacidad de
+% salida. La accesibilidad consiste en encontrar un camino desde el robot al GVD,
+
+% La valuacion abarca la distribuicion de los objetivos de exploracion desde la
+% central hacia los robots, la asignación de valores que cada robot debe hacer a
+% cada objetivo y el posterior envio de estas valoraciones desde los robots hacia
+% la central. 
+
 \subsection{Resolución} \label{subsec:MiResSub}
-La resolucion es el proceso de asignar los objetivos de exploracion a los
-robots. 
+% La resolucion es el proceso de asignar los objetivos La resolucion contempla
+% la recepcion de las valoraciones por la central, la asignacion de objetivos a
+
+% robots segun y la notificacion del objtivo asignado a los robots. 
+% de exploracion a los
+% robots. 
+
+explicar ventana dinamica de recepcion de valuaciones
+y como estas se guardan al recibirse
 
 
 La version original de \cite{wurm2008coordinated} lleva a cabo la
-resulucion utilizando el metodo hungaro. Este logra asignar los robots de 
-                                                     
-% considera que el numero de robots asigandos a un segmento debe ser menor que el
-% numero de fronteras que tiene ya que no tiene sentido asignar a un robot  a un
-% segmento si eseete no tiene objetivos disponibles. Habria que ver bien como
-% funciona el metodo hungaro, pero creo que es una asignacion robot-segmento que
-% no considera otra cosa que el costo, por lo tanto el num de fronteras de un
-% segmento no se estaria considerando.
+resulucion utilizando el metodo hungaro. Este logra asignar los robots de forma distribuid \todo[inline]{
+considera que el numero de robots asigandos a un segmento debe ser menor que el
+numero de fronteras que tiene ya que no tiene sentido asignar a un robot  a un
+segmento si eseete no tiene objetivos disponibles. Habria que ver bien como
+funciona el metodo hungaro, pero creo que es una asignacion robot-segmento que
+no considera otra cosa que el costo, por lo tanto el num de fronteras de un
+segmento no se estaria considerando.}
 
-Los objetivos de exploracion a subastar el artículo propone priorizar la distribución de los robots y no simplemente realizar un enfoque basado en las fronteras. Recordar que la segmentación busca que los robots se separen y exploren las habitaciones, aún cuando tengan fronteras cercanas a ellos en habitaciones exploradas por otros robots.
+explicar el factor de descuento
 
-La central da comienzo a la subasta enviando a cada robot el mapa global hasta el momento, el GVD e información sobre los segmentos. De cada segmento se envía, el punto crítico que delimita el segmento y las fronteras del mismo, ordenadas en forma creciente por distancia al punto crítico.
+explicar metodo de asigacion
 
-Por otra parte, el robot debe calcular un costo para cada segmento, este costo se calcula de la siguiente manera:
+
+% Los objetivos de exploracion a subastar el artículo propone priorizar la
+% distribución de los robots y no simplemente realizar un enfoque basado en las
+% fronteras. Recordar que la segmentación busca que los robots se separen y
+% exploren las habitaciones, aún cuando tengan fronteras cercanas a ellos en
+% habitaciones exploradas por otros robots.
+
+% La central da comienzo a la subasta enviando a cada robot el mapa global hasta
+% el momento, el GVD e información sobre los segmentos. De cada segmento se
+% envía, el punto crítico que delimita el segmento y las fronteras del mismo,
+% ordenadas en forma creciente por distancia al punto crítico.
+
+% Por otra parte, el robot debe calcular un costo para cada segmento, este costo se calcula de la siguiente manera:
 % \begin{equation}
 % C^i_s = dist(f_{min}, r_i) - in\_segment
 
@@ -739,24 +848,40 @@ Por otra parte, el robot debe calcular un costo para cada segmento, este costo s
 %      \end{cases}
 % \end{equation}
 
-Donde $f_{min}$ es la frontera más cercana al robot, la distancia entre $r_i$ y $c_s$ y la determinación del segmento para el robot requiere los siguientes pasos:
+% Donde $f_{min}$ es la frontera más cercana al robot, la distancia entre $r_i$ y $c_s$ y la determinación del segmento para el robot requiere los siguientes pasos:
 
-\begin{enumerate}
-    \item Unir la posición del robot con el vértice del GVD más cercano.
-    \item Guardar el segmento $s_v$ al que pertenece el vértice más cercano al robot.
-    \item Unir la fronteras más cercana a cada punto crítico para cada segmento al GVD.
-    \item Unir todas las fronteras para el segmento $s_v$ al GVD.
-    \item Utilizar el algoritmo A* sobre el grafo para obtener los caminos desde el robot hasta las fronteras agregadas.
-    \item En caso de que el camino robot-frontera contenga al punto crítico del segmento $s_v$ se asume que el robot no pertenece al segmento (debe cruzar la puerta de la habitación). De lo contrario, el robot esta en el segmento $s_v$.
-    \item Para cada segmento se calcula $C^i_s$.
-\end{enumerate}
+% \begin{enumerate}
+%     \item Unir la posición del robot con el vértice del GVD más cercano.
+%     \item Guardar el segmento $s_v$ al que pertenece el vértice más cercano al robot.
+%     \item Unir la fronteras más cercana a cada punto crítico para cada segmento al GVD.
+%     \item Unir todas las fronteras para el segmento $s_v$ al GVD.
+%     \item Utilizar el algoritmo A* sobre el grafo para obtener los caminos desde el robot hasta las fronteras agregadas.
+%     \item En caso de que el camino robot-frontera contenga al punto crítico del segmento $s_v$ se asume que el robot no pertenece al segmento (debe cruzar la puerta de la habitación). De lo contrario, el robot esta en el segmento $s_v$.
+%     \item Para cada segmento se calcula $C^i_s$.
+% \end{enumerate}
 
-Recordar que los puntos críticos suelen posicionarse en puertas (mínimos locales, grado 2, vecino de una intersección), por lo que son entradas a habitaciones. En el caso de que este pertenezca al camino robot-frontera significa que el robot se encuentra fuera de la habitación y por ende se considera fuera del segmento. Asimismo, la frontera más cercana al robot será la frontera más cercana al punto crítico. 
-La aplicación de este factor de descuento resulta en que aquellos robots que tengan una distancia mayor a la puerta (punto crítico) y que consecuentemente se encuentren más adentrados en el segmento, sean priorizados para que continúen la exploración en este, a diferencia con aquellos que se encuentran más cercanos a la puerta y el costo de cambiar de segmento sea menor.
+% Recordar que los puntos críticos suelen posicionarse en puertas (mínimos
+% locales, grado 2, vecino de una intersección), por lo que son entradas a
+% habitaciones. En el caso de que este pertenezca al camino robot-frontera
+% significa que el robot se encuentra fuera de la habitación y por ende se
+% considera fuera del segmento. Asimismo, la frontera más cercana al robot será
+% la frontera más cercana al punto crítico. 
+% La aplicación de este factor de descuento resulta en que aquellos robots que
+% tengan una distancia mayor a la puerta (punto crítico) y que consecuentemente
+% se encuentren más adentrados en el segmento, sean priorizados para que
+% continúen la exploración en este, a diferencia con aquellos que se encuentran
+% más cercanos a la puerta y el costo de cambiar de segmento sea menor.
 
-Para unir un nuevo punto al GVD es utilizada una función de distancias similar a la utilizada para la generación de GVD. Consta en expandirse desde la celda hasta llegar a un vértice del GVD. Esta celda pertenecerá al mismo segmento que el vértice más cercano a ella.
+% Para unir un nuevo punto al GVD es utilizada una función de distancias similar
+% a la utilizada para la generación de GVD. Consta en expandirse desde la celda
+% hasta llegar a un vértice del GVD. Esta celda pertenecerá al mismo segmento que
+% el vértice más cercano a ella.
 
-Continuando con la subasta, el robot prepara la oferta y la envía a la central, quien estaba esperando por estas. En la sección  4.5, Ventanas, se discute el tiempo que la central debe esperar por estas respuestas. Más aún, cada subasta tiene su propia identificación, evitando que se mezclen mensajes de subastas anteriores. 
+% Continuando con la subasta, el robot prepara la oferta y la envía a la central,
+% quien estaba esperando por estas. En la sección  4.5, Ventanas, se discute el
+% tiempo que la central debe esperar por estas respuestas. Más aún, cada subasta
+% tiene su propia identificación, evitando que se mezclen mensajes de subastas
+% anteriores. 
 
 % Una vez recibidas las ofertas, la central resuelve la subasta con el algoritmo \ref{alg:resolucionsubastasegmentos}.
 
@@ -779,11 +904,13 @@ Calcular\\ % $robots\_por\_segmento = \lceil cantidad\ de\ robots / cantidad\ de
  \label{alg:resolucionsubastasegmentos}
 \end{algorithm}
 
-En resumen, la central asigna a los robots de manera   
-greedy, priorizando distribuir equitativamente a los mismos entre los segmentos. La central informa sobre las asignaciones a los robots y queda a la espera de un pedido por parte de alguno de los robots para volver a comenzar otra subasta.
+En resumen, la central asigna a los robots de manera   greedy, priorizando
+distribuir equitativamente a los mismos entre los segmentos. La central informa
+sobre las asignaciones a los robots y queda a la espera de un pedido por parte
+de alguno de los robots para volver a comenzar otra subasta.
 
 
-\section{Contruccion del GVD}\label{sec:MiConstGVD}
+\section{Construccion del GVD}\label{sec:MiConstGVD}
 
 Tratar de refenciar al maximo a lau, concentrarmente en describir los cambios.
 
@@ -791,19 +918,29 @@ Se mantienen todos los obts a minima distancia, y los que \say{casi} estan a
 minima distancia, siendo estos los puntos bases (puntos mas cercanos a
 generadosres base) tomados en cuenta, segun estos se define si un punto pertenece o no al GVD.
 
-Aunque existe una etapa de erosion posterior.
+Aunque existe una etapa de erosion posterior como en Lau para asegurar la sparceness. Comentar que se basa en el A de zhang, que en principio es mas eficiente que chequear patrones
 
-Oportunidad de comentra que mejora sobre lau porque perminte generar gvd en
+Oportunidad de comentar que mejora sobre lau porque perminte generar gvd en
 lugares a dist 1 de los obstaculos, cosa que lau no permite ni explica porque.
-Experimentalmetne sospecho que tiene problemas de desconexion. 
 
-Desribir problemas de desconexion.
+Desribir problemas de desconexion presentados en las diversas implementaciones: 
+\begin{itemize}
+  \item mencionar los de kalra
+  \item los generados por considerar dist 1 en lau
+  \item y mostrar que liu ming aunque no explique que hace bien tambien los tiene?
+\end{itemize}
 
-Mostrar que liu ming tambien los tiene???
+Explicar el problema de considerar lo desconocido, como no hacerlo lleva a GVD
+disconexos, explicar lo qeu se encuentra en el estado del arte (explicar como
+esta aplica para entornos abiertos), la alternativa de que los bordes no sean
+obstaculos (como esta no aplica a entornos abiertos y genera mas costos) y la
+alternativa de que las fronteras sean emisoras de GVD y lo desconocido no sea
+atravezable por las ondas y porque esto implica mucho menos costos para mapas
+cuando estos se comienzan a explorar y se componen de muchas celdas
+desconocidas.
 
 % \subsection{Segmentacion}
 % yo diria de 
-
 
 % Creo que aca en realidad no habria que comentar mucho si es que hay que comentar, son las mismasideas que las comentadas en \ref{subsec:mapaTopGVD}.
 

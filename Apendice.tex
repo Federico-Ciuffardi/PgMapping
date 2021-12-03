@@ -1,4 +1,4 @@
-\chapter{Ejecuciones completas}
+\chapter{Ejemplos completos}
 \section{Simplificacion de fronteras basada en cubrimiento}\label{EXE:sfbc}
 \begin{figure}[H]
   \centerfloat
@@ -36,7 +36,7 @@
   \centerfloat
 
   \subfloat[Se obtiene $\mli{fp}$ desencolando de $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f1.png}}
-  \subfloat[No existen celdas mas alejadas que $2*rango$, los candidatos se obienen con $radio=3.45$ largos de celda. ]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f2_3.png}}
+  \subfloat[No existen celdas mas alejadas que $2*rango$, los candidatos se obienen con $radio=3.45$ (largos de celda). ]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f3.png}}
   \subfloat[Se elige el unico candidato como $\mli{fs}$, se actualiza $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f4.png}}
 
 
@@ -45,9 +45,13 @@
 
   \caption[Proceso de simplificacion de fronteras según cubrimiento.]{Proceso
     de simplificacion de fronteras según cubrimiento. Las fronteras de $F_i$ se
-    marcan con azul si pertenecen a $\mli{UC}$ y con amarillo de lo contrario.
-    Con magenta se marcan las celdas en $\mli{FP}$ siendo la numeracion su
-    orden en la cola, los candidatos $\mli{FSC}$ se idican con naranja y las
-fronteras significativas con verde.}\label{fig:ejemploFSCubComp}
+    indican con azul si pertenecen a $\mli{UC}$ y con amarillo de lo contrario.
+    Con magenta se indican las celdas en $\mli{FP}$ siendo la numeracion su
+    orden en la cola y $\mli{fp}$ la ultima desencolada. Las
+    circunferencias rojas centradas en $\mli{fp}$ tienen como radio la distancia
+    utilizada para obtener los candidatos $\mli{FSC}$ los cuales se indican con
+    naranja. Las fronteras significativas se indican con verde, siendo las
+    circunferencias rojas de radio $rango=5.6$ (largos de celda) centradas en estas indicadores de su
+  cubrimiento.}\label{fig:ejemploFSCubComp}
 
 \end{figure}
