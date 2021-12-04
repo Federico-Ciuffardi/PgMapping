@@ -780,11 +780,9 @@ ontinue siendo asignado a los objetivos triviales que tiene por adelante al
 explorar.
 
 Obtenidos ambos valores para cada objetivo estos se envian hacia la central
-junto a la ubicacion actual del robot.
+junto a la ubicacion actual del robot, siendo toda esta informacion en su
+conjnto considerada una valuacion. \todo{o mensaje de valuacion, como quede mejor}
 
-\todo[inline]{ no se si comentar aca las diferencias con wurm, es distinto pero no me
-parece muy destacable, es decir ni peor ni mejor, a diferencia de comentar lo
-del GVD en la seccion anterior y lo del metodo hungaro en la siguietne}
 % De esta
 % forma los objetivos triviales se valuan distinto segun que tanto tiene que
 % rotar el robot para llegar a ellos y los objetivos no triviales tendran un
@@ -810,8 +808,9 @@ del GVD en la seccion anterior y lo del metodo hungaro en la siguietne}
 \subsubsection{Recepcion de valuaciones}
 La resolucion comienza con la recepcion de las valuaciones realizadas por
 los robots. Al recibirse la primera valuacion existe una ventana de tiempo en
-la que se continuara recibiendo nuevas valuaciones. Terminada esta ventana se
-ejecuta un algormitmo que resulta en la asignacion de objetivos a los robots.
+la que la central continuara recibiendo nuevas valuaciones. Terminada esta
+ventana se ejecuta un algormitmo que resulta en la asignacion de objetivos a
+los robots.
 
 El proposito de la ventana es que en escenarios reales los robots pueden dejar
 de comunicarse por alguna razón (desconexiones de red, accidentes que dejen a
@@ -864,21 +863,81 @@ pruebas realizadas.
 
 % y como estas se guardan al recibirse
 \subsubsection{Algoritmo de asignacion de objetivos}
+% Segun lo explicado en la seccion anterior
 
-La version original de \cite{wurm2008coordinated} lleva a cabo la asignacion 
-utilizando el metodo hungaro. Este logra asignar los robots de forma distribuid
+Cuando la central recibe una valuacion de un robot $r_i$, esta se encarga de
+procesar la informacion contenida en la valuacion de forma de obtener un unico
+costo $c_{i,j}$ del robot $r_i$ a cada objetivo $o_j$. Para un objetivo en
+$o_j$ la valuacion del robot $r_i$ contiene el costo $\mli{cca}_{i,j}$ del camino de
+$r_i$ a $o_j$ y el costo $\mli{cco}_{i,j}$ asociado a la complejidad de dicho camino.
+Adicionalmente a traves de la posicion recibida de $r_i$ se determina un descuento 
+$\mli{dse}_{i,j}$ que toma un valor constante menor a cero ($-10$ en al
+implemetnacion) si el robot $r_i$ pertence al mismo segmento que el objetivo
+$o_j$ y cero de lo contrario. Finalmente el costo $c_{i,j}$ se calcula segun la
+ecuacion \ref{eq:costoTot}.
 
-\todo[inline]{ considera que el numero de robots asigandos a un segmento debe
-  ser menor que el numero de fronteras que tiene ya que no tiene sentido
-  asignar a un robot  a un segmento si eseete no tiene objetivos disponibles.
-  Habria que ver bien como funciona el metodo hungaro, pero creo que es una
-  asignacion robot-segmento que no considera otra cosa que el costo, por lo
-  tanto el num de fronteras de un
-segmento no se estaria considerando.}
+\begin{equation} 
+  c_{i,j} = \mli{cca}_{i,j} + \mli{cco}_{i,j} + \mli{dse}_{i,j}
+  \label{eq:costoTot}
+\end{equation}
 
-explicar el factor de descuento
+Los costos $\mli{cca}_{i,j}$ y $\mli{cco}_{i,j}$ tienen como proposito
+penalizar en la asignacion a los objetivos segun la dificicultad asociada a los
+caminos que llevan a esto. Por otro lado el descuento $\mli{dse}_{i,j}$
+incentiva que los robots se mantengan explorando un mismo segmento, lo cual
+desencadena comportamientos deseables como el de que un robot continue
+explorando un mismo corredor, revelando rapidamente la estructura de un entorno
+estrucutrado.
 
-explicar metodo de asigacion
+% Los robots envian a la central dos valores junto a su posicion, cuando la central lo recibe estos se 
+
+% esto, la posicion de dicho robot y
+% dos valores, al recibirse la valuacion en la central dichos valores son
+% procesados de forma
+
+% La version original de \cite{wurm2008coordinated} lleva a cabo la asignacion
+% utilizando el metodo hungaro. Este  
+% de forma optima en $O(n^3)$ siendo $n$ el numero de tareas.
+
+Con estos costos costos como insumos se ejecuta un algorimo de asignacion de
+objetivos a robots, este tiene como proposito asignar objetivos a los robots de
+que estos se distribuyan sobre los segmentos (seccion \ref{subsec:wurmCoord}).
+\todo[inline]{El metodo hungaro capaz no considera que el numero de robots
+  asigandos a un segmento debe ser menor que el numero de fronteras que tiene
+  ya que no tiene sentido asignar a un robot a un segmento si este no tiene
+  objetivos disponibles. Habria que ver bien como funciona el metodo hungaro,
+  pero creo que es una asignacion robot-segmento que no considera otra cosa que
+  el costo, num robots y num segmentos, por lo tanto el num de fronteras de un
+  segmento no se estaria considerando.}
+
+\begin{algorithm}[H]
+\SetAlgoLined
+Ordenar en una cola de prioridad las ofertas, donde las de menor valor son más prioritarias.\\
+Calcular\\ % $robots\_por\_segmento = \lceil cantidad\ de\ robots / cantidad\ de\ segmentos \rceil$\\
+\While{queden robots participantes por asignar y ofertas en la cola}{
+        \If{el segmento $s$ tiene fronteras sin asignar y la cantidad asignada hasta el momento es menor a}{ %$robots\_por\_segmento$}{
+            Asignar el robot a $s$.
+        
+        }
+}
+\If{quedaron robots sin asignar y quedan frontera disponibles}{ 
+        Actualizar cola de prioridad y segmentos disponibles (con fronteras libres).\\
+        Volver al paso 2.
+}
+ \caption{Resolución de subasta de segmentos}
+ \label{alg:resolucionsubastasegmentos}
+\end{algorithm}
+
+En resumen, la central asigna a los robots de forma voraz y priorizando
+distribuirlos lo mas posible sobre los segmentos dada la cantidad de objetivos
+en cada segmento. Seguido a esto la central informa a cada robot su objetivo
+asignado, quedando a la espera de nuevos pedidos por parte de los robots para
+comenzar una nueva subasta. 
+
+% El algorimo toma como entrada el conjunto de robots $r_i$ de los cuales se recibieron
+% valuaciones, de objetivos $o_j$ valuados y de los costos calculados $c_{i,j}.
+
+
 
 
 % Los objetivos de exploracion a subastar el artículo propone priorizar la
@@ -941,28 +1000,6 @@ explicar metodo de asigacion
 % Una vez recibidas las ofertas, la central resuelve la subasta con el algoritmo \ref{alg:resolucionsubastasegmentos}.
 
 
-\begin{algorithm}[H]
-\SetAlgoLined
-Ordenar en una cola de prioridad las ofertas, donde las de menor valor son más prioritarias.\\
-Calcular\\ % $robots\_por\_segmento = \lceil cantidad\ de\ robots / cantidad\ de\ segmentos \rceil$\\
-\While{queden robots participantes por asignar y ofertas en la cola}{
-        \If{el segmento $s$ tiene fronteras sin asignar y la cantidad asignada hasta el momento es menor a}{ %$robots\_por\_segmento$}{
-            Asignar el robot a $s$.
-        
-        }
-}
-\If{quedaron robots sin asignar y quedan frontera disponibles}{ 
-        Actualizar cola de prioridad y segmentos disponibles (con fronteras libres).\\
-        Volver al paso 2.
-}
- \caption{Resolución de subasta de segmentos}
- \label{alg:resolucionsubastasegmentos}
-\end{algorithm}
-
-En resumen, la central asigna a los robots de manera   greedy, priorizando
-distribuir equitativamente a los mismos entre los segmentos. La central informa
-sobre las asignaciones a los robots y queda a la espera de un pedido por parte
-de alguno de los robots para volver a comenzar otra subasta.
 
 
 \section{Construccion del GVD}\label{sec:MiConstGVD}
