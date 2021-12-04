@@ -294,6 +294,8 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
 
 \begin{algorithm}[H]
 \SetAlgoLined
+  \SetKwInOut{Input}{Entrada}
+  \Input{C}
   $CC := \emptyset$
   $pila :=$ Pila Vacia \\
   $i := 1$ \\
@@ -511,8 +513,11 @@ $\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
 
 \begin{algorithm}[H]
 \SetAlgoLined
+  \SetKwInOut{Input}{Entrada}
+  \Input{C}
+
   $\mli{FS}_i := \emptyset$\\
-  $\mli{UC} := C$ \\
+  $\mli{UF} := C$ \\
 
   $PF :=$ Cola Vacia \\
   \ForEach { $f\in F_i$ } {
@@ -525,12 +530,12 @@ $\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
   \If{$\mli{PF}.vacia()$}{
     $\mli{PF}.encolar($elemento arbitrario de $F_i)$
   }
-  \While{$\mli{UC} \neq \emptyset$ } {
+  \While{$\mli{UF} \neq \emptyset$ } {
     $\mli{pf} := \mli{PF}.desencolar()$\\
-    \If{ $\mli{pf} \in \mli{UC}$}{
-      $dCen := max\{ d_{\mli{pf}}(\mli{f}) : f\in\mli{UC} \}/2$\\
+    \If{ $\mli{pf} \in \mli{UF}$}{
+      $dCen := max\{ d_{\mli{pf}}(\mli{f}) : f\in\mli{UF} \}/2$\\
       $radio := min(dCentrada,rango)$\\
-      $\mli{FSC} :=\mli{UC} \cap \mathscr{C}(\mli{pf},radio)$\\
+      $\mli{FSC} :=\mli{UF} \cap \mathscr{C}(\mli{pf},radio)$\\
       $\mli{fs} := $elemento arbitrario de $\mli{FSC}$\\
       $\mli{FS_i} := \mli{FS_i} \cup \{\mli{fs}\}$\\
 
@@ -555,7 +560,7 @@ todas las fronteras que resta cubrir $\mli{UF}$ (siglas del ingles
 \emph{uncovered frontiers}), y  una cola FIFO $\mli{PF}$ en donde se almacenan 
 los proximas fronteras a cubrir.
 
-$\mli{FS}_i$ se inicializa vacia y $\mli{UC}$ como $C$ (lineas 1 y 2). Por otro
+$\mli{FS}_i$ se inicializa vacia y $\mli{UF}$ como $F$ (lineas 1 y 2). Por otro
 lado $\mli{PF}$ se inicializa encolando en cualquier orden a las celdas
 fronteras adyacentes a celdas cuyo estado es ocupado, de no existir ninguna se
 encola una unica frontera arbitraria de $F_i$ (lineas 3-13). 
@@ -575,13 +580,13 @@ El proceso de eleccion de $\mli{fs}$ utlizado tiene como objetivo el asegurar
 que se cubra una frontera previamente no cubierta $\mli{pf}$ (obtenida de
 desencolar a $\mli{PF}$), esto se traduce en la restriccion
 $d_{\mli{pf}}(\mli{fs}) \leq rango$. Adicionalmente se tiene una heuristica que
-establece que dado $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{UC} \}/2$ las
+establece que dado $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{FF} \}/2$ las
 fronteras que esten a $min(dCen,rango)$ de distancia de $\mli{pf}$ seran las
 mejores candidatas a ser fronteras significativas. La heuristica busca elegir a
 las fronteras significativas que queden en el centro del conjunto de celdas
 nuevas que van a cubrir de $\mli{UF}$. con esto en cuenta se determina un
 conjunto de de fronteras significativas candidatas $\mli{FSC}$ como el conjunto
-de celdas que pertenecen a $\mli{UC}$ y a la circunferencia discretizada
+de celdas que pertenecen a $\mli{UF}$ y a la circunferencia discretizada
 \todo[inline]{este concepto capaz no queda claro. Es muy especifico y explicarlo me paree que corta un poco la narrativa. Dado el conjunto $Cir=\{f\in F_i : d_{\mli{fp}}(f) \leq radio\}$ son los puntos de $Cir$ que tienen un adyacente fuera de $Cir$ } %\cite{foleyphillips}
 de $radio = min(dCen,rango)$ centrada en $\mli{PF}$ denotada como
 $\mathscr{C}(\mli{pf},rango)$. Finalmente para elegir una nueva frontera
@@ -594,7 +599,7 @@ $\mli{RC}$ (siglas de recien cubiertas), las cuales se deben remover de
 $\mli{UF}$ y se utlizan para determinar que celdas encolar a $\mli{PF}$.
 El encolar nuevas fronteras en $\mli{PF}$ es necesario para que el criterio de
 eleccion propuesto funcione de forma correcta, siendo las fronteras agregadas
-para ser cubiertas en proximas iteraciones las fronteras en $\mli{UC}$ que son
+para ser cubiertas en proximas iteraciones las fronteras en $\mli{UF}$ que son
 adyacentes a las foronteras recien cubiertas.
 
 Un ejemplo de ejecucion para el caso presentado en la figura
@@ -604,21 +609,21 @@ detalle.
 
 \begin{figure}[H]
   \centerfloat
-  \subfloat[Incializacion de $\mli{FP}$, $\mli{UC}$ y $\mli{FS_i}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a2.png}}
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b5.png}}
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/c5.png}}
+  \subfloat[Incializacion de $\mli{FP}$, $\mli{UF}$ y $\mli{FS_i}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a2.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b5.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/c5.png}}
 
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/d5.png}}
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/e5.png}}
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UC}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f4.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/d5.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/e5.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f4.png}}
 
-  \subfloat[$\mli{UC}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
+  \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
   \subfloat[Resultado final.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal2.png}}
-  % \subfloat[$\mli{UC}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal3.png}}
+  % \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal3.png}}
 
   \caption[Proceso de simplificacion de fronteras según cubrimiento.]{Proceso
     de simplificacion de fronteras según cubrimiento.  Las fronteras de
-    $F_i$ se indican con azul si pertenecen a $\mli{UC}$ y con amarillo de lo
+    $F_i$ se indican con azul si pertenecen a $\mli{UF}$ y con amarillo de lo
     contrario. Con magenta se indican las celdas en $\mli{FP}$ siendo la
   numeracion su orden en la cola y $\mli{fp}$ la ultima desencolada. Las fronteras significativas se indican con
 verde, siendo las circunferencias rojas de radio $rango=5.6$ (largos de celda) centradas en estas indicadores de su cubrimiento.}\label{fig:ejemploFSCub}
@@ -937,9 +942,6 @@ comenzar una nueva subasta.
 % El algorimo toma como entrada el conjunto de robots $r_i$ de los cuales se recibieron
 % valuaciones, de objetivos $o_j$ valuados y de los costos calculados $c_{i,j}.
 
-
-
-
 % Los objetivos de exploracion a subastar el artículo propone priorizar la
 % distribución de los robots y no simplemente realizar un enfoque basado en las
 % fronteras. Recordar que la segmentación busca que los robots se separen y
@@ -998,9 +1000,6 @@ comenzar una nueva subasta.
 % anteriores. 
 
 % Una vez recibidas las ofertas, la central resuelve la subasta con el algoritmo \ref{alg:resolucionsubastasegmentos}.
-
-
-
 
 \section{Construccion del GVD}\label{sec:MiConstGVD}
 
@@ -1084,12 +1083,12 @@ Y por otro lado ocmo estas actualizaciones se integra (el metodo que se describe
 
 % eleccion de
 % $\mli{fs}$ debe considerar el resto de fronteras por cubrir y su cercania a los
-% obtaculos, por ejemplo si $\mli{UC}$ es tan pequeño como para que se cubra
+% obtaculos, por ejemplo si $\mli{UF}$ es tan pequeño como para que se cubra
 % completamente con una unica frontera significativa $\mli{fs}$ esta se deberia
-% elegir para que este centrada en $\mli{UC}$.
+% elegir para que este centrada en $\mli{UF}$.
 %%acatoy
 % Se asume que las fornteras mas centradas se encuentran a una
-% distancia $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{UC} \}/2$ de
+% distancia $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{UF} \}/2$ de
 % $\mli{fp}$. 
 
 % Combiando ambos factores se determina que el conjunto de fronteras
@@ -1140,8 +1139,8 @@ Y por otro lado ocmo estas actualizaciones se integra (el metodo que se describe
 % desencolar una frontera $\mli{PF}$ de $\mli{PF}$ para posteriomente determinar
 % el conjunto de fronteras significativas candidatas $\mli{FSC}$ como las
 % fronteras sin cubrir desde las cuales se cubre a $\mli{PF}$ estando lo mas
-% alejadas posible de esta, es decir, que $\mli{FSC}$ %$= \{f\in \mli{UC} : d_{\mli{fs}}(\mli{PF})= rango$\}
-% sera el conjunto de celdas en $\mli{UC}$ que solapen con la circunferencia del
+% alejadas posible de esta, es decir, que $\mli{FSC}$ %$= \{f\in \mli{UF} : d_{\mli{fs}}(\mli{PF})= rango$\}
+% sera el conjunto de celdas en $\mli{UF}$ que solapen con la circunferencia del
 % circulo de radio $rango$ centrada en $\mli{PF}$ denotada como $\mathscr{C}(\mli{PF},rango)$.
 % Para elegir una nueva frontera significativa $\mli{fs}$ se debe elegir una
 % frontera de $\mli{FSC}$, que en esta propuesta se hace de forma arbitraria.
@@ -1154,10 +1153,10 @@ Y por otro lado ocmo estas actualizaciones se integra (el metodo que se describe
 % \todo{esto esta mal, en realidad esta mal desde antes cuando se presenta FSC, FSC busca que las candidatas queden centradas. Por lo que el radio puede ser menor al rango aunque haya una (o mas) celda solapada conla circunferencia de radio rango}
 % , es
 % decir la circunferencia del circulo de radio $rango$ centrada en $\mli{PF}$ no
-% se solapa con ninguna celdas en $\mli{UC}$. Cuando esto sucede lo que se hace
+% se solapa con ninguna celdas en $\mli{UF}$. Cuando esto sucede lo que se hace
 % es reducir el radio del circulo a $\frac{max\{ d_{\mli{PF}}(\mli{f}) :
-% f\in\mli{UC} \}}{2}$ la divicion entre dos busca que la circunferencia se
-% solape sobre el punto medio entre $\mli{PF}$  y la celda de $\mli{UC}$ mas
+% f\in\mli{UF} \}}{2}$ la divicion entre dos busca que la circunferencia se
+% solape sobre el punto medio entre $\mli{PF}$  y la celda de $\mli{UF}$ mas
 % alejada de $\mli{PF}$, quedando la nueva frontera significativa centrada
 % (figura ejemplo de esto).
 
