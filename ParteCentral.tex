@@ -295,11 +295,11 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
 \begin{algorithm}[H]
 \SetAlgoLined
   \SetKwInOut{Input}{Entrada}
-  \Input{C}
-  $CC := \emptyset$
-  $pila :=$ Pila Vacia \\
-  $i := 1$ \\
+  \Input{$C$}
   $restantes := C$ \\
+  $CC := \emptyset$ \\
+  $pila :=$ Pila vacia \\
+  $i := 1$ \\
   \While{ $\neg restantes.vacia()$ } {
     $C_i := \emptyset $ \\
     $c :=$ elemento arbitrario de $Restantes$ \\
@@ -514,12 +514,12 @@ $\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
 \begin{algorithm}[H]
 \SetAlgoLined
   \SetKwInOut{Input}{Entrada}
-  \Input{C}
+  \Input{$F_i$}
 
+  $\mli{UF} := F_i$ \\
   $\mli{FS}_i := \emptyset$\\
-  $\mli{UF} := C$ \\
 
-  $PF :=$ Cola Vacia \\
+  $\mli{PF} :=$ Cola vacia \\
   \ForEach { $f\in F_i$ } {
     \ForEach{ $\mli{fa} \in ady(f)$ } {
       \If { $e(\mli{fa}) = ocupado$ } {
@@ -533,8 +533,8 @@ $\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
   \While{$\mli{UF} \neq \emptyset$ } {
     $\mli{pf} := \mli{PF}.desencolar()$\\
     \If{ $\mli{pf} \in \mli{UF}$}{
-      $dCen := max\{ d_{\mli{pf}}(\mli{f}) : f\in\mli{UF} \}/2$\\
-      $radio := min(dCentrada,rango)$\\
+      $dCen := max \{ d_{\mli{pf}}(\mli{f}) : f\in\mli{UF} \}/2$\\
+      $radio := min \{dCentrada, rango\}$\\
       $\mli{FSC} :=\mli{UF} \cap \mathscr{C}(\mli{pf},radio)$\\
       $\mli{fs} := $elemento arbitrario de $\mli{FSC}$\\
       $\mli{FS_i} := \mli{FS_i} \cup \{\mli{fs}\}$\\
@@ -580,15 +580,15 @@ El proceso de eleccion de $\mli{fs}$ utlizado tiene como objetivo el asegurar
 que se cubra una frontera previamente no cubierta $\mli{pf}$ (obtenida de
 desencolar a $\mli{PF}$), esto se traduce en la restriccion
 $d_{\mli{pf}}(\mli{fs}) \leq rango$. Adicionalmente se tiene una heuristica que
-establece que dado $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{FF} \}/2$ las
-fronteras que esten a $min(dCen,rango)$ de distancia de $\mli{pf}$ seran las
+establece que dado $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{UF} \}/2$ las
+fronteras que esten a $min \{dCen, rango\}$ de distancia de $\mli{pf}$ seran las
 mejores candidatas a ser fronteras significativas. La heuristica busca elegir a
 las fronteras significativas que queden en el centro del conjunto de celdas
 nuevas que van a cubrir de $\mli{UF}$. con esto en cuenta se determina un
 conjunto de de fronteras significativas candidatas $\mli{FSC}$ como el conjunto
 de celdas que pertenecen a $\mli{UF}$ y a la circunferencia discretizada
 \todo[inline]{este concepto capaz no queda claro. Es muy especifico y explicarlo me paree que corta un poco la narrativa. Dado el conjunto $Cir=\{f\in F_i : d_{\mli{fp}}(f) \leq radio\}$ son los puntos de $Cir$ que tienen un adyacente fuera de $Cir$ } %\cite{foleyphillips}
-de $radio = min(dCen,rango)$ centrada en $\mli{PF}$ denotada como
+de $radio = min \{dCen, rango\}$ centrada en $\mli{PF}$ denotada como
 $\mathscr{C}(\mli{pf},rango)$. Finalmente para elegir una nueva frontera
 significativa $\mli{fs}$ se debe elegir una frontera de $\mli{FSC}$, en esta
 propuesta se hace de forma arbitraria.
@@ -869,7 +869,6 @@ pruebas realizadas.
 % y como estas se guardan al recibirse
 \subsubsection{Algoritmo de asignacion de objetivos}
 % Segun lo explicado en la seccion anterior
-
 Cuando la central recibe una valuacion de un robot $r_i$, esta se encarga de
 procesar la informacion contenida en la valuacion de forma de obtener un unico
 costo $c_{i,j}$ del robot $r_i$ a cada objetivo $o_j$. Para un objetivo en
@@ -915,23 +914,119 @@ que estos se distribuyan sobre los segmentos (seccion \ref{subsec:wurmCoord}).
   el costo, num robots y num segmentos, por lo tanto el num de fronteras de un
   segmento no se estaria considerando.}
 
+% El algorimo \ref{alg:resolucionsubastasegmentos} presenta un pseudocodigo del
+% algormitmo de asigacion donde $R$ el conjunto de los identificadores de los
+% robots, $O$ el conjnto de los identificadores de los objetivos y $Costos$ el
+% conjunto los $c_{i,j}$ computados a partir de las valuaciones recibidas
+El algorimo de asigacion, se corresponde al algorimo
+\ref{alg:resolucionsubastasegmentos}, donde $R$ es el conjunto de los
+identificadores de los robots de los cuales se recibieron valuaciones, $O$ el
+conjnto de los identificadores de los objetivos valuados y $Costos$ un conjunto
+de tuplas $(c_{i,j},r_i,o_j)$ los $c_{i,j}$ computados a partir de las
+valuacion recibida de $r_i$ para $o_j$. El conjunto $S$ es el conjunto de
+segmentos y la funcion $segmento : O \rightarrow S$ dado un objetivo devulve el
+segmento al que pertence. Los conjuntos $O_1$,$O_2$,...,$O_k$,...,$O_{|S|}$ contienen los
+objetivos que estan dentro de un segmento $s_k\in S$.
+
+\vspace{1cm}
+  
 \begin{algorithm}[H]
 \SetAlgoLined
-Ordenar en una cola de prioridad las ofertas, donde las de menor valor son más prioritarias.\\
-Calcular\\ % $robots\_por\_segmento = \lceil cantidad\ de\ robots / cantidad\ de\ segmentos \rceil$\\
-\While{queden robots participantes por asignar y ofertas en la cola}{
-        \If{el segmento $s$ tiene fronteras sin asignar y la cantidad asignada hasta el momento es menor a}{ %$robots\_por\_segmento$}{
-            Asignar el robot a $s$.
-        
+  \SetKwInOut{Input}{Entrada}
+  \Input{$R, O, S, Costos, O_1, O_2,...,O_{|S|}$}
+%   // PARTE 1
+%   //   Determinar el número a no superar mencionado en la restricción (2). Dicho número depende de dos dos números 
+%   //   cocienteDistribucion y restoDistribucion, por lo tanto serán estos los que realmente se van a determinar.
+  
+    %ALT $segObjs :=$ Cola de prioridad vacia \tcp{Valores menores quedan primeros en la cola}
+    $segObjs := \emptyset$\\
+
+    %: cola de prioridad que contiene valores de tipo numFronteras (int) donde un menor numFronteras
+    %  es prioritario frente a uno mayor. Inicializado vacío.
+
+    % \tcp{DFS desde $c$ agregando las celdas visitadas a la componente conexa $C_i$}
+  
+%   /// recorrida de todos los elementos del diccionario, con el propósito de construir segFrontColaPrio
+    \ForEach{$s_k \in S $}{ 
+     %ALT segObjs.encolar($|O_k|$)\\
+     $segObj = segObj \cup \{|O_k|\}$\\
+    }
+    
+    $numSegs := |S|$\\
+    $numRobs := |R|$\\
+    $converge := false$\\
+
+    \While{$\lnot (segObjs.vacia() \lor converge$)}{
+      $cocienteDist := numRobs\ \ div\ \ numSegs$\\
+      $restoDist    := numRobs\ \ mod\ \ numSegs$\\
+    
+      $segObj := min\ segObjs$\\
+      $segObjs := segObjs - segObj$\\
+    
+      $converge := (segObj > cocienteDist) \lor (restoDist = 0 \land segObj = cocienteDist)$\\
+    
+%     // conciente crece siempre porque
+    
+%     // si no se puede parar es porque el segmento no tiene suficientes fronteras, por lo tanto se puede asumir que 
+%     // que todas sus fronteras serán asignadas al intentar de distribuir de forma uniforme a los robots sobre los segmentos
+%     // siendo la restricción (1) la limitante. Por lo tanto se calcula numRobots y numSeg teniendo lo anterior en cuenta
+%     // (el segmento ya no se contabiliza en numSeg y se resta de numRobots tantos robots como fronteras tiene el segmento).
+      \If{$\lnot converge$}{
+        $numRobots := numRobots - segFront$\\
+        $numSeg := numSeg - 1$\\
+      }
+    }
+%   // PARTE 2
+    $asignaciones := \emptyset$\\
+
+    $segRobNums :=$ diccionario de $S$ a enteros, siendo 0 el defecto\\   
+
+    \While{$R \neq \emptyset \land O \neq \emptyset$}{
+      $(c_{i,j}, r_i, o_j) := min\ Costos$ \tcp{Una tupla con minimo $c_{i,j}$}
+      $Costos := Costos - (c_{i,j}, r_i, o_j)$\\
+      $s_k := segmento(o_j)$\\
+      $distribuido := segRobNums[s_k] < cocienteDist \lor (restoDist > 0 \land segRobNums[s_k] < cocienteDist + 1)$\\
+      \If{ $r_i \in R \land o_j \in O \land distribuido$ }{
+        $asignaciones := asignaciones \cup (r_i,o_j)$\\
+        $segRobNums[s_k] := segRobNums[s_k] + 1$\\
+        $R := R - r_i$\\
+        $O := O - o_j$\\
+        \If{$segRobNums = cocienteDist + 1$}{
+           $restoDist := restoDist - 1$\\
         }
-}
-\If{quedaron robots sin asignar y quedan frontera disponibles}{ 
-        Actualizar cola de prioridad y segmentos disponibles (con fronteras libres).\\
-        Volver al paso 2.
-}
+      }
+    }
+  \Return asgnaciones 
+    
  \caption{Resolución de subasta de segmentos}
  \label{alg:resolucionsubastasegmentos}
 \end{algorithm}
+
+El algorimo se puede dividir en dos partes, el calculo de valores
+$cocienteDist$, $restoDist$ (lineas 1-18) y la asignacion distribuida (lineas
+19-36). 
+
+Los valores $cocienteDist$ y $restoDist$ se utlizan para lograr una asignacion
+distribuida sobre los segmentos conisderando los objetivos contenidos en cada
+uno. La distribucion deseada se corresponde con la distribucion que se logra al
+hacer $N$ rondas en las cuales se asigna un solo robot por segmento con tenga
+objetivos sin asignar. La ronda $N$ termina cuando no quedan robots o objetivos
+por asignar. Si existen menos objetivos que robots se tiene que la ronda $N$
+culmina con todos los objetivos asignados y algunos robots ociosos. De existir
+mas objetivos que robots luego de la ronda $N$ se pueden tener segmentos cuyos
+objetivos estan todos asignados y se tienen segmentos dentro de los cuales
+existen objetivos sin asignar, la distribucion sera unfirme sobre estos ultimos
+segmentos. Es decir los $K$ segmentos que tienen objetivos sin asignar
+cumpliran con (\ref{ec:uniform}), existiendo $restoDist$ segmentos con
+$N=cocienteDist+1$ robots asignados y $K-restoDist$ segmentos con
+$cocienteDist$ robots asignados. La idea detras del calculo de $cocienteDist$ y
+$restoDist$ es comenzar por una distribucion completamente uniforme sin
+considerar los objetivos de los segmentos y luego de forma iterativa (lineas 8-18) ajustar
+estos valores hasta sean consistentes con su definicion, es decir convergen.
+
+Los valores $cocienteDist$ y $restoDist$ 
+
+% , estos se calculan de forma que todos los segmentos tengan todos sus objetivos asignados a robots, un numero de robots asignadosk
 
 En resumen, la central asigna a los robots de forma voraz y priorizando
 distribuirlos lo mas posible sobre los segmentos dada la cantidad de objetivos
