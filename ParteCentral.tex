@@ -41,7 +41,7 @@ Estudiar la coordinación que se propone en \cite{wurm2008coordinated} utilizand
 
 % Propuesta y estudio de un algoritmo de construcción incremental de un GVD basado en \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando principalmente la forma de determinar las celdas pertenecientes al GVD.
 
-Adicionalmente se estudia un aspecto critico que no esta explicito en el estado del arte\todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}, el problema asociado a como se tratan las celdas de estado desconocido en la construcción del GVD. Para este problema se comentan posibles alternativas, pasando por la que esta presente en el estado del arte y una técnica novedosa que permite una mayor eficiencia.
+Adicionalmente se estudia un aspecto critico que no esta explicito en el estado del arte, el problema asociado a como se tratan las celdas de estado desconocido en la construcción del GVD. Para este problema se comentan posibles alternativas, pasando por la que esta presente en el estado del arte y una técnica novedosa que permite una mayor eficiencia.
 
 % Proponer un algoritmo novedoso para la simplificacion de conjuntos de fronteras que ... (no se que poner aca, pongo)
 % Estudiar la coordinacion propuesta une wurm utilizando un  GVD incremental ya que de lo contrario no es escalable.
@@ -1041,59 +1041,178 @@ que le fue asignado, quedando a la espera de nuevos pedidos por parte de los
 robots para comenzar una nueva subasta. 
 
 
-\section{Construccion del GVD}\label{sec:MiConstGVD}
+\section{Grafo generalizado de Voronoi}\label{sec:MiConstGVD}
 
 Considerando los problemas de eficiencia del algorimo \emph{brushfire} (seccion
 \ref{subsec:constGVD}) y los problemas de su version incremental
 \emph{brushfire dinamico} (seccion \ref{subsec:constGVDInc}) como fue propuesta
 originalmente en \cite{kalra2009incremental}, se decidio basar la construccion
 del GVD en la version de \emph{brushfire dinamico} propuesta en \cite{Lau2013},
-a la que se estara haciendo refencia al mencionar \emph{brushfire dinamico}
-desde este punto.
+a la que se estara haciendo refencia cuando se mencione \say{\emph{brushfire dinamico}
+original} desde este punto.
 
-Dado que se segmenta el entorno segun el metodo que se comenta en la seccion
-\ref{subsec:mapaTopGVD}, se es necesario encontrar los puntos criticos y lineas
-criticas asociadas al GVD construido. Mientras que entcontrar los puntos
-criticos (celdas criticas en el contexto de la implemtacion) solo requiere de
-las celdas pertenecientes al GVD y el del mapa de distancias subproducto de
-\emph{brushfire dinamico}, las lineas criticas requieren de encontrar las
-celdas mas cercanas de los generadores que generan la pertenecia de la celda
-critica al GVD (a los que se denominará como celdas base), informacion no
-es un resultado de \emph{brushfire dinamico}. En \emph{brushfire dinamico} no
-se manejan los generadores base de foma directa, la pertenencia de una celda al
-GVD se determina segun si las celdas ocupadas mas cercanas $oc_1$ y $oc_2$ de
-las dos celdas $c_1$ y $c_2$ involucradas en un choque de olas son o no
-adyacentes entre si. De esta forma se logra aproximar el GVD resultante de
-considerar generadores conexos y convexos \ref{subsec:GVD}. Determinar los
-puntos base con este metodo no es posible ya que una vez determinada la
-pertenecia de una celda $c_1$ al GVD no se almacena 
+A lo largo de esta seccion se explicaran las conicidencia y cambios entre
+\emph{brushfire dinamico} y la variante de este implementada en este proyecto.
 
+\subsection{Pertenecia}
+La implemetacion realizada en proyecto mantiene las olas conistentes e
+inconsistentes para el calulo incremental de mapas de distancia. Tambien
+mantiene la idea que las olas inconsistentes remueven las celdas que atraviesan
+del GVD y la idea de que las celdas en las cuales las ondas consistentes se
+detienen son las celdas cuya pertenencia al GVD se comprueba.
 
-Se mantienen todos los obts a minima distancia, y los que \say{casi} estan a
-minima distancia, siendo estos los puntos bases (puntos mas cercanos a
-generadosres base) tomados en cuenta, segun estos se define si un punto pertenece o no al GVD.
+\todo{seguir desde aca}
+El cambio que se hace es en el criterio con el cual se comprueba la pertenencia
+de una celda. En el \emph{brushfire dinamico} original se hace EXPLICAR
+CON LO DE MAS ABAJO. En esta implementacion cambia, al existir un choque de
+olas primero se establecen los pseudosources y luego de existir dos
+pseudosources no adjacentes entre si la celda pertenece.
 
-Aunque existe una etapa de erosion posterior como en Lau para asegurar la sparceness. Comentar que se basa en el A de zhang, que en principio es mas eficiente que chequear patrones
+Explicar definicion de un pseudosource, y porque esto termina siendo distinto
+que lo que se plantea en el \emph{brushfire dinamico} original.
 
 Oportunidad de comentar que mejora sobre lau porque perminte generar gvd en
 lugares a dist 1 de los obstaculos, cosa que lau no permite ni explica porque.
 
-Desribir problemas de desconexion presentados en las diversas implementaciones: 
-\begin{itemize}
-  \item mencionar los de kalra
-  \item los generados por considerar dist 1 en lau
-  \item y mostrar que liu ming aunque no explique que hace bien tambien los tiene?
-\end{itemize}
+Explicar que quizas se relacione al tema corredor de largo 2 que se va a explicar en \ref{subsec:filt}.
+
+\subsection{Filtrado}\label{subsec:filt}
+Los vetices que en una iteracion se determina que deben pertenecer al GVD segun
+el criterio de pertenecia aplicado en las celdas en las cuales se detiene una
+ola consistente, pasan por un filtrado extra. Este filtrado busca evitar lineas
+discretizadas de dos celdas de grosor que violan la propiedad \say{sparceness}
+GVD.
+
+As discussed before, different paths on the Voronoi graph correspond to
+topologically different routes in the environment (sparceness property). To preserve this property
+for GVDs on grid maps, thin Voronoi lines, i.e., being one pixel wide, are
+desired.
+
+% Spacrceness:Their application as roadmaps is an appealing technique for path
+% planning, since they are “sparse” in the sense that different paths on the
+% graph correspond to topologically different routes with respect to obstacles.
+% This
+
+En el \emph{brushfire dinamico} original el filtrado se lleva a cabo haciendo
+uso de patrones con los cuales se comprueba si el GVD queda o no disconexo
+
+Our optional pruning step erodes 2-pixel-wide Voronoi lines. Therefore, all
+new Voronoi cells are inserted into a priority queue and processed by the
+pruning stage. The image operator patterns shown in Fig. 6 (solo poner
+8-connected) match whenever the center cell s provides connectivity for one or
+more of its adjacent cells. In any pattern, a $1$ matches voro(s) = true, while
+$0$ stands for voro(s) = false, and empty fields are ignored. Where indicated
+by arrows, the same pattern is applied in all unique 90 degree rotations
+
+The second phase implements the actual pruning step. In increasing order of
+distance, the enqueued cells are iteratively popped from the priority queue. If
+such a cell has more than one neighbor on the GVD and is not required to keep
+the GVD connected, it can be removed from the GVD without affecting its
+topology. Again, this is tested using the image operator patterns: if none of
+the connectivity patterns match at the cell location, the cell is not required
+in the GVD.
+
+Enfasis en $P^8_1$ que indica que las celdas con un solo vecino deben pertenecer al GVD.
+
+En el caso de la implementacion del proyecto se comprueba si el GVD queda
+disconexo aplicando la tecnica presente en \cite{zhang1984fast},
+adicionalemtente evitando filtrar celdas con una sola celda adyacente en el GVD
+y con 2 celdas ayacentes en el GVD si estas se detectan en un corredor.
+
+Explicar caso corredor. comentar que no se considera en lau, quizas se arregla no permitiendo dist = 1
+
+% \subsection{Limpieza de aristas}
+% La limpieza de aristas es una tecnica aplicada solo en la implementación del
+% proyecto esta permite generar GVD mas limpios. 
+
+\subsection{Consideraciones de segmentacion}
+
+% segun si las celdas ocupadas mas cercanas $oc_1$ y $oc_2$ de
+
+Dado que se segmenta el entorno segun el metodo que se comenta en la seccion
+\ref{subsec:mapaTopGVD}, es necesario encontrar los puntos criticos y lineas
+criticas asociadas al GVD construido segun las cuales se dividen los segmentos.
+Recordando que el GVD contruido esta discretizado en celdas y que los conceptos
+de puntos y lineas criticas se definen en espacios continuos es necesario
+adaptarlos. 
+
+En el caso de los puntos criticos, dadas celdas $\mli{GVDD}$ que conforman al
+$GVD$ discretizado y considerando el mapa de distancia subproducto de
+\emph{brushfire dinamico} como la funcion de despeje discretizada $DD : C
+\rightarrow R$, se puede definir el conjunto de las celdas criticas (puntos
+criticos discretizados) $\mli{CrD}$ segun (\ref{eq:critDisc}). 
+
+\begin{equation}
+  % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
+  \mli{CrD} = \{c\ \in C_{\mli{GVD}} : \exists c_g \in ady(c), D(c_g) > D(c), \forall c_l \in ady(c), D(c) \leq D(c_l) \} \label{eq:critDisc}
+\end{equation}
+
+Explicar que esto no es exactamente un minimo local, si no que extienede la
+nocion a casos como los de las figuras que saque, en donde de ser solo minimo
+local no hay criticos pero al decir que no hay menors y hay al menos uno mayor
+si, cosa que es deseable dado que efectivamente los ejemplos mostrados son
+puertas y este tipo de situacion es usual en puertas sobre las esqunas de las
+habitaciones.
+
+Explicar (implica redefinir $\mli{CrD}$ , creo que lo mejor es plantear
+condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
+utilizados para los puntos criticos.
+
+Para adaptar el concepto de las lineas criticas es necesario adaptar primero el
+concepto de puntos base de un punto en el GVD, que son los puntos mas cercanos
+de los generadores que generan su pertenencia al GVD. En \emph{brushfire
+dinamico} no se manejan los generadores base de forma directa, la pertenencia de
+una celda al GVD se determina en cada choque de celdas. Dado un choque de
+celdas que involucra a las celdas $c_1$ y $c_2$, sean $oc_1$ y $oc_2$
+respectivamente sus celdas ocupadas más cercanas se considera que si $oc_1$ y $oc_2$
+son adyacentes entonces pertenecen al mismo generador generalizado y de lo
+contrario que pertenecen a distintos generadores generalizados. De esto se
+deriva que si $oc_1$ y $oc_2$ no son adyacentes entoces $c_1$ y $c_2$ deben
+pertenecer al GVD. De esta forma se logra aproximar el GVD resultante de
+considerar generadores conexos y convexos \ref{subsec:GVD}. Dado esto se
+definen los puntos que base discretizados $\mli{BPD}_c$ como las celdas
+obstaculizadas no adyacentes que generan la pertenecia de una celda $c$ al GVD.
+Las lineas criticas discretizadas se definen como las lineas discretizadas
+\cite{foleyphillips} definidas entre los centros de las celdas criticas y cada
+uno de sus puntos base discritizados.
+
+Establecido esto, es pertinente notar que la implementacion de \emph{brushfire
+dinamico} hecha en este proyecto difiere en la original en que esta almacena
+las celdas ocupadas que generan la pertenecia de un punto al GVD para ser
+utlizados posteriormente como puntos base.
+
+% Tambien se filtran las lineas criticas, como las ideas es que estas se ubiquen en umbrales 
+
+% Desribir problemas de desconexion presentados en las diversas implementaciones? 
+% \begin{itemize}
+%   \item mencionar los de kalra?
+%   \item los generados por considerar dist 1 en lau?
+%   \item y mostrar que liu ming aunque no explique que hace bien tambien los tiene?
+% \end{itemize}
+
+% Aunque existe una etapa de erosion posterior como en Lau para asegurar la
+% sparceness. Comentar que se basa en el A de zhang, que en principio es mas
+% eficiente que chequear patrones
+
+% Se mantienen todos los obts a minima distancia, y los que \say{casi} estan a
+% minima distancia, siendo estos los puntos bases (puntos mas cercanos a
+% generadosres base) tomados en cuenta, segun estos se define si un punto pertenece o no al GVD.
 
 \subsection{Consideraciones sobre el espacio desconocido}
+% , la alternativa de que los bordes no sean
+% Obstaculos (como esta no aplica a entornos abiertos y genera mas costos) y
 Explicar el problema de considerar lo desconocido, como no hacerlo lleva a GVD
-disconexos, explicar lo qeu se encuentra en el estado del arte (explicar como
-esta aplica para entornos abiertos), la alternativa de que los bordes no sean
-obstaculos (como esta no aplica a entornos abiertos y genera mas costos) y la
-alternativa de que las fronteras sean emisoras de GVD y lo desconocido no sea
-atravezable por las ondas y porque esto implica mucho menos costos para mapas
-cuando estos se comienzan a explorar y se componen de muchas celdas
-desconocidas.
+disconexos, explicar lo que se encuentra en el estado del arte (explicar como
+esta aplica para entornos abiertos) y la alternativa de que las fronteras
+(invertidas) sean emisoras de ondas consistentes e inconsistentes y lo
+desconocido no sea atravezable por las ondas y porque esto implica mucho menos
+costos para mapas cuando estos se comienzan a explorar y se componen de muchas
+celdas desconocidas.
+
+Comentar que las celdas con lo desconocido como punto base no genera lineas ni
+puntos criticos.
+
+\todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}
 
 % \subsection{Segmentacion}
 % yo diria de 
@@ -1113,12 +1232,141 @@ camino.
 
 Tocar por arriba los mecanismos de recuperacion si queda facil.
 
+\subsection{Subobjetivo}
+Es un punto intermedio de un camino que lleva a un objetivo, el cual debe ser percibido por los sensores del robot
+
+Un subobjetivo se considera completo si:
+\begin{itemize}
+  \item Existe una linea recta de grosor minDesiredDistance que lo conectan con
+    el robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a
+    minDesiredDistance. 
+  \item Esta a meno de una distancia Y (Y puede estar entre
+    forcedCompletionTolerance y $\infty$)
+\end{itemize}
+O si:
+\begin{itemize}
+  \item Esta a menos de una diatancia forcedCompletionTolerance (mencionada en otra seccion, se puede ver de reorganizar luego)
+\end{itemize}
+
+\subsection{Objetivo}
+Es el punto final de un camino, debe ser percibidopor los sensores del robot
+
+Un objetivo se considera completo si:
+\begin{itemize}
+  \item Existe una linea recta de grosor minDesiredDistance que lo conectan con el
+    robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a minDesiredDistance. 
+  \item Esta a meno de una distancia Z (Z puede estar entre forcedCompletionTolerance y alcance de sensado)
+\end{itemize}
+
+O si:
+\begin{itemize}
+  \item Esta a menos de una diatancia forcedCompletionTolerance (mencionada en otra seccion, se puede ver de reorganizar luego)
+\end{itemize}
+
+\subsection{Objetivos triviales}
+Estos objetivos son los que tienen una linea recta de grosor X que lo conectan
+con el robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a
+X. X puede ser el maximo tamaño de una puerta o la minDesiredDistance.
+\begin{itemize}
+  \item Yo use un estimado del max tamaño de la puerta para evitar objetivos
+    triviales  que esten en un segmento distinto del que esta el robot
+\end{itemize}
+
+Estos objetivos tienen el trato especial de que los camninos planificados a
+estos no son sobre el GVD si no que consiten solo en el objetivo trivial.
+
+Esto facilita la navegacion cuando el camino al objetivo es muy facil, es decir es trivial.
+
+\subsection{Objetivos no triviales}
+
+Cuando el objetivo no es trivial lo que se hace es obtener un camnino utilizando el
+gvd como roadmap.
+
+Cada punto de este camnio es un subobjetivo menos el ultimo que es el objetivo
+en si. El robot siempre se dirige al ultimo subobjetivo/objetivo no competado.
+
+De esta forma notando las condiciones de complecion si Y es grande se tiene 
+navegacion libre (delegada a move base, el nivel bajo de la jerarquia) sobre
+zonas para las cuales no existen obtaculos mientras que se navega siguientdo el
+camnino seguro (provisto por el gvd, nivel alto de la jerarquia) cuando los
+objetivos son \say{no deseables} o \say{no seguros}.
+
+Lo que se suele obtener en entornos estructurados es que los robots se mueven
+libremente en el interior los segmentos, mientras que para pasar de segmento a
+segmento utiliza el gvd para pasar por los pasajes estrechos que consituyen las
+puertas.
+
+En el caso de un Y pequeño se tiene una navegacion que sigue de forma mas estricta al GVD.
+
+% Entiendo que Y grande es mejor:
+%   `Una prueba para validar esto seria probar: Y en [50,10,5 2.5]`
+
+\subsection{Recupaeracion}
+
+\begin{itemize}
+\item Primero: "si tengo un objetivo activo y no estoy avanzando a el entoces intento recuperarme"
+  \begin{itemize}
+  \item Para saber el objetivo actual interceptar el next.
+   
+  \item Si el objetivo cambia                           $=>$ reiniciar tiempo y distancia del ultimo avance.
+
+  \item Si la distancia es menor a la del ultimo avance $=>$ actualizar tiempo y distancia del ultimo avance
+
+  \item Si pasan X segundo desde el ultimo avance y el camino no esta completo =>
+    \begin{itemize}
+    \item Hacer recovery
+    \item reiniciar el timepo desde el ultimo avance (dejar un rato antes del proximo recovery)
+    \end{itemize}
+  \end{itemize}
+
+\item Segundo: "Si segun yo lo complete pero la central me dice que no esta completado seguramente no lo estoy viendo correctamente, intento recuperarme"
+  \begin{itemize}
+  \item Si se reasigna al objetivo => Hacer recovery
+  \end{itemize}
+\end{itemize}
+
+La recuperacion cosiste de:
+\begin{itemize}
+  \item  ir un poco para atras (en direccion opuesta al objetivo)
+  \item  esperar un tiempo estimando la llegada a la posicion a la que se fue en el punto anterior
+  \item  notificar a la central de la recuperacion para reasisgnar objetivos:
+  \begin{itemize}
+    \item Util por cambiar la pos del robot tanto en Primero como en Segundo
+    \item Util en segundo porque capaz ahora si se completo el objetivo
+  \end{itemize}
+  \item  Mientras la central no atienda al pedido volver al objetivo y eventualmente seguir con el camino
+\end{itemize}
+
+
 \section{Construcción cooperativa del mapa}
-Aca tengo que comentar como funcina el map merger:
+Comentar como funcina el map merger:
 
-las actualizaciones, que las da el stack de navegacion, lo que esto implica, que incrementales (solo porcion del mapa) 
+las actualizaciones, que las da el stack de navegacion, lo que esto implica
+(los datos de los sensores se procesan en celdas), que son incrementales (solo
+porcion del mapa) tanto la entradas como las salidas
 
-Y por otro lado ocmo estas actualizaciones se integra (el metodo que se describe en \cite{stachniss2009robotic}).
+Y por otro lado como estas actualizaciones se integra (el metodo que se describe en \cite{stachniss2009robotic}).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 % basura de: \subsection{Simplificacion de fronteras basada en cubrimiento}
 
