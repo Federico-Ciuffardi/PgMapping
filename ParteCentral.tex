@@ -12,12 +12,14 @@ el algoritmo de actualización presentado en \cite{stachniss2009robotic}.
 
 Con respecto al problema de asignación de tareas (sección
 \ref{sec:exploracion}) se presentan soluciones para cada una de sus partes.
-Para la identificación de objetivos se propone una técnica novedosa que
-determina \todo{FEDE: estaria bueno aca poner un adjetivo que resuma como es el
-algorimo que desarrolle. De forma: determinista, geometrica, otro?} como
-objetivos a un subconjunto de los puntos fronterizos. Con respecto a la
-asignación de objetivos a robots, esta se resuelve de forma coordinada
-aplicando una variante de lo presentado en la sección \ref{subsec:wurmCoord}.
+Para la identificación de objetivos se propone una técnica novedosa basada en
+el rango de sensado de los robots que determina \todo{FEDE: estaria bueno aca
+  poner un adjetivo que resuma como es el algorimo que desarrolle. capaz basada
+  en el cubrimiento, me queda la duda de usar ese concepto dado que es medio
+  inventado, capaz basada en el rango de sensado?} como objetivos a un
+  subconjunto de los puntos fronterizos. Con respecto a la asignación de
+  objetivos a robots, esta se resuelve de forma coordinada aplicando una
+  variante de lo presentado en la sección \ref{subsec:wurmCoord}.
 
 La asignación requiere de la construcción de un mapa topológico, para esto se
 implementa la técnica descrita en la sección \ref{subsec:mapaTopGVD},
@@ -37,7 +39,7 @@ Propuesta y estudio de un algoritmo novedoso para identificación de objetivos b
 
 Estudiar la coordinación que se propone en \cite{wurm2008coordinated} utilizando una construcción incremental del GVD.
 
-Propuesta y estudio de un algoritmo de construcción incremental de un GVD basado en \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando principalmente la forma de determinar las celdas pertenecientes al GVD.
+% Propuesta y estudio de un algoritmo de construcción incremental de un GVD basado en \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando principalmente la forma de determinar las celdas pertenecientes al GVD.
 
 Adicionalmente se estudia un aspecto critico que no esta explicito en el estado del arte\todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}, el problema asociado a como se tratan las celdas de estado desconocido en la construcción del GVD. Para este problema se comentan posibles alternativas, pasando por la que esta presente en el estado del arte y una técnica novedosa que permite una mayor eficiencia.
 
@@ -921,42 +923,37 @@ que estos se distribuyan sobre los segmentos (seccion \ref{subsec:wurmCoord}).
 El algorimo de asigacion, se corresponde al algorimo
 \ref{alg:resolucionsubastasegmentos}, donde $R$ es el conjunto de los
 identificadores de los robots de los cuales se recibieron valuaciones, $O$ el
-conjnto de los identificadores de los objetivos valuados y $Costos$ un conjunto
+conjnto de los identificadores de los objetivos valuados, $Costos$ un conjunto
 de tuplas $(c_{i,j},r_i,o_j)$ los $c_{i,j}$ computados a partir de las
-valuacion recibida de $r_i$ para $o_j$. El conjunto $S$ es el conjunto de
-segmentos y la funcion $segmento : O \rightarrow S$ dado un objetivo devulve el
-segmento al que pertence. Los conjuntos $O_1$,$O_2$,...,$O_k$,...,$O_{|S|}$ contienen los
-objetivos que estan dentro de un segmento $s_k\in S$.
+valuacion recibida de $r_i$ para $o_j$ y $S$ el conjunto de
+segmentos. La funcion $segmento : O \rightarrow S$ dado un objetivo devulve el
+segmento al que pertence y la funcion $\#objetivos : S \rightarrow N$ devuelve
+el numero de objetivos en un segmento.
+% Los conjuntos $O_1$,$O_2$,...,$O_k$,...,$O_{|S|}$ contienen los
+% objetivos que estan dentro de un segmento $s_k\in S$.
 
 \vspace{1cm}
   
 \begin{algorithm}[H]
 \SetAlgoLined
   \SetKwInOut{Input}{Entrada}
-  \Input{$R, O, S, Costos, O_1, O_2,...,O_{|S|}$}
+  \Input{$R, O, S, Costos$} % O_1, O_2,...,O_{|S|}$}
 %   // PARTE 1
-%   //   Determinar el número a no superar mencionado en la restricción (2). Dicho número depende de dos dos números 
-%   //   cocienteDistribucion y restoDistribucion, por lo tanto serán estos los que realmente se van a determinar.
-  
-    %ALT $segObjs :=$ Cola de prioridad vacia \tcp{Valores menores quedan primeros en la cola}
-    $segObjs := \emptyset$\\
+    $segObjs :=$ Multiconjunto vacio 
 
-    %: cola de prioridad que contiene valores de tipo numFronteras (int) donde un menor numFronteras
-    %  es prioritario frente a uno mayor. Inicializado vacío.
-
-    % \tcp{DFS desde $c$ agregando las celdas visitadas a la componente conexa $C_i$}
   
 %   /// recorrida de todos los elementos del diccionario, con el propósito de construir segFrontColaPrio
     \ForEach{$s_k \in S $}{ 
-     %ALT segObjs.encolar($|O_k|$)\\
-     $segObj = segObj \cup \{|O_k|\}$\\
+     %ALT1 segObjs.encolar($|O_k|$)\\
+     %ALT2 $segObj = segObj \cup \{|O_k|\}$\\
+     $segObj = segObj \cup \{\#objetivos(s_k)\}$\\
     }
     
     $numSegs := |S|$\\
     $numRobs := |R|$\\
     $converge := false$\\
 
-    \While{$\lnot (segObjs.vacia() \lor converge$)}{
+    \While{$\lnot (segObjs = \emptyset \lor converge$)}{
       $cocienteDist := numRobs\ \ div\ \ numSegs$\\
       $restoDist    := numRobs\ \ mod\ \ numSegs$\\
     
@@ -964,25 +961,18 @@ objetivos que estan dentro de un segmento $s_k\in S$.
       $segObjs := segObjs - segObj$\\
     
       $converge := (segObj > cocienteDist) \lor (restoDist = 0 \land segObj = cocienteDist)$\\
-    
-%     // conciente crece siempre porque
-    
-%     // si no se puede parar es porque el segmento no tiene suficientes fronteras, por lo tanto se puede asumir que 
-%     // que todas sus fronteras serán asignadas al intentar de distribuir de forma uniforme a los robots sobre los segmentos
-%     // siendo la restricción (1) la limitante. Por lo tanto se calcula numRobots y numSeg teniendo lo anterior en cuenta
-%     // (el segmento ya no se contabiliza en numSeg y se resta de numRobots tantos robots como fronteras tiene el segmento).
       \If{$\lnot converge$}{
-        $numRobots := numRobots - segFront$\\
+        $numRobots := numRobots - segObj$\\
         $numSeg := numSeg - 1$\\
       }
     }
 %   // PARTE 2
     $asignaciones := \emptyset$\\
 
-    $segRobNums :=$ diccionario de $S$ a enteros, siendo 0 el defecto\\   
+    $segRobNums :=$ diccionario de $S$ a enteros, siendo 0 el entero asignado por defecto\\   
 
     \While{$R \neq \emptyset \land O \neq \emptyset$}{
-      $(c_{i,j}, r_i, o_j) := min\ Costos$ \tcp{Una tupla con minimo $c_{i,j}$}
+      $(c_{i,j}, r_i, o_j) := min\ Costos$ \tcp{Tupla de $Costos$ con minimo $c_{i,j}$}
       $Costos := Costos - (c_{i,j}, r_i, o_j)$\\
       $s_k := segmento(o_j)$\\
       $distribuido := segRobNums[s_k] < cocienteDist \lor (restoDist > 0 \land segRobNums[s_k] < cocienteDist + 1)$\\
@@ -998,107 +988,86 @@ objetivos que estan dentro de un segmento $s_k\in S$.
     }
   \Return asgnaciones 
     
- \caption{Resolución de subasta de segmentos}
+ \caption{Asigacion de robots a objetivos}
  \label{alg:resolucionsubastasegmentos}
 \end{algorithm}
 
-El algorimo se puede dividir en dos partes, el calculo de valores
-$cocienteDist$, $restoDist$ (lineas 1-18) y la asignacion distribuida (lineas
+El algorimo se puede dividir en dos partes, el \emph{calculo de valores}
+$cocienteDist$, $restoDist$ (lineas 1-18) y la \emph{asignacion distribuida} (lineas
 19-36). 
 
 Los valores $cocienteDist$ y $restoDist$ se utlizan para lograr una asignacion
 distribuida sobre los segmentos conisderando los objetivos contenidos en cada
 uno. La distribucion deseada se corresponde con la distribucion que se logra al
-hacer $N$ rondas en las cuales se asigna un solo robot por segmento con tenga
+hacer $N$ rondas en las que se asigna un solo robot por segmento con tenga
 objetivos sin asignar. La ronda $N$ termina cuando no quedan robots o objetivos
 por asignar. Si existen menos objetivos que robots se tiene que la ronda $N$
 culmina con todos los objetivos asignados y algunos robots ociosos. De existir
 mas objetivos que robots luego de la ronda $N$ se pueden tener segmentos cuyos
-objetivos estan todos asignados y se tienen segmentos dentro de los cuales
+objetivos estan todos asignados y se tienen segmentos dentro de los que 
 existen objetivos sin asignar, la distribucion sera unfirme sobre estos ultimos
 segmentos. Es decir los $K$ segmentos que tienen objetivos sin asignar
 cumpliran con (\ref{ec:uniform}), existiendo $restoDist$ segmentos con
 $N=cocienteDist+1$ robots asignados y $K-restoDist$ segmentos con
-$cocienteDist$ robots asignados. La idea detras del calculo de $cocienteDist$ y
-$restoDist$ es comenzar por una distribucion completamente uniforme sin
-considerar los objetivos de los segmentos y luego de forma iterativa (lineas 8-18) ajustar
-estos valores hasta sean consistentes con su definicion, es decir convergen.
+$cocienteDist$ robots asignados. El \emph{calculo de valores} se lleva a cabo
+inicializando $cocienteDist$ y $restoDist$ asumiendo una distribucion
+completamente uniforme (lineas 5-6 y 9-10 primera iteracion), sin considerar si
+es posible dado el numero de objetivos en cada segmento. Luego de forma
+iterativa, segmento a segmento y comenzando por los que tienen menos objetivos
+(lineas 11-12), comprobar si son de los segmentos cuyos objetivos seran todos
+asignados (linea 13) y de serlo ajustar los valores para que la distribucion
+sea uniforme en el resto de conjuntos (lineas 14-17 y 9-10). Las iteraciones
+continuan hasta que solo quedan los segmentos en los que quedaran objetivos sin
+asignar (linea 8), cuando esto sucede se dice que $cocienteDist$ y $restoDist$
+convergen.
+% a los valores consistentes con la distribucion deseada.
 
-Con los valores $cocienteDist$ y $restoDist$ calculados la asignacion conssite en...
+Con los valores $cocienteDist$ y $restoDist$ calculados la \emph{asignacion
+distribuida} consiste en retirar las tuplas $(c_{i,j},r_i,o_j)$ de $Costos$
+comenzando por las de menor costo $c_{i,j}$ (lineas 22-23) y para cada una de
+estas asignar $r_i$ a $o_j$ (lineas 27-33), si $r_i$ y $o_j$ no forman parte de
+ninguna de las asiganciones realizadas hasta el momento, y si la asignacion
+mantiene la distribuicion deseada (lineas 25-26). Esto se repite hasta que
+todos los robots estan asignados o que no quedan mas objetivos por asignar
+(linea 21).
 
 % , estos se calculan de forma que todos los segmentos tengan todos sus objetivos asignados a robots, un numero de robots asignadosk
 
-En resumen, la central asigna a los robots de forma voraz y priorizando
-distribuirlos lo mas posible sobre los segmentos dada la cantidad de objetivos
-en cada segmento. Seguido a esto la central informa a cada robot su objetivo
-asignado, quedando a la espera de nuevos pedidos por parte de los robots para
-comenzar una nueva subasta. 
+En resumen, la central asigna a los robots a objetivos considerando los costos
+de forma voraz y con la restriccion de distribuir los robots sobre los
+segmentos considerando la cantidad de objetivos que contienen. Luego de
+ejecutar el algorimo de asigacion la central informa a cada robot el objetivo
+que le fue asignado, quedando a la espera de nuevos pedidos por parte de los
+robots para comenzar una nueva subasta. 
 
-% El algorimo toma como entrada el conjunto de robots $r_i$ de los cuales se recibieron
-% valuaciones, de objetivos $o_j$ valuados y de los costos calculados $c_{i,j}.
-
-% Los objetivos de exploracion a subastar el artículo propone priorizar la
-% distribución de los robots y no simplemente realizar un enfoque basado en las
-% fronteras. Recordar que la segmentación busca que los robots se separen y
-% exploren las habitaciones, aún cuando tengan fronteras cercanas a ellos en
-% habitaciones exploradas por otros robots.
-
-% La central da comienzo a la subasta enviando a cada robot el mapa global hasta
-% el momento, el GVD e información sobre los segmentos. De cada segmento se
-% envía, el punto crítico que delimita el segmento y las fronteras del mismo,
-% ordenadas en forma creciente por distancia al punto crítico.
-
-% Por otra parte, el robot debe calcular un costo para cada segmento, este costo se calcula de la siguiente manera:
-% \begin{equation}
-% C^i_s = dist(f_{min}, r_i) - in\_segment
-
-% in\_segment = 
-%      \begin{cases}
-%        dis(r_i,c_s) & si\ el\ robot\ esta\ en\ s.\\
-%        0 & sino. 
-%      \end{cases}
-% \end{equation}
-
-% Donde $f_{min}$ es la frontera más cercana al robot, la distancia entre $r_i$ y $c_s$ y la determinación del segmento para el robot requiere los siguientes pasos:
-
-% \begin{enumerate}
-%     \item Unir la posición del robot con el vértice del GVD más cercano.
-%     \item Guardar el segmento $s_v$ al que pertenece el vértice más cercano al robot.
-%     \item Unir la fronteras más cercana a cada punto crítico para cada segmento al GVD.
-%     \item Unir todas las fronteras para el segmento $s_v$ al GVD.
-%     \item Utilizar el algoritmo A* sobre el grafo para obtener los caminos desde el robot hasta las fronteras agregadas.
-%     \item En caso de que el camino robot-frontera contenga al punto crítico del segmento $s_v$ se asume que el robot no pertenece al segmento (debe cruzar la puerta de la habitación). De lo contrario, el robot esta en el segmento $s_v$.
-%     \item Para cada segmento se calcula $C^i_s$.
-% \end{enumerate}
-
-% Recordar que los puntos críticos suelen posicionarse en puertas (mínimos
-% locales, grado 2, vecino de una intersección), por lo que son entradas a
-% habitaciones. En el caso de que este pertenezca al camino robot-frontera
-% significa que el robot se encuentra fuera de la habitación y por ende se
-% considera fuera del segmento. Asimismo, la frontera más cercana al robot será
-% la frontera más cercana al punto crítico. 
-% La aplicación de este factor de descuento resulta en que aquellos robots que
-% tengan una distancia mayor a la puerta (punto crítico) y que consecuentemente
-% se encuentren más adentrados en el segmento, sean priorizados para que
-% continúen la exploración en este, a diferencia con aquellos que se encuentran
-% más cercanos a la puerta y el costo de cambiar de segmento sea menor.
-
-% Para unir un nuevo punto al GVD es utilizada una función de distancias similar
-% a la utilizada para la generación de GVD. Consta en expandirse desde la celda
-% hasta llegar a un vértice del GVD. Esta celda pertenecerá al mismo segmento que
-% el vértice más cercano a ella.
-
-% Continuando con la subasta, el robot prepara la oferta y la envía a la central,
-% quien estaba esperando por estas. En la sección  4.5, Ventanas, se discute el
-% tiempo que la central debe esperar por estas respuestas. Más aún, cada subasta
-% tiene su propia identificación, evitando que se mezclen mensajes de subastas
-% anteriores. 
-
-% Una vez recibidas las ofertas, la central resuelve la subasta con el algoritmo \ref{alg:resolucionsubastasegmentos}.
 
 \section{Construccion del GVD}\label{sec:MiConstGVD}
 
-Tratar de refenciar al maximo a lau, concentrarmente en describir los cambios.
+Considerando los problemas de eficiencia del algorimo \emph{brushfire} (seccion
+\ref{subsec:constGVD}) y los problemas de su version incremental
+\emph{brushfire dinamico} (seccion \ref{subsec:constGVDInc}) como fue propuesta
+originalmente en \cite{kalra2009incremental}, se decidio basar la construccion
+del GVD en la version de \emph{brushfire dinamico} propuesta en \cite{Lau2013},
+a la que se estara haciendo refencia al mencionar \emph{brushfire dinamico}
+desde este punto.
+
+Dado que se segmenta el entorno segun el metodo que se comenta en la seccion
+\ref{subsec:mapaTopGVD}, se es necesario encontrar los puntos criticos y lineas
+criticas asociadas al GVD construido. Mientras que entcontrar los puntos
+criticos (celdas criticas en el contexto de la implemtacion) solo requiere de
+las celdas pertenecientes al GVD y el del mapa de distancias subproducto de
+\emph{brushfire dinamico}, las lineas criticas requieren de encontrar las
+celdas mas cercanas de los generadores que generan la pertenecia de la celda
+critica al GVD (a los que se denominará como celdas base), informacion no
+es un resultado de \emph{brushfire dinamico}. En \emph{brushfire dinamico} no
+se manejan los generadores base de foma directa, la pertenencia de una celda al
+GVD se determina segun si las celdas ocupadas mas cercanas $oc_1$ y $oc_2$ de
+las dos celdas $c_1$ y $c_2$ involucradas en un choque de olas son o no
+adyacentes entre si. De esta forma se logra aproximar el GVD resultante de
+considerar generadores conexos y convexos \ref{subsec:GVD}. Determinar los
+puntos base con este metodo no es posible ya que una vez determinada la
+pertenecia de una celda $c_1$ al GVD no se almacena 
+
 
 Se mantienen todos los obts a minima distancia, y los que \say{casi} estan a
 minima distancia, siendo estos los puntos bases (puntos mas cercanos a
@@ -1116,6 +1085,7 @@ Desribir problemas de desconexion presentados en las diversas implementaciones:
   \item y mostrar que liu ming aunque no explique que hace bien tambien los tiene?
 \end{itemize}
 
+\subsection{Consideraciones sobre el espacio desconocido}
 Explicar el problema de considerar lo desconocido, como no hacerlo lleva a GVD
 disconexos, explicar lo qeu se encuentra en el estado del arte (explicar como
 esta aplica para entornos abiertos), la alternativa de que los bordes no sean
@@ -1149,10 +1119,6 @@ Aca tengo que comentar como funcina el map merger:
 las actualizaciones, que las da el stack de navegacion, lo que esto implica, que incrementales (solo porcion del mapa) 
 
 Y por otro lado ocmo estas actualizaciones se integra (el metodo que se describe en \cite{stachniss2009robotic}).
-
-
-
-
 
 % basura de: \subsection{Simplificacion de fronteras basada en cubrimiento}
 
