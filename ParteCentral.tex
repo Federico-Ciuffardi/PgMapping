@@ -13,18 +13,24 @@ el algoritmo de actualización presentado en \cite{stachniss2009robotic}.
 Con respecto al problema de asignación de tareas (sección
 \ref{sec:exploracion}) se presentan soluciones para cada una de sus partes.
 Para la identificación de objetivos se propone una técnica novedosa basada en
-el rango de sensado de los robots que determina \todo{FEDE: estaria bueno aca
-  poner un adjetivo que resuma como es el algorimo que desarrolle. capaz basada
-  en el cubrimiento, me queda la duda de usar ese concepto dado que es medio
-  inventado, capaz basada en el rango de sensado?} como objetivos a un
+el rango de sensado de los robots que determina 
+% \todo{FEDE: estaria bueno aca
+%   poner un adjetivo que resuma como es el algorimo que desarrolle. capaz basada
+%   en el cubrimiento, me queda la duda de usar ese concepto dado que es medio
+%   inventado, capaz basada en el rango de sensado?}
+  como objetivos a un
   subconjunto de los puntos fronterizos. Con respecto a la asignación de
   objetivos a robots, esta se resuelve de forma coordinada aplicando una
   variante de lo presentado en la sección \ref{subsec:wurmCoord}.
 
-La asignación requiere de la construcción de un mapa topológico, para esto se
-implementa la técnica descrita en la sección \ref{subsec:mapaTopGVD},
-construyendo el GVD de forma incremental con una variante del algoritmo
-\emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}).
+La asignación requiere de la construcción de
+un mapa topológico, para esto se implementa
+la técnica descrita en la sección
+\ref{subsec:mapaTopGVD} que requiere de un
+GVD, el cual se contruye de forma
+incremental con una variante del algoritmo
+\emph{brushfire dinámico} (sección
+\ref{subsec:constGVDInc}).
 
 Luego de asignado a un objetivo el robot deberá llegar hasta el, para esto es
 necesario solucionar el este problema de planificación. La solución desarrollada 
@@ -1227,6 +1233,8 @@ puntos criticos.
 % Algunos resultados?
 
 \section{Planificación}
+Referenciar los tipos de caminos a la parte de la valuacion que habla de esto.
+
 Describier el proceso a detalle desde que llega un camino, y como este se va
 completando poco a poco hasta llegar al objetivo de exploracion al final del
 camino.
