@@ -225,20 +225,20 @@ exito o el fracaso en seguir el camino asignado.
 
 % \section{Ciclo de la central}
 \section{Definiciones}
-\subsection{Grillas de ocupacion}
+\subsection{Grillas de ocupacion}\label{subsec:Grilla}
 En el contexto de este trabajo se utlizara las siguientes definiciones referentes a
 grillas de ocupacion, introducidas en la seccion \ref{subsec:mapas}.
 
-El conjunto $C\subseteq R^2$ esta conformado de los centros de cada celda de la
+El conjunto $\mli{CG}\subseteq R^2$ esta conformado de los centros de cada celda de la
 grilla de ocupacion. Las celdas se repreresentan segun sus centros y viceversa
 sin ambigüedad, por lo tanto en lo que resta de este informe se usaran ambos
 terminos de forma indistinta.
 
-Se dice que cada celda $c\in C$ tiene asociada una probabilidad $P(c|m(1:k))$
+Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|m(1:k))$
 de estar ocupada, donde $m(1:k)$ es el conjunto de medidas resultantes de algun
 sensor desde el comienzo de la exploarcion.
 
-La funcion $e : C \rightarrow E$ dado un centro de celda, devuelve uno de los
+La funcion $e : \mli{CG} \rightarrow E$ dado un centro de celda, devuelve uno de los
 tres estados posibles $E=\{libre, ocupado, desconocido\}$ segun la probabilidad
 asociada a $c$. En el contexto de este proyecto la funcion $e$ se define segun
 (\ref{eq:estado}).
@@ -254,15 +254,22 @@ asociada a $c$. En el contexto de este proyecto la funcion $e$ se define segun
   \label{eq:estado}
 \end{equation}
 
-La funcion $ady : C \rightarrow P(C)$ dada una celda devuelve el conjunto de
-celdas adyacentes a la misma. La definicion de $ady$ utlizada en el contexto de
-este proyecto se presenta en (\ref{eq:vecinos}) donde $n_1, n_2, ..., n_8$ se
-corresponden a vecinos diagonales y horizontales de $c$ segun se muestran en la
-figura \ref{fig:vecinos}.
+La funcion $ady_4 : \mli{CG} \rightarrow P(\mli{CG})$ dada una celda $c$ devuelve el conjunto
+de celdas horizontalmente adyacentes y la funcion $ady_8 : \mli{CG} \rightarrow P(\mli{CG})$
+devuelve el conjunto de celdas adyacentes horizontal y diagonalmente. Las
+definiciones de $ady_4$ y $ady_8$ se presentan en (\ref{eq:vecinos4}) y
+(\ref{eq:vecinos8}) respectivamente donde $n_2, n_4, n_6, n_8$ se corresponden
+a vecinos horizontales y $n_1, n_3, n_5, n_7$ se corresponden a los vecinos
+diagonales de $c$ segun se muestran en la figura \ref{fig:vecinos}.
 
 \begin{equation} 
- ady(c)=\{n_i : 1\leq i \leq 8, n_i \in C\}
- \label{eq:vecinos}
+ ady_4(c)=\{n_{k*2} : 1\leq i \leq 4, n_k \in C\}
+ \label{eq:vecinos4}
+\end{equation} 
+
+\begin{equation} 
+ ady_8(c)=\{n_i : 1\leq i \leq 8, n_i \in C\}
+ \label{eq:vecinos8}
 \end{equation} 
 
 \begin{figure}[H]
@@ -272,17 +279,21 @@ figura \ref{fig:vecinos}.
   \label{fig:vecinos}
 \end{figure} 
 
-Notar que la relacion de adyacencia es simetrica por lo que $c_1 \in ady(c_2) \Leftrightarrow c_2 \in ady(c_1)$.
+Desde este punto se utlizara la funcion $ady$ como una funcion de adyacencia
+generica que puede ser tanto $ady_4$ como $ady_8$ a no ser que se indique lo
+contrario.
+Notar que la relacion de adyacencia es simetrica por lo que $c_1 \in ady(c_2)
+\Leftrightarrow c_2 \in ady(c_1)$.
 % This map is obtained from the occupancy probability grid by a simple clipping operation with a threshold of 0.5. The gray areas of the maximum-likelihood map correspond to cells that have not been sensed by the robot.
 
 \subsection{Componentes conexas} \label{subsec:CompComp}
 Una descomposicion en componentes conexas de un conjunto de
-celdas $C$ es un conjunto $CC\in P(C)$ compuesto por $N$ conjuntos $C_i$ con
+celdas $C \subseteq \mli{CG}$ es un conjunto $CC\in P(C)$ compuesto por $N$ conjuntos $C_i$ con
 $i\in[1,N]$ tales que:
 \begin{itemize}
   \item $\bigcup_{i=1}^{N}C_i = C$ 
   \item Para todo $i,j \in [1,N]$ $C_i\cap C_j = \emptyset$
-  \item Para todo $i \in [1,N]$, para todo par $c_1,c_2 \in C_i$ se cumple que $c_1 \in ady(c_2)$.\todo{arrglar, seria hay camnio en $C_i$}
+  \item Para todo $i \in [1,N]$, para todo par $c_1,c_2 \in C_i$ se cumple que existe un camino de celdas adyacentes en $C_i$ que llevan desde $c_1$ a $c_2$.
   \item No existen $i,j \in [1,N]$ tales que existan $c_1 \in C_i$ y $c_2 \in C_j$ que cumplan con $c_1 \in ady(c_2)$ 
 \end{itemize}
 
@@ -364,7 +375,7 @@ asociado es $desconocido$ (figura \ref{fig:fronteras}).
 Por lo tanto segun Yamauchi los objetivos de exploración seran las celdas
 fronteras $F$ segun se definen en (\ref{eq:fronteras}).
 \begin{equation} 
-  F = \{ c \in C : e(c) = libre, \exists n \in ady(c), e(n) = desconocido  \}
+  F = \{ c \in \mli{CG} : e(c) = libre, \exists n \in ady(c), e(n) = desconocido  \}
   \label{eq:fronteras}
 \end{equation}
 
@@ -736,11 +747,16 @@ los robots sobre estos.
 La identificacion de objetivos se lleva a cabo con el metodo descrito en la
 sección \ref{subsec:MiSimp}.
 
-El mapa topológico se construye con la tecnica descrita en la seccion
-\ref{subsec:mapaTopGVD} que se basa en el uso de un GVD. Uno de los cambios
-principales con respecto al trabajo original de \cite{wurm2008coordinated} es
-la forma en la cual se contruye el GVD. En el trabajo original se hace uso de
-un metodo de construccion no incremental, en este proyecto con el motivo de
+El mapa topológico necesario para saber cuales son los segmentos sobre
+los cuales distribuir a los robots, se construye en esta etapa con una
+tecnica que al igual que en el trabajo original de
+\cite{wurm2008coordinated} se basa en la tecnica de \cite{Thrun1998}
+explicada en la seccion \ref{subsec:mapaTopGVD} que hace uso de 
+un GVD (detalles de la implementación de esta tecnica se tratan en
+\ref{subsec:mapaTopGVDGrid}). Uno de los cambios principales con
+respecto al trabajo original de \cite{wurm2008coordinated} es la forma
+en la cual se contruye el GVD. En el trabajo original se hace uso de un
+metodo de construccion no incremental, en este proyecto con el motivo de
 alcanzar una implementación que logre funcionar en tiempo real (seccion
 \ref{subsec:constGVDInc}) se reemplaza por una variante del algoritmo
 incremental \emph{brushfire dinamico} que se presentará en la seccion
@@ -1046,164 +1062,52 @@ ejecutar el algorimo de asigacion la central informa a cada robot el objetivo
 que le fue asignado, quedando a la espera de nuevos pedidos por parte de los
 robots para comenzar una nueva subasta. 
 
-
-\section{Grafo generalizado de Voronoi}\label{sec:MiConstGVD}
-
-Considerando los problemas de eficiencia del algorimo \emph{brushfire} (seccion
-\ref{subsec:constGVD}) y los problemas de su version incremental
-\emph{brushfire dinamico} (seccion \ref{subsec:constGVDInc}) como fue propuesta
-originalmente en \cite{kalra2009incremental}, se decidio basar la construccion
-del GVD en la version de \emph{brushfire dinamico} propuesta en \cite{Lau2013},
-a la que se estara haciendo refencia cuando se mencione \say{\emph{brushfire dinamico}
-original} desde este punto.
-
-A lo largo de esta seccion se explicaran las conicidencia y cambios entre
-\emph{brushfire dinamico} y la variante de este implementada en este proyecto.
-
-\subsection{Algorimo general}
-\begin{algorithm}[h]
-  \SetKwProg{main}{Algorithm}{}{}
-  \begin{multicols}{2}
-\main{\funone{b}}{
-        \KwData{MyData b}
-\nl     \While{this is true}{
-\nl         Do X\;
-\nl         Do X\;
-        }
-\nl     Do X\;
-    }
-
-  \end{multicols}
-  \caption{Resolve 1 and 3}
-\end{algorithm}
-
-% poner pseudocodigo de todo lo que hice basado en el de lau
-% Si se sigue entendiendo lo de abajo sin esto me parece mejor evitarlo (muy similar a lau que ya se explico (sin pseudo pero la idea si) y la explicacion ocn pseudo puede llevar algunas carillas)
-
-\subsection{Pertenecia}
-La implemetacion realizada en proyecto mantiene las olas conistentes e
-inconsistentes para el calulo incremental de mapas de distancia. Tambien
-mantiene la idea que las olas inconsistentes remueven las celdas que atraviesan
-del GVD y la idea de que las celdas en las cuales las ondas consistentes se
-detienen y las celdas que causaron que se detengan son las celdas cuya
-pertenencia al GVD se comprueba.
-
-capaz prodria decir la def de pertenecia dado un choque de olas, explicar que
-un choque de olas siempre se da entre dos celdas, explicar el de lau, y el mio,
-estableciendo bien como es el tema de los pseudosources y las diff, dada la
-info que lleva la ola, etc. Aunque puede ser dificil dar ejemplos
-
-El cambio que se hace es en el criterio con el cual se comprueba la pertenencia
-de una celda. En el \emph{brushfire dinamico} original se hace EXPLICAR
-CON LO DE MAS ABAJO. En esta implementacion cambia, al existir un choque de
-olas primero se establecen los pseudosources y luego de existir dos
-pseudosources no adjacentes entre si la celda pertenece.
-
-Explicar definicion de un pseudosource (SACAR DE LAS NOTAS), y porque esto termina siendo distinto
-que lo que se plantea en el \emph{brushfire dinamico} original.
-
-Capaz que explicar que el evitar generar si no hay dos basis no vecions es el evitar generar incorrectamente gvd en corredores diagonales. (aunque puede dar lugar a la discucion de que pasa si no es completamente diagonal, cosa que sospecho que puede dar problemas similares)
-
-Oportunidad de comentar que mejora sobre lau porque perminte generar gvd en
-lugares a dist 1 (ver bien que), cosa que lau no permite por resistencia al ruido pero que con el metodo actual no llevo mayores inconvenientes permitiendo generar gvd en grillas con el maximo tamaño de celda posible en el cual las puertas mas chicas consisten de una unica celda ejemplo de algo asi: (esta en comentarios de latex)
-
-%   mio            lau
-% - - | - -      - - - - -
-% - - | - -      - - - - -
-% X X | X X  VS  X X - X X 
-% - - | - -      - - - - -
-% - - | - -      - - - - -
-
-Explicar que quizas se relacione al tema corredor de largo 2 que se va a explicar en \ref{subsec:filt}.
-
-\subsection{Filtrado}\label{subsec:filt}
-Los vetices que en una iteracion se determina que deben pertenecer al GVD segun
-el criterio de pertenecia aplicado en las celdas en las cuales se detiene una
-ola consistente, pasan por un filtrado extra. Este filtrado busca evitar lineas
-discretizadas de dos celdas de grosor que violan la propiedad \say{sparceness}
-GVD.
-
-As discussed before, different paths on the Voronoi graph correspond to
-topologically different routes in the environment (sparceness property). To preserve this property
-for GVDs on grid maps, thin Voronoi lines, i.e., being one pixel wide, are
-desired.
-
-% Spacrceness:Their application as roadmaps is an appealing technique for path
-% planning, since they are “sparse” in the sense that different paths on the
-% graph correspond to topologically different routes with respect to obstacles.
-% This
-
-En el \emph{brushfire dinamico} original el filtrado se lleva a cabo haciendo
-uso de patrones con los cuales se comprueba si el GVD queda o no disconexo
-
-Our optional pruning step erodes 2-pixel-wide Voronoi lines. Therefore, all
-new Voronoi cells are inserted into a priority queue and processed by the
-pruning stage. The image operator patterns shown in Fig. 6 (solo poner
-8-connected) match whenever the center cell s provides connectivity for one or
-more of its adjacent cells. In any pattern, a $1$ matches voro(s) = true, while
-$0$ stands for voro(s) = false, and empty fields are ignored. Where indicated
-by arrows, the same pattern is applied in all unique 90 degree rotations
-
-The second phase implements the actual pruning step. In increasing order of
-distance, the enqueued cells are iteratively popped from the priority queue. If
-such a cell has more than one neighbor on the GVD and is not required to keep
-the GVD connected, it can be removed from the GVD without affecting its
-topology. Again, this is tested using the image operator patterns: if none of
-the connectivity patterns match at the cell location, the cell is not required
-in the GVD.
-
-Enfasis en $P^8_1$ que indica que las celdas con un solo vecino deben pertenecer al GVD.
-
-En el caso de la implementacion del proyecto se comprueba si el GVD queda
-disconexo aplicando la tecnica presente en \cite{zhang1984fast},
-adicionalemtente evitando filtrar celdas con una sola celda adyacente en el GVD
-y con 2 celdas ayacentes en el GVD si estas se detectan en un corredor.
-
-Explicar caso corredor(SACAR DE LAS NOTAS). comentar que no se considera en
-lau, quizas este es un problema que se arregla no permitiendo dist = 1. Aunque
-mas analisis son necesarios
-
-% \subsection{Limpieza de aristas}
-% La limpieza de aristas es una tecnica aplicada solo en la implementación del
-% proyecto esta permite generar GVD mas limpios. 
-
-\subsection{Consideraciones de segmentacion}
-
+\subsection{Segmentación}\label{subsec:mapaTopGVDGrid}
 % segun si las celdas ocupadas mas cercanas $oc_1$ y $oc_2$ de
 
-Dado que se segmenta el entorno segun el metodo que se comenta en la seccion
-\ref{subsec:mapaTopGVD}, es necesario encontrar los puntos criticos y lineas
-criticas asociadas al GVD construido segun las cuales se dividen los segmentos.
-Recordando que el GVD contruido esta discretizado en celdas y que los conceptos
-de puntos y lineas criticas se definen en espacios continuos es necesario
-adaptarlos. 
+La segmentacion del entorno se basa en el metodo que comentado en la
+seccion \ref{subsec:mapaTopGVD}. Dado que el entorno se representa con
+grillas discretas en lugar de ser un espacio continuo, es necesario
+definir los equivalentes discretizados de un GVD y de los puntos
+criticos y lineas criticas asociadas a un GVD según los cuales se
+dividen los segmentos.
 
-En el caso de los puntos criticos, dadas celdas $\mli{GVDD}$ que conforman al
-GVD discretizado y considerando el mapa de distancia subproducto de
-\emph{brushfire dinamico} como la funcion de despeje discretizada $\mli{DD} : C
-\rightarrow R$, se puede definir el conjunto de las celdas criticas (puntos
-criticos discretizados) $\mli{CrD}$ segun (\ref{eq:critDisc}). 
+En primer lugar un GVD discretizado se define como el conjunto
+$\mli{GVDD}$ de celdas que pertenecen al GVD discretizado. La
+construccion de este se trata en la seccion \ref{sec:MiConstGVD}.
+%y que los conceptos de puntos y lineas criticas
+% se definen en espacios continuos es necesario adaptarlos. 
+
+% considerando el mapa de distancia
+% subproducto de \emph{brushfire dinamico}
+En el caso de los puntos criticos, dada funcion de despeje discretizada
+$\mli{DD} : \mli{CG} \rightarrow R$ que se corresponde con un mapa de distancia
+a las celdas pertenecientes a generadores, se define el conjunto de las
+celdas criticas (puntos criticos discretizados) $\mli{CrD}$ segun
+(\ref{eq:critDisc}). 
 
 % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
 \begin{equation}
 \begin{split}
-  \mli{CrD} = \{c\ \in C_{\mli{GVD}} : & \forall c_l \in ady(c) \cup \mli{GVD}, D(c) \leq D(c_l),\\
-                                       & \exists c_g \in ady(c) \cup \mli{GVD}, (c_g) > D(c) \} %, \\
+  \mli{CrD} = \{c\ \in \mli{GGVD} : & \forall c_l \in ady(c) \cap \mli{GVD}, D(c) \leq D(c_l),\\
+                                       & \exists c_g \in ady(c) \cap \mli{GVD}, (c_g) > D(c) \} %, \\
                                        % & |ady(c)\cup \mli{GVD}| = 2\}
 \end{split}
 \label{eq:critDisc}
 \end{equation}
 
-Al adaptar a celdas el concepto de punto critico, es conveniente no solo
-considerar las celdas del GVD que minimizan el despeje localmente, es decir las
-tienen un despeje menor que el de sus celdas adyacentes en el GVD, si no que
-tambien incluir a las celdas que tienen un despeje menor o igual que el de sus
+Esta definicion adaptada traduce el concepto de entorno en el espacio continuo
+en el concepto de adyacencia del espacio discreto, aunque no solo se remite a
+traducir sino que se altera ligeramente la definicion ya que es conveniente no
+solo considerar las celdas del GVD que minimizan el despeje localmente, es
+decir las tienen un despeje menor que el de sus celdas adyacentes en el GVD, si
+no ademas incluir las celdas que tienen un despeje menor o igual que el de sus
 celdas adyacentes en el GVD y adicionalemtente al menos una de sus celdas
 adyacentes en el GVD tiene un despeje mayor.
 % donde de ser solo minimo local no hay criticos pero al decir que no hay menors
 % y hay al menos uno mayor si, 
 El motivo de esto es permitir puntos criticos en situaciones como la
-presentadas en la figura \ref{fig:celYlinCrit}, donde se puede observar un
+presentadas en la figura \ref{fig:ejSegGVDGrid:CRI}, donde se puede observar un
 portar horizontal que lleva de un corredor (arriba) a una habitacion (abajo).
 El punto critico que se ubica dicho portal no es un minimo local (la celda del
 GVD ubicada arriba tiene igual despeje), por lo que si estas fueran las
@@ -1221,47 +1125,77 @@ mayor.
 % condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
 % utilizados para los puntos criticos.
 
-Para adaptar el concepto de las lineas criticas es necesario adaptar primero el
-concepto de puntos base de un punto, que refiere a los puntos mas cercanos de
-los generadores. En \emph{brushfire dinamico} no se manejan los generadores de
-forma directa, por lo cual para llegar a una defición celdas base (puntos base
-discretizados), es necesario analizar el funcionamiento del algorimo.
+Para adaptar el concepto de las lineas criticas es necesario adaptar
+primero el concepto de puntos base de un punto $p$, que refieren al conjunto de
+puntos pertenecientes a generadores que son mas cercanos a $p$. Las celdas base
+(puntos base discretizados) de un a celda $c$ se definen como el conjunto de
+celdas pertenecientes a generadores (notar que no es relevante saber a que
+generdor pertnece cada punto) que son mas cercanas a $c$ \todo{explicar
+problemas de dicretizacion (ming-siegwart)}. Luego las lineas criticas
+discretizadas se definen como las lineas discretizadas \cite{foleyphillips}
+definidas entre los centros de las celdas criticas y cada uno de sus puntos
+base discritizados.
 
-En \emph{brushfire dinamico} cuando ocurre un choque de ondas consistentes en a
-las celdas $c_1$ y $c_2$, sean $oc_1$ y $oc_2$ respectivamente sus celdas
-ocupadas más cercanas se considera que si $oc_1$ y $oc_2$ son adyacentes
-entonces pertenecen al mismo generador y de lo contrario que pertenecen a
-distintos generadores. De esto se deriva que si $oc_1$ y $oc_2$ no son
-adyacentes entoces $c_1$ y $c_2$ deben pertenecer al GVD. De esta forma se
-logra aproximar el GVD resultante de considerar generadores conexos y convexos
-\ref{subsec:GVD}. Analizando esto, se decidio definir los puntos que base
-discretizados $\mli{BPD}_c$ se definen como las celdas obstaculizadas no
-adyacentes que generan la pertenecia de una celda $c$ al GVD. Las lineas
-criticas discretizadas se definen como las lineas discretizadas
-\cite{foleyphillips} definidas entre los centros de las celdas criticas y cada
-uno de sus puntos base discritizados.
 
-Establecido esto, es pertinente notar que la implementacion de \emph{brushfire
-dinamico} hecha en este proyecto difiere en la original en que esta almacena
-las celdas ocupadas que generan la pertenecia de un punto al GVD para ser
-utlizados posteriormente como puntos base.
+Una vez determinadas las celdas criticas y las lineas criticas discretizadas es
+posible obtener la segmentacion en regiones topologicas con la aplicacion de un
+algorimo de descomposicion en componentes conexas (seccion
+\ref{subsec:CompComp}) donde el conjunto que se descompone es el que se compone
+por las celdas libres de $\mli{CG}$ que no son puntos criticos ni forman parte
+de una linea critica discretizada.
+
+En la figura \ref{fig:ejSegGVDGrid} se muestra el proceso de segmentacion
+completo, desde la grilla de ocupacion usada como entrada
+\ref{fig:ejSegGVDGrid:GRID}, pasando por el GVD generado
+\ref{fig:ejSegGVDGrid:GVD}, los puntos y lineas criticas detectadas
+\ref{fig:ejSegGVDGrid:CRI}, terminando con la segmentacion del entorno
+\ref{fig:ejSegGVDGrid:SEG}.
 
 \begin{figure}[H]
   \centerfloat
 
-  \subfloat[Grilla de ocupacion]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/a.png}}
+  \subfloat[Grilla de ocupacion]{\includegraphics[clip=true,
+  width=0.40\textwidth]{imagenes/GVDDisc/a.png}\label{fig:ejSegGVDGrid:GRID}}
   \qquad
-  \subfloat[GVD]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/b.png}}
+  \subfloat[GVD]{\includegraphics[clip=true,
+  width=0.40\textwidth]{imagenes/GVDDisc/b.png}\label{fig:ejSegGVDGrid:GVD}}
 
-  \subfloat[Celdas criticas contienen cuadrados amarillos y las pertinentes a lineas criticas discretizadas contienen cuadrados grises]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/c.png}\label{fig:celYlinCrit}}
+  \subfloat[Celdas criticas contienen cuadrados amarillos y las pertinentes a lineas criticas discretizadas contienen cuadrados grises]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/c.png}\label{fig:ejSegGVDGrid:CRI}}
   \qquad
-  \subfloat[Segmentación del entorno, cada segmento se indica con un color distinto]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/d.png}}
+  \subfloat[Segmentación del entorno, cada segmento se indica con un
+  color distinto]{\includegraphics[clip=true,
+  width=0.40\textwidth]{imagenes/GVDDisc/d.png}\label{fig:ejSegGVDGrid:SEG}}
 
-  \caption{Proceso de segmentación en una grilla a partir de un
-  GVD}\label{fig:ejSegGVDGrid}
+  \caption{Proceso de segmentación en una grilla a partir de un GVD}\label{fig:ejSegGVDGrid}
 
 \end{figure}
 
+
+Una consideracion a tener en cuenta es que el algoritmo \ref{alg:compcon} debe
+ejecutarse con $ady_4$ como funcion de adyacencia (seccion
+\ref{subsec:Grilla}), ya que si se usa $ady_8$ las lineas criticas
+discretizadas diagonales no separan segmentos. Esto se debe a que las celdas a ambos lados de una linea
+discretizada diagonal son adyacentes diagonalmente como se muestra en la figura
+\ref{fig:probDiagSeg}, por lo tanto al usar $ady_4$ la linea critica separa dos
+componentes conexas al no permitir la adyacencia entre las celdas a sus lados
+mientras que usando $ady_8$ si se permite dicha adyacencia con lo cual resulta
+en una unica componente.
+
+\begin{figure}[H]
+  \centerfloat
+
+% , c es adyacente a n3, lo que causa un unico segmento.
+
+  \subfloat[Usando $ady_8$]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/probDiagSeg/0_33_8conRojov3.png}}
+  \qquad
+  \subfloat[Usando $ady_4$]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/probDiagSeg/0_33_4con.png}}
+
+  \caption{Linea critica discretizada diagonal, y sus efectos en la
+  segmentacion al usar $ady_4$ o $ady_8$. La celda $c$ se da como ejemplo de
+una celda de un lado de la linea que es adyacente segun $ady_8$ a la celda $n3$ al 
+otro lado de la linea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
+
+\end{figure}
 
 % Tambien se filtran las lineas criticas, como las ideas es que estas se ubiquen en umbrales 
 
@@ -1279,6 +1213,195 @@ utlizados posteriormente como puntos base.
 % Se mantienen todos los obts a minima distancia, y los que \say{casi} estan a
 % minima distancia, siendo estos los puntos bases (puntos mas cercanos a
 % generadosres base) tomados en cuenta, segun estos se define si un punto pertenece o no al GVD.
+
+
+
+\section{Grafo generalizado de Voronoi}\label{sec:MiConstGVD}
+
+Considerando los problemas de eficiencia del algorimo \emph{brushfire} (seccion
+\ref{subsec:constGVD}) y los problemas de su version incremental
+\emph{brushfire dinamico} (seccion \ref{subsec:constGVDInc}) como fue propuesta
+originalmente en \cite{kalra2009incremental}, se decidio basar la construccion
+del GVD en la version de \emph{brushfire dinamico} propuesta en \cite{Lau2013},
+a la que se estara haciendo refencia cuando se mencione \say{\emph{brushfire dinamico}
+original} desde este punto.
+
+Hablar de la necesidad de encontrar las celdas base para lograr definir la
+lineas criticas y posteriormente lograr segmentar (seccion \ref{subsec:mapaTopGVDGrid}).
+
+Mencionar la solucion a la que se llego, y cual es la definicion de celda base.
+Dos caminos (I) mi definicion que separa los basis en sources y pseudosources. O (II)
+definir los basis como las celdas ocupadas que hacen que una celda pertenezca
+al GVD segun lau (solo se neceita para puntos criticos incluidos en el GVD). 
+
+(II) tiene la ventaja que es facil de explicar y permite basarse en lo que ya
+esta bien fundamnetado (Lau), por otro lado (I) es lo que se implemento, pero
+puede ser dificil de explicar, sin tener mucho fundamento mas que el
+generalizar y definir bien para el haberlo hecho asi. (puedo tomarme un tiempo
+para pensar en algun acaso claro y facil de epxlicar donde (I) esto funcione
+mejor pero no se)
+
+(I) aplica el criterio de siegwart-ming que capaz esta bueno que sea epxlicito.
+
+(I) permite comentar el tema de dist 1.
+
+% Comentar como a partir de esta definicion de celda base, y las nociones de no
+% adyacentes ni iguales entoces diferentes generadores (parrafo mas abajo) se
+% logra una nueva condicion de pertenencia al GVD, la cual esta mas cercana a la
+% definicion de GVD en el espacio continuo. (aunque aca cuidado, que tan distinta
+% es al final? no se hace algo similar pero solo usando el obstaculo mas
+% cercano?) capaz puedo ir por ese lado y siendo mas facil basarse en el trabajo
+% de lau que redefinir sin mucho fundamento.
+
+% Bueno hay una diferencias, la condicion de distancias de liu ming, y que no se
+% permiten pseudosources adyacentes entre si. Ademas que se mantiene un registro
+% de pseudosources.
+
+% Son detalles que estan buenos para mi, porque son mas generales mejor definidos
+% pero no se que tanto puedo fundamentar su necesidad, y por lo tanto no se que
+% tanto aporta dar toda la epxlicacion para lo que cuesta explicar y entender, creo que se
+% puede epxlicar mas facilmente con un solo obstaculo y esableciendo los oc que
+% hicieron que pertenezca al GVD.
+
+En \emph{brushfire dinamico} cuando ocurre un choque de ondas consistentes en
+las celdas $c_1$ y $c_2$, sean $oc_1$ y $oc_2$ respectivamente sus celdas
+ocupadas más cercanas se considera que si $oc_1\neq oc_2$ y no son adyacentes
+entonces pertenecen distintos generadores y de lo contrario pertenecen al
+mismo. Dado esto se puede afirmar que $c_1$ y $c_2$ pertenecen al GVD si y solo
+si $oc_1\neq oc_2$ y no son adyacentes, logrando aproximar el GVD resultante de considerar
+generadores conexos y convexos \ref{subsec:GVD} de forma simple, sin definir explicitamente los generadores.
+
+% fue necesario analizar el
+% funcionamiento del algorimo.
+
+% Hablar de que en \emph{brushfire dinamico} no se manejan los generadores de forma directa,
+
+% Dado esto, 
+% se decidio definir los puntos que base discretizados $\mli{BPD}_c$ 
+% como las celdas obstaculizadas no adyacentes que generan la pertenecia
+% de una celda $c$ al GVD.
+% Establecido esto, es pertinente notar que la implementacion de \emph{brushfire
+% dinamico} hecha en este proyecto difiere en la original en que esta almacena
+% las celdas ocupadas que generan la pertenecia de un punto al GVD para ser
+% utlizados posteriormente como puntos base.
+
+
+% A lo largo de esta seccion se explicaran las conicidencia y cambios entre
+% \emph{brushfire dinamico} y la variante de este implementada en este proyecto.
+
+% \subsection{Algorimo general}
+
+% \begin{algorithm}[H]
+% \SetAlgoLined
+% \SetKwProg{Fn}{Function}{}{}
+
+% \Fn{establecerFuente(f)}{
+%   $F_i := {f}$\\ 
+%   $\mli{PF}_i := \emptyset$\\
+%   $\mli{DD} := 0$\\
+%   $removido := falso$
+% }
+
+
+% \Fn{removerObstaculo(oc)}{
+%   $F_i := \emptyset$\\ 
+%   $\mli{PF}_i := \emptyset$\\
+%   $\mli{DD} := \infty$\\
+%   $removido := verdadero$
+% }
+    
+% \caption{Brushfire }
+% \label{alg:DinBF}
+% \end{algorithm}
+% poner pseudocodigo de todo lo que hice basado en el de lau
+% Si se sigue entendiendo lo de abajo sin esto me parece mejor evitarlo (muy similar a lau que ya se explico (sin pseudo pero la idea si) y la explicacion ocn pseudo puede llevar algunas carillas)
+
+% \subsection{Pertenecia}
+% La implemetacion realizada en proyecto mantiene las olas conistentes e
+% inconsistentes para el calulo incremental de mapas de distancia. Tambien
+% mantiene la idea que las olas inconsistentes remueven las celdas que atraviesan
+% del GVD y la idea de que las celdas en las cuales las ondas consistentes se
+% detienen y las celdas que causaron que se detengan son las celdas cuya
+% pertenencia al GVD se comprueba.
+
+% capaz prodria decir la def de pertenecia dado un choque de olas, explicar que
+% un choque de olas siempre se da entre dos celdas, explicar el de lau, y el mio,
+% estableciendo bien como es el tema de los pseudosources y las diff, dada la
+% info que lleva la ola, etc. Aunque puede ser dificil dar ejemplos
+
+% El cambio que se hace es en el criterio con el cual se comprueba la pertenencia
+% de una celda. En el \emph{brushfire dinamico} original se hace EXPLICAR
+% CON LO DE MAS ABAJO. En esta implementacion cambia, al existir un choque de
+% olas primero se establecen los pseudosources y luego de existir dos
+% pseudosources no adjacentes entre si la celda pertenece.
+
+% Explicar definicion de un pseudosource (SACAR DE LAS NOTAS), y porque esto termina siendo distinto
+% que lo que se plantea en el \emph{brushfire dinamico} original.
+
+% Capaz que explicar que el evitar generar si no hay dos basis no vecions es el evitar generar incorrectamente gvd en corredores diagonales. (aunque puede dar lugar a la discucion de que pasa si no es completamente diagonal, cosa que sospecho que puede dar problemas similares)
+
+% Oportunidad de comentar que mejora sobre lau porque perminte generar gvd en
+% lugares a dist 1 (ver bien que), cosa que lau no permite por resistencia al ruido pero que con el metodo actual no llevo mayores inconvenientes permitiendo generar gvd en grillas con el maximo tamaño de celda posible en el cual las puertas mas chicas consisten de una unica celda ejemplo de algo asi: (esta en comentarios de latex)
+
+%   mio            lau
+% - - | - -      - - - - -
+% - - | - -      - - - - -
+% X X | X X  VS  X X - X X 
+% - - | - -      - - - - -
+% - - | - -      - - - - -
+
+% Explicar que quizas se relacione al tema corredor de largo 2 que se va a explicar en \ref{subsec:filt}.
+
+% \subsection{Filtrado}\label{subsec:filt}
+% Los vetices que en una iteracion se determina que deben pertenecer al GVD segun
+% el criterio de pertenecia aplicado en las celdas en las cuales se detiene una
+% ola consistente, pasan por un filtrado extra. Este filtrado busca evitar lineas
+% discretizadas de dos celdas de grosor que violan la propiedad \say{sparceness}
+% GVD.
+
+% As discussed before, different paths on the Voronoi graph correspond to
+% topologically different routes in the environment (sparceness property). To preserve this property
+% for GVDs on grid maps, thin Voronoi lines, i.e., being one pixel wide, are
+% desired.
+
+% Spacrceness:Their application as roadmaps is an appealing technique for path
+% planning, since they are “sparse” in the sense that different paths on the
+% graph correspond to topologically different routes with respect to obstacles.
+% This
+
+% En el \emph{brushfire dinamico} original el filtrado se lleva a cabo haciendo
+% uso de patrones con los cuales se comprueba si el GVD queda o no disconexo
+
+% Our optional pruning step erodes 2-pixel-wide Voronoi lines. Therefore, all
+% new Voronoi cells are inserted into a priority queue and processed by the
+% pruning stage. The image operator patterns shown in Fig. 6 (solo poner
+% 8-connected) match whenever the center cell s provides connectivity for one or
+% more of its adjacent cells. In any pattern, a $1$ matches voro(s) = true, while
+% $0$ stands for voro(s) = false, and empty fields are ignored. Where indicated
+% by arrows, the same pattern is applied in all unique 90 degree rotations
+
+% The second phase implements the actual pruning step. In increasing order of
+% distance, the enqueued cells are iteratively popped from the priority queue. If
+% such a cell has more than one neighbor on the GVD and is not required to keep
+% the GVD connected, it can be removed from the GVD without affecting its
+% topology. Again, this is tested using the image operator patterns: if none of
+% the connectivity patterns match at the cell location, the cell is not required
+% in the GVD.
+
+% Enfasis en $P^8_1$ que indica que las celdas con un solo vecino deben pertenecer al GVD.
+
+% En el caso de la implementacion del proyecto se comprueba si el GVD queda
+% disconexo aplicando la tecnica presente en \cite{zhang1984fast},
+% adicionalemtente evitando filtrar celdas con una sola celda adyacente en el GVD
+% y con 2 celdas ayacentes en el GVD si estas se detectan en un corredor.
+
+% Explicar caso corredor(SACAR DE LAS NOTAS). comentar que no se considera en
+% lau, quizas este es un problema que se arregla no permitiendo dist = 1. Aunque
+% mas analisis son necesarios
+
+% \subsection{Limpieza de aristas}
+% La limpieza de aristas es una tecnica aplicada solo en la implementación del
+% proyecto esta permite generar GVD mas limpios. 
 
 \subsection{Consideraciones sobre el espacio desconocido}
 % , la alternativa de que los bordes no sean
