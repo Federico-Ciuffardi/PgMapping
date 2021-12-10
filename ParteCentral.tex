@@ -1060,14 +1060,39 @@ original} desde este punto.
 A lo largo de esta seccion se explicaran las conicidencia y cambios entre
 \emph{brushfire dinamico} y la variante de este implementada en este proyecto.
 
+\subsection{Algorimo general}
+\begin{algorithm}[h]
+  \SetKwProg{main}{Algorithm}{}{}
+  \begin{multicols}{2}
+\main{\funone{b}}{
+        \KwData{MyData b}
+\nl     \While{this is true}{
+\nl         Do X\;
+\nl         Do X\;
+        }
+\nl     Do X\;
+    }
+
+  \end{multicols}
+  \caption{Resolve 1 and 3}
+\end{algorithm}
+
+% poner pseudocodigo de todo lo que hice basado en el de lau
+% Si se sigue entendiendo lo de abajo sin esto me parece mejor evitarlo (muy similar a lau que ya se explico (sin pseudo pero la idea si) y la explicacion ocn pseudo puede llevar algunas carillas)
+
 \subsection{Pertenecia}
 La implemetacion realizada en proyecto mantiene las olas conistentes e
 inconsistentes para el calulo incremental de mapas de distancia. Tambien
 mantiene la idea que las olas inconsistentes remueven las celdas que atraviesan
 del GVD y la idea de que las celdas en las cuales las ondas consistentes se
-detienen son las celdas cuya pertenencia al GVD se comprueba.
+detienen y las celdas que causaron que se detengan son las celdas cuya
+pertenencia al GVD se comprueba.
 
-\todo{seguir desde aca}
+capaz prodria decir la def de pertenecia dado un choque de olas, explicar que
+un choque de olas siempre se da entre dos celdas, explicar el de lau, y el mio,
+estableciendo bien como es el tema de los pseudosources y las diff, dada la
+info que lleva la ola, etc. Aunque puede ser dificil dar ejemplos
+
 El cambio que se hace es en el criterio con el cual se comprueba la pertenencia
 de una celda. En el \emph{brushfire dinamico} original se hace EXPLICAR
 CON LO DE MAS ABAJO. En esta implementacion cambia, al existir un choque de
@@ -1077,9 +1102,17 @@ pseudosources no adjacentes entre si la celda pertenece.
 Explicar definicion de un pseudosource (SACAR DE LAS NOTAS), y porque esto termina siendo distinto
 que lo que se plantea en el \emph{brushfire dinamico} original.
 
+Capaz que explicar que el evitar generar si no hay dos basis no vecions es el evitar generar incorrectamente gvd en corredores diagonales. (aunque puede dar lugar a la discucion de que pasa si no es completamente diagonal, cosa que sospecho que puede dar problemas similares)
 
 Oportunidad de comentar que mejora sobre lau porque perminte generar gvd en
-lugares a dist 1 de los obstaculos, cosa que lau no permite ni explica porque.
+lugares a dist 1 (ver bien que), cosa que lau no permite por resistencia al ruido pero que con el metodo actual no llevo mayores inconvenientes permitiendo generar gvd en grillas con el maximo tamaño de celda posible en el cual las puertas mas chicas consisten de una unica celda ejemplo de algo asi: (esta en comentarios de latex)
+
+%   mio            lau
+% - - | - -      - - - - -
+% - - | - -      - - - - -
+% X X | X X  VS  X X - X X 
+% - - | - -      - - - - -
+% - - | - -      - - - - -
 
 Explicar que quizas se relacione al tema corredor de largo 2 que se va a explicar en \ref{subsec:filt}.
 
@@ -1126,7 +1159,9 @@ disconexo aplicando la tecnica presente en \cite{zhang1984fast},
 adicionalemtente evitando filtrar celdas con una sola celda adyacente en el GVD
 y con 2 celdas ayacentes en el GVD si estas se detectan en un corredor.
 
-Explicar caso corredor(SACAR DE LAS NOTAS). comentar que no se considera en lau, quizas se arregla no permitiendo dist = 1
+Explicar caso corredor(SACAR DE LAS NOTAS). comentar que no se considera en
+lau, quizas este es un problema que se arregla no permitiendo dist = 1. Aunque
+mas analisis son necesarios
 
 % \subsection{Limpieza de aristas}
 % La limpieza de aristas es una tecnica aplicada solo en la implementación del
@@ -1144,42 +1179,65 @@ de puntos y lineas criticas se definen en espacios continuos es necesario
 adaptarlos. 
 
 En el caso de los puntos criticos, dadas celdas $\mli{GVDD}$ que conforman al
-$GVD$ discretizado y considerando el mapa de distancia subproducto de
-\emph{brushfire dinamico} como la funcion de despeje discretizada $DD : C
+GVD discretizado y considerando el mapa de distancia subproducto de
+\emph{brushfire dinamico} como la funcion de despeje discretizada $\mli{DD} : C
 \rightarrow R$, se puede definir el conjunto de las celdas criticas (puntos
 criticos discretizados) $\mli{CrD}$ segun (\ref{eq:critDisc}). 
 
+% p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
 \begin{equation}
-  % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
-  \mli{CrD} = \{c\ \in C_{\mli{GVD}} : \exists c_g \in ady(c), D(c_g) > D(c), \forall c_l \in ady(c), D(c) \leq D(c_l) \} \label{eq:critDisc}
+\begin{split}
+  \mli{CrD} = \{c\ \in C_{\mli{GVD}} : & \forall c_l \in ady(c) \cup \mli{GVD}, D(c) \leq D(c_l),\\
+                                       & \exists c_g \in ady(c) \cup \mli{GVD}, (c_g) > D(c) \} %, \\
+                                       % & |ady(c)\cup \mli{GVD}| = 2\}
+\end{split}
+\label{eq:critDisc}
 \end{equation}
 
-Explicar que esto no es exactamente un minimo local, si no que extienede la
-nocion a casos como los de las figuras que saque, en donde de ser solo minimo
-local no hay criticos pero al decir que no hay menors y hay al menos uno mayor
-si, cosa que es deseable dado que efectivamente los ejemplos mostrados son
-puertas y este tipo de situacion es usual en puertas sobre las esqunas de las
-habitaciones.
+Al adaptar a celdas el concepto de punto critico, es conveniente no solo
+considerar las celdas del GVD que minimizan el despeje localmente, es decir las
+tienen un despeje menor que el de sus celdas adyacentes en el GVD, si no que
+tambien incluir a las celdas que tienen un despeje menor o igual que el de sus
+celdas adyacentes en el GVD y adicionalemtente al menos una de sus celdas
+adyacentes en el GVD tiene un despeje mayor.
+% donde de ser solo minimo local no hay criticos pero al decir que no hay menors
+% y hay al menos uno mayor si, 
+El motivo de esto es permitir puntos criticos en situaciones como la
+presentadas en la figura \ref{fig:celYlinCrit}, donde se puede observar un
+portar horizontal que lleva de un corredor (arriba) a una habitacion (abajo).
+El punto critico que se ubica dicho portal no es un minimo local (la celda del
+GVD ubicada arriba tiene igual despeje), por lo que si estas fueran las
+condiciones este no seria un critico y tanto el corredor como la habitacion
+serian unico segmento, lo cual no es deseable. El resultado se mejora al
+considerar las condiciones planteadas en \ref{eq:critDisc} ya que como se
+menciono la celda de arriba tiene igual despeje y la de abajo tiene un despeje
+mayor. 
+% Por otro lado la condicion $|ady(c)\cup \mli{GVD}| = 2$ es parte de las condiciones de
+% filtrado de puntos criticos que no se ubican en portales que separan segmentos
+% se propuestas en \cite{wurm2008coordinated}.
 
-Explicar (implica redefinir $\mli{CrD}$ , creo que lo mejor es plantear
-condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
-utilizados para los puntos criticos.
+
+% Explicar (implica redefinir $\mli{CrD}$ , creo que lo mejor es plantear
+% condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
+% utilizados para los puntos criticos.
 
 Para adaptar el concepto de las lineas criticas es necesario adaptar primero el
-concepto de puntos base de un punto en el GVD, que son los puntos mas cercanos
-de los generadores que generan su pertenencia al GVD. En \emph{brushfire
-dinamico} no se manejan los generadores base de forma directa, la pertenencia de
-una celda al GVD se determina en cada choque de celdas. Dado un choque de
-celdas que involucra a las celdas $c_1$ y $c_2$, sean $oc_1$ y $oc_2$
-respectivamente sus celdas ocupadas más cercanas se considera que si $oc_1$ y $oc_2$
-son adyacentes entonces pertenecen al mismo generador generalizado y de lo
-contrario que pertenecen a distintos generadores generalizados. De esto se
-deriva que si $oc_1$ y $oc_2$ no son adyacentes entoces $c_1$ y $c_2$ deben
-pertenecer al GVD. De esta forma se logra aproximar el GVD resultante de
-considerar generadores conexos y convexos \ref{subsec:GVD}. Dado esto se
-definen los puntos que base discretizados $\mli{BPD}_c$ como las celdas
-obstaculizadas no adyacentes que generan la pertenecia de una celda $c$ al GVD.
-Las lineas criticas discretizadas se definen como las lineas discretizadas
+concepto de puntos base de un punto, que refiere a los puntos mas cercanos de
+los generadores. En \emph{brushfire dinamico} no se manejan los generadores de
+forma directa, por lo cual para llegar a una defición celdas base (puntos base
+discretizados), es necesario analizar el funcionamiento del algorimo.
+
+En \emph{brushfire dinamico} cuando ocurre un choque de ondas consistentes en a
+las celdas $c_1$ y $c_2$, sean $oc_1$ y $oc_2$ respectivamente sus celdas
+ocupadas más cercanas se considera que si $oc_1$ y $oc_2$ son adyacentes
+entonces pertenecen al mismo generador y de lo contrario que pertenecen a
+distintos generadores. De esto se deriva que si $oc_1$ y $oc_2$ no son
+adyacentes entoces $c_1$ y $c_2$ deben pertenecer al GVD. De esta forma se
+logra aproximar el GVD resultante de considerar generadores conexos y convexos
+\ref{subsec:GVD}. Analizando esto, se decidio definir los puntos que base
+discretizados $\mli{BPD}_c$ se definen como las celdas obstaculizadas no
+adyacentes que generan la pertenecia de una celda $c$ al GVD. Las lineas
+criticas discretizadas se definen como las lineas discretizadas
 \cite{foleyphillips} definidas entre los centros de las celdas criticas y cada
 uno de sus puntos base discritizados.
 
@@ -1187,6 +1245,23 @@ Establecido esto, es pertinente notar que la implementacion de \emph{brushfire
 dinamico} hecha en este proyecto difiere en la original en que esta almacena
 las celdas ocupadas que generan la pertenecia de un punto al GVD para ser
 utlizados posteriormente como puntos base.
+
+\begin{figure}[H]
+  \centerfloat
+
+  \subfloat[Grilla de ocupacion]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/a.png}}
+  \qquad
+  \subfloat[GVD]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/b.png}}
+
+  \subfloat[Celdas criticas contienen cuadrados amarillos y las pertinentes a lineas criticas discretizadas contienen cuadrados grises]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/c.png}\label{fig:celYlinCrit}}
+  \qquad
+  \subfloat[Segmentación del entorno, cada segmento se indica con un color distinto]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/d.png}}
+
+  \caption{Proceso de segmentación en una grilla a partir de un
+  GVD}\label{fig:ejSegGVDGrid}
+
+\end{figure}
+
 
 % Tambien se filtran las lineas criticas, como las ideas es que estas se ubiquen en umbrales 
 
@@ -1220,6 +1295,8 @@ Comentar que las celdas con lo desconocido como punto base no genera lineas ni
 puntos criticos.
 
 \todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}
+
+Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el area desconocida debe ser procesado por el original mientras que el mio se reduce al area exploradoa, sientod la parte importante (la del area explorada) casi igual que la otra.
 
 % \subsection{Segmentacion}
 % yo diria de 
