@@ -980,7 +980,7 @@ el numero de objetivos en un segmento.
       $restoDist    := numRobs\ \ mod\ \ numSegs$\\
     
       $segObj := min\ segObjs$\\
-      $segObjs := segObjs - segObj$\\
+      $segObjs := segObjs - \{segObj\}$\\
     
       $converge := (segObj > cocienteDist) \lor (restoDist = 0 \land segObj = cocienteDist)$\\
       \If{$\lnot converge$}{
@@ -995,14 +995,14 @@ el numero de objetivos en un segmento.
 
     \While{$R \neq \emptyset \land O \neq \emptyset$}{
       $(c_{i,j}, r_i, o_j) := min\ Costos$ \tcp{Tupla de $Costos$ con minimo $c_{i,j}$}
-      $Costos := Costos /{(c_{i,j}, r_i, o_j)}$\\
+      $Costos := Costos - \{(c_{i,j}, r_i, o_j)\}$\\
       $s_k := segmento(o_j)$\\
       $distribuido := segRobNums[s_k] < cocienteDist \lor (restoDist > 0 \land segRobNums[s_k] < cocienteDist + 1)$\\
       \If{ $r_i \in R \land o_j \in O \land distribuido$ }{
-        $asignaciones := asignaciones \cup (r_i,o_j)$\\
+        $asignaciones := asignaciones \cup \{(r_i,o_j)\}$\\
         $segRobNums[s_k] := segRobNums[s_k] + 1$\\
-        $R := R - r_i$\\
-        $O := O - o_j$\\
+        $R := R - \{r_i\}$\\
+        $O := O - \{o_j\}$\\
         \If{$segRobNums = cocienteDist + 1$}{
            $restoDist := restoDist - 1$\\
         }
