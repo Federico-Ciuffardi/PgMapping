@@ -995,7 +995,7 @@ el numero de objetivos en un segmento.
 
     \While{$R \neq \emptyset \land O \neq \emptyset$}{
       $(c_{i,j}, r_i, o_j) := min\ Costos$ \tcp{Tupla de $Costos$ con minimo $c_{i,j}$}
-      $Costos := Costos - (c_{i,j}, r_i, o_j)$\\
+      $Costos := Costos /{(c_{i,j}, r_i, o_j)}$\\
       $s_k := segmento(o_j)$\\
       $distribuido := segRobNums[s_k] < cocienteDist \lor (restoDist > 0 \land segRobNums[s_k] < cocienteDist + 1)$\\
       \If{ $r_i \in R \land o_j \in O \land distribuido$ }{
