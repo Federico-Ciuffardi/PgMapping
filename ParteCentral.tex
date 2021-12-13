@@ -1065,38 +1065,37 @@ robots para comenzar una nueva subasta.
 \subsection{Segmentación}\label{subsec:mapaTopGVDGrid}
 % segun si las celdas ocupadas mas cercanas $oc_1$ y $oc_2$ de
 
-La segmentacion del entorno se basa en el metodo que comentado en la
-seccion \ref{subsec:mapaTopGVD}. Dado que el entorno se representa con
-grillas discretas en lugar de ser un espacio continuo, es necesario
-definir los equivalentes discretizados de un GVD y de los puntos
-criticos y lineas criticas asociadas a un GVD según los cuales se
-dividen los segmentos.
+La segmentacion del entorno se basa en el metodo que comentado en la seccion
+\ref{subsec:mapaTopGVD}. Dado que el entorno se representa con grillas
+discretas en lugar de ser un espacio continuo, es necesario definir los
+equivalentes discretizados de GVD, como tambien de los puntos criticos y lineas
+criticas asociadas según los cuales se dividen los segmentos.
 
-En primer lugar un GVD discretizado se define como el conjunto
-$\mli{GVDD}$ de celdas que pertenecen al GVD discretizado. La
-construccion de este se trata en la seccion \ref{sec:MiConstGVD}.
+Un \emph{GVD discretizado} consiste en el conjunto $\mli{GVDD}$ de celdas que
+pertenecen al GVD discretizado. La construccion de este se trata en la seccion
+\ref{sec:MiConstGVD}.
 %y que los conceptos de puntos y lineas criticas
 % se definen en espacios continuos es necesario adaptarlos. 
 
 % considerando el mapa de distancia
 % subproducto de \emph{brushfire dinamico}
-En el caso de los puntos criticos, dada funcion de despeje discretizada
-$\mli{DD} : \mli{CG} \rightarrow R$ que se corresponde con un mapa de distancia (seccion \ref{subsec:constGVD})
-a las celdas pertenecientes a generadores, se define el conjunto de las
-celdas criticas (puntos criticos discretizados) $\mli{CrD}$ segun
+Dada funcion de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ que se
+corresponde con un mapa de distancia (seccion \ref{subsec:constGVD}) a las
+celdas pertenecientes a generadores, se define el conjunto de las \emph{celdas
+criticas} (puntos criticos discretizados) $\mli{CrD}$ segun
 (\ref{eq:critDisc}). 
 
 % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
 \begin{equation}
 \begin{split}
   \mli{CrD} = \{c\ \in \mli{GGVD} : & \forall c_l \in ady(c) \cap \mli{GVD}, \mli{DD}(c) \leq \mli{DD}(c_l),\\
-                                       & \exists c_g \in ady(c) \cap \mli{GVD}, \mli{DD}(c_g) > \mli{DD}(c) \} %, \\
+                                    & \exists c_g \in ady(c) \cap \mli{GVD}, \mli{DD}(c_g) > \mli{DD}(c) \} %, \\
                                        % & |ady(c)\cup \mli{GVD}| = 2\}
 \end{split}
 \label{eq:critDisc}
 \end{equation}
 
-Esta definicion adaptada traduce el concepto de entorno en el espacio continuo
+Esta definicion traduce el concepto de entorno en el espacio continuo
 en el concepto de adyacencia del espacio discreto, aunque no solo se remite a
 traducir sino que se altera ligeramente la definicion ya que es conveniente no
 solo considerar las celdas del GVD que minimizan el despeje localmente, es
@@ -1125,55 +1124,94 @@ mayor.
 % condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
 % utilizados para los puntos criticos.
 
-Para adaptar el concepto de las lineas criticas es necesario adaptar primero el
-concepto de puntos base de un punto $p$, que refieren al conjunto de puntos
-pertenecientes a generadores que son mas cercanos a $p$. Sea $CGen$ el conjunto
-formado por todas las celdas pertenecientes a algun generador, las celdas base
-(puntos base discretizados) $DBP_c$ de un a celda $c$ se definen como el
-conjunto de las celdas pertenecientes a generadores que estan a una distancia
-menor o igual a $\mli{DD}(c)+L$, como se expresa en (\ref{eq:bpDisc}), siendo
-$L$ el largo de las celdas.
+Para adaptar el concepto de las lineas criticas a un espacio discreto, primero
+es necesario adaptar el concepto de puntos base de un punto $p$, que refieren
+al conjunto de puntos pertenecientes a generadores que son mas cercanos a $p$.
+Sea $\mli{CGen}$ el conjunto formado por todas las celdas pertenecientes a
+algun generador, las \emph{celdas base} (puntos base discretizados) $DBP_c$ de
+un a celda $c$ se definen como el conjunto de las celdas pertenecientes a
+generadores que estan a una distancia menor o igual a $\mli{DD}(c)+L$, como se
+expresa en (\ref{eq:bpDisc}), siendo $L$ el largo de las celdas.
 \begin{equation}
 \mli{DBP}_c = \{ b \in \mli{CGen} : d_c(b) - \mli{DD}(c) \leq L\}
 \label{eq:bpDisc}
 \end{equation}
-Las celdas que estan a una distanicia $\mli{DD}(c)$ de $c$, son las que estan a
-minima distancia de $c$, estas serian las unicas celdas base si se adaptara de
-forma directa la definicion punto base en espacio continuo. Sin embargo al adaptar
-de forma directa la definicion existen casos donde los resultados difieren de
-los que se obtienen en el espacio continuo. 
-Un ejemplo es caso que se presenta en la figura \ref{fig:bptol} donde se tiene
-una seccion horizontal de un corredor. En el espacio continuo esto genera la
-pertenecia de los puntos del centro del corredor al GVD, donde cada punto $p$
-que pertenece al GVD tiene dos puntos base, uno a cada lado del corredor a
-distancia $d$ de $p$. El problema ocurre cuando la discretizacion de dicho
-corredor resulta en un numero par de celdas libres entre cada celda ocupada
-correspondiente a una pared del corredor, en este caso se tendran dos celdas
-$c_1$ y $c_2$ en el centro del corredor, $c_1$ tiene una celda $b_1 \in CGen$ a
-minima distancia $d_c(b_1) = DD(c) = d-\frac{L}{2}$, mientras que la celda $b_2
-\in CGen$ está en el otro lado del corrdor a distancia $d_c(b_2) =
-d+\frac{L}{2}$, segun lo que ocurre en el espacio continuo esta
-deberia ser tambien una celda base aunque no este a minima distancia de $c$. La
-tolerancia introducida en la definicion presentada en (\ref{eq:bpDisc}) asegura
-la pertenencia de $b_2$ a $CGen$, recordadndo que $b_2\in CGen$ entoces segun
-dicha definicion se tiene que:
 
-$b_2 \in \mli{DBP}_c \iff$ $d_c(b_2) - \mli{DD}(c) \leq L \iff$ $d+\frac{L}{2}
-- (d-\frac{L}{2}) \leq L \iff$ $d+\frac{L}{2} -d +\frac{L}{2} \leq L \iff$ $L
-\leq L$. 
+Adaptar directamente la definicion de punto base en espacio continuo a celda
+base en el espacio discreto resulta en que solo las celdas pertenecientes a
+generadores que estan a minima distancia de $c$ que a una minima distanicia
+$\mli{DD}(c)$ de $c$ son las celdas base. Sin embargo la definicion dada en
+(\ref{eq:bpDisc}) no se correponde con esta debido a que al adaptar de forma
+directa existen casos donde los resultados difieren de los que se obtienen en
+el espacio continuo. 
+Uno de estos casos es el que se presenta en la figura \ref{fig:bptol} donde se
+tiene una seccion horizontal de un corredor. En el espacio continuo esto genera
+la pertenecia de los puntos del centro del corredor al GVD, donde cada punto
+$p$ que pertenece al GVD tiene dos puntos base, uno a cada lado del corredor a
+distancia $d$ de $p$. 
+El problema ocurre cuando la discretizacion de dicho corredor resulta en un
+numero par de celdas libres entre cada celda ocupada correspondiente a una
+pared del corredor, en esta situacion se tienen dos celdas $c_1$ y $c_2$ en el
+centro del corredor, con al menos una de estas perteneciendo al GVD discretizado en
+representacion de los puntos el centro del corredor que pertenecen al GVD continuo.
+Suponiendo sin perdida de generalidad que $c_1$ pertenece al GVD, entoces $c_1$
+tiene una celda $b_1 \in \mli{CGen}$ a minima distancia $d_{c_1}(b_1) = \mli{DD}(c_1) =
+d-\frac{L}{2}$, mientras que la celda $b_2 \in \mli{CGen}$ está en el otro lado del
+corrdor a distancia $d_{c_1}(b_2) = d+\frac{L}{2}$, dado lo que ocurre en el
+espacio continuo esta tambien debería ser una celda base aunque no este a
+minima distancia de $c_1$. Para considerar estos casos la definicion presentada
+en (\ref{eq:bpDisc}) incluye en $\mli{DBP}_{c_1}$ a las celdas en $\mli{CGen}$ que
+tienen una distancia a $c_1$ que esta entre la minima posible de $\mli{DD}(c_1)$ y
+una maxima tolerada de $\mli{DD}(c_1)+L$, siendo $L$ la diferencia entre ambos
+extremos, conocida como tolerancia. Definiendo $\mli{DBP}_{c_1}$ de esta forma se logra la pertenencia de
+$b_2$ en las celdas base de $c_1$, ya que recordando que $b_2\in \mli{CGen}$ entonces:
+
+\begin{align*}
+\begin{split}
+  b_2 \in \mli{DBP}_{c_1} & \iff  d_{c_1}(b_2) - \mli{DD}(c_1) \leq L \iff d+\frac{L}{2} - (d-\frac{L}{2}) \leq L\\
+                          & \iff   d+\frac{L}{2} -d +\frac{L}{2} \leq L \iff L \leq L_{\ \blacksquare}
+\end{split}
+\end{align*}
 
 \begin{figure}[H]
   \centerfloat
 
-  \includegraphics[clip=true, width=0.80\textwidth]{imagenes/basis/horizontal.png}
+  \includegraphics[clip=true, width=0.80\textwidth]{imagenes/basis/horizontalMod.png}
 
-  \caption[Caso en el cual se requiere de una tolerancia para detectar correctmente a los puntos base.]{Caso en el cual se requiere de una tolerancia para detectar correctmente a los puntos base. Por simplicidad $L=1$. Extraída de \cite{Liu2015}}\label{fig:bptol}
+  \caption[Caso en el cual se requiere de una tolerancia para detectar correctmente a los puntos base.]{Caso en el cual se requiere de una tolerancia para detectar correctmente a los puntos base. Modificada de \cite{Liu2015}}\label{fig:bptol}
 
 \end{figure}
 
-La definicion presentada en (\ref{eq:bpDisc}) basa en el analisis realizado en
-\cite{Liu2015} donde se resuelve que la tolerancia adecuada entre las distancias
-de puntos bases es $L$.
+La definicion presentada en (\ref{eq:bpDisc}) se basa en el analisis realizado
+en \cite{Liu2015} donde se resuelve que la tolerancia adecuada entre las
+distancias de puntos bases es $L$.
+
+% Con el motivo de incluir celdas como $b_2$ que por
+% causa de la discretizacion no estan a una minima distancia $DD(c)$ de $c$ en
+% $DBP_c$ . 
+% Adaptar directamente la definicion de punto base en espacio continuo a celda base en el espacio discreto resulta en que solo
+% las celdas que estan a una distanicia $\mli{DD}(c)$ de $c$, son las que estan a
+% minima distancia de $c$, estas serian las unicas celdas base de $c$ si se adaptara de
+% forma directa la definicion de punto base en espacio continuo. Sin embargo al adaptar
+% de forma directa la definicion existen casos donde los resultados difieren de
+% los que se obtienen en el espacio continuo. 
+% Un ejemplo es caso que se presenta en la figura \ref{fig:bptol} donde se tiene
+% una seccion horizontal de un corredor. En el espacio continuo esto genera la
+% pertenecia de los puntos del centro del corredor al GVD, donde cada punto $p$
+% que pertenece al GVD tiene dos puntos base, uno a cada lado del corredor a
+% distancia $d$ de $p$. El problema ocurre cuando la discretizacion de dicho
+% corredor resulta en un numero par de celdas libres entre cada celda ocupada
+% correspondiente a una pared del corredor, en este caso se tendran dos celdas
+% $c_1$ y $c_2$ en el centro del corredor, $c_1$ tiene una celda $b_1 \in CGen$ a
+% minima distancia $d_c(b_1) = DD(c) = d-\frac{L}{2}$, mientras que la celda $b_2
+% \in CGen$ está en el otro lado del corrdor a distancia $d_c(b_2) =
+% d+\frac{L}{2}$, segun lo que ocurre en el espacio continuo esta
+% deberia ser tambien una celda base aunque no este a minima distancia de $c$. La
+% tolerancia introducida en la definicion presentada en (\ref{eq:bpDisc}) asegura
+% la pertenencia de $b_2$ a $CGen$, recordadndo que $b_2\in CGen$ entoces segun
+% dicha definicion se tiene que:
+
+
  % Debido a la discretizacion  no lleva a buenos resultados ya que la defincion de
 % celda base agrega una tolerancia que permite una correcta generacion del GVD
 % discretizado, esta tol
@@ -1195,10 +1233,9 @@ de puntos bases es $L$.
 % \todo{explicar
 % problemas de dicretizacion (ming-siegwart)}.
 
-Las lineas criticas discretizadas se definen como las lineas discretizadas
-\cite{foleyphillips} definidas entre los centros de las celdas criticas y cada
-uno de sus puntos base discritizados.
-
+Finalmente las \emph{lineas criticas discretizadas} se definen como las lineas
+discretizadas \cite{foleyphillips} definidas entre los centros de las celdas
+criticas y cada uno de sus puntos base discritizados.
 
 Una vez determinadas las celdas criticas y las lineas criticas discretizadas es
 posible obtener la segmentacion en regiones topologicas con la aplicacion de un
