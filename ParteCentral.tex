@@ -1081,7 +1081,7 @@ construccion de este se trata en la seccion \ref{sec:MiConstGVD}.
 % considerando el mapa de distancia
 % subproducto de \emph{brushfire dinamico}
 En el caso de los puntos criticos, dada funcion de despeje discretizada
-$\mli{DD} : \mli{CG} \rightarrow R$ que se corresponde con un mapa de distancia
+$\mli{DD} : \mli{CG} \rightarrow R$ que se corresponde con un mapa de distancia (seccion \ref{subsec:constGVD})
 a las celdas pertenecientes a generadores, se define el conjunto de las
 celdas criticas (puntos criticos discretizados) $\mli{CrD}$ segun
 (\ref{eq:critDisc}). 
@@ -1089,8 +1089,8 @@ celdas criticas (puntos criticos discretizados) $\mli{CrD}$ segun
 % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
 \begin{equation}
 \begin{split}
-  \mli{CrD} = \{c\ \in \mli{GGVD} : & \forall c_l \in ady(c) \cap \mli{GVD}, D(c) \leq D(c_l),\\
-                                       & \exists c_g \in ady(c) \cap \mli{GVD}, (c_g) > D(c) \} %, \\
+  \mli{CrD} = \{c\ \in \mli{GGVD} : & \forall c_l \in ady(c) \cap \mli{GVD}, \mli{DD}(c) \leq \mli{DD}(c_l),\\
+                                       & \exists c_g \in ady(c) \cap \mli{GVD}, \mli{DD}(c_g) > \mli{DD}(c) \} %, \\
                                        % & |ady(c)\cup \mli{GVD}| = 2\}
 \end{split}
 \label{eq:critDisc}
@@ -1125,16 +1125,79 @@ mayor.
 % condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
 % utilizados para los puntos criticos.
 
-Para adaptar el concepto de las lineas criticas es necesario adaptar
-primero el concepto de puntos base de un punto $p$, que refieren al conjunto de
-puntos pertenecientes a generadores que son mas cercanos a $p$. Las celdas base
-(puntos base discretizados) de un a celda $c$ se definen como el conjunto de
-celdas pertenecientes a generadores (notar que no es relevante saber a que
-generdor pertnece cada punto) que son mas cercanas a $c$ \todo{explicar
-problemas de dicretizacion (ming-siegwart)}. Luego las lineas criticas
-discretizadas se definen como las lineas discretizadas \cite{foleyphillips}
-definidas entre los centros de las celdas criticas y cada uno de sus puntos
-base discritizados.
+Para adaptar el concepto de las lineas criticas es necesario adaptar primero el
+concepto de puntos base de un punto $p$, que refieren al conjunto de puntos
+pertenecientes a generadores que son mas cercanos a $p$. Sea $CGen$ el conjunto
+formado por todas las celdas pertenecientes a algun generador, las celdas base
+(puntos base discretizados) $DBP_c$ de un a celda $c$ se definen como el
+conjunto de las celdas pertenecientes a generadores que estan a una distancia
+menor o igual a $\mli{DD}(c)+L$, como se expresa en (\ref{eq:bpDisc}), siendo
+$L$ el largo de las celdas.
+\begin{equation}
+\mli{DBP}_c = \{ b \in \mli{CGen} : d_c(b) - \mli{DD}(c) \leq L\}
+\label{eq:bpDisc}
+\end{equation}
+Las celdas que estan a una distanicia $\mli{DD}(c)$ de $c$, son las que estan a
+minima distancia de $c$, estas serian las unicas celdas base si se adaptara de
+forma directa la definicion punto base en espacio continuo. Sin embargo al adaptar
+de forma directa la definicion existen casos donde los resultados difieren de
+los que se obtienen en el espacio continuo. 
+Un ejemplo es caso que se presenta en la figura \ref{fig:bptol} donde se tiene
+una seccion horizontal de un corredor. En el espacio continuo esto genera la
+pertenecia de los puntos del centro del corredor al GVD, donde cada punto $p$
+que pertenece al GVD tiene dos puntos base, uno a cada lado del corredor a
+distancia $d$ de $p$. El problema ocurre cuando la discretizacion de dicho
+corredor resulta en un numero par de celdas libres entre cada celda ocupada
+correspondiente a una pared del corredor, en este caso se tendran dos celdas
+$c_1$ y $c_2$ en el centro del corredor, $c_1$ tiene una celda $b_1 \in CGen$ a
+minima distancia $d_c(b_1) = DD(c) = d-\frac{L}{2}$, mientras que la celda $b_2
+\in CGen$ está en el otro lado del corrdor a distancia $d_c(b_2) =
+d+\frac{L}{2}$, segun lo que ocurre en el espacio continuo esta
+deberia ser tambien una celda base aunque no este a minima distancia de $c$. La
+tolerancia introducida en la definicion presentada en (\ref{eq:bpDisc}) asegura
+la pertenencia de $b_2$ a $CGen$, recordadndo que $b_2\in CGen$ entoces segun
+dicha definicion se tiene que:
+
+$b_2 \in \mli{DBP}_c \iff$ $d_c(b_2) - \mli{DD}(c) \leq L \iff$ $d+\frac{L}{2}
+- (d-\frac{L}{2}) \leq L \iff$ $d+\frac{L}{2} -d +\frac{L}{2} \leq L \iff$ $L
+\leq L$. 
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=0.80\textwidth]{imagenes/basis/horizontal.png}
+
+  \caption[Caso en el cual se requiere de una tolerancia para detectar correctmente a los puntos base.]{Caso en el cual se requiere de una tolerancia para detectar correctmente a los puntos base. Por simplicidad $L=1$. Extraída de \cite{Liu2015}}\label{fig:bptol}
+
+\end{figure}
+
+La definicion presentada en (\ref{eq:bpDisc}) basa en el analisis realizado en
+\cite{Liu2015} donde se resuelve que la tolerancia adecuada entre las distancias
+de puntos bases es $L$.
+ % Debido a la discretizacion  no lleva a buenos resultados ya que la defincion de
+% celda base agrega una tolerancia que permite una correcta generacion del GVD
+% discretizado, esta tol
+
+% a celda base seria entoces la celdas pertenecientes a un generador tal que su distancia
+% , y dado que $minD$ de
+% dichas deldas mas cercanas a $c$, tambien se incluyen las celdas que estan a $minD+L$
+
+% 1 defino minD 
+
+% 2 expreso la def en paralabra
+
+% 3 eq
+
+% 4 explico la relacion con la variante continua y el porque de la toreancia (dibujito de liu ming)
+
+% (notar que no es relevante saber a que
+% generdor pertnece cada punto)
+% \todo{explicar
+% problemas de dicretizacion (ming-siegwart)}.
+
+Las lineas criticas discretizadas se definen como las lineas discretizadas
+\cite{foleyphillips} definidas entre los centros de las celdas criticas y cada
+uno de sus puntos base discritizados.
 
 
 Una vez determinadas las celdas criticas y las lineas criticas discretizadas es
@@ -1190,7 +1253,8 @@ en una unica componente.
   \qquad
   \subfloat[Usando $ady_4$]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/probDiagSeg/0_33_4con.png}}
 
-  \caption{Linea critica discretizada diagonal, y sus efectos en la
+  \caption[Linea critica discretizada diagonal, y sus efectos en la
+  segmentacion al usar $ady_4$ o $ady_8$.]{Linea critica discretizada diagonal, y sus efectos en la
   segmentacion al usar $ady_4$ o $ady_8$. La celda $c$ se da como ejemplo de
 una celda de un lado de la linea que es adyacente segun $ady_8$ a la celda $n3$ al 
 otro lado de la linea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
@@ -1243,7 +1307,11 @@ mejor pero no se)
 
 (I) aplica el criterio de siegwart-ming que capaz esta bueno que sea epxlicito.
 
-(I) permite comentar el tema de dist 1.
+(I) permite comentar el tema de dist 1. (se puede mencionar en II tambien,
+diciendo que se hace eso pero que en realidad se saco si experimetnar el rido
+que dice que evita)
+
+Se puede intentar comentar todo en alto nivel
 
 % Comentar como a partir de esta definicion de celda base, y las nociones de no
 % adyacentes ni iguales entoces diferentes generadores (parrafo mas abajo) se
