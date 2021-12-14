@@ -394,13 +394,13 @@ Se comienza inicializando las distancias de las celdas libres con $\infty$ y
 las ocupadas con $0$.  Adicionalmente, las celdas ocupadas se insertan en una
 cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que
 las cola de prioridad este vacía se remueve la celda más prioritaria $c$ y para
-cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $dt_{c'}$
+cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $\mli{dt}_{c'}$
 según \eqref{ec:dtBrushFire} que remplaza la distancia actual $d_{c'}$ de la
-celda $c'$ si $dt_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en
+celda $c'$ si $\mli{dt}_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en
 la cola de prioridad. 
 
 \begin{equation}\label{ec:dtBrushFire}
-  dt_{c'} = d_c+||c'-c||_2
+  \mli{dt}_{c'} = d_c+||c'-c||_2
 \end{equation}
 
 Una vez que la cola de prioridad queda vacía, el valor de distancia de las celdas converge al valor de la mínima distancia hacia un obstáculo. 
@@ -421,10 +421,15 @@ esqueletización. La idea se basa en asignar identificadores a cada
 conjunto conexo de celdas ocupadas, y luego según la interpretación de
 brushfire como ondas, las ondas provenientes de celdas ocupadas con
 identificadores distintos colisionan en las celdas que deben pertenecer
-al GVD. Notar que la asignación de identificadores presentada causa los
-problemas asociados a generadores cóncavos comentados en la sección
-\ref{subsec:GVD}, en la sección \ref{subsec:constGVDInc} se describe una
-solución. 
+al GVD. Una colision de ondas involucra dos celdas $c$ y $c'$, y ocurre cuando
+una celda $c$ recien extraida de la cola de prioridad no reemplaza la distancia
+$d_{c'}$ de una celda adyacente $c'$, con distancia tentativa $\mli{dt}_{c'}$
+calculada segun \ref{ec:dtBrushFire}, por ser la  $\mli{dt}_{c'}\geq d_{c'}$.
+Notar que dos ondas pueden generar multiples choques de ondas.  
+
+La asignación de identificadores presentada causa los problemas asociados a
+generadores cóncavos comentados en la sección \ref{subsec:GVD}, en la sección
+\ref{subsec:constGVDInc} se describe una solución. 
 
 \subsection{Construcción incremental de un GVD}\label{subsec:constGVDInc}
 % A lo largo de la exploración el mapa construido recibirá, de forma frecuente, actualizaciones que solo modifican una pequeña porción del mismo. Dado esto, por motivos de eficiencia, se busca que los algoritmos que utilizan al mapa como una entrada eviten recomputarse completamente en cada actualización y que en su lugar actualicen el último resultado obtenido para que sea consistente con la última version del mapa.
@@ -468,7 +473,7 @@ cuya distancia a la nueva celda ocupada es menor que la distancia mínima a un
 obstáculo que tenían antes de la modificación.
 
 Brushfire dinámico lleva a cabo las actualizaciones propagando los cambios ocurridos
-en forma de ondas. Las celdas $o$ que pasan a estar ocupadas emiten una onda
+en forma de ondas (sección \ref{subsec:constGVD}). Las celdas $o$ que pasan a estar ocupadas emiten una onda
 \say{consistente} que establece la distancia $dt_c$ recorrida por la onda a la
 distancia $d_c$ asociada a la celda $c$ si $dt_{c}<d_{c}$, si la distancia se
 modifica, entonces se establece a $o$ como el obstáculo a mínima distancia de $c$. En el
@@ -494,8 +499,8 @@ Al igual que en el algoritmo brushfire original, en brushfire dinámico la
 construcción de un GVD se hace a partir de identificadores asignados a
 conjuntos conexos de celdas ocupadas.
 Las ondas consistentes en su expansion remueven las celdas del GVD, y al
-detenerse agregan al GVD tanto las celdas en donde se detienen, como también
-las celdas que causaron que se detengan, siempre y cuando dichas celdas tengan
+chocar agregan al GVD tanto las celdas en donde se detienen, como también
+las celdas que causaron el choque, siempre y cuando dichas celdas tengan
 identificadores distintos entre sí. Por otro lado las ondas inconsistentes remueven del
 GVD a todas las celdas cuya pertenencia al GVD involucra a celdas previamente
 ocupadas que pasaron a ser libres. Un ejemplo de como agregar y remover un
@@ -504,7 +509,7 @@ obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}.
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesKalra.png}
-  \caption[Olas de brushfire dinámico.]{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al detenerse genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre mientras que al al llegar a cedas con una distancia mínima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
+  \caption[Olas de brushfire dinámico.]{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al chocar genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre mientras que al al llegar a cedas con una distancia mínima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
 \end{figure} 
 
 
