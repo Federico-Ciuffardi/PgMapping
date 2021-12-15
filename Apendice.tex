@@ -1,13 +1,78 @@
+\chapter{Algoritmos completos}
+
+\section{Obtencion de las celdas base}\label{algComp:celdasbase}
+El algoritmo \ref{alg:celdasBaseCompleto} consiste en una version sin las
+simplificaciones comentadas en la seccion \ref{subsec:critPer} del algoritmo
+\ref{alg:celdasBase}.
+
+\begin{algorithm}[H]
+\SetAlgoLined
+  \SetKwInOut{Input}{Entrada}
+  \Input{$c$}
+
+% En updateBase c es pN y cA es p
+% En setPseudoSourcesFromWave c es p y cA es waveP
+  % \tcp{DFS desde $c$ agregando las celdas visitadas a la componente conexa $C_i$}
+  $\mli{CB}_c := \emptyset$
+
+  \ForEach{ $cA \in ady(c)$} {
+    \ForEach{$b \in gens(cA)$} {
+      $\mli{tolerado}  := d_c(b) - \mli{DD}(c) \leq L$\\
+      % $\mli{noIgNiAdy} := b \notin gens(c) \land b \notin \bigcup_{b'} ady(gen(c))$\\
+
+      $\mli{masCercano} := Verdadero$\\
+      $\mli{aRemover} := \emptyset$\\
+      \ForEach{$b' \in \mli{CB}_c$} {
+        \If{$b' = b \lor b' \in ady(b)$}{
+          \uIf{$d_c(b) < d_c(b')$}{
+            $\mli{aRemover} := \mli{aRemover} \cup \{b'\}$\\
+          }\Else{
+            $\mli{masCercano} := \mli{masCercano} \land Falso$ \\
+            \tcp{Se puede terminar de iterar una vez ejecutada esta linea}
+          }
+        }
+      }
+      
+      \If{tolerado $\land$ masCercano}{
+        $\mli{CB}_c := \mli{CB}_c -\mli{aRemover}$\\
+        $\mli{CB}_c := \mli{CB}_c \cup \{\mli{b}\}$\\
+      }
+    }
+  }
+  \Return $\mli{CB}_c$ 
+
+  \caption{Obtencion de las celdas base $\mli{CB}_c$ de la celda $c$}
+  \label{alg:celdasBaseCompleto}
+\end{algorithm}
+
+\newpage
+Uno de los cambios principales es el remplazo de la funcion $gen$ por la
+funcion $gens : \mli{CG} \rightarrow P(\mli{CGen})$ que dada una celda $c$ de
+la grilla devuelve el conjunto de todas las celdas a minima distancia de $c$ que pertenecen a
+un generador. Otro cambio a notar es que la condicion que en algoritmo
+simplificado es controlada explicitamente con la variable $\mli{noIgNiAdy}$, en
+este algoritmo completo se maneja implicitamente en la condicion controlada
+a traves de la variable $\mli{masCercano}$. El utlimo cambio a destacar es que la
+condicion asociada a la variable $\mli{masCercano}$ (lineas 5-15) pasa a
+ser que la celda base candidato $b$ esté a menor distnacia de $c$ que las
+celdas base actuales $b'$ de $c$ que son iguales o adyacentes a $b$, de cumplirse esta
+condicion dichos $b'$ dejan de ser celdas base de $c$.
+\newpage
+
 \chapter{Ejemplos completos}
 \section{Simplificacion de fronteras basada en cubrimiento}\label{EXE:sfbc}
+\begingroup
+\small
+La figura \ref{EXE:sfbc} presenta un version completa del ejemplo mostrado en la figura \ref{fig:ejemploFSCub}.
+\endgroup
 \begin{figure}[H]
   \centerfloat
-  \subfloat[Estado inicial.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a1.png}}
-  \subfloat[Se inicializa $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a2.png}}
+  \subfloat[Estado inicial.]{\includegraphics[clip=true, width=0.38\textwidth]{imagenes/ejemploSimpCub/a1.png}}
+  \subfloat[Se inicializa $\mli{FP}$.]{\includegraphics[clip=true, width=0.38\textwidth]{imagenes/ejemploSimpCub/a2.png}}
 
-  \subfloat[Se obtiene $\mli{fp}$ desencolando de $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b1.png}}
-  \subfloat[Existen celdas mas alejadas que $2*rango$, los candidatos se obienen con $radio=rango$. ]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b3.png}}
-  \subfloat[Se elige el unico candidato como $\mli{fs}$, se actualiza $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b5.png}}
+  \subfloat[Se obtiene $\mli{fp}$ desencolando de $\mli{FP}$.]{\includegraphics[clip=true, width=0.38\textwidth]{imagenes/ejemploSimpCub/b1.png}}
+  \subfloat[Existen celdas mas alejadas que $2*rango$, los candidatos se obienen con $radio=rango$. ]{\includegraphics[clip=true, width=0.38\textwidth]{imagenes/ejemploSimpCub/b3.png}}
+  \subfloat[Se elige el unico candidato como $\mli{fs}$, se actualiza $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.38\textwidth]{imagenes/ejemploSimpCub/b5.png}}
  \phantomcaption
 
 \end{figure}
@@ -42,8 +107,8 @@
   \subfloat[Se elige el unico candidato como $\mli{fs}$, se actualiza $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f4.png}}
 
 
-  \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
-  % \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal3.png}}
+  \subfloat[$\mli{UF}=\emptyset$ por lo que el algoritmo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
+  % \subfloat[$\mli{UF}=\emptyset$ por lo que el algoritmo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal3.png}}
 
   \caption[Proceso de simplificacion de fronteras según cubrimiento.]{Proceso
     de simplificacion de fronteras según cubrimiento. Las fronteras de $F_i$ se

@@ -330,7 +330,7 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
     $pila.apilar(c)$ \\
     \While { $\neg pila.vacia()$ } {
       $c := pila.desapilar()$ \\
-      \For{ $cA \in ady(c)$ } {
+      \ForEach{ $cA \in ady(c)$ } {
         \If{ $cA \in restantes$ } {
           $C_i :=  C_i \cup \{c\}$ \\
           $restantes := restantes - \{c\}$ \\
@@ -351,7 +351,7 @@ Este algoritmo se resume en elegir una celda $c\in C$ que no este aun en una
 componente conexa (linea 6), aplicar un \emph{depth-first search} (DFS)
 partiendo $c$ agregado todas las celdas recorridas a una misma componente
 conexa (lineas 7-19). Repetir dicho procedimiento hasta que todas las celdas
-pertenezcan a alguna componente conexa (linea 4). Este algormitmo es analogo al
+pertenezcan a alguna componente conexa (linea 4). Este algoritmo es analogo al
 que esta presente en \cite{hopcroft1973algorithm}.
 
 \section{Identificación de objetivos}
@@ -584,7 +584,7 @@ lado $\mli{PF}$ se inicializa encolando en cualquier orden a las celdas
 fronteras adyacentes a celdas cuyo estado es ocupado, de no existir ninguna se
 encola una unica frontera arbitraria de $F_i$ (lineas 3-13). 
 
-Luego el algormitmo se basa en elegir una frontera de $\mli{UF}$ como frontera
+Luego el algoritmo se basa en elegir una frontera de $\mli{UF}$ como frontera
 significativa $\mli{fs}$ (lineas 15-20). Posteriomente se actualizan las
 estructuras mantenidas en funcion de la nueva $\mli{fs}$ (lineas 21-27), notar
 que esto implica reducir el numero de celdas en $\mli{UF}$ ya que como minimo
@@ -838,7 +838,7 @@ conjnto considerada una valuacion. \todo{o mensaje de valuacion, como quede mejo
 La resolucion comienza con la recepcion de las valuaciones realizadas por
 los robots. Al recibirse la primera valuacion existe una ventana de tiempo en
 la que la central continuara recibiendo nuevas valuaciones. Terminada esta
-ventana se ejecuta un algormitmo que resulta en la asignacion de objetivos a
+ventana se ejecuta un algoritmo que resulta en la asignacion de objetivos a
 los robots.
 
 El proposito de la ventana es que en escenarios reales los robots pueden dejar
@@ -861,7 +861,7 @@ dichas valoraciones la ventana de resolución es terminada prematuramente
 evitando esperas innecesarias.
 
 Siendo $tr_i$ el tiempo que paso desde la recepcion de la primera valuacion
-hasta el comienzo de la ejecucion del algormitmo de asignacion y $vr_i$ la
+hasta el comienzo de la ejecucion del algoritmo de asignacion y $vr_i$ la
 duracion de la ventana $i$ definida en \ref{eq:ventanaVals}.
 
 \begin{equation} 
@@ -939,7 +939,7 @@ que estos se distribuyan sobre los segmentos (seccion \ref{subsec:wurmCoord}).
   segmento no se estaria considerando.}
 
 % El algorimo \ref{alg:resolucionsubastasegmentos} presenta un pseudocodigo del
-% algormitmo de asigacion donde $R$ el conjunto de los identificadores de los
+% algoritmo de asigacion donde $R$ el conjunto de los identificadores de los
 % robots, $O$ el conjnto de los identificadores de los objetivos y $Costos$ el
 % conjunto los $c_{i,j}$ computados a partir de las valuaciones recibidas
 El algorimo de asignacion, se corresponde al algorimo
@@ -1083,13 +1083,13 @@ simplemente como GVD.
 Dada funcion de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ que se
 corresponde con un mapa de distancia (seccion \ref{subsec:constGVD}) a las
 celdas pertenecientes a generadores, se define el conjunto de las \emph{celdas
-criticas} (puntos criticos discretizados) $\mli{CrD}$ segun
+criticas} (puntos criticos discretizados) $\mli{CCr}$ segun
 (\ref{eq:critDisc}). 
 
 % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
 \begin{equation}
 \begin{split}
-  \mli{CrD} = \{c\ \in \mli{GGVD} : & \forall c_l \in ady(c) \cap \mli{GVD}, \mli{DD}(c) \leq \mli{DD}(c_l),\\
+  \mli{CCr} = \{c\ \in \mli{GGVD} : & \forall c_l \in ady(c) \cap \mli{GVD}, \mli{DD}(c) \leq \mli{DD}(c_l),\\
                                     & \exists c_g \in ady(c) \cap \mli{GVD}, \mli{DD}(c_g) > \mli{DD}(c) \} %, \\
                                        % & |ady(c)\cup \mli{GVD}| = 2\}
 \end{split}
@@ -1121,7 +1121,7 @@ mayor.
 % se propuestas en \cite{wurm2008coordinated}.
 
 
-% Explicar (implica redefinir $\mli{CrD}$ , creo que lo mejor es plantear
+% Explicar (implica redefinir $\mli{CCr}$ , creo que lo mejor es plantear
 % condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
 % utilizados para los puntos criticos.
 
@@ -1129,12 +1129,12 @@ Para adaptar el concepto de las lineas criticas a un espacio discreto, primero
 es necesario adaptar el concepto de puntos base de un punto $p$, que refieren
 al conjunto de puntos pertenecientes a generadores que son mas cercanos a $p$.
 Sea $\mli{CGen}$ el conjunto formado por todas las celdas pertenecientes a
-algun generador, las \emph{celdas base} (puntos base discretizados) $DBP_c$ de
+algun generador, las \emph{celdas base} (puntos base discretizados) $\mli{CB}_c$ de
 un a celda $c$ se definen como el conjunto de las celdas pertenecientes a
 generadores que estan a una distancia menor o igual a $\mli{DD}(c)+L$, como se
 expresa en (\ref{eq:bpDisc}), siendo $L$ el largo de las celdas.
 \begin{equation}
-\mli{DBP}_c = \{ b \in \mli{CGen} : d_c(b) - \mli{DD}(c) \leq L\}
+\mli{CB}_c = \{ b \in \mli{CGen} : d_c(b) - \mli{DD}(c) \leq L\}
 \label{eq:bpDisc}
 \end{equation}
 
@@ -1161,15 +1161,15 @@ d-\frac{L}{2}$, mientras que la celda $b_2 \in \mli{CGen}$ está en el otro lado
 corrdor a distancia $d_{c_1}(b_2) = d+\frac{L}{2}$, dado lo que ocurre en el
 espacio continuo esta tambien debería ser una celda base aunque no este a
 minima distancia de $c_1$. Para considerar estos casos la definicion presentada
-en (\ref{eq:bpDisc}) incluye en $\mli{DBP}_{c_1}$ a las celdas en $\mli{CGen}$ que
+en (\ref{eq:bpDisc}) incluye en $\mli{CB}_{c_1}$ a las celdas en $\mli{CGen}$ que
 tienen una distancia a $c_1$ que esta entre la minima posible de $\mli{DD}(c_1)$ y
 una maxima tolerada de $\mli{DD}(c_1)+L$, siendo $L$ la diferencia entre ambos
 extremos, conocida como tolerancia. De esta forma se obtiene que $b_2 \in
-\mli{DBP}_{c_1}$ como es deseado, ya que recordando que $b_2\in \mli{CGen}$ entonces:
+\mli{CB}_{c_1}$ como es deseado, ya que recordando que $b_2\in \mli{CGen}$ entonces:
 
 \begin{align*}
 \begin{split}
-  b_2 \in \mli{DBP}_{c_1} & \iff  d_{c_1}(b_2) - \mli{DD}(c_1) \leq L \iff d+\frac{L}{2} - (d-\frac{L}{2}) \leq L\\
+  b_2 \in \mli{CB}_{c_1} & \iff  d_{c_1}(b_2) - \mli{DD}(c_1) \leq L \iff d+\frac{L}{2} - (d-\frac{L}{2}) \leq L\\
                           & \iff   d+\frac{L}{2} -d +\frac{L}{2} \leq L \iff L \leq L_{\ \blacksquare}
 \end{split}
 \end{align*}
@@ -1179,7 +1179,7 @@ extremos, conocida como tolerancia. De esta forma se obtiene que $b_2 \in
 
   \includegraphics[clip=true, width=0.80\textwidth]{imagenes/basis/horizontalMod.png}
 
-  \caption[Caso en el cual se requiere de una tolerancia para detectar correctmente a los puntos base.]{Caso en el cual se requiere de una tolerancia para detectar correctmente a los puntos base. Modificada de \cite{Liu2015}}\label{fig:bptol}
+  \caption[Caso en el cual se requiere de una tolerancia para detectar correctmente a las celdas base.]{Caso en el cual se requiere de una tolerancia para detectar correctmente a las celdas base. Modificada de \cite{Liu2015}}\label{fig:bptol}
 
 \end{figure}
 
@@ -1236,19 +1236,24 @@ distancias de puntos bases es $L$.
 
 Finalmente las \emph{lineas criticas discretizadas} se definen como las lineas
 discretizadas \cite{foleyphillips} definidas entre los centros de las celdas
-criticas y cada uno de sus puntos base discritizados.
+criticas y cada una de sus celdas base discritizados. El conjunto de todas las
+celdas pertenecientes a lineas criticas discretizadas se conoce como
+$\mli{LCrD}$.
 
 Una vez determinadas las celdas criticas y las lineas criticas discretizadas es
 posible obtener la segmentacion en regiones topologicas con la aplicacion de un
 algorimo de descomposicion en componentes conexas (seccion
-\ref{subsec:CompComp}) donde el conjunto que se descompone es el que se compone
-por las celdas libres de $\mli{CG}$ que no son puntos criticos ni forman parte
-de una linea critica discretizada.
+\ref{subsec:CompComp}) donde el conjunto que se descompone (la entrada del
+algorimo) es el que esta compuesto por las celdas libres de $\mli{CG}$ que no son
+celdas criticas ni forman parte de una linea critica discretizada, es decir: 
+\begin{align*}
+C := \{ c \in \mli{CG} : estado(c) = libre, c \notin \mli{CCr}, c \notin{LCrD}\}
+\end{align*}
 
 En la figura \ref{fig:ejSegGVDGrid} se muestra el proceso de segmentacion
 completo, desde la grilla de ocupacion usada como entrada
 \ref{fig:ejSegGVDGrid:GRID}, pasando por el GVD generado
-\ref{fig:ejSegGVDGrid:GVD}, la detección de puntos y lineas criticas detectadas
+\ref{fig:ejSegGVDGrid:GVD}, la detección de celdas criticas y lineas criticas discretizadas
 \ref{fig:ejSegGVDGrid:CRI}, terminando con la segmentacion del entorno
 \ref{fig:ejSegGVDGrid:SEG}.
 
@@ -1343,67 +1348,222 @@ pertenencia de las celdas candidatas al GVD y en como se considera el espacio
 desconocido al construir el GVD durante la exploracion. Estos se tratan en las
 siguientes secciones.
 
-\subsection{Criterio de pertenecia}
+\subsection{Criterio de pertenecia}\label{subsec:critPer}
 
-Dado un choque de onda que involucra dos celdas $c_1$ y $c_2$, en
-\emph{brushfire dinamico} original escencialmente estas pertenecen al GVD si
-$g_1$ y $g_2$, sus respectivas celdas más cercanas que pertenecen a un
-generador son distintas y no adyacentes entre si. 
+En \emph{brushfire dinamico} original la pertenecia de las celdas al GVD se
+determina en los choques de ondas consistentes. Dada la funcion $\mli{gen} :
+\mli{CG} \rightarrow \mli{CGen}$ que dada una celda $c$ de la grilla devuelve
+una de las celdas a minima distancia de $c$ que pertecen a un generador, el
+criterio esencialmente consiste en que, sean $c_1$ y $c_2$ las celdas
+involucradas en un choque de ondas consistentes, estas pertenecen al GVD si
+$\mli{gen}(c_1) \neq \mli{gen}(c_2)$ y $\mli{gen}(c_1) \notin
+ady(\mli{gen}(c_2))$, es decir si $\mli{gen}(c_1)$ y $\mli{gen}(c_2)$ no son
+iguales ni adyacentes entre sí. 
 
 La defincion de GVD para el espacio continuo donde un punto $p$ pertenece al
-GVD si tiene dos generadores distintos a minima distancia, lo cual implica que
-$p$ tiene al menos un punto de cada uno de esos generadores a minima distancia,
-estos puntos son parte de los puntos base de $p$ (seccion
-\ref{subsec:mapaTopGVDGrid}). Por lo que se puede decir que un punto pertenece
+GVD si tiene dos generadores distintos a minima distancia, lo cual sucede si y solo si
+$p$ tiene al menos un punto a una misma minima distancia en cada uno de esos generadores,
+dichos puntos son parte de los puntos base de $p$ (seccion
+\ref{subsec:mapaTopGVDGrid}). Dado esto que se puede decir que un punto pertenece
 al GVD si tiene al menos dos puntos bases que pertenecen a generdores
-distintos. Al pasar a un espacio discretizado en celdas, estos implica que
-existen dos celdas base que pertenecen a dos generadores distintos.
+distintos, lo cual en un espacio discretizado en celdas se traduce a que
+existan dos celdas base que pertenecen a generadores distintos.
 
 Dado este analisis y la necesidad de determinar las celdas base planteada en la
-seccion \ref{subsec:mapaTopGVDGrid}, se determinó que la pertenencia de una
-celda al GVD se establece segun la existencia de dos celdas base pertenecientes
-a generadores distintos.
+seccion \ref{subsec:mapaTopGVDGrid}, se determinó diferir en el criterio
+pertenencia con respecto al \emph{brushfire dinamico} original, siendo el nuevo
+criterio de pertenencia de una celda $c$ al GVD la existencia de dos celdas
+base de $c$ pertenecientes a generadores distintos.
 
 La forma de obtener las celdas base de un punto se basa en el concepto de
 choque de olas, de forma similar al criterio de pertenencia de celdas al GVD en
-el \emph{brushfire dinamico} original. Cuando, durante el calculo del mapa de
-distancia de un incremento se registran todas las celdas involucradas en algun
-choque de olas. Al finalizar el calculo del mapa de distnacia siendo este
-consistente con el ultimo mapa disponibles, se calculan las celdas base de
-cada celda registrada previamente segun el algorimo X.
+el \emph{brushfire dinamico} original. Durante el calculo del mapa de distancia
+correspondiente a incremento se registran todas las celdas en involucradas en
+choques de olas consistentes. Luego de finalizar la actualizacion del mapa de
+distnacia, se obtienen las celdas base $\mli{CB}_c$ de cada celda $c$
+registrada previamente segun el algorimo \ref{alg:celdasBase}, notar que la
+funcion de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ se
+corresponde los valores del mapa de distancia calculado.
+
+\begin{algorithm}[H]
+\SetAlgoLined
+  \SetKwInOut{Input}{Entrada}
+  \Input{$c$}
+
+% En updateBase c es pN y cA es p
+% En setPseudoSourcesFromWave c es p y cA es waveP
+
+  $\mli{minD} := \infty$
+
+  % \tcp{DFS desde $c$ agregando las celdas visitadas a la componente conexa $C_i$}
+  \ForEach{ $cA \in ady(c)$} {
+    $b := \mli{gen}(cA)$\\
+    $\mli{tolerado} := d_c(b) - \mli{DD}(c) \leq L$\\
+    $\mli{noIgNiAdy} := b \neq gen(c) \land b \notin ady(gen(c))$\\
+    $\mli{masCercano} := d_c(b) < minD$\\
+    \If{tolerado $\land$ noIgNiAdy $\land$ masCercano}{
+      $\mli{minD}  := d_c(b)$\\
+      $\mli{minDB} := b$\\
+    }
+  }
+  $\mli{CB}_c := \{\mli{gen}(A)\}$\\
+  \If{$\mli{minD} < \infty$}{
+    $\mli{CB}_c := \mli{CB}_c \cup \{\mli{minB}\}$\\
+  }
+  \Return $\mli{CB}_c$ 
+
+  \caption{Obtencion de las celdas base $\mli{CB}_c$ de la celda $c$ (simplificada)}
+  \label{alg:celdasBase}
+\end{algorithm}
+
+El algoritmo procesa cada celda $cA$ adyacente a $c$ (linea 2) obteniendo el
+candidato a ser una celda base de $c$ (linea 3) y comprobando una serie de
+condiciones para que este candidato pueda ser una celda base de $c$ (lineas
+4-6). La condicion que se comprueba en la linea 4 es que el punto base
+candidato este dentro del intervalo definido por la tolerancia como fue
+definido en la seccion \ref{subsec:mapaTopGVDGrid}. En la linea 5 la condicion
+verifica que el candidato no puede ser la celda perteneciente a un generador
+mas cercana a $c$ ni adyacente a esta. Finalmente la condicion presente en la
+linea 6 establece que el candidato actual debe tener una distanica a $c$ menor
+que la de los candidatos procesados anteriormente que cumplen el resto de las
+condiciones. Al finalizar la ejecucion se devuelve como celdas bases a la celda
+perteneciente a un generador que es cercana a $c$ y en el caso de que exista al
+ultimo candidato en cumplir todas las condiciones (lineas 12-16).
 
 %(sacr de la implementacion) (notar que gens a igual distancia tambien se encuentran, igual no comentar por las dudas)
 
 % Notar el uso de la tolerancia de un largo de celda determinada en \cite{Liu2015}
 
-Teniendo las celdas base de un punto para determinar su pertenencia al GVD
-resta verificar si existen al menos dos celdas base que pertenecen distintos
-generadores. Para esto se aplica una tecnica derivada del criterio de pertenencia
-de celdas al GVD en el \emph{brushfire dinamico} original, que consiste en que
-dos puntos base distintos y no adyacentes entre sí pertenecen a distintos
-generadores, y de lo contrario pertenecen al mismo generador.
-De esta forma se logra aproximar el GVD resultante de considerar generadores
-conexos y convexos \ref{subsec:GVD} sin definir explicitamente los generadores.
-Y adicionalemtente se obtienen las celdas base a partir necesarias para
-segmentar.
+Habiendo obtenido las celdas base de un celda $c$ para determinar la
+pertenencia de $c$ al GVD resta verificar si existen al menos dos celdas base
+que pertenecen distintos generadores. Para esto se aplica una tecnica derivada
+del criterio de pertenencia de celdas al GVD presente en el \emph{brushfire dinamico}
+original, que consiste en que dos celdas distintas y no adyacentes entre
+sí pertenecen a distintos generadores, y de lo contrario pertenecen al mismo
+generador. De esta forma se logra aproximar el GVD resultante de considerar
+generadores conexos y convexos \ref{subsec:GVD} sin definir explicitamente los
+generadores. Y adicionalemtente se obtienen las celdas base a partir necesarias
+para segmentar.
+
+Es pertienente aclarar que el algorimo \ref{alg:celdasBase} es una version
+simplificada del que esta presente en la implementacion del proyecto. Las
+simplificaciones son dos, la primera es que se considera solo una de las celdas
+a minima distancia que pertenecen a un generador (la devuelta por la funcion
+$gen$), similar a como se trabaja en el \emph{brushfire dinamico} original. La
+segunda es que solo se permiten dos celdas base. En la seccion
+\ref{algComp:celdasbase} se presenta el algormitmo completo para obtener las
+celdas base sin las simplificaciones mencionadas, es decir que maneja todas las
+celdas pertenecientes a generadores que estan a minima distnacia y permite mas
+de dos celdas base.
+
+% \todo[inline]{Es queda bien este parrafo? Si es
+%   asi tambien me gustaria aclarar un poco que el motivo por el cual se presenta
+%   la simplificacion: permite transmitir las ideas principales del algorimo que
+% esta en la implementacion evitando las complicaciones de genralizar, y
+% explerimentalmente se obtienen resultados similares. No se si tiene sentido
+% agregar esto, ni como escribirlo bien}
+
 
 \subsection{Consideraciones sobre el espacio desconocido}
+
+% Durante la exploracion la grilla de ocupacion (seccion \ref{subsec:Grilla}) que
+% representa el entorno explorado celdas  estado se puede determinar como
+% ocupadas, libres y desconocidas
+Durante la exploracion un subconjunto de celdas de la grilla de ocupacion usada
+para representar el entrono explorado, cuyo estado se determina como
+desconocido. Para una celda $c$ con estado desconocido que $c$ este ocupada y
+que $c$ este libre, son sucesos equiprobables, siendo necesaria evidencia de
+que la celda esta ocupada ni de que esta libre, para que la celda cambie su
+estado ya sea a libre o a ocupado. En un escenario donde comienza sin conocimiento sobre
+el entorno explorado y que el objetivo de la exploracion es obtener
+informacion de dicho entorno, es posible decir que todas las celdas comienzan con estado desconocio 
+y el numero de celdas en dicho estado decrece a lo largo que transcurre la
+exploracion a medida que se obtiene informacion (evidencia) sobre el entrono.
+
+En este contexto el considerar las celdas de estado desconocido se vuelve
+importante ya que en un inicio estas ocupan un gran procentaje del total de las
+celdas de la grilla.
+
+En \cite{kalra2009incremental} y \cite{Lau2013} se considera que el espacio
+desconocido es atravezable por las ondas consistentes e inconsistentes. A su
+vez los bordes del mapa se rellenan con obstaculos. De esta forma se obtienen
+resultados similares a los que se presentan en la figura \ref{fig:kalraOG}.
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=0.75\textwidth]{imagenes/desconocidoCons/kalraOG.png}
+
+  \caption[Consideración del espacio desconocido en \cite{kalra2009incremental} y \cite{Lau2013}.]{Consideración del espacio desconocido en \cite{kalra2009incremental} y \cite{Lau2013}. En la parte superior se muestra la grilla de ocupacion actual. En la inferior su GVD correspondiente, indicandose con rojo los obstaculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
+\end{figure}
+
+El que las olas se propaguen por el espacio desconocido tiene una desventaja
+asociada que es el costo computacion que implica atravezar y generar el GVD
+sobre las partes desconocidas del espacio. Costo especialmente alto al comienzo
+de la ejecucion cuando, como ya se menciono una gran parte del entorno es
+desconocido. Esto se puede evidenciar en la figura X donde solo una pequeña
+porcion del espacio es conocida y el GVD se extiende por todo el entorno.
+
+Dado que en el contexto del proyecto no es necesario construir GVD fuera del
+area desconocida se desarrollo una tecnica permite mantener un GVD conexo y
+solo considerar el espacio conocido. Esta consiste en no permitir que las olas
+atraviesen el espacio desconocido y en considerar como celdas pertenecientes a
+un generador tanto a las celdas ocupadas como a las celdas desconocidas que
+tienen un vecino conocido. De esta forma para el caso de la figura X se obtiene
+un GVD reducido al espacio conocido, y se evita propagar las olas sobre el
+espacio desconocido, como se muestra en la figura Y.
+
+FIG X y FIGY
+
+
+Una alternativa que resulto intuitiva y tuvo que ser descartada es la de
+simplemente considerar el espacio desconocido como no atravezable, el problema
+con esta es que resulta en GVD disconexos en algunos casos donde esto no es
+necesario. Los GVD disconexos se buscan evitar ya que no representan un
+\emph{roadmap} (seccion \ref{subsec:mapacarr}) al no cumplir con la propiedad
+de \emph{conectividad}. En la figura \ref{fig:desconocidoEj} se muestra un GVD
+generado con las tres formas de considerar el espacio desconocido en una misma
+grilla de ocupacion, 
+
+% El problema presentado por esta forma de considerar el espacio desconocido es
+% que las ondas se propagan por el espacio desconocido, generado GVD fuera del
+
+% al explorar donde en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas desconocidas,
+% Llamado de atencion al problema de conectividad de un GVD al explorar donde en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas desconocidas, las cuales no se consideran en los articulos del estado del arte. Estos se asume (no se explicita pero en Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien) que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo desconocido es libre. En este trabajo se propone una tecnica novedosa que soluciona este problema de forma mas eficiente evitando procesar todo el espacio desconocido mientras se va explorando.
+
+\begin{figure}[H]
+  \centerfloat
+
+  \subfloat[Lo desconocido no es atravezable por ondas y no genera ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/noHacerNada.png}}
+  \quad
+  \subfloat[Lo desconocido es atravezable por ondas y no genera ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/kalra.png}}
+  \quad
+  \subfloat[Lo desconocido no es atravezable por ondas y genera ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/mio.png}}
+
+  \caption{Diferentes formas de considerar el espacio desconocido. El GVD generado se indica en azul.}\label{fig:desconocidoEj}
+\end{figure}
+
+% 1. desconexiones
+% 2. incrementalmente si se agregan celdas libres que no son obstaulos entonces igual es necesario actualizar el GVD
+
 % , la alternativa de que los bordes no sean
 % Obstaculos (como esta no aplica a entornos abiertos y genera mas costos) y
-Explicar el problema de considerar lo desconocido, como no hacerlo lleva a GVD
-disconexos, explicar lo que se encuentra en el estado del arte (explicar como
-esta aplica para entornos abiertos) y la alternativa de que las fronteras
-(invertidas) sean emisoras de ondas consistentes e inconsistentes y lo
-desconocido no sea atravezable por las ondas y porque esto implica mucho menos
-costos para mapas cuando estos se comienzan a explorar y se componen de muchas
-celdas desconocidas.
 
-Comentar que las celdas con lo desconocido como punto base no genera lineas ni
-puntos criticos.
 
-\todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}
+% Explicar el problema de considerar lo desconocido, como no hacerlo lleva a GVD
+% disconexos, explicar lo que se encuentra en el estado del arte (explicar como
+% esta aplica para entornos abiertos) y la alternativa de que las fronteras
+% (invertidas) sean emisoras de ondas consistentes e inconsistentes y lo
+% desconocido no sea atravezable por las ondas y porque esto implica mucho menos
+% costos para mapas cuando estos se comienzan a explorar y se componen de muchas
+% celdas desconocidas.
 
-Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el area desconocida debe ser procesado por el original mientras que el mio se reduce al area exploradoa, sientod la parte importante (la del area explorada) casi igual que la otra.
+% Comentar que las celdas con lo desconocido como punto base no genera lineas ni
+% puntos criticos.
+
+% \todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}
+
+% Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el area desconocida debe ser procesado por el original mientras que el mio se reduce al area exploradoa, sientod la parte importante (la del area explorada) casi igual que la otra.
 
 \section{Planificación}
 Referenciar los tipos de caminos a la parte de la valuacion que habla de esto.
@@ -1792,7 +1952,7 @@ Y por otro lado como estas actualizaciones se integra (el metodo que se describe
 % Los pasos del 2 al 4 no presentan ambigüedad, siendo el paso 1 en el que resta
 % aclarar, especificamente lo que resta aclarar es el criterio con el que se
 % elige la frontera significativa. La eleccion en un principio podria ser
-% aleatoria y el algormitmo daria resultados validos, pero esto dejaria a la
+% aleatoria y el algoritmo daria resultados validos, pero esto dejaria a la
 % suerte la calidad de la solucion. La idea seria elegir de forma determinista a
 % una frontera significativa buscando que cubra la mayor cantidad de frotneras
 % mientras se evita cubrir nuevamente fronteras que ya sean cubiertas por otra
