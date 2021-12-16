@@ -45,13 +45,13 @@ Propuesta y estudio de un algoritmo novedoso para identificación de objetivos b
 
 Estudiar la coordinación que se propone en \cite{wurm2008coordinated} utilizando una construcción incremental del GVD.
 
-% Propuesta y estudio de un algoritmo de construcción incremental de un GVD basado en \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando principalmente la forma de determinar las celdas pertenecientes al GVD.
+% Propuesta  de un algoritmo de construcción incremental de un GVD basado en \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando principalmente la forma de determinar las celdas pertenecientes al GVD.
 
 Adicionalmente se estudia un aspecto critico que no esta explicito en el estado del arte, el problema asociado a como se tratan las celdas de estado desconocido en la construcción del GVD. Para este problema se comentan posibles alternativas, pasando por la que esta presente en el estado del arte y una técnica novedosa que permite una mayor eficiencia.
 
 % Proponer un algoritmo novedoso para la simplificacion de conjuntos de fronteras que ... (no se que poner aca, pongo)
 % Estudiar la coordinacion propuesta une wurm utilizando un  GVD incremental ya que de lo contrario no es escalable.
-% Y que adicionalemtente se implemento una construiccion de GVD novedosa que basa su construiccion en sources y pseudosources (la idea intuitiva pero considerando los potenciales problemas de discretizacion)
+% Y que adicionalmente se implemento una construiccion de GVD novedosa que basa su construiccion en sources y pseudosources (la idea intuitiva pero considerando los potenciales problemas de discretizacion)
 % Llamado de atencion al problema de conectividad de un GVD al explorar donde en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas desconocidas, las cuales no se consideran en los articulos del estado del arte. Estos se asume (no se explicita pero en Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien) que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo desconocido es libre. En este trabajo se propone una tecnica novedosa que soluciona este problema de forma mas eficiente evitando procesar todo el espacio desconocido mientras se va explorando.
 
 \section{Hipótesis de trabajo}
@@ -650,7 +650,7 @@ verde, siendo las circunferencias rojas de radio $rango=5.6$ (largos de celda) c
 \end{figure}
 
 
-\section{Asignación de tareas}
+\section{Asignación de tareas}\label{sec:asigTar}
 % Comentar el tema de que uso wurm, que cambio como obtengo el gvd haciendo uso de una variante del metodo inc presentado en Lau que tenia esas mejoras que se mencionaron en \ref{subsec:constGVDInc}. Decir que se va a comentar a detalle las variaciones desarrolladas la seccion \ref{sec:MiConstGVD}. 
 
 Cuando un robot se encuentra ocioso este le solicita a la central que le asigne
@@ -848,7 +848,7 @@ valuaciones de todos los robots puede ser una espera infinita.
 
 Dado que el problema que los robots deben resolver para generar las valoraciones es
 similar, se asume que el tiempo se demora en generar las valoraciones tambien
-es similar, adicionalemtente dicho tiempo es proporcional al area del
+es similar, adicionalmente dicho tiempo es proporcional al area del
 mapa que se encuentra explorada, por lo tanto se opto por utilizar una ventana
 dinámica de un tamaño que, considerando lo que demoraron las valoraciones de
 los robots en la subasta anterior, sea lo suficientemente grande como para que
@@ -1102,7 +1102,7 @@ traducir sino que se altera ligeramente la definicion ya que es conveniente no
 solo considerar las celdas del GVD que minimizan el despeje localmente, es
 decir las tienen un despeje menor que el de sus celdas adyacentes en el GVD, si
 no ademas incluir las celdas que tienen un despeje menor o igual que el de sus
-celdas adyacentes en el GVD y adicionalemtente al menos una de sus celdas
+celdas adyacentes en el GVD y adicionalmente al menos una de sus celdas
 adyacentes en el GVD tiene un despeje mayor.
 % donde de ser solo minimo local no hay criticos pero al decir que no hay menors
 % y hay al menos uno mayor si, 
@@ -1114,7 +1114,7 @@ GVD ubicada arriba tiene igual despeje), por lo que si estas fueran las
 condiciones este no seria un critico y tanto el corredor como la habitacion
 serian unico segmento, lo cual no es deseable. El resultado se mejora al
 considerar las condiciones planteadas en \ref{eq:critDisc} ya que como se
-menciono la celda de arriba tiene igual despeje y la de abajo tiene un despeje
+menciono, la celda de arriba tiene igual despeje y la de abajo tiene un despeje
 mayor. 
 % Por otro lado la condicion $|ady(c)\cup \mli{GVD}| = 2$ es parte de las condiciones de
 % filtrado de puntos criticos que no se ubican en portales que separan segmentos
@@ -1442,7 +1442,7 @@ original, que consiste en que dos celdas distintas y no adyacentes entre
 sí pertenecen a distintos generadores, y de lo contrario pertenecen al mismo
 generador. De esta forma se logra aproximar el GVD resultante de considerar
 generadores conexos y convexos \ref{subsec:GVD} sin definir explicitamente los
-generadores. Y adicionalemtente se obtienen las celdas base a partir necesarias
+generadores. Y adicionalmente se obtienen las celdas base a partir necesarias
 para segmentar.
 
 Es pertienente aclarar que el algorimo \ref{alg:celdasBase} es una version
@@ -1480,50 +1480,87 @@ informacion de dicho entorno, es posible decir que todas las celdas comienzan co
 y el numero de celdas en dicho estado decrece a lo largo que transcurre la
 exploracion a medida que se obtiene informacion (evidencia) sobre el entrono.
 
-En este contexto el considerar las celdas de estado desconocido se vuelve
-importante ya que en un inicio estas ocupan un gran procentaje del total de las
-celdas de la grilla.
+ % por las ondas consistentes e inconsistentes.
 
-En \cite{kalra2009incremental} y \cite{Lau2013} se considera que el espacio
-desconocido es atravezable por las ondas consistentes e inconsistentes. A su
-vez los bordes del mapa se rellenan con obstaculos. De esta forma se obtienen
-resultados similares a los que se presentan en la figura \ref{fig:kalraOG}.
+ %(principales bases para la construccion del GVD presnte en la implementación)
+
+% (no se explicita pero en Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien)
+% se encuentran en los limites de la grilla se consideran como celdas
+% pertenecientes a generadores.
+
+A pesar de esto, las celdas de estado desconocido no es un tema que se trate de
+forma explicita los trabajos estudiados sobre la contruccion incremental de
+GVD. A pesar de esto a partir del codigo e imagenes disponibles es posible
+deducir que en \cite{kalra2009incremental} y \cite{Lau2013} las celdas de
+estado desconocido se consideran de igual forma que las de estado libre al
+construir el GVD. De esta forma se obtienen resultados similares a los que se
+presentan en la figura \ref{fig:kalraOG}. Notar que otra caracteristica
+particular presente en estas implementaciones es que las celdas ubicada en los
+bordes del entrono se consideran como pertenecientes a generdores.
+
+% Y tambien se detecto otra caracteristica que no
+% se relacionada al espacio desconocido pero 
+
+Cons que las celdas que
 
 \begin{figure}[H]
   \centerfloat
 
   \includegraphics[clip=true, width=0.75\textwidth]{imagenes/desconocidoCons/kalraOG.png}
 
-  \caption[Consideración del espacio desconocido en \cite{kalra2009incremental} y \cite{Lau2013}.]{Consideración del espacio desconocido en \cite{kalra2009incremental} y \cite{Lau2013}. En la parte superior se muestra la grilla de ocupacion actual. En la inferior su GVD correspondiente, indicandose con rojo los obstaculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
+  \caption[Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}.]{Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}. En la parte superior se muestra la grilla de ocupacion actual. En la inferior su GVD correspondiente, indicandose con rojo los obstaculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
 \end{figure}
 
-El que las olas se propaguen por el espacio desconocido tiene una desventaja
-asociada que es el costo computacion que implica atravezar y generar el GVD
-sobre las partes desconocidas del espacio. Costo especialmente alto al comienzo
-de la ejecucion cuando, como ya se menciono una gran parte del entorno es
-desconocido. Esto se puede evidenciar en la figura X donde solo una pequeña
-porcion del espacio es conocida y el GVD se extiende por todo el entorno.
+
+% que  costo asociado a las celdas
+% libres es alto al comienzo de la ejecucion cuando, . 
+
+Que las las celdas desconocidas se traten igual que las celdas libres implica
+que las olas utilizadas para construir el GVD pueden propagarse por el espacio
+desconocido y generar la pertenecia de la celdas desconocidas al GVD. Esto
+tiene asociado un costo computacional, que es relevante dado que como ya se
+menciono una gran parte del entorno es desconocido en un principio.
+En la figura \ref{fig:desconocidoKalra} se puede observar como la tratar las
+celdas desconocidas como conocidas lleva a un GVD que abarca todo el entrono
+sin importar que solo una pequeña porcion del espacio sea conocida. 
+
+%mantener un GVD conexo,
+% (por motivos que se seran comentados a continuacion)
 
 Dado que en el contexto del proyecto no es necesario construir GVD fuera del
-area desconocida se desarrollo una tecnica permite mantener un GVD conexo y
-solo considerar el espacio conocido. Esta consiste en no permitir que las olas
-atraviesen el espacio desconocido y en considerar como celdas pertenecientes a
-un generador tanto a las celdas ocupadas como a las celdas desconocidas que
-tienen un vecino conocido. De esta forma para el caso de la figura X se obtiene
-un GVD reducido al espacio conocido, y se evita propagar las olas sobre el
-espacio desconocido, como se muestra en la figura Y.
+area conocida se desarrollo una tecnica que solo construye GVD en las celdas
+conocidas evitando trabajar sobre espacio desconocido. Esta consiste en no
+permitir que las olas se propaguen por el espacio desconocido, y
+adicionalmente considerar al conjunto de celdas desconocidas que tienen un
+vecino conocido $\mli{UF}$ como celdas pertenecientes a generdores
+($\mli{UF}\subseteq \mli{CGen}$) junto a las celdas ocupadas.
+De esta forma para el caso presentado en la figura \ref{fig:desconocidoKalra}
+se obtiene un GVD que se reduce al espacio conocido como se muestra en la
+figura \ref{fig:desconocidoMio}.
+% evitando propagar las olas sobre el espacio desconocido, 
 
-FIG X y FIGY
+\begin{figure}[H]
+  \centerfloat
+
+  \subfloat[Celdas desconocidas se consideran como libres.]{\includegraphics[clip=true, width=0.45\textwidth]{imagenes/conectividad/kalra.png}\label{fig:desconocidoKalra}}
+  \quad
+  \subfloat[Celdas desconocidas no propagan ondas y $\mli{UF}\subseteq \mli{CGen}$.]{\includegraphics[clip=true, width=0.45\textwidth]{imagenes/conectividad/mio.png}\label{fig:desconocidoMio}}
+
+  \caption[Formas de considerar el espacio desconocido.]{Formas de considerar el espacio desconocido. El GVD generado se indica en azul.}\label{fig:desconocidoEj1}
+\end{figure}
 
 
-Una alternativa que resulto intuitiva y tuvo que ser descartada es la de
-simplemente considerar el espacio desconocido como no atravezable, el problema
-con esta es que resulta en GVD disconexos en algunos casos donde esto no es
-necesario. Los GVD disconexos se buscan evitar ya que no representan un
-\emph{roadmap} (seccion \ref{subsec:mapacarr}) al no cumplir con la propiedad
-de \emph{conectividad}. En la figura \ref{fig:desconocidoEj} se muestra un GVD
-generado con las tres formas de considerar el espacio desconocido en una misma
-grilla de ocupacion, 
+El solo considerar que las celdas desconocidas no propagan ondas tiene el
+problema de resultar en GVD disconexos en casos donde esto se puede evitar. El
+problema con los GVD disconexos es que estos no cumplen con la propiedad de
+\emph{conectividad} necesaria para ser un \emph{roadmap} (seccion
+\ref{subsec:mapacarr}), lo cual genera errores de usarse el GVD como
+\emph{roadmap} para la planificación. En la figura \ref{fig:desconocidoEj2} se
+muestra el GVD generado en una misma grilla de ocupacion con cada una de las
+tres formas de considerar el espacio desconocido mencionadas, es posible
+observar que el GVD resultante de solo considerar que las celdas desconocidas
+no propagan ondas no preseva la conectividad, mientras que los otros dos
+metodos otros si lo hacen.
 
 % El problema presentado por esta forma de considerar el espacio desconocido es
 % que las ondas se propagan por el espacio desconocido, generado GVD fuera del
@@ -1534,13 +1571,13 @@ grilla de ocupacion,
 \begin{figure}[H]
   \centerfloat
 
-  \subfloat[Lo desconocido no es atravezable por ondas y no genera ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/noHacerNada.png}}
+  \subfloat[Celdas desconocidas se consideran como libres.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/kalra.png}}
   \quad
-  \subfloat[Lo desconocido es atravezable por ondas y no genera ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/kalra.png}}
+  \subfloat[Celdas desconocidas no propagan ondas y $\mli{UF}\subseteq \mli{CGen}$.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/mio.png}}
   \quad
-  \subfloat[Lo desconocido no es atravezable por ondas y genera ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/mio.png}}
+  \subfloat[Celdas desconocidas no propagan ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/noHacerNada.png} \label{fig:desconocidoEj2_naive}}
 
-  \caption{Diferentes formas de considerar el espacio desconocido. El GVD generado se indica en azul.}\label{fig:desconocidoEj}
+  \caption[Conectividad en diferentes formas de considerar el espacio desconocido.]{Conectividad en diferentes formas de considerar el espacio desconocido. El GVD generado se indica en azul.}\label{fig:desconocidoEj2}
 \end{figure}
 
 % 1. desconexiones
@@ -1566,118 +1603,247 @@ grilla de ocupacion,
 % Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el area desconocida debe ser procesado por el original mientras que el mio se reduce al area exploradoa, sientod la parte importante (la del area explorada) casi igual que la otra.
 
 \section{Planificación}
-Referenciar los tipos de caminos a la parte de la valuacion que habla de esto.
 
-Describier el proceso a detalle desde que llega un camino, y como este se va
-completando poco a poco hasta llegar al objetivo de exploracion al final del
-camino.
+Al recibir un objetivo de exploracion, desde la central (seccion
+\ref{sec:asigTar}), el robot debe moverse fisicamente hasta el lugar indicado.
 
-Tocar por arriba los mecanismos de recuperacion si queda facil.
+Cuando el modulo \emph{controlador del robot} recibe el objetivo, este recupera de la
+memoria del robot el camino que lleva al objetivo que fue determinado para
+valuar dicho objetivo (seccion \ref{subsec:MiValSub}) y transmite dicho camino
+al modulo \emph{controlador de movimiento}. 
 
-\subsection{Subobjetivo}
-Es un punto intermedio de un camino que lleva a un objetivo, el cual debe ser percibido por los sensores del robot
+El camino consiste en una secuencia de centros de celdas adyacentes entre si,
+que comienza en el centro de celda mas cercano a la posición actual del robot y
+termina en el centro de celda correspondietne al objetivo. Los puntos del
+camino se denominan subobjetivos con exepcion del ultimo que es el objetivo.
 
-Un subobjetivo se considera completo si:
-\begin{itemize}
-  \item Existe una linea recta de grosor minDesiredDistance que lo conectan con
-    el robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a
-    minDesiredDistance. 
-  \item Esta a meno de una distancia Y (Y puede estar entre
-    forcedCompletionTolerance y $\infty$)
-\end{itemize}
-O si:
-\begin{itemize}
-  \item Esta a menos de una diatancia forcedCompletionTolerance (mencionada en otra seccion, se puede ver de reorganizar luego)
-\end{itemize}
+El modulo \emph{controlador de movimiento} se encarga de enviar el primer
+objetivo/subobjetivo del camino que se considera no completado al modulo \emph{move
+base} el cual se encarga de generar las directivas a los motores del robot para
+que pueda llegar de forma segura a dicho objetivo/subobjetivo. En algun punto de la
+trayectoria hacia el objetivo/subobjetivo que lleva a cabo \emph{move base}
+este se considera completado, dado esto el siguiente objetivo/subobjetivo
+sin completar se envia a \emph{move base}. El proceso se repite hasta completar
+el objetivo, completando asi el camnino completo.
 
-\subsection{Objetivo}
-Es el punto final de un camino, debe ser percibidopor los sensores del robot
+El \emph{controlador de movimiento} tiene dos formas de considerar completo un
+objetivo/subobjetivo, la normal y la forzosa.
 
-Un objetivo se considera completo si:
-\begin{itemize}
-  \item Existe una linea recta de grosor minDesiredDistance que lo conectan con el
-    robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a minDesiredDistance. 
-  \item Esta a meno de una distancia Z (Z puede estar entre forcedCompletionTolerance y alcance de sensado)
-\end{itemize}
+La compleción forzosa es igual en objetivos y subobjetivos ocurriendo cuando el
+robot esta a una distancia menor que $\mli{DistF}$ de estos. Este criterio de
+compleción tiene como proposito determinar cuando un robot esta lo
+suficientemente cerca de un objetivo/subobjetivo como para considerarlo
+completo a pesar de que no se dio aun la complecion normal.
 
-O si:
-\begin{itemize}
-  \item Esta a menos de una diatancia forcedCompletionTolerance (mencionada en otra seccion, se puede ver de reorganizar luego)
-\end{itemize}
+Por otro lado la compleción normal se da cuando el segmento de recta que
+existe entre el robot y el objetivo/subobjetivo no contiene obstaculos. Adicionalmente, 
+en el caso de un subobjetivo la distancia entre este y el robot debe ser menor
+a $\mli{DistNs}$ y en el caso de un objetivo desde este al robot debe ser menor a
+$\mli{DistNo}$.
 
-\subsection{Objetivos triviales}
-Estos objetivos son los que tienen una linea recta de grosor X que lo conectan
-con el robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a
-X. X puede ser el maximo tamaño de una puerta o la minDesiredDistance.
-\begin{itemize}
-  \item Yo use un estimado del max tamaño de la puerta para evitar objetivos
-    triviales  que esten en un segmento distinto del que esta el robot
-\end{itemize}
+El valor de $\mli{DistF}$ se establece para cumplir con el proposito de la complecion
+forzosa, para esto debe considerarse las dimenciones del robot, el tamaño de la
+grilla entre otros factores. 
 
-Estos objetivos tienen el trato especial de que los camninos planificados a
-estos no son sobre el GVD si no que consiten solo en el objetivo trivial.
+EL valor $\mli{DistNo}$ debe cumplir con $\mli{DistF}<\mli{DistNo}<\mli{rango}$, siendo $\mli{rango}$ el
+alcance de los sensores del robot. Esto se debe a que la idea detras de
+criterio de complecion normal asociado al objetivo es considerar que el
+objetivo final se completa cuando el robot tiene una linea directa de vision y
+el objetivo esta en el rango de sensado del robot ya que esto implica que el
+robot esta en condiciones de recopilar nueva información del entorno, que es el
+motivo por el cual el objtivo fue asignado en un primer lugar.
 
-Esto facilita la navegacion cuando el camino al objetivo es muy facil, es decir es trivial.
+Por otro lado el valor $\mli{DistNs}$ solo debe ser mayor que $\mli{DistF}$, y
+establece que tan estrictamente se sigue el camino original en espacios
+despejados de obstaculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot
+siga el camnino original de foma estricta aunque este en espacios despejados ya
+que fuerzan a que el robot este cerca de los subobjetivos para completarlos. Al
+aumentar el valor de $\mli{DistNs}$ se permite mayor libertad en como seguir el
+camino original cuando el espacio esta despejado, esto sucede porque en los
+espacios despejados todos los subobjetivos a una distancia menor a
+$\mli{DistNs}$ se consideran completados, siendo move base el encargado de la
+trayectoria hasta el primer subobjetivo no aun no completado, sin estar
+obligado a pasar cerca por los subobjetivos previamente completados.
 
-\subsection{Objetivos no triviales}
+Valores de $\mli{DistNs}$ similares al de las dimenciones de los segmentos de
+un entorno estructurado llevan a una navegacion jerárquica. Esto sucede porque
+asumiendo segmentos despejados, un robots completa todos los subobjetivos
+asociados a un segmento cuando se encuentra en su interior. Por lo tanto en
+en caminos largos que abarcan varios segmentos, los unicos subobjetivos
+enviados a \emph{move base} son los que se ubican en las transiciones entre un
+segmento y el siguiente segmento en el camino. Es decir que el robot utliza el
+camnino original (en su mayor parte compuesto por centros de celdas
+pertencientes a GVD) para determinar los subobjetivos que permiten transicionar
+entre los segmentos del camino y \emph{move base} para navegar dentro de los
+segmentos hacia dichos subobjetivos. La ventaja de esta navegacion jerárquica
+es que es eficiente calcular camnios sobre el GVD, pero los caminos resultantes
+pueden ser innecesariamente largos,  
 
-Cuando el objetivo no es trivial lo que se hace es obtener un camnino utilizando el
-gvd como roadmap.
+% Recordando que los caminos originales se contruyen principalmente sobre el GVD,
+% los niveles de jerarquia son do
 
-Cada punto de este camnio es un subobjetivo menos el ultimo que es el objetivo
-en si. El robot siempre se dirige al ultimo subobjetivo/objetivo no competado.
+% Por e dado un valor de $\mli{DistNs}$ mas grande que elPara ejemp esto  esto porque los subobjetivos
+% para los cuales exite una linea  
 
-De esta forma notando las condiciones de complecion si Y es grande se tiene 
-navegacion libre (delegada a move base, el nivel bajo de la jerarquia) sobre
-zonas para las cuales no existen obtaculos mientras que se navega siguientdo el
-camnino seguro (provisto por el gvd, nivel alto de la jerarquia) cuando los
-objetivos son \say{no deseables} o \say{no seguros}.
+%   \item Existe una linea recta de grosor minDesiredDistance que lo conectan con el
+%     robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a minDesiredDistance. 
+%   \item Esta a meno de una distancia Z (Z puede estar entre forcedCompletionTolerance y alcance de sensado)
 
-Lo que se suele obtener en entornos estructurados es que los robots se mueven
-libremente en el interior los segmentos, mientras que para pasar de segmento a
-segmento utiliza el gvd para pasar por los pasajes estrechos que consituyen las
-puertas.
 
-En el caso de un Y pequeño se tiene una navegacion que sigue de forma mas estricta al GVD.
+% Lo que se suele obtener en entornos estructurados es que los robots se mueven
+% libremente en el interior los segmentos, mientras que para pasar de segmento a
+% segmento utiliza el gvd para pasar por los pasajes estrechos que consituyen las
+% puertas.
 
-% Entiendo que Y grande es mejor:
-%   `Una prueba para validar esto seria probar: Y en [50,10,5 2.5]`
+% En el caso de un Y pequeño se tiene una navegacion que sigue de forma mas estricta al GVD.
 
-\subsection{Recupaeracion}
 
-\begin{itemize}
-\item Primero: "si tengo un objetivo activo y no estoy avanzando a el entoces intento recuperarme"
-  \begin{itemize}
-  \item Para saber el objetivo actual interceptar el next.
+
+% Los objetivos triviales se definen como los objetivos para los cuales el
+% segmento de recta que existe entre el robot y el objetivo no contiene
+% obstaculos, de lo contrario el objetivo es no trivial. Para determniar esto, se
+% discretiza el segmento de recta en celdas \cite{foleyphillips} y se comprueba
+% en el mapa global (grilla de ocupacion) almacenado en el robot, alguna de las
+% celdas tiene un estado ocupado.
+
+% El camino en objetivos triviales se determina como dicho segmento de recta que
+% existe entre el robot y el objetivo, que se encuentra libre de obstaculos. 
+
+
+
+
+% Este camino se divide subobjetivos y objtivos. El
+% objetivo es el objetivo asignado, ubicado al final del camino. Por otro lado
+% subobjetivos, son puntos intermedios correspondientes a centros de celda
+
+% planificar como llegar a dicho objetivo. 
+
+
+% Luego de que la central concluye el proceso a traves del cual determina que
+% objetivo asignar a un robot  e informa dicha
+% asignacion.  
+
+% asignado a un objetivo el robot deberá llegar hasta el, para esto es necesario
+% solucionar el este problema de planificación. La solución desarrollada aplica
+% las ideas de planificación jerárquica presentadas en la sección
+% \ref{subsec:mapas}, con el motivo de permitir una planificación eficiente sin
+% resultar en caminos innecesariamente largos.
+
+
+
+
+% Referenciar los tipos de caminos a la parte de la valuacion que habla de esto.
+
+% Describier el proceso a detalle desde que llega un camino, y como este se va
+% completando poco a poco hasta llegar al objetivo de exploracion al final del
+% camino.
+
+% Tocar por arriba los mecanismos de recuperacion si queda facil.
+
+% \subsection{Subobjetivo}
+% Es un punto intermedio de un camino que lleva a un objetivo, el cual debe ser percibido por los sensores del robot
+
+% Un subobjetivo se considera completo si:
+% \begin{itemize}
+%   \item Existe una linea recta de grosor minDesiredDistance que lo conectan con
+%     el robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a
+%     minDesiredDistance. 
+%   \item Esta a meno de una distancia Y (Y puede estar entre
+%     forcedCompletionTolerance y $\infty$)
+% \end{itemize}
+% O si:
+% \begin{itemize}
+%   \item Esta a menos de una diatancia forcedCompletionTolerance (mencionada en otra seccion, se puede ver de reorganizar luego)
+% \end{itemize}
+
+% \subsection{Objetivo}
+% Es el punto final de un camino, debe ser percibidopor los sensores del robot
+
+% Un objetivo se considera completo si:
+% \begin{itemize}
+%   \item Existe una linea recta de grosor minDesiredDistance que lo conectan con el
+%     robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a minDesiredDistance. 
+%   \item Esta a meno de una distancia Z (Z puede estar entre forcedCompletionTolerance y alcance de sensado)
+% \end{itemize}
+
+% O si:
+% \begin{itemize}
+%   \item Esta a menos de una diatancia forcedCompletionTolerance (mencionada en otra seccion, se puede ver de reorganizar luego)
+% \end{itemize}
+
+% \subsection{Objetivos triviales}
+% Estos objetivos son los que tienen una linea recta de grosor X que lo conectan
+% con el robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a
+% X. X puede ser el maximo tamaño de una puerta o la minDesiredDistance.
+% \begin{itemize}
+%   \item Yo use un estimado del max tamaño de la puerta para evitar objetivos
+%     triviales  que esten en un segmento distinto del que esta el robot
+% \end{itemize}
+
+% Estos objetivos tienen el trato especial de que los camninos planificados a
+% estos no son sobre el GVD si no que consiten solo en el objetivo trivial.
+
+% Esto facilita la navegacion cuando el camino al objetivo es muy facil, es decir es trivial.
+
+% \subsection{Objetivos no triviales}
+
+% Cuando el objetivo no es trivial lo que se hace es obtener un camnino utilizando el
+% gvd como roadmap.
+
+% Cada punto de este camnio es un subobjetivo menos el ultimo que es el objetivo
+% en si. El robot siempre se dirige al ultimo subobjetivo/objetivo no competado.
+
+% De esta forma notando las condiciones de complecion si Y es grande se tiene 
+% navegacion libre (delegada a move base, el nivel bajo de la jerarquia) sobre
+% zonas para las cuales no existen obtaculos mientras que se navega siguientdo el
+% camnino seguro (provisto por el gvd, nivel alto de la jerarquia) cuando los
+% objetivos son \say{no deseables} o \say{no seguros}.
+
+% Lo que se suele obtener en entornos estructurados es que los robots se mueven
+% libremente en el interior los segmentos, mientras que para pasar de segmento a
+% segmento utiliza el gvd para pasar por los pasajes estrechos que consituyen las
+% puertas.
+
+% En el caso de un Y pequeño se tiene una navegacion que sigue de forma mas estricta al GVD.
+
+% % Entiendo que Y grande es mejor:
+% %   `Una prueba para validar esto seria probar: Y en [50,10,5 2.5]`
+
+% \subsection{Recupaeracion}
+
+% \begin{itemize}
+% \item Primero: "si tengo un objetivo activo y no estoy avanzando a el entoces intento recuperarme"
+%   \begin{itemize}
+%   \item Para saber el objetivo actual interceptar el next.
    
-  \item Si el objetivo cambia                           $=>$ reiniciar tiempo y distancia del ultimo avance.
+%   \item Si el objetivo cambia                           $=>$ reiniciar tiempo y distancia del ultimo avance.
 
-  \item Si la distancia es menor a la del ultimo avance $=>$ actualizar tiempo y distancia del ultimo avance
+%   \item Si la distancia es menor a la del ultimo avance $=>$ actualizar tiempo y distancia del ultimo avance
 
-  \item Si pasan X segundo desde el ultimo avance y el camino no esta completo =>
-    \begin{itemize}
-    \item Hacer recovery
-    \item reiniciar el timepo desde el ultimo avance (dejar un rato antes del proximo recovery)
-    \end{itemize}
-  \end{itemize}
+%   \item Si pasan X segundo desde el ultimo avance y el camino no esta completo =>
+%     \begin{itemize}
+%     \item Hacer recovery
+%     \item reiniciar el timepo desde el ultimo avance (dejar un rato antes del proximo recovery)
+%     \end{itemize}
+%   \end{itemize}
 
-\item Segundo: "Si segun yo lo complete pero la central me dice que no esta completado seguramente no lo estoy viendo correctamente, intento recuperarme"
-  \begin{itemize}
-  \item Si se reasigna al objetivo => Hacer recovery
-  \end{itemize}
-\end{itemize}
+% \item Segundo: "Si segun yo lo complete pero la central me dice que no esta completado seguramente no lo estoy viendo correctamente, intento recuperarme"
+%   \begin{itemize}
+%   \item Si se reasigna al objetivo => Hacer recovery
+%   \end{itemize}
+% \end{itemize}
 
-La recuperacion cosiste de:
-\begin{itemize}
-  \item  ir un poco para atras (en direccion opuesta al objetivo)
-  \item  esperar un tiempo estimando la llegada a la posicion a la que se fue en el punto anterior
-  \item  notificar a la central de la recuperacion para reasisgnar objetivos:
-  \begin{itemize}
-    \item Util por cambiar la pos del robot tanto en Primero como en Segundo
-    \item Util en segundo porque capaz ahora si se completo el objetivo
-  \end{itemize}
-  \item  Mientras la central no atienda al pedido volver al objetivo y eventualmente seguir con el camino
-\end{itemize}
+% La recuperacion cosiste de:
+% \begin{itemize}
+%   \item  ir un poco para atras (en direccion opuesta al objetivo)
+%   \item  esperar un tiempo estimando la llegada a la posicion a la que se fue en el punto anterior
+%   \item  notificar a la central de la recuperacion para reasisgnar objetivos:
+%   \begin{itemize}
+%     \item Util por cambiar la pos del robot tanto en Primero como en Segundo
+%     \item Util en segundo porque capaz ahora si se completo el objetivo
+%   \end{itemize}
+%   \item  Mientras la central no atienda al pedido volver al objetivo y eventualmente seguir con el camino
+% \end{itemize}
 
 
 \section{Construcción cooperativa del mapa}
@@ -1859,7 +2025,7 @@ Y por otro lado como estas actualizaciones se integra (el metodo que se describe
 
 % En el caso de la implementacion del proyecto se comprueba si el GVD queda
 % disconexo aplicando la tecnica presente en \cite{zhang1984fast},
-% adicionalemtente evitando filtrar celdas con una sola celda adyacente en el GVD
+% adicionalmente evitando filtrar celdas con una sola celda adyacente en el GVD
 % y con 2 celdas ayacentes en el GVD si estas se detectan en un corredor.
 
 % Explicar caso corredor(SACAR DE LAS NOTAS). comentar que no se considera en
