@@ -64,6 +64,8 @@ La solución desarrollada tomara las siguientes hipótesis de trabajo.
   % \item El entorno es estático.
 \end{enumerate}
 
+\todo{necesito agregar que las dimenciones del entorno osn conocidas para armar un mapa}
+
 Estas hipótesis tienen el motivo de simplificar algunos aspectos del
 problema de exploración permitiendo que el trabajo se pueda enfocar en otros.
 
@@ -97,7 +99,7 @@ que ocurren entre ellos.
 
 En lo que resta de esta sección se comentará cada modulo, tanto sus tareas y como sus interacciones con el resto de los módulos.
 
-\subsection{Move Base}
+\subsection{Move Base}\label{subsec:move_base}
 El modulo \emph{Move Base} consiste en una instancia del nodo ROS
 \emph{move\_base} \cite{ROS-move_base} que provee una interfaz para configurar,
 ejecutar y interactuar con el \emph{stack de navegación} de ROS
@@ -765,52 +767,72 @@ incremental \emph{brushfire dinamico} que se presentará en la seccion
 
 \subsection{Valuacion} \label{subsec:MiValSub}
 
-Luego de obtenida la informacion se da comienzo a la estapa de \emph{valuacion}
-distribuyendo dicha informacion desde la central hacia los robots. Cuando un
+Luego de obtenida la informacion comienza la etapa de \emph{valuacion}
+con la central distribuyendo los objetivos y el GVD hacia los robots. Cuando un
 robot recibe la informacion este asigna dos valores a cada objetivo, el largo
 del camino hacia a el y un costo asociado a la complejidad del camino.
 
-Calcular el largo de un camino implica determnar el camino en sí. El camino se
-calcula de forma distinta dependiendo de la clase de objetivo, existen dos,
-triviales y no triviales.
+Calcular el largo de un camino implica determinar el camino en sí. En este
+proyecto los caminos se componen de una secuencia de puntos en el espacio que
+comienza en la posicion del robot y termina en el objetivo. Los caminos se
+calculan de forma distinta dependiendo de la clase de objetivo al que llevan,
+existiendo dos clases, trivial y no trivial.
 
 Los objetivos triviales se definen como los objetivos para los cuales el
 segmento de recta que existe entre el robot y el objetivo no contiene
-obstaculos, de lo contrario el objetivo es no trivial. Para determniar esto, se
+obstaculos, de lo contrario el objetivo es no trivial. Para determinar esto, se
 discretiza el segmento de recta en celdas \cite{foleyphillips} y se comprueba
 en el mapa global (grilla de ocupacion) almacenado en el robot, alguna de las
-celdas tiene un estado ocupado.
+celdas tiene un estado ocupado. 
 
-El camino en objetivos triviales se determina como dicho segmento de recta que
-existe entre el robot y el objetivo, que se encuentra libre de obstaculos. 
+El camino hacia objetivos triviales se determina como los puntos ubicados en
+los extremos del segmento de recta que existe entre el robot y el objetivo, que
+se encuentra libre de obstaculos. Un ejemplo de un camino trivial se muestra
+en la figura \ref{fig:caminoT}.
 
 En el caso de los objetivos no triviales se hace uso del GVD recibido como
 parte de la informacion de la subasta, aprovechando que este constituye un
-\emph{roadmap} (seccion \ref{subsec:mapacarr}). El GVD viene representado
-como el conjunto de celdas que abarca, el proceso para construir el camino puede dividir 
-en tres partes cada una asociada a una de las propiedades que caracterizan a un
-\emph{roadmap}: accesibilidad, conectividad y capacidad de salida. La parte asociada
-accesibilidad consiste en encontrar un camino desde el robot al GVD, lo cual se
-hace a traves de un \emph{breadth-first search} (BFS), se comienza en la celda
-asociada a la posicion del robot y se detiene apenas se visita una celda $c_1$
-perteneciente al GVD. La que se relaciona con la capacidad de salida es analoga a la
-accesibilidad pero el camino va desde el objetivo a alguna celda $c_2$ del GVD.
-Por ultimo la parte vinculada con la conectividad se basa en establecer un
-camino sobre las celdas del GVD desde $c_1$ a $c_2$, lo cual se hace aplicando
-algoritmo $A^*$. Conectando esos tres caminos se obtiene el camnino completo.
+\emph{roadmap} (seccion \ref{subsec:mapacarr}). El proceso para construir el
+camino puede dividir en tres partes cada una asociada a una de las propiedades
+que caracterizan a un \emph{roadmap}: accesibilidad, conectividad y capacidad
+de salida. La parte asociada accesibilidad consiste en encontrar un camino
+desde el robot al GVD, lo cual se hace a traves de un \emph{breadth-first
+search} (BFS), comenzando en la celda asociada a la posicion del robot y
+deteniendose apenas se visita una celda $c_1$ perteneciente al GVD. La que se
+relaciona con la capacidad de salida es analoga a la accesibilidad pero el
+desde el objetivo a alguna celda $c_2$ perteneciente al GVD. Por ultimo la parte
+vinculada con la conectividad se basa en establecer un camino sobre las celdas
+pertenecientes al GVD desde $c_1$ a $c_2$, lo cual se hace aplicando algoritmo
+$A^*$. Conectando los centros de celdas de estos tres caminos se obtiene el
+camnino completo. En la figura \ref{fig:caminoNT} se presenta un ejemplo de un
+camnino no trivial.
+
+\begin{figure}[H]
+  \centerfloat
+
+  \subfloat[Trivial.]{\includegraphics[clip=true, width=0.25\textwidth]{imagenes/camino/caminoTsinGVDRecortado.png}\label{fig:caminoT}}
+  \qquad
+  \subfloat[No trivial.]{\includegraphics[clip=true, width=0.70\textwidth]{imagenes/camino/camino.png}\label{fig:caminoNT}}
+
+  \caption[Camino.]{Caminos calculados desde la posición del robot indicada en
+  rojo, hasta el objetivo indicado en verde. Los puntos del camino se conectan
+entre si con lineas magenta.}\label{fig:camino}
+
+\end{figure}
+
 
 El costo asociado a la complejidad en el caso de objetivos triviales se
-determina como el tiempo estimado que demora el robot en rotar de forma que su
-parte delantera apunte hacia el objetivo. Y en el caso de objetivos no
+corresponde a una estimacion del tiempo que demora el robot en rotar de forma
+que su parte delantera apunte hacia el objetivo. Y en el caso de objetivos no
 triviales se utiliza la maxima penalizacion usada para objetivos no triviales.
 El proposito de esto es diferenciar los objetivos triviales sin beneficiar a
 los objetivos no triviales. Este costo se aplica para incentivar a que el robot
-ontinue siendo asignado a los objetivos triviales que tiene por adelante al
+continue siendo asignado a los objetivos triviales que tiene por adelante al
 explorar.
 
 Obtenidos ambos valores para cada objetivo estos se envian hacia la central
 junto a la ubicacion actual del robot, siendo toda esta informacion en su
-conjnto considerada una valuacion. \todo{o mensaje de valuacion, como quede mejor}
+conjnto considerada una valuacion. %\todo{o mensaje de valuacion, como quede mejor}
 
 % De esta
 % forma los objetivos triviales se valuan distinto segun que tanto tiene que
@@ -923,25 +945,27 @@ estrucutrado.
 % dos valores, al recibirse la valuacion en la central dichos valores son
 % procesados de forma
 
-% La version original de \cite{wurm2008coordinated} lleva a cabo la asignacion
-% utilizando el metodo hungaro. Este  
-% de forma optima en $O(n^3)$ siendo $n$ el numero de tareas.
 
-Con estos costos costos como insumos se ejecuta un algorimo de asignacion de
-objetivos a robots, este tiene como proposito asignar objetivos a los robots de
-que estos se distribuyan sobre los segmentos (seccion \ref{subsec:wurmCoord}).
-\todo[inline]{El metodo hungaro capaz no considera que el numero de robots
-  asigandos a un segmento debe ser menor que el numero de fronteras que tiene
-  ya que no tiene sentido asignar a un robot a un segmento si este no tiene
-  objetivos disponibles. Habria que ver bien como funciona el metodo hungaro,
-  pero creo que es una asignacion robot-segmento que no considera otra cosa que
-  el costo, num robots y num segmentos, por lo tanto el num de fronteras de un
-  segmento no se estaria considerando.}
+% La version original de
+% \cite{wurm2008coordinated} lleva a cabo la asignacion utilizando el metodo
+% hungaro. Este logra la asignacion de forma optima en $O(n^3)$ siendo $n$ el numero de segmentos.
+% la cantidad de objetivos que contienen
+% \todo[inline]{El metodo hungaro capaz no considera que el numero de robots
+%   asigandos a un segmento debe ser menor que el numero de fronteras que tiene
+%   ya que no tiene sentido asignar a un robot a un segmento si este no tiene
+%   objetivos disponibles. Habria que ver bien como funciona el metodo hungaro,
+%   pero creo que es una asignacion robot-segmento que no considera otra cosa que
+%   el costo, num robots y num segmentos, por lo tanto el num de fronteras de un
+%   segmento no se estaria considerando.}
 
 % El algorimo \ref{alg:resolucionsubastasegmentos} presenta un pseudocodigo del
 % algoritmo de asigacion donde $R$ el conjunto de los identificadores de los
 % robots, $O$ el conjnto de los identificadores de los objetivos y $Costos$ el
 % conjunto los $c_{i,j}$ computados a partir de las valuaciones recibidas
+Con estos costos como insumos se ejecuta un algorimo de asignacion de objetivos
+a robots, que busca asignar a cada robot a su objetivo mejor valuado con la
+restriccion de que los objetivos asignados deben estar distribuidos sobre los
+segmentos (seccion \ref{subsec:wurmCoord}). 
 El algorimo de asignacion, se corresponde al algorimo
 \ref{alg:resolucionsubastasegmentos}, donde $R$ es el conjunto de los
 identificadores de los robots de los cuales se recibieron valuaciones, $O$ el
@@ -954,7 +978,6 @@ el numero de objetivos en un segmento.
 % Los conjuntos $O_1$,$O_2$,...,$O_k$,...,$O_{|S|}$ contienen los
 % objetivos que estan dentro de un segmento $s_k\in S$.
 
-\vspace{1cm}
   
 \begin{algorithm}[H]
 \SetAlgoLined
@@ -1469,16 +1492,17 @@ de dos celdas base.
 % Durante la exploracion la grilla de ocupacion (seccion \ref{subsec:Grilla}) que
 % representa el entorno explorado celdas  estado se puede determinar como
 % ocupadas, libres y desconocidas
-Durante la exploracion un subconjunto de celdas de la grilla de ocupacion usada
-para representar el entrono explorado, cuyo estado se determina como
-desconocido. Para una celda $c$ con estado desconocido que $c$ este ocupada y
-que $c$ este libre, son sucesos equiprobables, siendo necesaria evidencia de
-que la celda esta ocupada ni de que esta libre, para que la celda cambie su
-estado ya sea a libre o a ocupado. En un escenario donde comienza sin conocimiento sobre
-el entorno explorado y que el objetivo de la exploracion es obtener
-informacion de dicho entorno, es posible decir que todas las celdas comienzan con estado desconocio 
-y el numero de celdas en dicho estado decrece a lo largo que transcurre la
-exploracion a medida que se obtiene informacion (evidencia) sobre el entrono.
+
+% , son sucesos equiprobables
+
+% Para una celda $c$ con estado desconocido, es equiprobable que $c$ este ocupada o 
+% libre, siendo necesaria evidencia de
+% que la celda esta ocupada ni de que esta libre, para que la celda cambie su
+% estado ya sea a libre o a ocupado. En un escenario donde se comienza sin conocimiento sobre
+% el entorno explorado y que el objetivo de la exploracion es obtener
+% informacion de dicho entorno, es posible decir que todas las celdas comienzan con estado desconocio 
+% y el numero de celdas en dicho estado decrece a lo largo que transcurre la
+% exploracion, a medida que se obtiene informacion (evidencia) sobre el entrono.
 
  % por las ondas consistentes e inconsistentes.
 
@@ -1488,20 +1512,27 @@ exploracion a medida que se obtiene informacion (evidencia) sobre el entrono.
 % se encuentran en los limites de la grilla se consideran como celdas
 % pertenecientes a generadores.
 
-A pesar de esto, las celdas de estado desconocido no es un tema que se trate de
-forma explicita los trabajos estudiados sobre la contruccion incremental de
-GVD. A pesar de esto a partir del codigo e imagenes disponibles es posible
-deducir que en \cite{kalra2009incremental} y \cite{Lau2013} las celdas de
-estado desconocido se consideran de igual forma que las de estado libre al
-construir el GVD. De esta forma se obtienen resultados similares a los que se
-presentan en la figura \ref{fig:kalraOG}. Notar que otra caracteristica
-particular presente en estas implementaciones es que las celdas ubicada en los
-bordes del entrono se consideran como pertenecientes a generdores.
+Durante la exploracion existe un conjunto de celdas de estado desconocido en la
+grilla de ocupacion (seccion \ref{subsec:Grilla}) usada para representar el
+entrono explorado, dichas celdas repesentan la existencia de porciones del
+entrono sin explorar. Dado que la definicion del GVD no contempla el espacio
+desconocido, para poder construir un GVD sobre grillas de ocupacion durante la
+exploracion es necesario tomar una decicion acerca de como considerar el 
+espacio desconocido. Sin embargo, este no es un tema que se trate de forma
+explicita en los trabajos estudiados sobre la contruccion incremental de GVD. 
+
+A partir del codigo e imagenes disponibles es posible deducir que en
+\cite{kalra2009incremental} y \cite{Lau2013} al construir el GVD las celdas de
+estado desconocido se consideran iguales que las de estado libre. De esta
+forma se obtienen resultados similares a los que se presentan en la figura
+\ref{fig:kalraOG}. Notar que otra caracteristica particular presente en estas
+implementaciones es que las celdas ubicadas en los bordes del entrono se
+consideran como pertenecientes a generdores.
 
 % Y tambien se detecto otra caracteristica que no
 % se relacionada al espacio desconocido pero 
 
-Cons que las celdas que
+% Cons que las celdas que
 
 \begin{figure}[H]
   \centerfloat
@@ -1517,9 +1548,8 @@ Cons que las celdas que
 
 Que las las celdas desconocidas se traten igual que las celdas libres implica
 que las olas utilizadas para construir el GVD pueden propagarse por el espacio
-desconocido y generar la pertenecia de la celdas desconocidas al GVD. Esto
-tiene asociado un costo computacional, que es relevante dado que como ya se
-menciono una gran parte del entorno es desconocido en un principio.
+desconocido y generar la pertenecia de la celdas desconocidas al GVD, lo cual
+tiene asociado un costo computacional.
 En la figura \ref{fig:desconocidoKalra} se puede observar como la tratar las
 celdas desconocidas como conocidas lleva a un GVD que abarca todo el entrono
 sin importar que solo una pequeña porcion del espacio sea conocida. 
@@ -1603,81 +1633,218 @@ metodos otros si lo hacen.
 % Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el area desconocida debe ser procesado por el original mientras que el mio se reduce al area exploradoa, sientod la parte importante (la del area explorada) casi igual que la otra.
 
 \section{Planificación}
+% Recordando que el camino consiste en una secuencia puntos en el espacio, en el
+% contexto de la planificación estos se denominan como subobjetivos con exepcion
+% del ultimo punto llamado como objetivo.
 
-Al recibir un objetivo de exploracion, desde la central (seccion
-\ref{sec:asigTar}), el robot debe moverse fisicamente hasta el lugar indicado.
+% En el contexto de la planificación los puntos que componen el
+% camino se denominan subobjetivos con exepcion del ultimo punto que se denomina
+% como objetivo.
 
-Cuando el modulo \emph{controlador del robot} recibe el objetivo, este recupera de la
-memoria del robot el camino que lleva al objetivo que fue determinado para
-valuar dicho objetivo (seccion \ref{subsec:MiValSub}) y transmite dicho camino
-al modulo \emph{controlador de movimiento}. 
+Una vez que el robot recibe un objetivo de exploracion, desde la central
+(seccion \ref{sec:asigTar}), el robot debe moverse fisicamente hasta el lugar
+indicado para completar dicho objetivo y progresar en la exploracion del entorno.
 
-El camino consiste en una secuencia de centros de celdas adyacentes entre si,
-que comienza en el centro de celda mas cercano a la posición actual del robot y
-termina en el centro de celda correspondietne al objetivo. Los puntos del
-camino se denominan subobjetivos con exepcion del ultimo que es el objetivo.
+El modulo encargado de recibir el objetivo es el \emph{controlador del robot},
+este tiene la tarea de recuperar de la memoria del robot el camino que fue
+determinado durante la valuacion de dicho objetivo (seccion
+\ref{subsec:MiValSub}) y transmitir dicho camino al modulo \emph{controlador de
+movimiento}. 
 
-El modulo \emph{controlador de movimiento} se encarga de enviar el primer
-objetivo/subobjetivo del camino que se considera no completado al modulo \emph{move
-base} el cual se encarga de generar las directivas a los motores del robot para
-que pueda llegar de forma segura a dicho objetivo/subobjetivo. En algun punto de la
-trayectoria hacia el objetivo/subobjetivo que lleva a cabo \emph{move base}
-este se considera completado, dado esto el siguiente objetivo/subobjetivo
-sin completar se envia a \emph{move base}. El proceso se repite hasta completar
-el objetivo, completando asi el camnino completo.
+% Una que el caminno llega al modulo \emph{controlador de movimiento}
+% trabaja
+% junto al modulo \emph{move base} para lograr su comentido.
+
+ % puntos
+% del camino, son relevantes para poder llegar al objetivo.
+
+% que se
+% considera no completado al modulo \emph{move base} el cual se encarga de
+% generar las directivas a los motores del robot para que pueda llegar de forma
+% segura a dicho objetivo/subobjetivo.
+
+% Para determinar que punto debe ser enviado a
+% \emph{move base} el \emph{controlador de moviemiento} 
+
+% Adicionalmente tiene la tarea de determinar cuando un punto
+% se considera completado
+
+% Especificamente el \emph{controlador de
+% moviemiento} comienza enviando el primer punto del camino  En algun punto de la trayectoria hacia el
+% objetivo/subobjetivo que lleva a cabo \emph{move base} este se considera
+% completado, dado esto el siguiente objetivo/subobjetivo sin completar se envia
+% a \emph{move base}. El proceso se repite hasta completar el objetivo,
+% completando asi el camnino completo.
+
+El modulo \emph{controlador de movimiento} se encarga de enviar puntos del
+camino al modulo \emph{move base} que genera las directivas necesarias para que
+el robot avance hacia dicho punto. Estos puntos deben enviarse en una secuencia
+que permita que el robot puede seguir el camino hasta el objetivo. Para lograr
+esto se de define criterio que permite considerar cuando un punto del camino se
+considera completado. Dado esto el funcionamiento del \emph{controlador de
+movimiento} consiste en determinar el primer punto no completado del camnino
+asignado, luego enviar dicho punto al \emph{controlador de movimiento} y
+esperar a que el robot avance lo suficiente hasta este para que se considere
+completado. Cuando el punto es completado se repete el proceso con el siguiente
+punto sin completar, esto sucede hasta que se completa el ultmo punto el
+objetivo.
+
+% Para determinar cuando un punto del camino considera completado, estos se separan  el ultimo punto  objetivo  subobjetivos con exepcion del ultimo punto que se denomina
+% como objetivo.
 
 El \emph{controlador de movimiento} tiene dos formas de considerar completo un
-objetivo/subobjetivo, la normal y la forzosa.
+punto del camino, la normal y la forzosa.
 
-La compleción forzosa es igual en objetivos y subobjetivos ocurriendo cuando el
-robot esta a una distancia menor que $\mli{DistF}$ de estos. Este criterio de
-compleción tiene como proposito determinar cuando un robot esta lo
-suficientemente cerca de un objetivo/subobjetivo como para considerarlo
-completo a pesar de que no se dio aun la complecion normal.
+La compleción forzosa ocurre cuando el robot esta a una distancia menor que
+$\mli{DistF}$ del punto en cuestion. Este criterio de compleción tiene como
+proposito determinar cuando un robot esta lo suficientemente cerca de un
+punto del camnino como para considerarlo completo a pesar de que no se dio
+aun la complecion normal. Siendo el valor de $\mli{DistF}$ establecido para
+cumplir con el proposito de la complecion forzosa, para esto debe considerarse
+las principalmente las dimenciones del robot.
 
-Por otro lado la compleción normal se da cuando el segmento de recta que
-existe entre el robot y el objetivo/subobjetivo no contiene obstaculos. Adicionalmente, 
-en el caso de un subobjetivo la distancia entre este y el robot debe ser menor
-a $\mli{DistNs}$ y en el caso de un objetivo desde este al robot debe ser menor a
-$\mli{DistNo}$.
+Por otro lado para la compleción normal existen dos condiciones, la primera es
+que exista una linea de ancho $Seg$ entre el robot y el punto del camino que al
+discretizarse en celdas no contiene ninguna ocupada. La segunda, en el caso del
+ultimo punto del camino (el objetivo) la distancia en entre este y el robot
+debe ser menor a $\mli{DistNo}$, en el resto de los puntos (subobjetivos) la distnacia debe
+ser menor a $\mli{DistNs}$.
 
-El valor de $\mli{DistF}$ se establece para cumplir con el proposito de la complecion
-forzosa, para esto debe considerarse las dimenciones del robot, el tamaño de la
-grilla entre otros factores. 
+El valor $\mli{DistNo}$ debe cumplir con
+$\mli{DistF}<\mli{DistNo}<\mli{rango}$, siendo $\mli{rango}$ el alcance de los
+sensores del robot. Esto se debe a que la idea detras de criterio de complecion
+normal aplicado al objetivo es considerarlo completo cuando es seguro que dicho objetivo
+esta en el rango de sensado del robot. Esto implica que el robot esta en
+condiciones de recopilar nueva información del entorno, siendo este el motivo
+por el cual el objetivo fue asignado en un primer lugar.
 
-EL valor $\mli{DistNo}$ debe cumplir con $\mli{DistF}<\mli{DistNo}<\mli{rango}$, siendo $\mli{rango}$ el
-alcance de los sensores del robot. Esto se debe a que la idea detras de
-criterio de complecion normal asociado al objetivo es considerar que el
-objetivo final se completa cuando el robot tiene una linea directa de vision y
-el objetivo esta en el rango de sensado del robot ya que esto implica que el
-robot esta en condiciones de recopilar nueva información del entorno, que es el
-motivo por el cual el objtivo fue asignado en un primer lugar.
-
-Por otro lado el valor $\mli{DistNs}$ solo debe ser mayor que $\mli{DistF}$, y
-establece que tan estrictamente se sigue el camino original en espacios
-despejados de obstaculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot
-siga el camnino original de foma estricta aunque este en espacios despejados ya
-que fuerzan a que el robot este cerca de los subobjetivos para completarlos. Al
-aumentar el valor de $\mli{DistNs}$ se permite mayor libertad en como seguir el
+El valor $\mli{DistNs}$ solo debe ser mayor que $\mli{DistF}$, y establece que
+tan estrictamente se sigue el camino original en espacios despejados de
+obstaculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot siga el
+camnino original de forma estricta aunque este en espacios despejados ya que se 
+fuerza que el robot este cerca de los subobjetivos para completarlos. Al
+aumentar el valor de $\mli{DistNs}$se permite mayor libertad en como seguir el
 camino original cuando el espacio esta despejado, esto sucede porque en los
-espacios despejados todos los subobjetivos a una distancia menor a
-$\mli{DistNs}$ se consideran completados, siendo move base el encargado de la
-trayectoria hasta el primer subobjetivo no aun no completado, sin estar
-obligado a pasar cerca por los subobjetivos previamente completados.
+espacios despejados todos los subobjetivos del camino que esten a una
+distancia menor a $\mli{DistNs}$ se consideran completados, siendo move base el
+encargado de la trayectoria hasta el primer punto no completado del camino,
+sin ser necesario pasar cerca por los subobjetivos previamente completados.
 
-Valores de $\mli{DistNs}$ similares al de las dimenciones de los segmentos de
-un entorno estructurado llevan a una navegacion jerárquica. Esto sucede porque
-asumiendo segmentos despejados, un robots completa todos los subobjetivos
-asociados a un segmento cuando se encuentra en su interior. Por lo tanto en
-en caminos largos que abarcan varios segmentos, los unicos subobjetivos
-enviados a \emph{move base} son los que se ubican en las transiciones entre un
-segmento y el siguiente segmento en el camino. Es decir que el robot utliza el
-camnino original (en su mayor parte compuesto por centros de celdas
-pertencientes a GVD) para determinar los subobjetivos que permiten transicionar
-entre los segmentos del camino y \emph{move base} para navegar dentro de los
-segmentos hacia dichos subobjetivos. La ventaja de esta navegacion jerárquica
-es que es eficiente calcular camnios sobre el GVD, pero los caminos resultantes
-pueden ser innecesariamente largos,  
+\subsection{Planificación jerarquica}
+% es que los caminos originales
+% calculados sobre el GVD (seccion \ref{subsec:MiValSub})
+Los GVD son estructras que se representan con un cantidad considerablemente
+menor de celdas que las presentes la grilla de ocupación a partir de la cual se
+lo genera. A pesar de esto, los GVD son \emph{roadmaps} (seccion
+\ref{subsec:mapacarr}) por lo que permiten planificar caminos entre cualquier par de
+puntos del espacio, al igual que las grillas de ocupación. 
+
+La diferencia de tamaños implica que los caminos generados sobre el GVD tienen
+una menor en costo computacional que los calculados sobre la grillas de
+ocupación. Pero a su vez, los caminos generados sobre el GVD se encuentran lo
+mas alejado posible de los obtaculos (seccion \ref{subsec:GVD}), lo que lleva a
+caminos que aunque son seguros, pueden resultar innecesariamente largos.
+
+La motivacion de la planificación jerarquica es aprovechar la eficiencia de los
+caminos generados sobre el GVD, evitando los desvios innecesarios que estos
+contienen.
+
+La planificación jerarquica consiste en utilizar la informacion
+topologica del camino generado del GVD, especificamente se utlizan los
+puntos del camino que se encuentran en las transicisiones entre los
+segmentos (habitaciones y corredores) para establecer un camino de alto
+nivel compuesto por la secuencia de estos puntos y el objetivo final.
+Luego caminos de bajo nivel se establecen entre el robot y el siguiente
+punto del camino de alto nivel, la idea de estos caminos es que el robot
+pueda navegar libremente (sin considerar el GVD) dentro de los
+segmentos, moviendose de transicion en transicision. La planificación de
+los camninos de bajo nivel se delega a \emph{move base}, el cual genera
+caminos sin desvios innecesarios.
+
+Es pertinente notar que en la implementación realizada \emph{move base} se
+configuro con un planificador global que calcula caminos sobre la grilla de
+ocupacion (seccion \ref{subsec:move_base}), de igual manera aplicar esta
+tecnica tiene ventajas de eficiencia ya que el calculo sobre la grilla se
+reduce al tamaño del segmento que se debe transitar.
+
+Esta planificación jerarquica se lleva a cabo estableciendo un valor de
+$\mli{DistNs}$ mayor a las dimenciones de los segmentos y un valor de
+$\mli{Seg}$ mayor al tamaño de los portales de transicion entre
+segmentos (puertas, pasajes abiertos). De esta forma asumiendo segmentos
+despejados, todos los subobjetivos asociados a un segmento en el que se
+encuentra un robot son completados de forma normal. Por lo tanto en en
+caminos largos que abarcan varios segmentos, los unicos subobjetivos
+enviados a \emph{move base} son los que se ubican en las portales entre
+un segmento y el siguiente en el camino, los cuales no son completados
+de forma normal ya que dicha transicion consiste en un portal de ancho
+menor a $\mli{Seg}$ que no permite la existencia de una linea
+discretizada de ancho $\mli{Seg}$ que no contenga obstaculos.
+
+En la figura \ref{fig:navjer} se muestra un ejemplo en el cual se puede
+apreciar la diferencia de largos entre el camino original ubicado sobre
+el GVD y el de bajo nivel que lleva hacia la celda ubicada sobre el
+portal en la transición al siguiente segmento del camino.
+
+\begin{figure}[H]
+  \center
+  \includegraphics[width=1\linewidth]{imagenes/navjer/caso1/a.png}
+  \caption[Planificación jerárquica.]{Planificación jerárquica. El GVD
+    se indica con azul. En magenta se marca el camino original y en
+    naranja el de bajo nivel, siendo el punto verde el primer
+    subobjetivo sin completar del camino original. El vector rojo indica
+    la posición y orientación del robot.
+ }
+  \label{fig:navjer}
+\end{figure} 
+
+
+\section{Construcción cooperativa del mapa}
+Comentar como funcina el map merger:
+
+las actualizaciones, que las da el stack de navegacion, lo que esto implica
+(los datos de los sensores se procesan en celdas), que son incrementales (solo
+porcion del mapa) tanto la entradas como las salidas
+
+Y por otro lado como estas actualizaciones se integra (el metodo que se describe en \cite{stachniss2009robotic}).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% basura de planificación
+% Resumiendo, la planificación jerarquica cosnsiste en utlizar el camino original
+% para determinar los subobjetivos ubicados en las transicisiones entre los segmentos
+% del camino y \emph{move base} para navegar dentro de los segmentos hacia dichas
+% transiciones. 
+
+% solo utilizar la información topologica contenida en
+% los caminos originales generados sobre el GVD.
+
+% (en su mayor parte compuesto por centros de celdas pertencientes a GVD) p
+% que son mas
+% eficientes computacionalmente que los generados sobre todo el espacio libre de
+% la grilla, sin las desventajas.
+% no trivales se calcula sobre las celdas pertencientes al GVD, lo cual tiene
+% menor costo computacional que considerar todo el espacio libre de la grilla de
+% coupacion eficiente calcular.
+
+
+
+% La ventaja de aplicar esta tecnica es que hace posible utlizar
+% los caminos , 
+
+% caminos sobre el GVD, pero los caminos resultantes pueden ser innecesariamente
+% largos, mientras que \emph{move base} con la configuracion correcta, permite
+% ejecutar de forma eficiente caminos cercanos a los lineales. De esta manera se
+% aporvecha la eficiencia del calaculo de caminos sobre el GVD, y se evitan los
+% desvios que dichos camnios tienen, solo utlizando de estos los subobjetivos que
+% se ubican en portales, 
+
+
+% del camino y \emph{move base} para navegar dentro de los segmentos hacia dichas
+% transiciones. La ventaja de aplicar esta tecnica es que hace posible utlizar los camnios
+% no trivales se calcula sobre las celdas pertencientes al GVD, lo cual tiene
+% menor costo computacional que considerar todo el espacio libre de la grilla de
+% coupacion eficiente calcular.
+
 
 % Recordando que los caminos originales se contruyen principalmente sobre el GVD,
 % los niveles de jerarquia son do
@@ -1844,17 +2011,6 @@ pueden ser innecesariamente largos,
 %   \end{itemize}
 %   \item  Mientras la central no atienda al pedido volver al objetivo y eventualmente seguir con el camino
 % \end{itemize}
-
-
-\section{Construcción cooperativa del mapa}
-Comentar como funcina el map merger:
-
-las actualizaciones, que las da el stack de navegacion, lo que esto implica
-(los datos de los sensores se procesan en celdas), que son incrementales (solo
-porcion del mapa) tanto la entradas como las salidas
-
-Y por otro lado como estas actualizaciones se integra (el metodo que se describe en \cite{stachniss2009robotic}).
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % basura de GVD
