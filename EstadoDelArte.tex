@@ -816,7 +816,7 @@ Para asignar los objetivos a los robots primero estos son asignados a los segmen
   \forall s,s' \in S, |\#Robots(s) - \#Robots(s')| <= 1
 \end{equation}
 
-Para resolver la asignación se propone el uso del método húngaro \cite{kuhn1955hungarian} de una forma particular que permite cumplir con la restricción \eqref{ec:uniform}. Para ejecutar el método húngaro es necesario calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la celda frontera más cercana del segmento $s \in S$ con el robot $i$ y descontando un valor constante en caso de que el robot ya se encuentre en el segmento. 
+Para resolver la asignación a segmentos se propone el uso del método húngaro \cite{kuhn1955hungarian} de una forma particular que permite cumplir con la restricción \eqref{ec:uniform}. Para ejecutar el método húngaro es necesario calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la celda frontera más cercana del segmento $s \in S$ con el robot $i$ y descontando un valor constante en caso de que el robot ya se encuentre en el segmento. Luego de haber asignado los robots a los segmentos, se ejecuta nuevamente el método húngaro para cada segmento $s$ con el propósito de asignar los robots que fueron asignados a $s$, a las fronteras que se en encuentran en $s$.
 
 La técnica de coordinación explicada en esta sección se resume en el algoritmo \ref{alg:asignacionobjetivos}.
 
@@ -832,7 +832,7 @@ La técnica de coordinación explicada en esta sección se resume en el algoritm
     }
     Asignar robots a los segmentos usando el método húngaro\\
     \For{cada segmento $s \in S$}{
-        Asignar robots a las fronteras objetivas en $s$ utilizando el resultado del método húngaro\\
+        Asignar los robots a las fronteras en $s$ utilizando el resultado del método húngaro\\
     }
     \caption{Asignación de objetivos}
     \label{alg:asignacionobjetivos}
@@ -1257,10 +1257,11 @@ experimentados al integrar con ROS\footnote{La version R2021b de
 Webots agrega soporte para \emph{diff\_drive\_controller}}. Gazebo resulto tener una mejor usabilidad al no presentar dichos
 inconvenientes.
 
-La simulación en Gazebo no presenta diferencias visibles al comportamiento esperado mientras
-que en Webots se detecto una a nivel de actuación y otra a nivel de sensado.
+La simulación en Gazebo no presenta diferencias visibles al comportamiento
+esperado mientras que en Webots se detecto una diferencia a nivel de actuación
+y otra a nivel de sensado.
 
-En términos de rendimiento, aunque las resultados no tienen relevancia estadística,
+En términos de rendimiento, aunque los resultados no tienen relevancia estadística,
 dan indicios de que el rendimiento de Gazebo es mejor que el de Webots,
 principalmente al hacer uso del modo \emph{headless}.
 

@@ -995,10 +995,32 @@ estrucutrado.
 % algoritmo de asigacion donde $R$ el conjunto de los identificadores de los
 % robots, $O$ el conjnto de los identificadores de los objetivos y $Costos$ el
 % conjunto los $c_{i,j}$ computados a partir de las valuaciones recibidas
+% Con estos costos como insumos se ejecuta un algorimo de asignacion de objetivos
+% a robots, que busca asignar a cada robot a su objetivo mejor valuado con la
+% restriccion de que los objetivos asignados deben estar distribuidos sobre los
+% segmentos (seccion \ref{subsec:wurmCoord}). 
+
 Con estos costos como insumos se ejecuta un algorimo de asignacion de objetivos
 a robots, que busca asignar a cada robot a su objetivo mejor valuado con la
 restriccion de que los objetivos asignados deben estar distribuidos sobre los
-segmentos (seccion \ref{subsec:wurmCoord}). 
+segmentos. Este algormitmo de asignacion tiene principalmente dos ventajas con
+respecto al presentado en la seccion \ref{subsec:wurmCoord}. La primera es que
+resuelve la asignacion de robots a objetivos directamente, en lugar de asignar
+primero robots a segmentos, y luego resolver asignaciones de los robots a
+objetivos localmente a cada segmento. La segunda es distribuye los robots en
+los segmentos considerando el numero de objetivos disponibles en cada segmento,
+en lugar de simplemente hacer una asignacion uniforme. Una situacion que
+ejemplifica el problema de una asignacion uniforme es una en la cual se tienen
+$10$ robots y $2$ segmentos, $s_1$ un solo objetivo y $s_2$ con $9$. Una
+asignacion uniforme resulta en asignar $5$ robots a cada segmento aunque esto
+implique que en $s_1$ quedeb $4$ robots ociosos (sin objetivo asignado). El
+algormitmo presentado a continuacion resuleve este tipo de problemas a la vez
+que permite distribuciones uniformes de haber suficientes objetivos disponibles
+en cada segmento. Por ejemplo para el caso planteado anteriormente su ejecucion
+resulta en un solo robot asignado en $s_1$ y los restantes $9$ asignados en
+$s_2$, mientras que para un caso alternativo en el que $s_1$ y $s_2$ tienen $5$
+objetivos cada uno, resulta en una asignacion uniforme.
+
 El algorimo de asignacion, se corresponde al algorimo
 \ref{alg:resolucionsubastasegmentos}, donde $R$ es el conjunto de los
 identificadores de los robots de los cuales se recibieron valuaciones, $O$ el
@@ -1011,6 +1033,7 @@ el numero de objetivos en un segmento.
 % Los conjuntos $O_1$,$O_2$,...,$O_k$,...,$O_{|S|}$ contienen los
 % objetivos que estan dentro de un segmento $s_k\in S$.
 
+\vspace{1cm}
   
 \begin{algorithm}[H]
 \SetAlgoLined
