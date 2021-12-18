@@ -4,10 +4,10 @@
 
 % Avoid blank page before chapter in appendix 
 % https://tex.stackexchange.com/questions/24066/start-new-chapter-on-same-page/24068#24068 
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
-\makeatother
+% \usepackage{etoolbox}
+% \makeatletter
+% \patchcmd{\chapter}{\if@openright\cleardoublepage\else\clearpage\fi}{}{}{}
+% \makeatother
 
 % = Packages =
 \usepackage{todonotes}
@@ -221,6 +221,12 @@ Tutor: Facundo Benavides%
 
 \include{ParteCentral}
 
+\chapter{Experimentación}
+\hfuzz=10pt 
+\minitoc
+\hfuzz=0pt 
+
+\include{Experimentacion}
 
 \begin{appendices}
 \include{Apendice}

@@ -1,93 +1,126 @@
 \section{Solución desarrollada}
 Durante el proyecto se desarrollo una solución al problema de exploración
-multirobot. Esto requiere la soluciones para una gran cantidad de problemas
-relacionados a diversos aspectos de la exploración multirobot, este proyecto se
-concentrara en algunos de ellos.
+multirobot. Esto requiere soluciones para varios problemas relacionados a
+diversos aspectos de la exploración multirobot, este proyecto se concentrara en
+algunos de ellos.
 
-% se a partir de la información sensorial de los
-El problema construir un mapa de forma cooperativa robots se soluciona construyendo una grilla de ocupación con
-el algoritmo de actualización presentado en \cite{stachniss2009robotic}.
+Para el problema de asignación de tareas (sección \ref{sec:exploracion}) se
+presentan soluciones para cada una de sus partes. Para la identificación de
+objetivos se propone una técnica novedosa basada en el rango de sensado de los
+robots que determina como objetivos a un subconjunto de los puntos fronterizos.
+Con respecto a la asignación de objetivos a robots, esta se resuelve de forma
+coordinada aplicando una variante de lo presentado en la sección
+\ref{subsec:wurmCoord}.
 
-% Se presenta una solución para las dos partes asociadas al
-
-Con respecto al problema de asignación de tareas (sección
-\ref{sec:exploracion}) se presentan soluciones para cada una de sus partes.
-Para la identificación de objetivos se propone una técnica novedosa basada en
-el rango de sensado de los robots que determina 
-% \todo{FEDE: estaria bueno aca
-%   poner un adjetivo que resuma como es el algorimo que desarrolle. capaz basada
-%   en el cubrimiento, me queda la duda de usar ese concepto dado que es medio
-%   inventado, capaz basada en el rango de sensado?}
-  como objetivos a un
-  subconjunto de los puntos fronterizos. Con respecto a la asignación de
-  objetivos a robots, esta se resuelve de forma coordinada aplicando una
-  variante de lo presentado en la sección \ref{subsec:wurmCoord}.
-
-La asignación requiere de la construcción de
-un mapa topológico, para esto se implementa
-la técnica descrita en la sección
-\ref{subsec:mapaTopGVD} que requiere de un
-GVD, el cual se contruye de forma
-incremental con una variante del algoritmo
-\emph{brushfire dinámico} (sección
-\ref{subsec:constGVDInc}).
+La asignación requiere de la construcción de un mapa topológico, para esto se
+implementa la técnica descrita en la sección \ref{subsec:mapaTopGVD} que
+requiere de un GVD, el cual se contruye de forma incremental con una variante
+del algoritmo \emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}).
 
 Luego de asignado a un objetivo el robot deberá llegar hasta el, para esto es
-necesario solucionar el este problema de planificación. La solución desarrollada 
-aplica las ideas de planificación jerárquica presentadas en la sección
+necesario solucionar el problema de planificación. La solución desarrollada
+aplica la idea de planificación jerárquica presentadas en la sección
 \ref{subsec:mapas}, con el motivo de permitir una planificación eficiente sin
 resultar en caminos innecesariamente largos.
 
+El problema construir el mapa de un entrono inicialmente desconocido a partir
+de los datos sensoriales de varios robots se soluciona, contruyendo en cada
+robot, segun la información sensorial que estos recolectan, una grilla de
+ocupación con el nodo de ROS \emph{costmap\_2d} \cite{ROS-costmap_2d} y luego
+combinando dichas grillas con las ideas presentadas en
+\cite{stachniss2009robotic}.
+
 
 \section{Principales aportes}
+Propuesta y estudio de un algoritmo novedoso para identificación de objetivos
+basado en la simplificacion de fronteras.
 
-Propuesta y estudio de un algoritmo novedoso para identificación de objetivos basado en la simplificacion de fronteras.% que no se basa en un algoritmo de clasificación no supervisada (p.e. K-Means).
+Estudiar el impacto al de utlizar una construcción incremental del GVD en la
+tecnica de coordinación que se propone en \cite{wurm2008coordinated}. 
 
-Estudiar la coordinación que se propone en \cite{wurm2008coordinated} utilizando una construcción incremental del GVD.
+Adicionalmente se estudia un aspecto critico que no esta explicito en el estado
+del arte, el problema de como como tratar las porciones desconocidas al
+contruir un GVD en un entorno parcialemnte explorado. Para este problema se
+comentan posibles alternativas, pasando por la que esta presente en el estado
+del arte y una técnica novedosa que permite una mayor eficiencia.
 
-% Propuesta  de un algoritmo de construcción incremental de un GVD basado en \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando principalmente la forma de determinar las celdas pertenecientes al GVD.
+ % que se presenta al contruir un GVD sobre espacio parcialmente explorado, que consiste en 
 
-Adicionalmente se estudia un aspecto critico que no esta explicito en el estado del arte, el problema asociado a como se tratan las celdas de estado desconocido en la construcción del GVD. Para este problema se comentan posibles alternativas, pasando por la que esta presente en el estado del arte y una técnica novedosa que permite una mayor eficiencia.
+% Adicionalmente se estudia un aspecto critico que no esta explicito en el estado
+% del arte, el problema de como como tratar las porciones desconocidas existentes
+% en un entorno parcialemnte explorado al contruir un GVD.
 
-% Proponer un algoritmo novedoso para la simplificacion de conjuntos de fronteras que ... (no se que poner aca, pongo)
-% Estudiar la coordinacion propuesta une wurm utilizando un  GVD incremental ya que de lo contrario no es escalable.
-% Y que adicionalmente se implemento una construiccion de GVD novedosa que basa su construiccion en sources y pseudosources (la idea intuitiva pero considerando los potenciales problemas de discretizacion)
-% Llamado de atencion al problema de conectividad de un GVD al explorar donde en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas desconocidas, las cuales no se consideran en los articulos del estado del arte. Estos se asume (no se explicita pero en Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien) que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo desconocido es libre. En este trabajo se propone una tecnica novedosa que soluciona este problema de forma mas eficiente evitando procesar todo el espacio desconocido mientras se va explorando.
+% que no se basa en un algoritmo de clasificación no supervisada (p.e. K-Means).
+% Propuesta  de un algoritmo de construcción incremental de un GVD basado en
+% \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando
+% principalmente la forma de determinar las celdas pertenecientes al GVD.
+% Proponer un algoritmo novedoso para la simplificacion de conjuntos de
+% fronteras que ... (no se que poner aca, pongo) Estudiar la coordinacion
+% propuesta une wurm utilizando un  GVD incremental ya que de lo contrario no
+% es escalable. Y que adicionalmente se implemento una construiccion de GVD
+% novedosa que basa su construiccion en sources y pseudosources (la idea
+% intuitiva pero considerando los potenciales problemas de discretizacion)
+% Llamado de atencion al problema de conectividad de un GVD al explorar donde
+% en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas
+% desconocidas, las cuales no se consideran en los articulos del estado del
+% arte. Estos se asume (no se explicita pero en Kalra se ve que el mapa para
+% entorno abierto es consistente con esta tecnica, en el codigo de lau tambien)
+% que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo
+% desconocido es libre. En este trabajo se propone una tecnica novedosa que
+% soluciona este problema de forma mas eficiente evitando procesar todo el
+% espacio desconocido mientras se va explorando.
 
 \section{Hipótesis de trabajo}
-La solución desarrollada tomara las siguientes hipótesis de trabajo.
+La solución se desarrolla con las siguientes hipótesis de trabajo.
 \begin{enumerate}[label=(\roman*)]
   \item Cada robot conoce en todo momento su ubicación (posición y orientación).
   \item La comunicaciones son sin perdida y de rango infinito.
-  \item El entorno a explorar es cerrado.
   \item Los robots son circulares e iguales entre sí.
+  \item Los robots tienen la capacidad de detectar las superficies mas cercanas
+    que se encuentran dentro de un circulo de radio $rango$ centrado en el
+    robot.
+  \item El entorno a explorar es cerrado.
+  \item Se conocen las dimenciones del entorno a explorar.
   % \item El entorno es estático.
 \end{enumerate}
 
-\todo{necesito agregar que las dimenciones del entorno osn conocidas para armar un mapa}
+% \todo{necesito agregar que las dimenciones del entorno osn conocidas para armar un mapa}
 
 Estas hipótesis tienen el motivo de simplificar algunos aspectos del
 problema de exploración permitiendo que el trabajo se pueda enfocar en otros.
 
-La hipótesis I resuelve trivialmente el problema de localización. La hipótesis
-II simplifica la coordinación al no tener que considerarse en esta los posibles
-problemas de comunicación que pueden haber de asignar robots a objetivos muy
-distantes o con obstrucciones entre si. La hipótesis III es útil
-principalmente para poder aplicar el criterio de parada que consiste en detener
-la exploración al no tener más objetivos restantes (sección
+La hipótesis (I) resuelve trivialmente el problema de localización \cite{slam}. 
+
+Las hipótesis (II) y (III) simplifican la coordinación. La (II) al no tener que hacer
+consideraciones especiales dependiendo de las dimenciones del robot. La (III) por
+no tener que considerarse los posibles problemas de comunicación que pueden
+haber de asignar robots a objetivos muy distantes o con obstrucciones entre si. 
+
+Las hipótesis (IV) establece la capacidad sensorial del robot, que se pueda
+sensar un circulo centrado en el robot, evita considerar la orientación de este
+para extraer información.
+
+La hipótesis (V) es util para poder aplicar el criterio de parada que consiste
+en detener la exploración al no tener más objetivos restantes (sección
 \ref{sec:exploracion}). 
 
-\section{Arquitectura}
-La arquitectura se divide en dos partes robots y unidad central.  Cada una de
-estas partes esta asociado a un hardware especifico, siendo los robots móviles
-y la estación central estática. Los robots pueden ser uno o más mientras que la
-estación central es única. Cada parte se compone de módulos los cuales cuales se
+Finalmente la hipótesis (VI) permite establecer una grilla de ocupación con las
+dimenciones suficientes para representar todo el entrono a explorar. 
+
+\section{Arquitectura}\label{sec:arqui}
+La arquitectura se divide en dos tipos de componentes robots y unidad central.
+Existe una unica unidad central que se encarga de centralizar la información
+del entrono explorado y de coordinar a los varios robots que pueden existir.
+Cada componente esta asociado a un hardware especifico, siendo los robots móviles
+y la estación central estática. 
+%Los robots pueden ser uno o más mientras que la estación central es única. 
+Cada componente esta a su vez compuesto de módulos los cuales cuales se
 encargan de tareas específicas. 
 
 En la figura \ref{fig:arquitectura} se resume la arquitectura en un diagrama en
-el cual es posible ver los componentes, sus módulos dichos módulos, como se
-distribuyen entre los componentes y una simplificación de las comunicaciones
-que ocurren entre ellos.
+el cual es posible ver los componentes, sus módulos y como estos distribuyen
+entre los componentes. Tambien es posible aprciar una simplificación de las
+comunicaciones que ocurren entre dichos modulos.
 
 
 \begin{figure}[H]
@@ -236,9 +269,9 @@ grilla de ocupacion. Las celdas se repreresentan segun sus centros y viceversa
 sin ambigüedad, por lo tanto en lo que resta de este informe se usaran ambos
 terminos de forma indistinta.
 
-Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|m(1:k))$
-de estar ocupada, donde $m(1:k)$ es el conjunto de medidas resultantes de algun
-sensor desde el comienzo de la exploarcion.
+Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|x_{1:t},z_{1:t})$
+de estar ocupada, donde $z_{1:t}$ es la secuencia de medidas obtenidas de los
+sensores desde las posiciones $x_{1:t}$.
 
 La funcion $e : \mli{CG} \rightarrow E$ dado un centro de celda, devuelve uno de los
 tres estados posibles $E=\{libre, ocupado, desconocido\}$ segun la probabilidad
@@ -248,9 +281,9 @@ asociada a $c$. En el contexto de este proyecto la funcion $e$ se define segun
   e(c)= 
   \left \{ 
     \begin{aligned}
-       libre       &\ \ \ \text{ si}& P(c|m(1:k)) < 0.5 \\
-       desconocido &\ \ \ \text{ si}& P(c|m(1:k)) = 0.5 \\
-       ocupado     &\ \ \ \text{ si}& P(c|m(1:k)) > 0.5
+       libre       &\ \ \ \text{ si}& P(c|x_{1:t},z_{1:t}) < 0.5 \\
+       desconocido &\ \ \ \text{ si}& P(c|x_{1:t},z_{1:t}) = 0.5 \\
+       ocupado     &\ \ \ \text{ si}& P(c|x_{1:t},z_{1:t}) > 0.5
     \end{aligned}
   \right .
   \label{eq:estado}
@@ -1680,17 +1713,18 @@ El modulo \emph{controlador de movimiento} se encarga de enviar puntos del
 camino al modulo \emph{move base} que genera las directivas necesarias para que
 el robot avance hacia dicho punto. Estos puntos deben enviarse en una secuencia
 que permita que el robot puede seguir el camino hasta el objetivo. Para lograr
-esto se de define criterio que permite considerar cuando un punto del camino se
-considera completado. Dado esto el funcionamiento del \emph{controlador de
+esto asumiendo que se tiene un criterio que permite considerar cuando un punto del camino se
+considera completado, el funcionamiento del \emph{controlador de
 movimiento} consiste en determinar el primer punto no completado del camnino
-asignado, luego enviar dicho punto al \emph{controlador de movimiento} y
-esperar a que el robot avance lo suficiente hasta este para que se considere
-completado. Cuando el punto es completado se repete el proceso con el siguiente
-punto sin completar, esto sucede hasta que se completa el ultmo punto el
-objetivo.
+asignado, enviar dicho punto a \emph{move base} y esperar a que el robot avance
+lo suficiente para completarlo. Una vez completado se repite el
+proceso con el siguiente punto sin completar, esto sucede hasta que se completa
+el ultimo punto del camino, el objetivo.
 
 % Para determinar cuando un punto del camino considera completado, estos se separan  el ultimo punto  objetivo  subobjetivos con exepcion del ultimo punto que se denomina
 % como objetivo.
+
+\subsection{Criterios de compleción}
 
 El \emph{controlador de movimiento} tiene dos formas de considerar completo un
 punto del camino, la normal y la forzosa.
@@ -1723,7 +1757,7 @@ tan estrictamente se sigue el camino original en espacios despejados de
 obstaculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot siga el
 camnino original de forma estricta aunque este en espacios despejados ya que se 
 fuerza que el robot este cerca de los subobjetivos para completarlos. Al
-aumentar el valor de $\mli{DistNs}$se permite mayor libertad en como seguir el
+aumentar el valor de $\mli{DistNs}$ se permite mayor libertad en como seguir el
 camino original cuando el espacio esta despejado, esto sucede porque en los
 espacios despejados todos los subobjetivos del camino que esten a una
 distancia menor a $\mli{DistNs}$ se consideran completados, siendo move base el
@@ -1764,8 +1798,8 @@ caminos sin desvios innecesarios.
 Es pertinente notar que en la implementación realizada \emph{move base} se
 configuro con un planificador global que calcula caminos sobre la grilla de
 ocupacion (seccion \ref{subsec:move_base}), de igual manera aplicar esta
-tecnica tiene ventajas de eficiencia ya que el calculo sobre la grilla se
-reduce al tamaño del segmento que se debe transitar.
+tecnica simplifica los calculos de caminos sobre la grilla siendo dichos
+calculos locales a cada segmento que se debe transitar.
 
 Esta planificación jerarquica se lleva a cabo estableciendo un valor de
 $\mli{DistNs}$ mayor a las dimenciones de los segmentos y un valor de
@@ -1799,13 +1833,106 @@ portal en la transición al siguiente segmento del camino.
 
 
 \section{Construcción cooperativa del mapa}
-Comentar como funcina el map merger:
+% Durante la exploracion la grilla de ocupacion (seccion \ref{subsec:Grilla}) que
+% representa el entorno explorado celdas  estado se puede determinar como
+% ocupadas, libres y desconocidas
 
-las actualizaciones, que las da el stack de navegacion, lo que esto implica
-(los datos de los sensores se procesan en celdas), que son incrementales (solo
-porcion del mapa) tanto la entradas como las salidas
+% Para una celda $c$ con estado desconocido, es equiprobable que $c$ este ocupada o 
+% libre, siendo necesaria evidencia de
+% que la celda esta ocupada ni de que esta libre, para que la celda cambie su
+% estado ya sea a libre o a ocupado. En un escenario donde se comienza sin conocimiento sobre
+% el entorno explorado y que el objetivo de la exploracion es obtener
+% informacion de dicho entorno, es posible decir que todas las celdas comienzan con estado desconocio 
+% y el numero de celdas en dicho estado decrece a lo largo que transcurre la
+% exploracion, a medida que se obtiene informacion (evidencia) sobre el entrono.
 
-Y por otro lado como estas actualizaciones se integra (el metodo que se describe en \cite{stachniss2009robotic}).
+
+A lo largo de la exploracion los robots de la flota son asignados a objetivos
+de exploracion, cuando un robot completa un objetivo este sensa porciones del
+entorno antes desconocido. Esta nueva información debe ser manejada para
+aportar a la construccion de la grilla de ocupacion (mapa) con la cual se
+representa el entorno explorado. A continuacion se describe el proceso completo
+desde los sensores hasta la construccion de un mapa que contenga toda la
+informacion obtenida del entrono.
+
+Cada robot esta constantemente recopilando informacion del entrono a traves de
+sus sensores y enviando dicha informacion al nodo de ROS \emph{global\_costmap}
+ubicado en su modulo \emph{move base} (seccion \ref{subsec:move_base}). Al
+recibir datos sensoriales \emph{global\_costmap} actualiza la grilla de
+ocupacion que construye. \emph{Global\_costmap} fue configurado para que los
+valores de probablidad de ocupacion asociados a las celdas de su grilla de
+(seccion \ref{subsec:Grilla}) solo dependan de la ultima evidencia sensorial
+obtenida para cada celdas. Adicionalmente las celdas tienen asociado uno de
+tres valores de probabilidad de ocupacion posibles: $0.5$ indicando que la
+celda es desconocida, $0.55$ indicando que la celda esta ocupada y $0.45$
+indicando que la celda esta libre. Estos valores indican la probabilidad
+$P(c|x_t,z_t)$ de que una celda $c$ este ocupada dada una unica medida $z_t$
+desde una cierta posicion $x_t$.
+
+Dado que cada \emph{global\_costmap} contruye una grilla de ocupacion solo
+considerando los datos sensoriales del robot en el cual ejecuta, estas se deben
+combinar en una que centralice toda la información recopilada del entorno. Esto
+se logra configurando los \emph{global\_costmap} para que cuando se den
+modificaciones en estas grillas se envien las porciones modificadas al modulo
+\emph{combinador de mapas}. Dichas porciones consisten en el conjunto de celdas
+de la grilla que fueron modificadas y sus nuevo valores de ocupacion.
+
+Al recibir una actualizacion el modulo \emph{combinador de mapas} aplica la
+regla de actualizacion presentada en \cite{stachniss2009robotic}, celda a
+celda, para integrar la nueva información a la grilla central que concentra
+toda la información proporcionada por los robots. La regla de actualización
+para una celda $c$ esta dada
+por (\ref{eq:updateRule}) donde $P(c|x_{1:t-1},z_{1:t-1})$ es la probabildad
+anterior a la actualización, $P(c | x_t,z_t)$ es el valor de probabildad
+asociado a $c$ en la actualización recibida y  $P(c|x_{1:t},z_{1:t})$ es el
+valor de probabilidad actualizado. 
+
+\begin{equation}
+  P(c|x_{1:t},z_{1:t}) =\left( 1 + \frac{1 - P(c | x_t,z_t)}{P(c|x_t,z_t)} \frac{1 - P(c|x_{1:t-1},z_{1:t-1})}{P(c|x_{1:t-1},z_{1:t-1})} \right)^{-1}
+\label{eq:updateRule}
+\end{equation}
+
+En la figura \ref{fig:mappingUpRule} se muestra un ejemplo de la aplicacion de
+esta regla de actualización. Notar el ejemplo de la figura es en otro contexto
+por lo que los mapas intermedios son distintos a los descritos en esta seccion.
+
+Luego de que el modulo \emph{combinador de mapas} integra toda la informacion
+de la actualizacion obtenida al mapa central, envia la porcion actualizada del
+mapa central a los diversos modulos (seccion \ref{sec:arqui}) que requieren
+mantener actualizado un mapa completo del entorno explorado.
+
+\begin{figure}[H]
+  \center
+  \includegraphics[width=0.95\linewidth]{imagenes/occgridUpdate.png}
+  \caption[Aplicacion de la regla de acutalización propuesta en
+  \cite{stachniss2009robotic} en un corredor.]{Aplicacion de la
+    regla de acutalización propuesta en \cite{stachniss2009robotic} en un
+    corredor. La imagen superior izquierda muestra el mapa inicial y
+    la inferior derecha contiene el mapa resultante. Los mapas intermedios son los
+    mapas locales construidos a partir de los sensores del robot. Extraída de
+  \cite{stachniss2009robotic}. }
+  \label{fig:mappingUpRule}
+\end{figure} 
+
+
+
+% Y por otro lado como estas actualizaciones se integra (el metodo que se describe en \cite{stachniss2009robotic}).
+% notando que solo se considera los datos sensoriales
+% aportados  el robot
+
+% si
+% esto genera un cambio en la grilla, este cambio se informa al modulo
+% \emph{combinador de mapas}. 
+
+% robot completa un objetivo de exploración este recopila nueva
+% informacion del entrono a partir de sus sensores
+
+% Comentar como funcina el map merger:
+
+% las actualizaciones, que las da el stack de navegacion, lo que esto implica
+% (los datos de los sensores se procesan en celdas), que son incrementales (solo
+% porcion del mapa) tanto la entradas como las salidas
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
