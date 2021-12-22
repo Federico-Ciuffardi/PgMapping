@@ -70,11 +70,11 @@ del arte y una técnica novedosa que permite una mayor eficiencia.
 % soluciona este problema de forma mas eficiente evitando procesar todo el
 % espacio desconocido mientras se va explorando.
 
-\section{Hipótesis de trabajo}
+\section{Hipótesis de trabajo}\label{sec:hip}
 La solución se desarrolla con las siguientes hipótesis de trabajo.
 \begin{enumerate}[label=(\roman*)]
   \item Cada robot conoce en todo momento su ubicación (posición y orientación).
-  \item La comunicaciones son sin perdida y de rango infinito.
+  \item Las comunicaciones son sin perdida y de rango infinito.
   \item Los robots son circulares e iguales entre sí.
   \item Los robots tienen la capacidad de detectar las superficies mas cercanas
     que se encuentran dentro de un circulo de radio $rango$ centrado en el
@@ -389,7 +389,7 @@ conexa (lineas 7-19). Repetir dicho procedimiento hasta que todas las celdas
 pertenezcan a alguna componente conexa (linea 4). Este algoritmo es analogo al
 que esta presente en \cite{hopcroft1973algorithm}.
 
-\section{Identificación de objetivos}
+\section{Identificación de objetivos}\label{sec:pc:idobj}
 El problema de identificación de objetivos consiste en determinar los puntos
 del espacio a los cuales es conveniente enviar robots para recolectar nueva
 informacion sobre el entorno explorado. Estos puntos son los llamdos objetivos
@@ -1617,8 +1617,8 @@ Dado que en el contexto del proyecto no es necesario construir GVD fuera del
 area conocida se desarrollo una tecnica que solo construye GVD en las celdas
 conocidas evitando trabajar sobre espacio desconocido. Esta consiste en no
 permitir que las olas se propaguen por el espacio desconocido, y
-adicionalmente considerar al conjunto de celdas desconocidas que tienen un
-vecino conocido $\mli{UF}$ como celdas pertenecientes a generdores
+adicionalmente considerar al conjunto $\mli{UF}$ de celdas desconocidas que tienen un
+vecino conocido como celdas pertenecientes a generdores
 ($\mli{UF}\subseteq \mli{CGen}$) junto a las celdas ocupadas.
 De esta forma para el caso presentado en la figura \ref{fig:desconocidoKalra}
 se obtiene un GVD que se reduce al espacio conocido como se muestra en la

@@ -1019,7 +1019,7 @@ Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada 
 % Luego esta el submódulo de planificación de ruta, este se encarga de generar una ruta que le permita al robot llegar al objetivo asignado. Esto se logra a partir del algoritmo $A*$, para la ejecución de este se asume que las celdas desconocidas son libres. En el caso de encontrarse un obstáculo en la ruta planificada se replanifica ejecutando nuevamente el algoritmo $A*$ en la version mas reciente del mapa.
 
 % El último es el submódulo de ejecución de trayectoria que se encarga de generar los comandos de actuación para seguir una ruta planeada.
-\section{Simuladores}
+\section{Simuladores}\label{sec:sim}
 
 % Introducción sobre porque simular esta bueno.
 
@@ -1185,7 +1185,7 @@ ambos.
 \subsubsection{Método}
 El experimento se basa en replicar un mismo escenario en Gazebo y Webots una
 consiste en dos paredes de $20m$ paralelas que están a $10m$ una de la otra.
-Entremedio de estas se ubican 3 robots diferenciales pioneer 3-DX uno alineado
+Entremedio de estas se ubican 3 robots diferenciales Pioneer 3-DX \cite{p3dx} uno alineado
 con el centro de las paredes, uno a la izquierda y otro a la derecha ambos a
 $5m$ del que se encuentra en el centro. En la figura \ref{fig:impsim} se
 muestra el escenario de simulación implementado en los simuladores a evaluar.
@@ -1199,7 +1199,7 @@ muestra el escenario de simulación implementado en los simuladores a evaluar.
 \end{figure}
 
 Al ejecutarse la simulación los robots deben avanzar hasta una de las paredes
-cuando se encuentran a un metro de esta (información obtenida usando un LiDAR)
+cuando se encuentran a un metro de esta (información obtenida usando un LiDAR) %\footnote{Dispositivo que permite determinar la distancia desde un emisor láser a una superficie.}
 estos cambian de dirección repitiendo el comportamiento por cinco minutos.
 
 El proceso de replicar el escenario en cada simulador utilizando ROS será el
@@ -1212,7 +1212,7 @@ tiempo real que tome ejecutarla $tr$. A mayor $R_{sim}$ mayor rendimiento.
 
 El software utilizado fue Ubuntu \emph{20.04}, ROS \emph{Noetic}, Gazebo \emph{11.4.0} y Webots \emph{R2021a}. 
 
-El hardware consiste de un procesador Intel Core i3-9100F, un procesador
+El hardware utlizado consiste de un procesador Intel Core i3-9100F, un procesador
 gráfico GeForce GTX 660 y 16GB de memoria RAM.
 
 \subsubsection{Resultados}
