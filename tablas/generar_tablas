@@ -1,0 +1,7 @@
+#! /bin/env bash
+
+for config in configs/* ; do
+  filename=$(basename $config)
+  filename="${filename%.*}"
+  $HOME/catkin_ws/src/pgmappingcooperativo/scripts/table_gen.py "$config" > $filename.tex
+done

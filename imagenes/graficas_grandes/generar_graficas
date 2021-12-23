@@ -1,0 +1,29 @@
+#! /bin/env bash
+pg_root="$HOME/catkin_ws/src/pgmappingcooperativo"
+
+function plot(){
+  tipo="$1"
+  mkdir -p graficas_$tipo/desconocido
+  "$pg_root"/scripts/plotter_$tipo.py graficas_$tipo/desconocido desconocido celda "$pg_root"/data_wo_bags/cell_size/inc_fsm5_gcm1  \
+                                                                                   "$pg_root"/data_wo_bags/cell_size/inc_fsm5_gcm2
+  mkdir -p graficas_$tipo/ident_obj
+  "$pg_root"/scripts/plotter_$tipo.py graficas_$tipo/ident_obj ident_obj celda "$pg_root"/data_wo_bags/cell_size/inc_fsm5_gcm1 \
+                                                                               "$pg_root"/data_wo_bags/cell_size/inc_fsm2_gcm1 \
+                                                                               "$pg_root"/data_wo_bags/cell_size/inc_fsm0_gcm1
+  mkdir -p graficas_$tipo/ident_obj_robots
+  "$pg_root"/scripts/plotter_$tipo.py graficas_$tipo/ident_obj_robots ident_obj robot "$pg_root"/data_wo_bags/robots/inc_fsm5_gcm1 \
+                                                                                      "$pg_root"/data_wo_bags/robots/inc_fsm2_gcm1 \
+                                                                                      "$pg_root"/data_wo_bags/robots/inc_fsm0_gcm1
+  mkdir -p graficas_$tipo/incrementalidad
+  "$pg_root"/scripts/plotter_$tipo.py graficas_$tipo/incrementalidad incrementalidad celda "$pg_root"/data_wo_bags/cell_size/inc_fsm5_gcm1  \
+                                                                                           "$pg_root"/data_wo_bags/cell_size/noninc_fsm5_gcm1
+  mkdir -p graficas_$tipo/planificacion_robots
+  "$pg_root"/scripts/plotter_$tipo.py graficas_$tipo/planificacion_robots planificacion robot "$pg_root"/data_wo_bags/robots/inc_fsm5_gcm1 \
+                                                                                                  "$pg_root"/data_wo_bags/control/2_5
+}
+
+
+plot histo
+plot histo_num 
+plot line
+
