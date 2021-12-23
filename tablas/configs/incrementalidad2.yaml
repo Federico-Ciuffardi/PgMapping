@@ -34,9 +34,9 @@
    # - "gvd_construction_time_diff_min"
    # - "gvd_construction_time_diff_sum" 
    # - "gvd_construction_time_max"    
-   - "gvd_construction_time_mean" 
+   # - "gvd_construction_time_mean" 
    # - "gvd_construction_time_min" 
-   # - "gvd_construction_time_sum" 
+   - "gvd_construction_time_sum" 
 
    - "gvd_update_auction_info_percent" 
    # - "gvd_update_auction_info_percent_log_max" 
