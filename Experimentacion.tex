@@ -153,7 +153,7 @@ cambiando la granularidad de la grilla de ocupacion utlizada para representar
 el entorno explorado. La granularidad se indica a traves de las celdas de una
 grilla que se corresponden con un metro cuadrado de la realidad. Los valores de
 granularidad utilizados para las pruebas son $1,4,9$ y $16$ celdas
-por metro cuadrado ($celdas/m^2$). 
+por metro cuadrado ($\frac{celdas}{m^2}$). 
 
 Adicionalente debido a que es posible que ejecuciones de un misma simulacion
 lleven a distintos resutlados, con el fin de obtener resultados
@@ -227,7 +227,17 @@ Las metricas que fueron utilizadas para evaluar y comparar el desempeño de la
 exploracion en las pruebas, se basan en las que se proponen en
 \cite{yan2015metrics}.
 
+Completitud y error del mapa.
 
+Tiempo de exploracion y costo de exploracion (suma de distancia recorrdia).
+
+Tiempo de objtencion de info (suma)
+
+Tiempo de contruiccion del GVD (suma)
+
+Tiempo de identificación de objetivos(suma)
+
+Porcentajes de contruccion del GVD y de identificación de objetivos.
 
 \section{Resultados}
 \newlength{\graphlen}
@@ -246,23 +256,23 @@ repeticiones que se hacen debido al no determinismo del simulador.
 
 % el error y la calidad:
 
-En la tabla \ref{tab:todo3} se muestra el completitud y calidad de los mapas
+En la tabla \ref{tab:todo3} se muestra la completitud y calidad de los mapas
 obtenidos en todas las pruebas realizadas. 
 
 Con respecto a la completitud es posible apreciar que no existen diferencias
-mayores entre las variantes de la implemetnación, todas obteniendo una
-completitud en propmedo mayor a $0.999$. Dado que el criterio de parada es que
-no se detecte mas espacio por explorar, estos valores hablan de la capacidad de
-detectar el espacio desconocido explorable que tienen las soluciones. Todas las
-soluciones detectan expacio desconocido explorable mientras exista una un celda
-$c_1$ libre y otra $c_2$ desconocida tal que $c_1 \in ady_4(c_2)$ (seccion
-\ref{subsec:Grilla}), principalemente porque en estas condiciones se asume que
-los robots no pueden atravezar de $c_1$ a $c_2$. Dicho esto el porcentaje
-faltante se explica por la existencia de celdas ubicadas en esquinas de paredes
-que que a pesar de no cumplir con las codiciones de ser detectadas como
-explorables, lo son. Un ejempo de este tipo de celda se muestra en la figura
-\ref{fig:faltaCub}. Sin embargo los valores de completitud obtenidos indican
-que este tipo de situaciones son despreciables.
+mayores entre las variantes de la implemetnación, teniendo todos los mapas
+generados una completitud alta. Dado que el criterio de parada es que no se
+detecte mas espacio por explorar, estos valores hablan principalmente de la
+capacidad de detectar el espacio desconocido explorable que tienen las
+soluciones. Todas las soluciones detectan expacio desconocido explorable
+mientras exista una un celda $c_1$ libre y otra $c_2$ desconocida tal que $c_1
+\in ady_4(c_2)$ (seccion \ref{subsec:Grilla}), principalemente porque en estas
+condiciones se asume que los robots no pueden atravezar de $c_1$ a $c_2$. Dicho
+esto se presume que la completitud de los mapas no es perfecta debido a la precencia de celdas
+ubicadas en esquinas de paredes que que a pesar de no cumplir con las
+codiciones de ser detectadas como explorables, lo son. Un ejempo de este tipo
+de celda se muestra en la figura \ref{fig:faltaCub}. Sin embargo los valores de
+completitud obtenidos indican que este tipo de situaciones son despreciables.
 
 \begin{figure}[H]
   \centerfloat
@@ -271,11 +281,36 @@ que este tipo de situaciones son despreciables.
   \qquad
   \subfloat[Mapa generado.]{\includegraphics[clip=true, width=0.33\textwidth]{imagenes/faltaDeCub/faltaCubRed}}
 
-  \caption{Esquina superior del mapa referencia y de un mapa resultante de una exploracion que presenta una celda explorable que no se reconoce como tal.}\label{fig:faltaCub}
+  \caption{Esquina superior izquierda del mapa referencia y de uno de los mapas
+  obtenido en las pruebas que presenta una celda explorable que no se reconoce
+como tal. Ambos mapas corresponden a una granularidad de una celda por metro cuadrado.}\label{fig:faltaCub}
    % A la izquierda se muestra el robot real, y a la derecha su version simulada.
 
 \end{figure}
 
+Los resultados de calidad del mapa obtenidos son similares a los de
+completitud, los mapas contruidos tienen una calidad alta, sin existir
+diferencias significativas entre las variantes. Esto es esperable ya que
+los sensores simulados fueron configurados para proporcionar medidas perfectas.
+Aunque a pesar de esto la calidad no perfecta, esto puede se explica en primer
+lugar por el impacto de la completitud del mapa en su calidad. En segundo lugar
+por la existencia de varios robots que pueden detectase como obstaculos entre
+sí, generado celdas obstaculizadas que no se encuentran en el mapa de
+referencia. Y en tercer lugar porque a pesar de las configuración de los
+sensores, sus medidas tienen un ruido pequeño.
+
+Estos resultados de completitud y calidad del mapa permiten concluir que todas
+las variantes logran resolver de manera satisfactoria el problema de la
+exploración multirobot, en terminos de los mapas contruidos. Las
+siguientes secciones se dedican a discutir los impactos que las diferentes
+variantes en terminos de tiempo y costo de exploracion.
+
+% De la
+% equacion 4 se de deduce que el cubrimiento siempre es mayor o igual que la
+% calidad. Por lo tanto 
+
+
+%%%%%%%%
 % Dado que las diferencias son despreciables se puede
 % concluir que el impacto de el uso de las distintas tambien despreciable.
 
