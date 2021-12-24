@@ -153,7 +153,7 @@ cambiando la granularidad de la grilla de ocupacion utlizada para representar
 el entorno explorado. La granularidad se indica a traves de las celdas de una
 grilla que se corresponden con un metro cuadrado de la realidad. Los valores de
 granularidad utilizados para las pruebas son $1,4,9$ y $16$ celdas
-por metro cuadrado ($c/m^2$). 
+por metro cuadrado ($celdas/m^2$). 
 
 Adicionalente debido a que es posible que ejecuciones de un misma simulacion
 lleven a distintos resutlados, con el fin de obtener resultados
@@ -186,17 +186,17 @@ defecto en Gazebo, llamado \say{Willow Garage}, el cual se modifico para
 reducir el area a exporar y que sea cerrado (sin salidas al exterior).
 
 \subsection{Robots}
-Los robots simulados en las pruebas modelan al robot diferencial Pioneer 3-DX
-\cite{p3dx} (figura \ref{fig:p3dx}). Cada robot esta equipado con un sensor LiDAR basado en el modelo
-URG-04LX-UG01 \cite{hokuyo}, que permite tomar medidas de distancia de hasta
-$5.6m$, con una frecuencia de aproximadamente $36hz$. Adicionalente el sensor
-fue alterado para tomar medidas en los $360$\textdegree al rededor del robot y
-para proporcionar medidas perfectas (sin ruido). %\todo{Justificar? Como?}.
+Los robots simulados\footnote{Especificación disponible en línea:
+\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pioneer_p3dx_model}} en las
+pruebas modelan al robot diferencial Pioneer 3-DX \cite{p3dx} (figura
+\ref{fig:p3dx}). Cada robot esta equipado con un sensor LiDAR basado en el
+modelo URG-04LX-UG01 \cite{hokuyo}, que permite tomar medidas de distancia de
+hasta $5.6m$, utilizando una frecuencia de $10hz$ de un maximo de $36hz$.
+Adicionalente el sensor fue alterado para tomar medidas en los $360$\textdegree
+al rededor del robot y para proporcionar medidas perfectas (sin ruido).
 
 \begin{figure}[H]
   \centerfloat
-
-% , c es adyacente a n3, lo que causa un unico segmento.
 
   \subfloat[Real.]{\includegraphics[clip=true, width=0.33\textwidth]{imagenes/pion/real.png}}
   \qquad
@@ -211,11 +211,16 @@ La flota de exploración se compone de cinco robots, ubicados en las posiciones
 indicadas en la figura \ref{fig:willow}. Las comunicaciones entre los robots de
 la flota son sin perdida y de rango infinito.
 
+\subsection{Software}
+El software utilizado en las pruebas fue Ubuntu \emph{20.04}, ROS \emph{Noetic} y Gazebo
+\emph{11.5.1}. 
+
 \subsection{Hardware}
 El simulador junto al resto de procesos necesarios para llevar a cabo una
 prueba fueron ejecutados en una computadora personal equipada con un procesador
 Intel Core i3-9100F, un procesador gráfico GeForce GTX 660 y 16GB de memoria
 RAM.
+
 
 \section{Metricas}
 Las metricas que fueron utilizadas para evaluar y comparar el desempeño de la
@@ -225,47 +230,165 @@ exploracion en las pruebas, se basan en las que se proponen en
 
 
 \section{Resultados}
+\newlength{\graphlen}
+\setlength{\graphlen}{0.85\textwidth}
+
+
 Los resultados explerimentales obtenidos son presentados y analizados en esta
-seccion.
+seccion. Las tablas que se presentan a lo largo de la sección indican para cada
+prueba los promedios y desviaciones estandar de las metricas en las 20
+repeticiones que se hacen debido al no determinismo del simulador.
+
+\subsection{Cubrimiento y calidad de los mapas}
+% Capaz aca puedo mencionar lo que pasa con los errores
+
+% el cubrimiento y la completitud: completitud mayor a 0.999 para todas combinaciones de granularidades y soluciones probadas
+
+% el error y la calidad:
+
+En la tabla \ref{tab:todo3} se muestra el completitud y calidad de los mapas
+obtenidos en todas las pruebas realizadas. 
+
+Con respecto a la completitud es posible apreciar que no existen diferencias
+mayores entre las variantes de la implemetnación, todas obteniendo una
+completitud en propmedo mayor a $0.999$. Dado que el criterio de parada es que
+no se detecte mas espacio por explorar, estos valores hablan de la capacidad de
+detectar el espacio desconocido explorable que tienen las soluciones. Todas las
+soluciones detectan expacio desconocido explorable mientras exista una un celda
+$c_1$ libre y otra $c_2$ desconocida tal que $c_1 \in ady_4(c_2)$ (seccion
+\ref{subsec:Grilla}), principalemente porque en estas condiciones se asume que
+los robots no pueden atravezar de $c_1$ a $c_2$. Dicho esto el porcentaje
+faltante se explica por la existencia de celdas ubicadas en esquinas de paredes
+que que a pesar de no cumplir con las codiciones de ser detectadas como
+explorables, lo son. Un ejempo de este tipo de celda se muestra en la figura
+\ref{fig:faltaCub}. Sin embargo los valores de completitud obtenidos indican
+que este tipo de situaciones son despreciables.
+
+\begin{figure}[H]
+  \centerfloat
+
+  \subfloat[Mapa de referencia.]{\includegraphics[clip=true, width=0.33\textwidth]{imagenes/faltaDeCub/ogred.png}}
+  \qquad
+  \subfloat[Mapa generado.]{\includegraphics[clip=true, width=0.33\textwidth]{imagenes/faltaDeCub/faltaCubRed}}
+
+  \caption{Porcion del mapa de referencia y la misma porcion de un mapa resultante de una exploracion que presenta una celda explorable que no se reconoce como tal.}\label{fig:faltaCub}
+   % A la izquierda se muestra el robot real, y a la derecha su version simulada.
+
+\end{figure}
+
+Dado que las diferencias son despreciables se puede
+concluir que el impacto de el uso de las distintas tambien despreciable.
+
+confirman que todas las variantes de la implemetnacion 
+finalizar su ejecucion con un mapa casi completo del entorno.
+
+Estos resutlados son los esperados ya que
+la mision concluye al no quedar mas espacio por explorar.
+
+Es posible apreciar que todos los
+mapas cubren casi en su totalidad al entorno y que la calidad de dichos mapas
+es casi perfecta en todos los casos.
+
+\input{tablas/todo3}
+
 \subsection{Incrementalidad}\label{sec:exp:inc}
-Los resutlados obtenidos se presentan en la tabla X, y las figuras YZW
+Los resutlados obtenidos se presentan en las tablas \ref{tab:inc1} y \ref{tab:inc2}.
 
 \input{tablas/incrementalidad1}
 
 \input{tablas/incrementalidad2}
 
+
 \begin{figure}[H]
   \centerfloat
 
-% , c es adyacente a n3, lo que causa un unico segmento.
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_time.png}
 
-  \subfloat{\includegraphics[clip=true, width=0.49\textwidth]{imagenes/graficas_grandes/graficas_histo_num/incrementalidad/exploration_time.png}}
-  \qquad
-  \subfloat{\includegraphics[clip=true, width=0.49\textwidth]{imagenes/graficas_grandes/graficas_histo_num/incrementalidad/exploration_cost.png}}
-
-  \caption[Robot diferencial Pioneer 3-DX.]{Graficas de tiempo de exploración y de distancia total recorrida por la flota, ambas en función de las celdas por metro cuadrado.}\label{fig:gra:inc1}
+  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:inc:et}
 
 \end{figure}
 
 \begin{figure}[H]
   \centerfloat
 
-  \includegraphics[clip=true, width=0.85\textwidth]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_sum.png}
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_cost.png}
 
-  \caption{Grafica de tiempo de exploración en función de las celdas por metro cuadrado.}\label{fig:gra:incs3}
+  \caption{Grafica de distancia total recorrida por la flota  en función de celdas por metro cuadrado.}\label{fig:gra:inc:ec}
 
 \end{figure}
 
 \begin{figure}[H]
   \centerfloat
 
-  \includegraphics[clip=true, width=0.85\textwidth]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_mean.png}
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_sum.png}
 
-  \caption{Grafica de tiempo de exploración en función de las celdas por metro cuadrado.}\label{fig:gra:inc2}
+  \caption{Grafica de la sumatoria del tiempo en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
 
 \end{figure}
+
 
 \subsection{Identificación de objetivos}\label{sec:exp:idobj}
+\input{tablas/ident_obj1}
+
+\input{tablas/ident_obj2}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_time.png}
+
+  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
+
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_cost.png}
+
+  \caption{Grafica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
+
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/auction_info_time_sum.png}
+
+  \caption{Grafica de la sumatoria del tiempo en obtencion de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
+
+\end{figure}
 
 \subsection{Consideracion del espacio desconocido}\label{sec:exp:desco}
+
+\input{tablas/desconocido1}
+
+\input{tablas/desconocido2}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_time.png}
+
+  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
+
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_cost.png}
+
+  \caption{Grafica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
+
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_sum.png}
+
+  \caption{Grafica de la sumatoria del tiempo en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
+
+\end{figure}
 

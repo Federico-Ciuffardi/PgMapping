@@ -1,0 +1,35 @@
+\begin{table}[H]
+%24/12/2021 03:06:44
+\hbadness = 10000
+\tolerance=9999
+\emergencystretch=10pt
+\hyphenpenalty=10000
+\exhyphenpenalty=100
+\begin{center}
+
+% \begin{adjustbox}{minipage=0.75\paperwidth, center}
+\begin{adjustbox}{width=1\textwidth}
+\small
+
+\begin{tabularx}{\textwidth}{|X|C{0.80cm}|X|X|}
+
+\hline
+Construcción del GVD & $\frac{celdas}{m^2}$ & Completitud del mapa & Calidad del mapa \\ \hline\hline
+\multirow{4}{\linewidth}{\centering Incremental}
+& 1 & 0.999725±1.1e-04 & 0.998986±2.4e-04\\ \cline{2-4}
+& 4 & 0.999919±7.5e-05 & 0.999657±1.9e-04\\ \cline{2-4}
+& 9 & 0.999987±1.2e-05 & 0.999737±4.8e-05\\ \cline{2-4}
+& 16 & 0.999997±3.7e-06 & 0.999924±7.1e-05\\ \hline\hline
+\multirow{4}{\linewidth}{\centering No incremental}
+& 1 & 0.999763±8.9e-05 & 0.999208±2.2e-04\\ \cline{2-4}
+& 4 & 0.999957±4.2e-05 & 0.999805±1.3e-04\\ \cline{2-4}
+& 9 & 0.999984±1.6e-05 & 0.999754±4.7e-05\\ \cline{2-4}
+& 16 & 0.999999±1.9e-06 & 0.999941±3.3e-05\\ \hline
+\end{tabularx}
+\end{adjustbox}
+
+\caption{Resultados de completitud y calidad de los mapas obtenidos en las pruebas realizadas con la construcción incremental y no incremental del GVD.}
+\label{tab:inc3}
+\end{center}
+
+\end{table}

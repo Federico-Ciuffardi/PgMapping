@@ -1,0 +1,35 @@
+\begin{table}[H]
+%24/12/2021 03:06:43
+\hbadness = 10000
+\tolerance=9999
+\emergencystretch=10pt
+\hyphenpenalty=10000
+\exhyphenpenalty=100
+\begin{center}
+
+% \begin{adjustbox}{minipage=0.75\paperwidth, center}
+\begin{adjustbox}{width=1\textwidth}
+\small
+
+\begin{tabularx}{\textwidth}{|X|C{0.80cm}|X|X|}
+
+\hline
+Consideración del espacio desconocido & $\frac{celdas}{m^2}$ & Tiempo de exploración $(s)$ & Distancia total recorrida por la flota $(m)$ \\ \hline\hline
+\multirow{4}{\linewidth}{\centering Desconocidas no propagan olas y $UF \subseteq CGen$}
+& 1 & 480.8±34.7 & 2587.0±186.4\\ \cline{2-4}
+& 4 & 498.0±25.3 & 2713.1±107.5\\ \cline{2-4}
+& 9 & 553.4±24.9 & 2894.7±124.5\\ \cline{2-4}
+& 16 & 689.7±29.0 & 3067.9±121.9\\ \hline\hline
+\multirow{4}{\linewidth}{\centering Desconocidas se consideran libres}
+& 1 & 479.1±34.4 & 2522.2±149.5\\ \cline{2-4}
+& 4 & 510.5±27.1 & 2728.9±135.2\\ \cline{2-4}
+& 9 & 677.8±26.4 & 3134.2±148.8\\ \cline{2-4}
+& 16 & 955.4±42.1 & 3303.6±240.5\\ \hline
+\end{tabularx}
+\end{adjustbox}
+
+\caption{Resultados de tiempo y costo de exploración obtenidos en las pruebas realizadas con las distintas consideraciones del espacio desconocido al construir el GVD.}
+\label{tab:desconocido1}
+\end{center}
+
+\end{table}

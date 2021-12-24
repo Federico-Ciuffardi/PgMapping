@@ -3,6 +3,12 @@
  caption:   "Resultados relacionados a los tiempos de construcción del GVD obtenidos en las pruebas realizadas con la construcción incremental y no incremental del GVD."
  label:     "tab:inc2"
 
+ mean_float_format:   "f"
+ mean_float_decimals: "2"
+
+ stddev_float_format:   "f"
+ stddev_float_decimals: "3"
+
  mode:      "celda"
  test_type: "incrementalidad"
 

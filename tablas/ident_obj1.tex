@@ -1,0 +1,40 @@
+\begin{table}[H]
+%24/12/2021 03:06:43
+\hbadness = 10000
+\tolerance=9999
+\emergencystretch=10pt
+\hyphenpenalty=10000
+\exhyphenpenalty=100
+\begin{center}
+
+% \begin{adjustbox}{minipage=0.75\paperwidth, center}
+\begin{adjustbox}{width=1\textwidth}
+\small
+
+\begin{tabularx}{\textwidth}{|X|C{0.80cm}|X|X|}
+
+\hline
+Identificación de objetivos & $\frac{celdas}{m^2}$ & Tiempo de exploración $(s)$ & Distancia total recorrida por la flota $(m)$ \\ \hline\hline
+\multirow{4}{\linewidth}{\centering Simplificación de fronteras basada en cubrimiento}
+& 1 & 480.8±34.7 & 2587.0±186.4\\ \cline{2-4}
+& 4 & 498.0±25.3 & 2713.1±107.5\\ \cline{2-4}
+& 9 & 553.4±24.9 & 2894.7±124.5\\ \cline{2-4}
+& 16 & 689.7±29.0 & 3067.9±121.9\\ \hline\hline
+\multirow{4}{\linewidth}{\centering Simplificación de fronteras basada en K-Means}
+& 1 & 491.0±25.7 & 2628.0±98.6\\ \cline{2-4}
+& 4 & 494.3±28.2 & 2684.8±106.7\\ \cline{2-4}
+& 9 & 532.6±21.1 & 2813.0±96.4\\ \cline{2-4}
+& 16 & 652.0±32.7 & 2962.4±136.6\\ \hline\hline
+\multirow{4}{\linewidth}{\centering Fronteras sin simplificar}
+& 1 & 487.9±24.3 & 2750.7±142.3\\ \cline{2-4}
+& 4 & 532.8±24.7 & 3028.3±136.1\\ \cline{2-4}
+& 9 & 643.3±22.8 & 3216.9±121.3\\ \cline{2-4}
+& 16 & 925.8±104.7 & 3352.5±208.7\\ \hline
+\end{tabularx}
+\end{adjustbox}
+
+\caption{Resultados de tiempo y costo de exploración obtenidos en las pruebas realizadas con los distintos métodos de identificación de objetivos.}
+\label{tab:ident_obj1}
+\end{center}
+
+\end{table}

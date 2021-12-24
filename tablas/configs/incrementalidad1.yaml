@@ -1,6 +1,6 @@
 ---
 
- caption:   "Resultados de tiempo y costo de exploracion obtenidos en las pruebas realizadas con la construcción incremental y no incremental del GVD."
+ caption:   "Resultados de tiempo y costo de exploración obtenidos en las pruebas realizadas con la construcción incremental y no incremental del GVD."
  label:     "tab:inc1"
 
  mode:      "celda"

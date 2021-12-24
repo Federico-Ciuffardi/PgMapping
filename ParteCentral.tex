@@ -1,8 +1,8 @@
-\section{Solución desarrollada}
-Durante el proyecto se desarrollo una solución al problema de exploración
-multirobot. Esto requiere soluciones para varios problemas relacionados a
-diversos aspectos de la exploración multirobot, este proyecto se concentrara en
-algunos de ellos.
+Durante el proyecto se implemento una solución al problema de exploración
+multirobot\footnote{Disponible en línea:\\
+\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}}. Esto
+requiere soluciones para varios problemas relacionados a diversos aspectos de
+la exploración multirobot, este proyecto se concentrara en algunos de ellos.
 
 Para el problema de asignación de tareas (sección \ref{sec:exploracion}) se
 presentan soluciones para cada una de sus partes. Para la identificación de
@@ -30,19 +30,6 @@ ocupación con el nodo de ROS \emph{costmap\_2d} \cite{ROS-costmap_2d} y luego
 combinando dichas grillas con las ideas presentadas en
 \cite{stachniss2009robotic}.
 
-
-\section{Principales aportes}
-Propuesta y estudio de un algoritmo novedoso para identificación de objetivos
-basado en la simplificacion de fronteras.
-
-Estudiar el impacto al de utlizar una construcción incremental del GVD en la
-tecnica de coordinación que se propone en \cite{wurm2008coordinated}. 
-
-Adicionalmente se estudia un aspecto critico que no esta explicito en el estado
-del arte, el problema de como como tratar las porciones desconocidas al
-contruir un GVD en un entorno parcialemnte explorado. Para este problema se
-comentan posibles alternativas, pasando por la que esta presente en el estado
-del arte y una técnica novedosa que permite una mayor eficiencia.
 
  % que se presenta al contruir un GVD sobre espacio parcialmente explorado, que consiste en 
 
@@ -260,6 +247,9 @@ exito o el fracaso en seguir el camino asignado.
 
 % \section{Ciclo de la central}
 \section{Definiciones}
+Esta seccion esta dedicada a formalizar conceptos que serán utilizados en lo que resta
+del capitulo.
+
 \subsection{Grillas de ocupacion}\label{subsec:Grilla}
 En el contexto de este trabajo se utlizara las siguientes definiciones referentes a
 grillas de ocupacion, introducidas en la seccion \ref{subsec:mapas}.

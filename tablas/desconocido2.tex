@@ -1,0 +1,35 @@
+\begin{table}[H]
+%24/12/2021 03:06:43
+\hbadness = 10000
+\tolerance=9999
+\emergencystretch=10pt
+\hyphenpenalty=10000
+\exhyphenpenalty=100
+\begin{center}
+
+% \begin{adjustbox}{minipage=0.75\paperwidth, center}
+\begin{adjustbox}{width=1\textwidth}
+\small
+
+\begin{tabularx}{\textwidth}{|X|C{0.80cm}|X|X|}
+
+\hline
+Consideración del espacio desconocido & $\frac{celdas}{m^2}$ & Sumatoria del tiempo en construcción de GVD $(s)$ & Porcentaje del tiempo de obtención de informacion en el que se construye el GVD $(\%)$ \\ \hline\hline
+\multirow{4}{\linewidth}{\centering Desconocidas no propagan olas y $UF \subseteq CGen$}
+& 1 & 13.5±0.6 & 34.9±1.3\\ \cline{2-4}
+& 4 & 45.2±1.5 & 33.8±1.2\\ \cline{2-4}
+& 9 & 86.7±2.5 & 34.4±1.1\\ \cline{2-4}
+& 16 & 148.2±5.0 & 34.1±1.0\\ \hline\hline
+\multirow{4}{\linewidth}{\centering Desconocidas se consideran libres}
+& 1 & 32.2±1.0 & 55.8±1.4\\ \cline{2-4}
+& 4 & 110.1±3.7 & 55.9±1.2\\ \cline{2-4}
+& 9 & 223.7±7.2 & 56.9±1.3\\ \cline{2-4}
+& 16 & 320.4±13.1 & 55.2±2.1\\ \hline
+\end{tabularx}
+\end{adjustbox}
+
+\caption{Resultados relacionados a los tiempos de construcción del GVD obtenidos en las pruebas realizadas con las distintas consideraciones del espacio desconocido al construir el GVD.}
+\label{tab:desconocido2}
+\end{center}
+
+\end{table}

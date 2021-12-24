@@ -23,7 +23,7 @@ function plot(){
 }
 
 
-plot histo
+# plot histo
 plot histo_num 
-plot line
+# plot line
 
