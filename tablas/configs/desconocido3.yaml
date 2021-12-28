@@ -1,50 +1,22 @@
 ---
 
- caption:   "Resultados de completitud y calidad de los mapas obtenidos en las pruebas realizadas con las distintas consideraciones del espacio desconocido al construir el GVD."
+ caption:   "Resultados obtenidos en las pruebas realizadas con las distintas consideraciones del espacio desconocido al construir el GVD."
  label:     "tab:desconocido3"
 
  mode:      "celda"
  test_type: "desconocido"
 
- mean_float_format:   "f"
- mean_float_decimals: "6"
-
- stddev_float_format:   "e"
- stddev_float_decimals: "1"
+ float_format:
+   default:
+     mean_f:   "f"
+     mean_d:   "6"
+     stddev_f: "e"
+     stddev_d: "1"
 
  data_dirs:
    - "cell_size/inc_fsm5_gcm1"
    - "cell_size/inc_fsm5_gcm2"
 
  metrics:
-   # - "exploration_time" 
-   # - "exploration_cost" 
-   # - "erroneous_area" 
-
-   # - "explored_area" 
-   # - "exploration_efficiency"
    - "map_completeness" 
    - "map_quality"
-
-   # - "auction_info_time_diff_max" 
-   # - "auction_info_time_diff_mean" 
-   # - "auction_info_time_diff_min"
-   # - "auction_info_time_diff_sum" 
-   # - "auction_info_time_max"
-   # - "auction_info_time_mean" 
-   # - "auction_info_time_min"
-   # - "auction_info_time_sum" 
-
-   # - "gvd_construction_time_diff_max" 
-   # - "gvd_construction_time_diff_mean" 
-   # - "gvd_construction_time_diff_min"
-   # - "gvd_construction_time_diff_sum" 
-   # - "gvd_construction_time_max"    
-   # - "gvd_construction_time_mean" 
-   # - "gvd_construction_time_min" 
-   # - "gvd_construction_time_sum" 
-
-   # - "gvd_update_auction_info_percent_log_max" 
-   # - "gvd_update_auction_info_percent_log_mean" 
-   # - "gvd_update_auction_info_percent_log_min"
-   # - "gvd_update_auction_info_percent_log_sum" 

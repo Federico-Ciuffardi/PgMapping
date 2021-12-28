@@ -6,11 +6,12 @@
  mode:      "celda"
  test_type: "todo"
 
- mean_float_format:   "f"
- mean_float_decimals: "6"
-
- stddev_float_format:   "e"
- stddev_float_decimals: "1"
+ float_format:
+   default:
+     mean_f:   "f"
+     mean_d:   "6"
+     stddev_f: "e"
+     stddev_d: "1"
 
  data_dirs:
    - "cell_size/inc_fsm5_gcm1"

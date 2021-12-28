@@ -25,13 +25,15 @@
 
 Este capitulo esta dedicado a describir las pruebas realizadas y analizar los
 resultados obtenidos. Las pruebas se ejecutaron de forma simuladas y consisten
-en resolver una instacia del problema de la exploracion multirobot coordinada.
-Los resultados de las pruebas separan en tres secciones segun su proposito. En
-la seccion \ref{sec:exp:inc} se estudia el impacto de construir el GVD de forma
-incremental. En la seccion \ref{sec:exp:idobj} se compara las diversas tecnicas
-de identificacion de objetivos. Y finalmente, en la seccion \ref{sec:exp:desco}
-se analiza la influencia de las diversas formas de considerar el espacio
-desconocido. 
+en resolver una instacia del problema de la exploracion multirobot coordinada
+con distintas soluciones.
+Los resultados de las pruebas separan en cuatro secciones segun su proposito.
+En la seccion \ref{sec:exp:cubcal} se evaluan los mapas contruidos en las
+purebas. En la seccion \ref{sec:exp:inc} se estudia el impacto de construir el
+GVD de forma incremental. En la seccion \ref{sec:exp:idobj} se compara las
+diversas tecnicas de identificacion de objetivos. Y finalmente, en la seccion
+\ref{sec:exp:desco} se analiza la influencia de las formas de considerar el
+espacio desconocido. 
 
 \section{Especificación de las pruebas}
 
@@ -119,7 +121,8 @@ Para lograr esto se define caso de prueba que permite evaluar el desempeño de
 una solucion que resueve dicho problema. El caso de pruebas definido consiste
 en reslover una instancia de dicho problema, especificamente en explorar un
 entorno cerrado con una flota de robots, hasta que no exista espacio sin
-explorar.
+explorar. El tipo de mapa generado en la exploración es una grilla de ocupacion
+de un tamaño fijo suficiente para representar el entrono explorado.
 
 Para poder validar los aspectos, se prueba la solución propuesta cambiando
 unicamente el aspecto a validar. Los aspectos a validar son: la construccion
@@ -177,7 +180,7 @@ sí. Un mapa de este entrono se muestra en la figura
 \begin{figure}[H]
   \center
   \includegraphics[width=0.5\linewidth]{imagenes/willow/0_250000mRobots2.png}
-  \caption[Mapa del entrono utilizado en las pruebas.]{Mapa del entrono utilizado en las pruebas. En negro se indican las paredes, en blanco el espacio libre y en gris el espacio Inaccesible. Las posiciones iniciales de los robots se indican en rojo.}
+  \caption[Mapa del entrono utilizado en las pruebas.]{Mapa del entrono utilizado en las pruebas. En negro se indican las paredes, en blanco el espacio libre y en gris el espacio inaccesible. Las posiciones iniciales de los robots se indican en rojo.}
   \label{fig:willow}
 \end{figure} 
 
@@ -221,27 +224,106 @@ prueba fueron ejecutados en una computadora personal equipada con un procesador
 Intel Core i3-9100F, un procesador gráfico GeForce GTX 660 y 16GB de memoria
 RAM.
 
-
 \section{Metricas}
-Las metricas que fueron utilizadas para evaluar y comparar el desempeño de la
-exploracion en las pruebas, se basan en las que se proponen en
-\cite{yan2015metrics}.
+Con el proposito comparar cuantitativamente los resultados de las pruebas se
+establece un conjunto de metricas. 
 
-Completitud y error del mapa.
+Una parte de las metricas utlizadas se proponen en \cite{yan2015metrics} y
+evaluan el problema de exploración en general, estas son: \emph{tiempo de
+exploración}, \emph{distancia total recorrida por la flota}, \emph{completitud
+del mapa} y \emph{calidad del mapa}. 
 
-Tiempo de exploracion y costo de exploracion (suma de distancia recorrdia).
+El \emph{tiempo de exploración} refiere al tiempo desde que los robots
+comienzan con la primera asignación de tareas (seccion \ref{sec:asigTar}) hasta
+que no se detecta mas espacio desconocido por explorar y se da por terminada la exploración.
 
-Tiempo de objtencion de info (suma)
+La \emph{distancia total recorrida por la flota} es la suma las distancias
+recorridas por cada robot de la flota a lo largo de la exploración. En
+\cite{yan2015metrics} esta metrica se presenta como \emph{costo de
+exploración}, ya que los autores la consideran como una buena aproximación del
+costo energetico del robot. 
 
-Tiempo de contruiccion del GVD (suma)
+ % mapas de referencia para evaluar los mapas resultantes de las pruebas,
 
-Tiempo de identificación de objetivos(suma)
+Para calcular las metricas de \emph{completitud} y \emph{calidad} de los mapas
+es necesario contar con mapas de referencia considerados como correctos. En
+este proyecto estos se representan a traves de grillas de ocupacion al igual
+que los generados en la exploración. Se definen cuatro mapas de
+referencia, uno por cada nivel de granularidad utlizado en las pruebas, con el
+proposito de poder comparar cualquiera de los mapas obtenidos en pruebas con
+un mapa de referencia de igual granularidad. Los mapas de referencia se pueden
+apreciar en la figura \ref{fig:mref}. 
 
-Porcentajes de contruccion del GVD y de identificación de objetivos.
+\begin{figure}[H]
+  \centerfloat
+
+  \subfloat[$1  \frac{celda}{m^2}$]{\includegraphics[clip=true, width=0.22\textwidth]{imagenes/willow_ref/1_000000m.png}}
+  \qquad
+  \subfloat[$4  \frac{celda}{m^2}$]{\includegraphics[clip=true, width=0.22\textwidth]{imagenes/willow_ref/0_500000m.png}}
+  \qquad
+  \subfloat[$9\frac{celda}{m^2}$]{\includegraphics[clip=true, width=0.22\textwidth]{imagenes/willow_ref/0_333333m.png}}
+  \qquad
+  \subfloat[$16 \frac{celda}{m^2}$]{\includegraphics[clip=true, width=0.22\textwidth]{imagenes/willow_ref/0_250000m.png}}
+
+  \caption[Mapas de referencia utlizados.]{Mapas de referencia utlizados. En negro se indican las paredes, en blanco el espacio libre y en gris el espacio desconocido por ser inaccesible.}\label{fig:mref}
+   % A la izquierda se muestra el robot real, y a la derecha su version simulada.
+
+\end{figure}
+
+Notar que existe espacio desconocido en los mapas de referencia, esto se debe a
+que la grilla de ocupación no se ajusta al espacio explorable. En terminos de
+las metricas calculadas, el espacio desconocido en los mapas de referencia no es
+considerado como parte de los mapas, tanto en los mapas de referencia como en
+los obtenidos en las pruebas.
+
+% Es decir las unicas celdas que se consideran como
+% parte de los mapas al calcular las metricas son las que tienen un estado
+% distinto a desconocido en los mapas de referencia.
+% De
+% esta forma los mapas de referencia no contienen celdas desconocidas, a
+% diferencia de los mapas resultantes de las pruebas los cuales si pueden.
+
+La \emph{completitud del mapa} se define segun (\ref{eq:metComp}) donde
+$M_{exp}$ es el area conocida del mapa obtenido en la exploración y $M_{ref}$
+es el area del mapa de referencia.
+
+\begin{equation} \label{eq:metComp}
+completitud\ del\ mapa = \frac{M_{exp}}{M_{ref}}
+\end{equation}
+
+La \emph{calidad del mapa} se establece en (\ref{eq:metCal}) donde se introduce
+$E_{exp}$ equivalente al área ocupada por las celdas del mapa obtenido en
+la exploración cuyo estado difiere del estado de su celda correpondiente en el
+mapa de referencia.
+
+\begin{equation} \label{eq:metCal}
+calidad\ del\ mapa = \frac{M_{exp}-E_{exp}}{M_{ref}}
+\end{equation}
+
+El resto de las metricas fueron diseñadas especificamente para
+este proyecto, estas son: \emph{tiempo promedio en construcción de GVD}, \emph{porcentaje
+del tiempo de obtención de información en el que se construye el GVD}, \emph{tiempo
+promedio en identificación de objetivos} y \emph{porcentaje promedio del tiempo de
+obtención de información en el que se identifican los objetivos}.
+
+El \emph{tiempo promedio en construcción de GVD} es el promedio del tiempo que
+toma construir el GVD en las etapas de obtención de información en cada
+asignación de tareas (seccion \ref{sec:asigTar}).
+
+El \emph{porcentaje del tiempo de obtención de información en el que se
+construye el GVD} es el resultado de multiplicar por $100$ a la division entre
+suma del los tiempos que toma construir el GVD en las etapas de obtención de
+información y la suma de los tiempos que llevan las etapas de obtención de
+información.
+
+El \emph{tiempo promedio en identificación de objetivos} y el \emph{porcentaje
+promedio del tiempo de obtención de información en el que se identifican los
+objetivos} son metricas analogas a las dos ultimas, pero refieren a la
+identificación de objetivos en lugar de la construcción del GVD.
 
 \section{Resultados}
 \newlength{\graphlen}
-\setlength{\graphlen}{0.85\textwidth}
+\setlength{\graphlen}{0.75\textwidth}
 
 
 Los resultados explerimentales obtenidos son presentados y analizados en esta
@@ -249,7 +331,7 @@ seccion. Las tablas que se presentan a lo largo de la sección indican para cada
 prueba los promedios y desviaciones estandar de las metricas en las 20
 repeticiones que se hacen debido al no determinismo del simulador.
 
-\subsection{Cubrimiento y calidad de los mapas}
+\subsection{Cubrimiento y calidad de los mapas} \label{sec:exp:cubcal}
 % Capaz aca puedo mencionar lo que pasa con los errores
 
 % el cubrimiento y la completitud: completitud mayor a 0.999 para todas combinaciones de granularidades y soluciones probadas
@@ -268,11 +350,12 @@ soluciones. Todas las soluciones detectan expacio desconocido explorable
 mientras exista una un celda $c_1$ libre y otra $c_2$ desconocida tal que $c_1
 \in ady_4(c_2)$ (seccion \ref{subsec:Grilla}), principalemente porque en estas
 condiciones se asume que los robots no pueden atravezar de $c_1$ a $c_2$. Dicho
-esto se presume que la completitud de los mapas no es perfecta debido a la precencia de celdas
-ubicadas en esquinas de paredes que que a pesar de no cumplir con las
-codiciones de ser detectadas como explorables, lo son. Un ejempo de este tipo
-de celda se muestra en la figura \ref{fig:faltaCub}. Sin embargo los valores de
-completitud obtenidos indican que este tipo de situaciones son despreciables.
+esto se presume que la completitud de los mapas no es perfecta debido a la
+presencia de celdas ubicadas en esquinas de paredes que que a pesar de no
+cumplir con las codiciones de ser detectadas como explorables, lo son. Un
+ejempo de este tipo de celda se muestra en la figura \ref{fig:faltaCub}. Sin
+embargo los valores de completitud obtenidos indican que este tipo de
+situaciones son despreciables.
 
 \begin{figure}[H]
   \centerfloat
@@ -282,13 +365,13 @@ completitud obtenidos indican que este tipo de situaciones son despreciables.
   \subfloat[Mapa generado.]{\includegraphics[clip=true, width=0.33\textwidth]{imagenes/faltaDeCub/faltaCubRed}}
 
   \caption{Esquina superior izquierda del mapa referencia y de uno de los mapas
-  obtenido en las pruebas que presenta una celda explorable que no se reconoce
+  obtenidos en las pruebas que presenta una celda explorable que no se reconoce
 como tal. Ambos mapas corresponden a una granularidad de una celda por metro cuadrado.}\label{fig:faltaCub}
    % A la izquierda se muestra el robot real, y a la derecha su version simulada.
 
 \end{figure}
 
-Los resultados de calidad del mapa obtenidos son similares a los de
+Los resultados de calidad de los mapas obtenidos son similares a los de
 completitud, los mapas contruidos tienen una calidad alta, sin existir
 diferencias significativas entre las variantes. Esto es esperable ya que
 los sensores simulados fueron configurados para proporcionar medidas perfectas.
@@ -327,11 +410,49 @@ variantes en terminos de tiempo y costo de exploracion.
 \input{tablas/todo3}
 
 \subsection{Incrementalidad}\label{sec:exp:inc}
-Los resutlados obtenidos se presentan en las tablas \ref{tab:inc1} y \ref{tab:inc2}.
+Estas pruebas comparan la solución original que construye el GVD de forma
+incremental con una variante que solo difiere en que la contrición del GVD es
+no incremental. Las métricas a analizar para estas pruebas se encuentran en la
+tabla \ref{tab:inc1} y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec}
+y \ref{fig:gra:inc:gvdt}.
+
+Se puede observar que los resultados obtenidos validan la idea de que la
+construcción incremental del GVD tiene mayor eficiencia computacional que su
+contraparte no incremental. 
+
+En cada nivel de granularidad el tiempo promedio en construcción del GVD de
+variante incremental siempre es menor que el de la variante no incremental,
+aumentando la diferencia a medida que aumentan las celdas por metro cuadrado.
+
+En cada nivel de granularidad la variante incremental reduce en aproximadamente
+un $94\%$ el tiempo promedio construcción del GVD con respecto a la variante no
+incremental. 
+
+El tiempo de construcción de GVD impacta directamente al tiempo que ocurre
+desde que un robot pide un objetivo y un objetivo le es asignado. 
+
+y por lo tanto
+impacta también en tiempos de exploración. Au
+
+%, ya que en cada asignación de objetivos existe al menos un robot ocioso. 
+Esto explica que los tiempos de exploración tengan un comportamiento similar al
+los tiempos promedio en construcción del GVD. 
+
+También se puede apreciar un impacto en las distancias recorridas por la flota,
+
+% La reducción del tiempo tiempo de construcción del GVD que se logra al
+% construirlo de forma incremental implica una reducción del $55\%$ en el
+% porcentaje de tiempo de la obtención de información en la que se construye el
+% GVD aproximadamente que se repite en todos los niveles de granularidad.
+
+
+% Como los tiempos de construcción promedio del GVD son menores
+% en las pruebas realizadas con las construcción incremental del GVD,
+
+% al aumentar las celdas por metro cuadrado, el tiempo
+% promedio en construcción del GVD, en el caso de la construcción incremental crece de a 
 
 \input{tablas/incrementalidad1}
-
-\input{tablas/incrementalidad2}
 
 
 \begin{figure}[H]
@@ -355,7 +476,7 @@ Los resutlados obtenidos se presentan en las tablas \ref{tab:inc1} y \ref{tab:in
 \begin{figure}[H]
   \centerfloat
 
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_sum.png}
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_mean.png}
 
   \caption{Grafica de la sumatoria del tiempo en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
 
@@ -365,7 +486,6 @@ Los resutlados obtenidos se presentan en las tablas \ref{tab:inc1} y \ref{tab:in
 \subsection{Identificación de objetivos}\label{sec:exp:idobj}
 \input{tablas/ident_obj1}
 
-\input{tablas/ident_obj2}
 
 \begin{figure}[H]
   \centerfloat
@@ -388,7 +508,7 @@ Los resutlados obtenidos se presentan en las tablas \ref{tab:inc1} y \ref{tab:in
 \begin{figure}[H]
   \centerfloat
 
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/auction_info_time_sum.png}
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/obj_id_time_mean.png}
 
   \caption{Grafica de la sumatoria del tiempo en obtencion de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
 
@@ -397,8 +517,6 @@ Los resutlados obtenidos se presentan en las tablas \ref{tab:inc1} y \ref{tab:in
 \subsection{Consideracion del espacio desconocido}\label{sec:exp:desco}
 
 \input{tablas/desconocido1}
-
-\input{tablas/desconocido2}
 
 \begin{figure}[H]
   \centerfloat
@@ -421,7 +539,7 @@ Los resutlados obtenidos se presentan en las tablas \ref{tab:inc1} y \ref{tab:in
 \begin{figure}[H]
   \centerfloat
 
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_sum.png}
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_mean.png}
 
   \caption{Grafica de la sumatoria del tiempo en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
 

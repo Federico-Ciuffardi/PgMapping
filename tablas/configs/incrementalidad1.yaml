@@ -1,7 +1,19 @@
 ---
 
- caption:   "Resultados de tiempo y costo de exploración obtenidos en las pruebas realizadas con la construcción incremental y no incremental del GVD."
+ caption:   "Resultados obtenidos en las pruebas realizadas con la construcción incremental y no incremental del GVD."
  label:     "tab:inc1"
+
+ float_format:
+   default:
+     mean_f:   "f"
+     mean_d:   "1"
+     stddev_f: "f"
+     stddev_d: "1"
+   gvd_construction_time_mean:
+     mean_f:   "f"
+     mean_d:   "4"
+     stddev_f: "f"
+     stddev_d: "4"
 
  mode:      "celda"
  test_type: "incrementalidad"
@@ -13,32 +25,4 @@
  metrics:
    - "exploration_time" 
    - "exploration_cost" 
-   # - "erroneous_area" 
-
-   # - "explored_area" 
-   # - "exploration_efficiency"
-   # - "map_completeness" 
-   # # - "map_quality"
-
-   # - "auction_info_time_diff_max" 
-   # - "auction_info_time_diff_mean" 
-   # - "auction_info_time_diff_min"
-   # - "auction_info_time_diff_sum" 
-   # - "auction_info_time_max"
-   # - "auction_info_time_mean" 
-   # - "auction_info_time_min"
-   # - "auction_info_time_sum" 
-
-   # - "gvd_construction_time_diff_max" 
-   # - "gvd_construction_time_diff_mean" 
-   # - "gvd_construction_time_diff_min"
-   # - "gvd_construction_time_diff_sum" 
-   # - "gvd_construction_time_max"    
-   # - "gvd_construction_time_mean" 
-   # - "gvd_construction_time_min" 
-   # - "gvd_construction_time_sum" 
-
-   # - "gvd_update_auction_info_percent_log_max" 
-   # - "gvd_update_auction_info_percent_log_mean" 
-   # - "gvd_update_auction_info_percent_log_min"
-   # - "gvd_update_auction_info_percent_log_sum" 
+   - "gvd_construction_time_mean" 
