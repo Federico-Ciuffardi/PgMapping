@@ -300,26 +300,17 @@ mapa de referencia.
 calidad\ del\ mapa = \frac{M_{exp}-E_{exp}}{M_{ref}}
 \end{equation}
 
-El resto de las metricas fueron diseñadas especificamente para
-este proyecto, estas son: \emph{tiempo promedio en construcción de GVD}, \emph{porcentaje
-del tiempo de obtención de información en el que se construye el GVD}, \emph{tiempo
-promedio en identificación de objetivos} y \emph{porcentaje promedio del tiempo de
-obtención de información en el que se identifican los objetivos}.
+El resto de las metricas fueron diseñadas especificamente para este proyecto,
+estas son: \emph{tiempo promedio en construcción de GVD} y \emph{tiempo
+promedio en simplificación de fronteras}.
 
 El \emph{tiempo promedio en construcción de GVD} es el promedio del tiempo que
 toma construir el GVD en las etapas de obtención de información en cada
 asignación de tareas (seccion \ref{sec:asigTar}).
 
-El \emph{porcentaje del tiempo de obtención de información en el que se
-construye el GVD} es el resultado de multiplicar por $100$ a la division entre
-suma del los tiempos que toma construir el GVD en las etapas de obtención de
-información y la suma de los tiempos que llevan las etapas de obtención de
-información.
-
-El \emph{tiempo promedio en identificación de objetivos} y el \emph{porcentaje
-promedio del tiempo de obtención de información en el que se identifican los
-objetivos} son metricas analogas a las dos ultimas, pero refieren a la
-identificación de objetivos en lugar de la construcción del GVD.
+El \emph{tiempo promedio en simplificación de fronteras} es el tiempo promedio
+que se demora en simplificar las fronteras para identificar los objetivos en
+cada asignación de tareas.
 
 \section{Resultados}
 \newlength{\graphlen}
@@ -410,41 +401,59 @@ variantes en terminos de tiempo y costo de exploracion.
 \input{tablas/todo3}
 
 \subsection{Incrementalidad}\label{sec:exp:inc}
-Estas pruebas comparan la solución original que construye el GVD de forma
-incremental con una variante que solo difiere en que la contrición del GVD es
-no incremental. Las métricas a analizar para estas pruebas se encuentran en la
-tabla \ref{tab:inc1} y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec}
-y \ref{fig:gra:inc:gvdt}.
+En esta sección se comparan los resultados de las pruebas realizadas con
+solución propuesta que construye el GVD de forma incremental contra los de una
+variante que solo difiere en que la construcción del GVD es no incremental. Las
+métricas a analizar para estas pruebas se encuentran en la tabla \ref{tab:inc1}
+y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
+\ref{fig:gra:inc:gvdt}.
 
 Se puede observar que los resultados obtenidos validan la idea de que la
 construcción incremental del GVD tiene mayor eficiencia computacional que su
 contraparte no incremental. 
 
-En cada nivel de granularidad el tiempo promedio en construcción del GVD de
-variante incremental siempre es menor que el de la variante no incremental,
-aumentando la diferencia a medida que aumentan las celdas por metro cuadrado.
-
-En cada nivel de granularidad la variante incremental reduce en aproximadamente
-un $94\%$ el tiempo promedio construcción del GVD con respecto a la variante no
-incremental. 
+En cada nivel de granularidad la variante incremental reduce un ${\smallsim}94\%$ el
+tiempo promedio construcción del GVD con respecto a la variante no incremental. 
 
 El tiempo de construcción de GVD impacta directamente al tiempo que ocurre
-desde que un robot pide un objetivo y un objetivo le es asignado. 
+desde que un robot pide un tarea y una le es asignada, ya que es una parte 
+necesaria y no paralelizada de la etapa de obtención de información
+(sección \ref{subsec:obtInfo}) de cada asignación de tareas (sección
+\ref{sec:asigTar}). A pesar de esto el impacto sobre los tiempos de exploración
+no es directo ya que una asignación de tareas este en curso solo asegura que un
+robot estara osicoso, ya que mientras que un robot pide una tarea y la obitene
+el resto puede estar completando tareas asignadas previamente. Cuanto mas chica
+es la demora en la asignación de tareas mas probable es que solo un robot quede
+osicoso, mientras que si dicha demora crece aumenta la probabilidad que en en
+transcurso de la asignacion mas robots completen sus tareas y requieran tareas,
+quedando ociosos. Esto logra explicar que en todos los niveles de granularidad
+la reduccion del tiempo promedio logrado por la variante incremental frente a
+la no incremental sea de un ${\smallsim}94\%$ constante mientras que la
+reduccion del tiempo de exploración comienza siendo de un ${\smallsim}8\%$ en
+el nivel de granularidad mas bajo (tiempos de construcción de GVD más altos),
+creciendo mediante se aumenta el nivel de granularidad llegando a una reduccion
+de un ${\smallsim}63\%$ en la granularidad mas alta (tiempos de construcción de
+GVD mas altos).
 
-y por lo tanto
-impacta también en tiempos de exploración. Au
+Construir el GVD de forma incremental también parece reducir las distancias
+totales recorridas por la flota en todas las granularidades, aunque en este
+caso las reducciones no son significativas. Especificamente, no son
+monótonamente crecientes ni decrecientes respecto a la granularidad, siempre
+son de menores al $7\%$ y adicionalmente las diferencias entre estas métricas
+similares a sus desviaciones estándar. Esto puede deberse a que tiempos más
+rapidos de asignación de objetivos hacen mas probable que los robots cambien su
+trayectoria a un nuevo objetivo antes de llegar a la ubicación exacta del
+objetivo previamente completado. Esto puede reducir la distancia recorrida por
+el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
-%, ya que en cada asignación de objetivos existe al menos un robot ocioso. 
-Esto explica que los tiempos de exploración tengan un comportamiento similar al
-los tiempos promedio en construcción del GVD. 
-
-También se puede apreciar un impacto en las distancias recorridas por la flota,
-
+% En cada nivel de granularidad el tiempo promedio en construcción del GVD de
+% variante incremental siempre es menor que el de la variante no incremental,
+% aumentando la diferencia a medida que aumentan las celdas por metro cuadrado.
 % La reducción del tiempo tiempo de construcción del GVD que se logra al
+
 % construirlo de forma incremental implica una reducción del $55\%$ en el
 % porcentaje de tiempo de la obtención de información en la que se construye el
 % GVD aproximadamente que se repite en todos los niveles de granularidad.
-
 
 % Como los tiempos de construcción promedio del GVD son menores
 % en las pruebas realizadas con las construcción incremental del GVD,
@@ -484,6 +493,98 @@ También se puede apreciar un impacto en las distancias recorridas por la flota,
 
 
 \subsection{Identificación de objetivos}\label{sec:exp:idobj}
+En esta sección se realiza un analisis comparativo de los resultados obtenidos
+en pruebas realizadas con tres soluciones distintas que difieren unicamente en
+el metodo usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
+metodos son: la simplificación de fronteas basada en cubrimiento propuesta en
+este proyecto, simplificación de fronteras basada en K-Means como utilizada en
+\cite{amorin2019novel} y la identificación de fronteras (sin simplificar)
+introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas a
+analizar se presentan en la tabla \ref{tab:inc1} y se encuentran graficadas en
+las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
+\ref{fig:gra:inc:gvdt}.
+
+%%% 1 %%%%
+% Es posible apreciar que la variante que identifica como objtivos a las
+% fronteras sin simplificar (\emph{FSS}) como objetivos obtiene los peores
+% resultados en terminos de tiempos de exploración. Esto explica de forma analoga
+% a como se explico el comportamiento de esta misma metrica en la sección
+% \ref{sec:exp:inc}. En este caso lo que impacta en el tiempo de la asignación de
+% tareas es la la existencia de una cantidad mayor de objetivos que causa que las
+% etapas de valuación (sección \ref{subsec:MiValSub}) y de resolución (sección
+% \ref{subsec:MiResSub}) tomen mas tiempo al ser mayor la cantidad de objtivos a
+% valuar y asignar. De los tiempos de exploración obtenidos al utlizar los otros
+% dos metodos se deduce que estos consiguen reducir las duraciones de las asignaciónes de
+% tareas, cosa que logran invertiendo tiempo en reducir los objetivos
+% indentificados al simplificar las fronteras a sus celdas más significativas.
+% Especificamente en las pruebas realizadas el simplificar las fronteras reduce
+% los tiempos de exploración con respecto a no simplificar, aunque comenzando por
+% el nivel mas bajo de granularidad la reducción es despreciable esta crece hasta
+% alcanzarse una reducción de ${\smallsim}29\%$ en el nivel de granularidad mas
+% alto.
+%%% 2 %%%%
+% Es posible apreciar que la variante que identifica como objtivos a las
+% fronteras sin simplificar (\emph{FSS}) como objetivos obtiene los peores
+% resultados en terminos de tiempos de exploración, o lo que es lo mismo, los
+% metodos que simplifican las fronteras reducen los tiempos de exploración con
+% respecto a no simplificar. Aunque comenzando por el nivel mas bajo de
+% granularidad las reducciones son despreciables estas crecen hasta alcanzar una
+% reducción de ${\smallsim}29\%$ en el nivel de granularidad mas alto. Esto en
+% parte se debe a lo explicado en la sección \ref{sec:exp:inc} con respecto a
+% esta metrica. En este caso lo que impacta en el tiempo de la asignación de
+% tareas es la cantidad de objetivos identificados, ya que aumentar dicha
+% cantidad implica aumentos en la duracion de las etapas de valuación (sección
+% \ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
+% mayor la cantidad de objtivos a valuar y asignar. De los tiempos de exploración
+% obtenidos al utlizar los otros dos metodos se deduce que estos consiguen
+% reducir las duraciones de las asignaciónes de tareas, cosa que logran
+% invertiendo tiempo en reducir los objetivos indentificados al simplificar las
+% fronteras a sus celdas más significativas.
+%%% 3 %%%%
+Es posible apreciar que los metodos que simplifican las fronteras reducen los
+tiempos de exploración con respecto al metodo que no las simplifica. Aunque
+comenzando por el nivel mas bajo de granularidad las reducciones son
+despreciables estas crecen hasta alcanzar una reducción de ${\smallsim}29\%$ en
+el nivel de granularidad mas alto. Esto en parte se debe a lo explicado en la
+sección \ref{sec:exp:inc} con respecto a esta metrica. En este caso lo que
+impacta en el tiempo de la asignación de tareas es la cantidad de objetivos
+identificados, ya que reducir dicha cantidad implica reducciones en la duracion
+de las etapas de valuación (sección \ref{subsec:MiValSub}) y de resolución
+(sección \ref{subsec:MiResSub}) al ser menor la cantidad de objetivos a valuar
+y asignar. Aunque otra razon posible, es que las simplificaciones pueden
+coordinar a los robots. Por ejemplo de no simplificarse las fronteras se
+permite que un robot sea asignado a un objetivo adyacentes a una pared o que
+dos robots sean asignados a objetivos adyacentes entre si, situaciones en las
+cuales se desaprovecha capacidad de sensado, y se complejiza la navegacion. Al
+simplificarse las fronteras, especialemente cuando se logra el cubrimiento
+minimizando los objetivos resultantes, se evitan las situaciones descritas
+similares lo cual puede verse como una coordinación implicita.
+
+% las simplificaciones que
+% minimizan el numero de fronteras significativas mientras mantienendo el
+% cubrimiento minimizan el solapamiento de sensado de los robots, aumentado la
+% nueva información que se obiente dele entorno.
+% es la principal razon por la cual se introducen los metodos basados en
+% simplificación, ya que estos la cantidad de objetivos para disminuir el tiempo total
+% de la asignación de tareas.
+
+\todo[inline]{seguir aca}
+reduccion tambien en distancia
+
+dado que los tiempos de demora de la asignación de tar se determino como un factor, que aunque tenia un peso, no era significativos, y en este caso donde las demoras segun los timpos de exploraicon son menores, se obtienen diferencias de distancia mas significativas entoces, se puede deteminar que la coordinación implicita es un factor de impacto en la distnacia.
+% La variante \emph{FSS} también obtiene los peores resultados en terminos de
+% distancia total recorrida por la flota. Este resultado se atribuye en primer
+% lugar a que al ser todas las celdas fronteras objtivos posibles, esto permite asignaciones
+
+% Y en segundo lugar al amuento del tiempo de asignación de tareas como se
+% explica en la sección \ref{sec:exp:inc},  
+
+
+
+%aunque esto no justifica que las reducciónes de las
+% distancias sean mayores a las obtenidas en las pruebas de dicha seccion a pesar de que las 
+
+
 \input{tablas/ident_obj1}
 
 

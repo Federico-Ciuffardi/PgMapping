@@ -75,7 +75,21 @@
 \usepackage{ mathrsfs }
 \usepackage{amssymb}
 \usepackage{ upgreek }
+\newcommand{\smallsim}{\smallsym{\mathrel}{\sim}}
 
+% small
+\makeatletter
+\newcommand{\smallsym}[2]{#1{\mathpalette\make@small@sym{#2}}}
+\newcommand{\make@small@sym}[2]{%
+  \vcenter{\hbox{$\m@th\downgrade@style#1#2$}}%
+}
+\newcommand{\downgrade@style}[1]{%
+  \ifx#1\displaystyle\scriptstyle\else
+    \ifx#1\textstyle\scriptstyle\else
+      \scriptscriptstyle
+  \fi\fi
+}
+\makeatother
 % == CODE ==
 \usepackage[ruled,vlined,spanish,onelanguage,linesnumbered]{algorithm2e}
 \usepackage{listings}
