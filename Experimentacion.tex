@@ -379,24 +379,6 @@ exploración multirobot, en terminos de los mapas contruidos. Las
 siguientes secciones se dedican a discutir los impactos que las diferentes
 variantes en terminos de tiempo y costo de exploracion.
 
-% De la
-% equacion 4 se de deduce que el cubrimiento siempre es mayor o igual que la
-% calidad. Por lo tanto 
-
-
-%%%%%%%%
-% Dado que las diferencias son despreciables se puede
-% concluir que el impacto de el uso de las distintas tambien despreciable.
-
-% confirman que todas las variantes de la implemetnacion 
-% finalizar su ejecucion con un mapa casi completo del entorno.
-
-% Estos resutlados son los esperados ya que
-% la mision concluye al no quedar mas espacio por explorar.
-
-% Es posible apreciar que todos los
-% mapas cubren casi en su totalidad al entorno y que la calidad de dichos mapas
-% es casi perfecta en todos los casos.
 
 \input{tablas/todo3}
 
@@ -408,33 +390,50 @@ métricas a analizar para estas pruebas se encuentran en la tabla \ref{tab:inc1}
 y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 \ref{fig:gra:inc:gvdt}.
 
-Se puede observar que los resultados obtenidos validan la idea de que la
-construcción incremental del GVD tiene mayor eficiencia computacional que su
-contraparte no incremental. 
+En cada nivel de granularidad la variante incremental reduce un
+${\smallsim}94\%$ el tiempo promedio construcción del GVD con respecto a la
+variante no incremental. Esto valida la idea de que la construcción incremental
+del GVD es mas eficiente que su contraparte no incremental.
 
-En cada nivel de granularidad la variante incremental reduce un ${\smallsim}94\%$ el
-tiempo promedio construcción del GVD con respecto a la variante no incremental. 
+% El tiempo de construcción de GVD impacta directamente al tiempo que ocurre
+% desde que un robot pide un tarea y una le es asignada, ya que es una parte
+% necesaria y no paralelizada de la etapa de obtención de información (sección
+% \ref{subsec:obtInfo}) de cada asignación de tareas (sección \ref{sec:asigTar}).
+% A pesar de esto el impacto sobre los tiempos de exploración no es directo. Esto
+% se debe al hecho de que una asignación de tareas este en curso solo asegura que un unico
+% robot estara osicoso, ya que mientras que un robot pide una tarea y la obitene
+% el resto puede estar completando tareas asignadas previamente. Cuanto mas corta 
+% es la demora en la asignación de tareas mas probable es que un unico robot quede
+% osicoso, mientras que si dicha demora aumenta, también lo hace la probabilidad
+% que en el transcurso de la asignacion mas robots completen sus tareas y
+% requieran tareas, quedando ociosos. Esto logra explicar que en todos los
+% niveles de granularidad la reduccion del tiempo promedio logrado por la
+% variante incremental frente a la no incremental sea de un ${\smallsim}94\%$
+% constante mientras que la reduccion del tiempo de exploración comienza siendo
+% de un ${\smallsim}8\%$ en el nivel de granularidad mas bajo (tiempos de
+% construcción de GVD más altos), creciendo mediante se aumenta el nivel de
+% granularidad llegando a una reduccion de un ${\smallsim}63\%$ en la
+% granularidad mas alta (tiempos de construcción de
+% GVD mas altos).
 
-El tiempo de construcción de GVD impacta directamente al tiempo que ocurre
-desde que un robot pide un tarea y una le es asignada, ya que es una parte 
-necesaria y no paralelizada de la etapa de obtención de información
-(sección \ref{subsec:obtInfo}) de cada asignación de tareas (sección
-\ref{sec:asigTar}). A pesar de esto el impacto sobre los tiempos de exploración
-no es directo ya que una asignación de tareas este en curso solo asegura que un
-robot estara osicoso, ya que mientras que un robot pide una tarea y la obitene
-el resto puede estar completando tareas asignadas previamente. Cuanto mas chica
-es la demora en la asignación de tareas mas probable es que solo un robot quede
-osicoso, mientras que si dicha demora crece aumenta la probabilidad que en en
+Con respecto a los tiempos de exploración, estos tambien son reducidos al
+contruir el GVD de forma incremental. La reducción comienza siendo de un
+${\smallsim}8\%$ en el nivel de granularidad mas bajo, y mediante se aumenta el
+nivel de granularidad las reducciones tambien aumentan hasta llegar a una
+reducción de ${\smallsim}63\%$ en el nivel mas alto. Esto se explica porque el
+tiempo de construcción de GVD impacta directamente al tiempo que ocurre desde
+que un robot pide un tarea y una le es asignada, por ser una parte necesaria y
+no paralelizada de la etapa de obtención de información (sección
+\ref{subsec:obtInfo}) de cada asignación de tareas (sección \ref{sec:asigTar}).
+Y los tiempos de asignación de tareas impactan a los tiempos de exploración,
+pero en este caso el impacto no es directo. Esto se debe a que una asignación
+de tareas en curso solo asegura que un unico robot esta osicoso, porque
+mientras que un robot pide una tarea y una le es asignada el resto puede estar
+completando tareas asignadas previamente. Cuanto mas corta es la demora en la
+asignación de tareas mas probable es que un unico robot quede osicoso, mientras
+que si dicha demora aumenta, también lo hace la probabilidad que en el
 transcurso de la asignacion mas robots completen sus tareas y requieran tareas,
-quedando ociosos. Esto logra explicar que en todos los niveles de granularidad
-la reduccion del tiempo promedio logrado por la variante incremental frente a
-la no incremental sea de un ${\smallsim}94\%$ constante mientras que la
-reduccion del tiempo de exploración comienza siendo de un ${\smallsim}8\%$ en
-el nivel de granularidad mas bajo (tiempos de construcción de GVD más altos),
-creciendo mediante se aumenta el nivel de granularidad llegando a una reduccion
-de un ${\smallsim}63\%$ en la granularidad mas alta (tiempos de construcción de
-GVD mas altos).
-
+quedando ociosos. 
 % no son
 % monótonamente crecientes ni decrecientes respecto a la granularidad
 
@@ -508,6 +507,174 @@ analizar se presentan en la tabla \ref{tab:inc1} y se encuentran graficadas en
 las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 \ref{fig:gra:inc:gvdt}.
 
+Es posible apreciar que los metodos que identifican los objetivos simplificando
+las fronteras reducen los tiempos de exploración con respecto al metodo que
+identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
+de granularidad mas bajo las reducciones son despreciables, estas crecen junto
+a la granularidad hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
+nivel mas alto. Esto puede deberse al tiempo de asignación de tareas como se
+explica en la sección \ref{sec:exp:inc}. En este caso se considera que los
+factores con mayor impacto sobre los tiempos de asignación de tareas son dos:
+el tiempo de simplificación de fronteras y la cantidad de objetivos
+identificados. Mayores tiempos de simplificación fronteras retrasan la
+identificación de objetivos, parte necesaria y no paralelizada de la etapa de
+obtencion de información (sección \ref{subsec:obtInfo}) en la asignacion de
+tareas. Mientras que disminuir la cantidad de objetivos identificados implica
+reducciones en la duracion de las etapas de valuación (sección
+\ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
+menor la cantidad de objetivos a valuar y a considerar en la resolución. Entonces lo que se evidencia
+en los resultados obtenidos, es que invertir tiempo en disminuir los objetivos
+identificados simplificando las fronteras lleva a una reduccion total de los
+tiempos de asignación de tareas, y en consecuencia de los tiempos de exploración
+frente a no invertir dicho tiempo y utlizar todas las fronteras sin
+simplificar. Otra razon posible para las reducciones del tiempo de exploración
+es que simplificar las fronteras puede aportar a la coordinación de los robots.
+Por ejemplo de no simplificarse las fronteras se permite que un robot sea
+asignado a un objetivo adyacente a una pared o que dos robots sean asignados a
+objetivos adyacentes entre sí, situaciones en las cuales se desaprovecha
+capacidad de sensado, y se complejiza la navegacion. Al simplificarse las
+fronteras, especialemente cuando se logra el cubrimiento minimizando los
+objetivos resultantes, se evitan situaciones como las descritas lo cual puede
+verse como una coordinación pasiva. \todo{o implicita?}
+
+De acuerdo con los resultados simplificar las fronteras en la identificacion de
+objetivos también reduce las distancias totales recorridas por la flota frente
+a no simplificarlas. Estas reducciones son en general de ${\smallsim}10\%$, y
+pueden ser causadas por la disminución del tiempo de asignación de tareas,
+debido a las mismas razones que se explican en la seccion \ref{sec:exp:inc}.
+Aunque la coordinación pasiva también puede estar jugando un rol al evitar que
+los robots se transladen a objetivos que desaprovechan las capacidades
+sensoriales del robot o que puedan llevar a inconvenientes en la navegacion.
+
+Con respecto a los dos metodos que simplifican las fornteras para 
+identificar objetivos, en el nivel de granularidad mas bajo, la
+simplificación basada en cubrimiento logra una reducción con respecto a la
+basada en K-Means de ${\smallsim}3\%$ en la distancia total recorrida por la
+flota y de ${\smallsim}5\%$ en los tiempo de exploración. Esto se invierte a
+medida que aumenta el nivel de granularidad, hasta que en el nivel mas alto en
+lugar de reducirse, las metricas aumentan. La distancia total recorrida por la
+flota aumenta en un ${\smallsim}3\%$ y el tiempo de exploración en un
+${\smallsim}6\%$. Por otro lado segun los resultados obtenidos del tiempo
+promedio en simplificación de fronteras, la simplificacion basada en
+cubrimiento en todo nivel de granularidad es entre $2$ y
+$4$ veces mas lenta que la basada en K-Means. Estos resultados
+parecen indicar que la simplificación basada en cubrimiento toma mas tiempo
+pero logra mejores reducciones de objetivos que la basada en K-Means. En el
+nivel de granularidad mas bajo el aumento de tiempo no es tan relevante como la
+reduccion de objetivos, por lo tanto la simplificación basada en cubrimiento
+obtiene un mejor redimiento. A medida la granularidad crece el aumento de
+tiempo se torna mas relevante que la reduccion de objetivos, por lo que la
+simplificación basada en K-Means obtiene un rendimiento superior.  
+
+\input{tablas/ident_obj1}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_time.png}
+
+  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
+
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_cost.png}
+
+  \caption{Grafica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
+
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/obj_id_time_mean.png}
+
+  \caption{Grafica de la sumatoria del tiempo en obtencion de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
+
+\end{figure}
+
+\subsection{Consideracion del espacio desconocido}\label{sec:exp:desco}
+
+% Para poder validar los aspectos, se prueba la solución propuesta cambiando
+% unicamente el aspecto a validar. Los aspectos a validar son: la construccion
+% incremental del GVD (sección \ref{sec:MiConstGVD}). La identificación de
+% objetivos que simplifica las fronteras basandose en el cubrimiento (seccion
+% \ref{subsec:MiSimp}). 
+
+% Para validar la construccion incremental del GVD esta se compara contra la
+% construccion no incremental. En el caso de la identificación de objetivos se
+% comparan las tres estrategias propuestas en la seccion \ref{sec:pc:idobj}: el
+% identificar las fronteras como objetivos, simplicar dichas fronteras a partir
+% K-Means, y simplificarlas basandose en el cubrimiento. Por ultimo, la
+% consideracion del espacio desconocido en la contruiccion del GVD se valida
+% comparandola contra considerar que el espacio desconocido es libre. 
+% Para validar la construccion incremental del GVD esta se compara contra la
+% construccion no incremental. En el caso de la identificación de objetivos esta se
+% comparan contra identificar todas las fronteras como objetivos, y la tecnica
+% que obtiene los objetivos simplicando dichas fronteras a partir K-Means. Por
+% ultimo, la consideracion del espacio desconocido en la contruiccion del GVD se
+% valida comparandola contra considerar que el espacio desconocido es libre. 
+
+
+% En esta sección se comparan los resultados de las pruebas realizadas con
+% solución propuesta que construye el GVD de forma incremental contra los de una
+% variante que solo difiere en que la construcción del GVD es no incremental. Las
+% métricas a analizar para estas pruebas se encuentran en la tabla \ref{tab:inc1}
+% y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
+% \ref{fig:gra:inc:gvdt}.
+
+% En esta sección se realiza un analisis comparativo de los resultados obtenidos
+% en pruebas realizadas con tres soluciones distintas que difieren unicamente en
+% el metodo usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
+% metodos son: la simplificación de fronteas basada en cubrimiento propuesta en
+% este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
+% \cite{amorin2019novel} y la identificación de fronteras (sin simplificar)
+% introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas a
+% analizar se presentan en la tabla \ref{tab:inc1} y se encuentran graficadas en
+% las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
+% \ref{fig:gra:inc:gvdt}.
+
+Las pruebas analizadas en esta sección corresponden a las realizadas con
+soluciones que varian unicamente en la forma de considerar el espacio
+desconocido al construir el GVD. Las formas en cuestion son dos: considerar las
+celdas desconocidas como libres y considerar que las celdas desconocidas no
+propagan olas y que el conjunto $\mli{UF}$ de celdas desconocidas que son
+adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF} \subseteq
+\mli{CGen}$). Ambas descritas en la seccion \ref{subsec:espDesc}.
+
+\input{tablas/desconocido1}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_time.png}
+
+  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
+
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_cost.png}
+
+  \caption{Grafica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
+
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_mean.png}
+
+  \caption{Grafica de la sumatoria del tiempo en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
+
+\end{figure}
+
+%%%%%%%%%%%%%%%%% ident obj
+
 %%% 1 %%%%
 % Es posible apreciar que la variante que identifica como objtivos a las
 % fronteras sin simplificar (\emph{FSS}) como objetivos obtiene los peores
@@ -570,96 +737,6 @@ las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 
 %%% 4 %%%%
 % Los metodos que simplifican las fronteras invierten tiempo en simplificar para disminuir dicha la cantidad de objetivos
-
-Es posible apreciar que los metodos que identifican los objetivos simplificando
-las fronteras reducen los tiempos de exploración con respecto al metodo que
-identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
-de granularidad mas bajo las reducciones son despreciables, estas crecen junto
-a la granularidad hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
-nivel mas alto. Esto puede deberse al tiempo de asignación de tareas como se
-explica en la sección \ref{sec:exp:inc}. En este caso se considera que los
-factores con mayor impacto sobre los tiempos de asignación de tareas son dos:
-el tiempo de simplificación de fronteras y la cantidad de objetivos
-identificados. Mayores tiempos de simplificación fronteras retrasan la
-identificación de objetivos, parte necesaria y no paralelizada de la etapa de
-obtencion de información (sección \ref{subsec:obtInfo}) en la asignacion de
-tareas. Mientras que disminuir la cantidad de objetivos identificados implica
-reducciones en la duracion de las etapas de valuación (sección
-\ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
-menor la cantidad de objetivos a valuar y a considerar en la resolución. Entonces lo que se evidencia
-en los resultados obtenidos, es que invertir tiempo en disminuir los objetivos
-identificados simplificando las fronteras lleva a una reduccion total de los
-tiempos de asignación de tareas, y en consecuencia de los tiempos de exploración
-frente a no invertir dicho tiempo y utlizar todas las fronteras sin
-simplificar. Otra razon posible para las reducciones del tiempo de exploración
-es que simplificar las fronteras puede aportar a la coordinación de los robots.
-Por ejemplo de no simplificarse las fronteras se permite que un robot sea
-asignado a un objetivo adyacente a una pared o que dos robots sean asignados a
-objetivos adyacentes entre sí, situaciones en las cuales se desaprovecha
-capacidad de sensado, y se complejiza la navegacion. Al simplificarse las
-fronteras, especialemente cuando se logra el cubrimiento minimizando los
-objetivos resultantes, se evitan situaciones como las descritas lo cual puede
-verse como una coordinación pasiva. \todo{o implicita?}
-
-% simplificandose
-% la navegación y aprovechandose las capacidades sensoriales de los robots. Esto
-
-% A simple vista este factor parece contradecir los resultados obtenidos, ya
-% que el metodo que obtiene los peores resultados es el menos impactado por
-% este factor ya que no simplifica las fronteras. Lo que sucede es que el
-% tiempo de simplificacion es en realidad una inversion de tiempo que se hace
-% para reducir la cantidad de objetivos
-
-% las simplificaciones que minimizan el numero de fronteras significativas
-% mientras mantienendo el cubrimiento minimizan el solapamiento de sensado de
-% los robots, aumentado la nueva información que se obiente dele entorno. es la
-% principal razon por la cual se introducen los metodos basados en
-% simplificación, ya que estos la cantidad de objetivos para disminuir el
-% tiempo total de la asignación de tareas.
-
-% se mantienen entre un ${\smallsim}9\%$ y ${\smallsim}11\%$, exceptuando la
-% granularidad de una celda por metro cuadrado en la simplificación basada en
-% K-Means, en la que se obtiene una reduccion del ${\smallsim}7\%$
-
-De acuerdo con los resultados simplificar las fronteras en la identificacion de
-objetivos también reduce las distancias totales recorridas por la flota frente
-a no simplificarlas. Estas reducciones son en general de ${\smallsim}10\%$, y
-pueden ser causadas por la disminución del tiempo de asignación de tareas,
-debido a las mismas razones que se explican en la seccion \ref{sec:exp:inc}.
-Aunque la coordinación pasiva también puede estar jugando un rol al evitar que
-los robots se transladen a objetivos que desaprovechan las capacidades
-sensoriales del robot o que puedan llevar a inconvenientes en la navegacion.
-
-
-% Con respecto a las dos tecnicas de simplificacion los comportamientos en las
-% metricas de tiempo de exploración y distancia total recorrida por la flota son
-% similares.
-% , tienen comportamientos similares tanto en el
-% tiempo de exploración como en distancia total recorrida por la flota. 
-% omo los niveles de granularidad tienen el proposito
-% variar la carga computacional, los resutados mencionados parecen indicar que la
-% simplificación basada en el cubrimiento es la mejor cuando la carga
-% computacional es baja, siendo superada por la simplificación basada en K-Means cuando
-% la carga computacional es alta. 
-Con respecto a los dos metodos que simplifican las fornteras para 
-identificar objetivos, en el nivel de granularidad mas bajo, la
-simplificación basada en cubrimiento logra una reducción con respecto a la
-basada en K-Means de ${\smallsim}3\%$ en la distancia total recorrida por la
-flota y de ${\smallsim}5\%$ en los tiempo de exploración. Esto se invierte a
-medida que aumenta el nivel de granularidad, hasta que en el nivel mas alto en
-lugar de reducirse, las metricas aumentan. La distancia total recorrida por la
-flota aumenta en un ${\smallsim}3\%$ y el tiempo de exploración en un
-${\smallsim}6\%$. Por otro lado segun los resultados obtenidos del tiempo
-promedio en simplificación de fronteras, la simplificacion basada en
-cubrimiento en todo nivel de granularidad es entre $2$ y
-$4$ veces mas lenta que la basada en K-Means. Estos resultados
-parecen indicar que la simplificación basada en cubrimiento toma mas tiempo
-pero logra mejores reducciones de objetivos que la basada en K-Means. En el
-nivel de granularidad mas bajo el aumento de tiempo no es tan relevante como la
-reduccion de objetivos, por lo tanto la simplificación basada en cubrimiento
-obtiene un mejor redimiento. A medida la granularidad crece el aumento de
-tiempo se torna mas relevante que la reduccion de objetivos, por lo que la
-simplificación basada en K-Means obtiene un rendimiento superior.  
 
 % costo computacional vs  
 %%, cuando los tiempos de simplificación son los mas cortos,
@@ -730,65 +807,54 @@ simplificación basada en K-Means obtiene un rendimiento superior.
 %aunque esto no justifica que las reducciónes de las
 % distancias sean mayores a las obtenidas en las pruebas de dicha seccion a pesar de que las 
 
+% simplificandose
+% la navegación y aprovechandose las capacidades sensoriales de los robots. Esto
 
-\input{tablas/ident_obj1}
+% A simple vista este factor parece contradecir los resultados obtenidos, ya
+% que el metodo que obtiene los peores resultados es el menos impactado por
+% este factor ya que no simplifica las fronteras. Lo que sucede es que el
+% tiempo de simplificacion es en realidad una inversion de tiempo que se hace
+% para reducir la cantidad de objetivos
+
+% las simplificaciones que minimizan el numero de fronteras significativas
+% mientras mantienendo el cubrimiento minimizan el solapamiento de sensado de
+% los robots, aumentado la nueva información que se obiente dele entorno. es la
+% principal razon por la cual se introducen los metodos basados en
+% simplificación, ya que estos la cantidad de objetivos para disminuir el
+% tiempo total de la asignación de tareas.
+
+% se mantienen entre un ${\smallsim}9\%$ y ${\smallsim}11\%$, exceptuando la
+% granularidad de una celda por metro cuadrado en la simplificación basada en
+% K-Means, en la que se obtiene una reduccion del ${\smallsim}7\%$
+
+% Con respecto a las dos tecnicas de simplificacion los comportamientos en las
+% metricas de tiempo de exploración y distancia total recorrida por la flota son
+% similares.
+% , tienen comportamientos similares tanto en el
+% tiempo de exploración como en distancia total recorrida por la flota. 
+% omo los niveles de granularidad tienen el proposito
+% variar la carga computacional, los resutados mencionados parecen indicar que la
+% simplificación basada en el cubrimiento es la mejor cuando la carga
+% computacional es baja, siendo superada por la simplificación basada en K-Means cuando
+% la carga computacional es alta. 
+
+%%%%%%%%% cub y cal
+% De la
+% equacion 4 se de deduce que el cubrimiento siempre es mayor o igual que la
+% calidad. Por lo tanto 
 
 
-\begin{figure}[H]
-  \centerfloat
+%%%%%%%%
+% Dado que las diferencias son despreciables se puede
+% concluir que el impacto de el uso de las distintas tambien despreciable.
 
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_time.png}
+% confirman que todas las variantes de la implemetnacion 
+% finalizar su ejecucion con un mapa casi completo del entorno.
 
-  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
+% Estos resutlados son los esperados ya que
+% la mision concluye al no quedar mas espacio por explorar.
 
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_cost.png}
-
-  \caption{Grafica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/obj_id_time_mean.png}
-
-  \caption{Grafica de la sumatoria del tiempo en obtencion de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
-
-\end{figure}
-
-\subsection{Consideracion del espacio desconocido}\label{sec:exp:desco}
-
-\input{tablas/desconocido1}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_time.png}
-
-  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_cost.png}
-
-  \caption{Grafica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_mean.png}
-
-  \caption{Grafica de la sumatoria del tiempo en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
-
-\end{figure}
+% Es posible apreciar que todos los
+% mapas cubren casi en su totalidad al entorno y que la calidad de dichos mapas
+% es casi perfecta en todos los casos.
 
