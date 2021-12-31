@@ -435,16 +435,20 @@ creciendo mediante se aumenta el nivel de granularidad llegando a una reduccion
 de un ${\smallsim}63\%$ en la granularidad mas alta (tiempos de construcción de
 GVD mas altos).
 
+% no son
+% monótonamente crecientes ni decrecientes respecto a la granularidad
+
 Construir el GVD de forma incremental también parece reducir las distancias
 totales recorridas por la flota en todas las granularidades, aunque en este
-caso las reducciones no son significativas. Especificamente, no son
-monótonamente crecientes ni decrecientes respecto a la granularidad, siempre
-son de menores al $7\%$ y adicionalmente las diferencias entre estas métricas
-similares a sus desviaciones estándar. Esto puede deberse a que tiempos más
-rapidos de asignación de objetivos hacen mas probable que los robots cambien su
-trayectoria a un nuevo objetivo antes de llegar a la ubicación exacta del
-objetivo previamente completado. Esto puede reducir la distancia recorrida por
-el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
+caso las reducciones no son significativas. Especificamente, las reducciones
+estan comprendidas entre $2\%$ y $7\%$, fluctuando al aumentar los
+niveles de granularidad y adicionalmente las diferencias entre los promedios de
+esta metrica son similares a sus desviaciones estándar. Esto puede deberse a
+que tiempos más rapidos de asignación de objetivos hacen mas probable que los
+robots cambien su trayectoria a un nuevo objetivo antes de llegar a la
+ubicación exacta del objetivo previamente completado. Esto puede reducir la
+distancia recorrida por el robot si los caminos hacia el objetivo anterior y el
+actual no se solapan.
 
 % En cada nivel de granularidad el tiempo promedio en construcción del GVD de
 % variante incremental siempre es menor que el de la variante no incremental,
@@ -497,7 +501,7 @@ En esta sección se realiza un analisis comparativo de los resultados obtenidos
 en pruebas realizadas con tres soluciones distintas que difieren unicamente en
 el metodo usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
 metodos son: la simplificación de fronteas basada en cubrimiento propuesta en
-este proyecto, simplificación de fronteras basada en K-Means como utilizada en
+este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
 \cite{amorin2019novel} y la identificación de fronteras (sin simplificar)
 introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas a
 analizar se presentan en la tabla \ref{tab:inc1} y se encuentran graficadas en
@@ -541,37 +545,179 @@ las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 % invertiendo tiempo en reducir los objetivos indentificados al simplificar las
 % fronteras a sus celdas más significativas.
 %%% 3 %%%%
-Es posible apreciar que los metodos que simplifican las fronteras reducen los
-tiempos de exploración con respecto al metodo que no las simplifica. Aunque
-comenzando por el nivel mas bajo de granularidad las reducciones son
-despreciables estas crecen hasta alcanzar una reducción de ${\smallsim}29\%$ en
-el nivel de granularidad mas alto. Esto en parte se debe a lo explicado en la
-sección \ref{sec:exp:inc} con respecto a esta metrica. En este caso lo que
-impacta en el tiempo de la asignación de tareas es la cantidad de objetivos
-identificados, ya que reducir dicha cantidad implica reducciones en la duracion
-de las etapas de valuación (sección \ref{subsec:MiValSub}) y de resolución
-(sección \ref{subsec:MiResSub}) al ser menor la cantidad de objetivos a valuar
-y asignar. Aunque otra razon posible, es que las simplificaciones pueden
-coordinar a los robots. Por ejemplo de no simplificarse las fronteras se
-permite que un robot sea asignado a un objetivo adyacentes a una pared o que
-dos robots sean asignados a objetivos adyacentes entre si, situaciones en las
-cuales se desaprovecha capacidad de sensado, y se complejiza la navegacion. Al
-simplificarse las fronteras, especialemente cuando se logra el cubrimiento
-minimizando los objetivos resultantes, se evitan las situaciones descritas
-similares lo cual puede verse como una coordinación implicita.
+% Es posible apreciar que los metodos que identifican los objetivos simplificando
+% las fronteras reducen los tiempos de exploración con respecto al metodo que
+% identifica a las fronteras sin idenficar como obtivos. Aunque en el nivel mas
+% bajo de granularidad las reducciones son despreciables estas crecen junto a la
+% granularidad, hasta alcanzarse una reducción de ${\smallsim}29\%$ en el nivel
+% de granularidad mas alto. Esto debe en parte a los tiempos de asignación de
+% tareas, por lo explicado en la sección \ref{sec:exp:inc} con respecto a esta
+% metrica. En este caso el principal impacto en
+% los tiempos de asignación de tareas es la cantidad de objetivos identificados.
+ 
+% implica reducciones en la duracion de las etapas de valuación (sección
+% \ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
+% menor la cantidad de objetivos a valuar y asignar. Aunque otra razon posible,
+% es que el simplificar las fronteras puede coordinar a los robots. Por ejemplo
+% de no simplificarse las fronteras se permite que un robot sea asignado a un
+% objetivo adyacentes a una pared o que dos robots sean asignados a objetivos
+% adyacentes entre si, situaciones en las cuales se desaprovecha capacidad de
+% sensado, y se complejiza la navegacion. Al simplificarse las fronteras,
+% especialemente cuando se logra el cubrimiento minimizando los objetivos
+% resultantes, se evitan las situaciones descritas similares lo cual puede verse
+% como una coordinación implicita.
 
-% las simplificaciones que
-% minimizan el numero de fronteras significativas mientras mantienendo el
-% cubrimiento minimizan el solapamiento de sensado de los robots, aumentado la
-% nueva información que se obiente dele entorno.
-% es la principal razon por la cual se introducen los metodos basados en
-% simplificación, ya que estos la cantidad de objetivos para disminuir el tiempo total
-% de la asignación de tareas.
 
-\todo[inline]{seguir aca}
-reduccion tambien en distancia
+%%% 4 %%%%
+% Los metodos que simplifican las fronteras invierten tiempo en simplificar para disminuir dicha la cantidad de objetivos
 
-dado que los tiempos de demora de la asignación de tar se determino como un factor, que aunque tenia un peso, no era significativos, y en este caso donde las demoras segun los timpos de exploraicon son menores, se obtienen diferencias de distancia mas significativas entoces, se puede deteminar que la coordinación implicita es un factor de impacto en la distnacia.
+Es posible apreciar que los metodos que identifican los objetivos simplificando
+las fronteras reducen los tiempos de exploración con respecto al metodo que
+identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
+mas bajo de granularidad las reducciones son despreciables estas crecen junto a
+la granularidad, hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
+nivel mas alto. Esto puede deberse al tiempo de asignación de tareas, por lo
+explicado en la sección \ref{sec:exp:inc}. En este caso se considera que
+principalemte son dos los factores que impactan a los tiempos de asignación de
+tareas: el tiempo de simplificación de fronteras y la cantidad de objetivos
+identificados. Mayores tiempos de simplificación fronteras retrasan la
+identificación de objetivos, parte necesaria y no paralelizada de la etapa de
+obtencion de información (sección \ref{subsec:obtInfo}) de la asignacion de
+tareas. Mientras que disminuir la cantidad de objetivos identificados implica
+reducciones en la duracion de las etapas de valuación (sección
+\ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
+menor la cantidad de objetivos a valuar y asignar. Entonces lo que se evidencia
+en los resultados obtenidos es que invertir tiempo en disminuir los obetivos
+identificados simplificando las fronteras lleva a una reduccion total de los
+tiempos de asignación de tareas y por lo tanto de los tiempos de exploración,
+frente a no invertir dicho tiempo y utlizar todas las fronteras sin
+simplificar. Otra razon posible para las reducciones del tiempo de exploración
+es que simplificar las fronteras puede aportar a la coordinación de los robots.
+Por ejemplo de no simplificarse las fronteras se permite que un robot sea
+asignado a un objetivo adyacente a una pared o que dos robots sean asignados a
+objetivos adyacentes entre sí, situaciones en las cuales se desaprovecha
+capacidad de sensado, y se complejiza la navegacion. Al simplificarse las
+fronteras, especialemente cuando se logra el cubrimiento minimizando los
+objetivos resultantes, se evitan las situaciones como las descritas lo cual 
+puede verse como una coordinación pasiva. \todo{o implicita?}
+
+% simplificandose
+% la navegación y aprovechandose las capacidades sensoriales de los robots. Esto
+
+% A simple vista este factor parece contradecir los resultados obtenidos, ya
+% que el metodo que obtiene los peores resultados es el menos impactado por
+% este factor ya que no simplifica las fronteras. Lo que sucede es que el
+% tiempo de simplificacion es en realidad una inversion de tiempo que se hace
+% para reducir la cantidad de objetivos
+
+% las simplificaciones que minimizan el numero de fronteras significativas
+% mientras mantienendo el cubrimiento minimizan el solapamiento de sensado de
+% los robots, aumentado la nueva información que se obiente dele entorno. es la
+% principal razon por la cual se introducen los metodos basados en
+% simplificación, ya que estos la cantidad de objetivos para disminuir el
+% tiempo total de la asignación de tareas.
+
+% se mantienen entre un ${\smallsim}9\%$ y ${\smallsim}11\%$, exceptuando la
+% granularidad de una celda por metro cuadrado en la simplificación basada en
+% K-Means, en la que se obtiene una reduccion del ${\smallsim}7\%$
+
+De acuerdo con los resultados simplificar las fronteras en la identificacion de
+objetivos también reduce las distancias totales recorridas por la flota frente
+a no simplificarlas. Estas reducciones son en general de ${\smallsim}10\%$, y
+pueden ser causadas por la disminución del tiempo de asignación de tareas, por
+las mismas razones que en la seccion \ref{sec:exp:inc}. Aunque la coordinación
+pasiva también puede estar jugando un rol al evitar que los robots se
+transladen a objetivos que desaprovechan las capacidades sensoriales del robot
+o que puedan llevar a inconvenientes en la navegacion.
+
+
+% Con respecto a las dos tecnicas de simplificacion los comportamientos en las
+% metricas de tiempo de exploración y distancia total recorrida por la flota son
+% similares.
+% , tienen comportamientos similares tanto en el
+% tiempo de exploración como en distancia total recorrida por la flota. 
+% omo los niveles de granularidad tienen el proposito
+% variar la carga computacional, los resutados mencionados parecen indicar que la
+% simplificación basada en el cubrimiento es la mejor cuando la carga
+% computacional es baja, siendo superada por la simplificación basada en K-Means cuando
+% la carga computacional es alta. 
+Con respecto a los dos metodos que simplifican las fornteras en la
+identificacion de objetivos, en el nivel de granularidad mas bajo, la
+simplificación basada en cubrimiento logra una reducción con respecto a la
+basada en K-Means de ${\smallsim}3\%$ en la distancia total recorrida por la
+flota y de ${\smallsim}5\%$ en los tiempo de exploración. Esto se invierte a
+medida que aumenta el nivel de granularidad, hasta que en el nivel mas alto en
+lugar de reducirse, las metricas aumentan. La distancia total recorrida por la
+flota aumenta en un ${\smallsim}3\%$ y el tiempo de exploración en un
+${\smallsim}6\%$. Por otro lado segun los resultados obtenidos del tiempo
+promedio en simplificación de fronteras, la simplificacion basada en
+cubrimiento en todo nivel de granularidad es entre ${\smallsim}2$ y
+${\smallsim}4$ veces mas lenta que la basada en K-Means. Estos resultados
+parecen indicar que la simplificación basada en cubrimiento toma mas tiempo
+pero logra mejores reducciones de objetivos que la basada en K-Means. En el
+nivel de granularidad mas bajo el aumento de tiempo no es tan relevante como la
+reduccion de objetivos, por lo tanto la simplificación basada en cubrimiento
+obtiene un mejor redimiento. A medida la granularidad crece el aumento de
+tiempo se torna mas relevante que la reduccion de objetivos, resultando
+superior la simplificación basada en K-Means. 
+
+% costo computacional vs  
+%%, cuando los tiempos de simplificación son los mas cortos,
+%%
+
+  % Dado que la
+% simplificación basada en cubrimiento tiene siempre un mayor costo temporal que
+% la basada en K-Means pero logra obtener
+
+% Lo cual implica que el metodo que simplifica basadose en el cubrimiento tiene
+% una inversion mayor de tiempo, y a pesar.
+% En este caso ambos metodos invierten tiempo en disminuir los
+% objetivos identificados a partir de simplificar las fronteras.
+
+% Con respecto a las dos tecnicas de simplificacion estas tienen comportamientos
+% similares tanto en el tiempo de exploración como en distancia total recorrida
+% por la flota. En el nivel de granularidad mas bajo, la simplificación basada en
+% cubrimiento logra una reducción con respecto a la basada en K-Means, de
+% ${\smallsim}3\%$ de la distancia total recorrida por la flota y de
+
+  % Esto concuerda con lo
+% que ocurre en los niveles de granularidad mas altos, donde la simplificacion
+% basada en cubrimiento obtiene peores resultados que la basada en K-Means. Con
+% respecto al nivel de granularidad mas bajo, lo que puede estar sucediendo es
+% que al ser el nivel con menos costo computacional y por lo tanto 
+
+% ste comportamiento en parte se explica por los tiempos de
+% asignación de tareas y su efecto en dichas metricas. En este caso aunque pueden
+% existir diferencias entre los numeros de objetivos identificados, estas son
+% menos significativas repecto a identificar todas las fronteras como objetivos.
+% Dado esto para los metodos que simplifican las fronteras se pasa a considerar
+% otro factor de impacto de los tiempos de asignación, el tiempo que demora dicha
+% simplificación. 
+
+% En este caso ambos
+% metodos reducen la cantidad de objetivos identificados simplificando las
+% fronteras, por lo tanto aunque pueden existir diferencias entre los numeros de
+% objetivos identificados en estos metodos, estas son menores en comparacion al
+% todas las fronteras como objetivos, y en consecuencia este aspecto tiene menor
+% impacto sobre el tiempo de la asignación de objetivos. Dado esto se pasa a
+% considerar otro factor de impacto de los tiempos de asignación: el tiempo que
+% demora la simplificación de fronteras. 
+
+% Dado esto se pasa a
+% considerar otro factor de impacto de los tiempos de asignación: el tiempo que
+% demora la simplificación de fronteras. Según los resultados el tiemp
+
+% Dado que estos metodos
+% solo difieren en como realizan la simplificacion de fronteras, la demora de
+% dicha simplificación es uno de los principales factores a tener en cuenta.
+
+
+
+% dado que los tiempos de demora de la asignación de tareas se determino como un
+% factor, que aunque tenia un peso, no era significativos, y en este caso donde
+% las demoras segun los timpos de exploraicon son menores, se obtienen
+% diferencias de distancia mas significativas entoces, se puede deteminar que la
+% coordinación implicita es un factor de impacto en la distnacia.
 % La variante \emph{FSS} también obtiene los peores resultados en terminos de
 % distancia total recorrida por la flota. Este resultado se atribuye en primer
 % lugar a que al ser todas las celdas fronteras objtivos posibles, esto permite asignaciones
