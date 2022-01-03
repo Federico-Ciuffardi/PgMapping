@@ -37,8 +37,8 @@ espacio desconocido.
 
 \section{Especificación de las pruebas}
 
-A lo largo de esta seccion se especifican las pruebas realizadas en este
-proyecto.
+En esta se seccion se especifican las pruebas realizadas en este
+proyecto y presentadas a lo largo de este capitulo.
 
 % * Pruebas realizadas, cosas generales:
 %   * simulador
@@ -437,17 +437,18 @@ quedando ociosos.
 % no son
 % monótonamente crecientes ni decrecientes respecto a la granularidad
 
+% las reducciones no son significativas. Especificamente, 
+% y adicionalmente las diferencias entre los promedios de
+% esta metrica son similares a sus desviaciones estándar
+
 Construir el GVD de forma incremental también parece reducir las distancias
 totales recorridas por la flota en todas las granularidades, aunque en este
-caso las reducciones no son significativas. Especificamente, las reducciones
-estan comprendidas entre $2\%$ y $7\%$, fluctuando al aumentar los
-niveles de granularidad y adicionalmente las diferencias entre los promedios de
-esta metrica son similares a sus desviaciones estándar. Esto puede deberse a
-que tiempos más rapidos de asignación de objetivos hacen mas probable que los
-robots cambien su trayectoria a un nuevo objetivo antes de llegar a la
-ubicación exacta del objetivo previamente completado. Esto puede reducir la
-distancia recorrida por el robot si los caminos hacia el objetivo anterior y el
-actual no se solapan.
+caso las reducciones estan comprendidas entre $2\%$ y $7\%$, fluctuando al
+aumentar los niveles de granularidad. Esto puede deberse a que tiempos más
+rapidos de asignación de objetivos hacen mas probable que los robots cambien su
+trayectoria a un nuevo objetivo antes de llegar a la ubicación exacta del
+objetivo previamente completado. Esto puede reducir la distancia recorrida por
+el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
 % En cada nivel de granularidad el tiempo promedio en construcción del GVD de
 % variante incremental siempre es menor que el de la variante no incremental,
@@ -490,7 +491,7 @@ actual no se solapan.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_mean.png}
 
-  \caption{Grafica de la sumatoria del tiempo en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
+  \caption{Grafica del tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
 
 \end{figure}
 
@@ -510,7 +511,7 @@ las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 Es posible apreciar que los metodos que identifican los objetivos simplificando
 las fronteras reducen los tiempos de exploración con respecto al metodo que
 identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
-de granularidad mas bajo las reducciones son despreciables, estas crecen junto
+de granularidad mas bajo las reducciones son menores a ${\smallsim}5\%$, estas crecen junto
 a la granularidad hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
 nivel mas alto. Esto puede deberse al tiempo de asignación de tareas como se
 explica en la sección \ref{sec:exp:inc}. En este caso se considera que los
@@ -560,11 +561,12 @@ cubrimiento en todo nivel de granularidad es entre $2$ y
 $4$ veces mas lenta que la basada en K-Means. Estos resultados
 parecen indicar que la simplificación basada en cubrimiento toma mas tiempo
 pero logra mejores reducciones de objetivos que la basada en K-Means. En el
-nivel de granularidad mas bajo el aumento de tiempo no es tan relevante como la
-reduccion de objetivos, por lo tanto la simplificación basada en cubrimiento
-obtiene un mejor redimiento. A medida la granularidad crece el aumento de
-tiempo se torna mas relevante que la reduccion de objetivos, por lo que la
-simplificación basada en K-Means obtiene un rendimiento superior.  
+nivel de granularidad mas bajo el aumento de tiempo de simplificación no es tan
+relevante como la reduccion de objetivos, por lo tanto la simplificación basada
+en cubrimiento obtiene un mejor redimiento. A medida la granularidad crece el
+aumento de tiempo de simplificación se torna mas relevante que la reduccion de
+objetivos, por lo que la simplificación basada en K-Means obtiene un
+rendimiento superior.  
 
 \input{tablas/ident_obj1}
 
@@ -591,58 +593,86 @@ simplificación basada en K-Means obtiene un rendimiento superior.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/obj_id_time_mean.png}
 
-  \caption{Grafica de la sumatoria del tiempo en obtencion de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
+  \caption{Grafica del tiempo promedio en obtencion de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
 
 \end{figure}
 
 \subsection{Consideracion del espacio desconocido}\label{sec:exp:desco}
 
-% Para poder validar los aspectos, se prueba la solución propuesta cambiando
-% unicamente el aspecto a validar. Los aspectos a validar son: la construccion
-% incremental del GVD (sección \ref{sec:MiConstGVD}). La identificación de
-% objetivos que simplifica las fronteras basandose en el cubrimiento (seccion
-% \ref{subsec:MiSimp}). 
-
-% Para validar la construccion incremental del GVD esta se compara contra la
-% construccion no incremental. En el caso de la identificación de objetivos se
-% comparan las tres estrategias propuestas en la seccion \ref{sec:pc:idobj}: el
-% identificar las fronteras como objetivos, simplicar dichas fronteras a partir
-% K-Means, y simplificarlas basandose en el cubrimiento. Por ultimo, la
-% consideracion del espacio desconocido en la contruiccion del GVD se valida
-% comparandola contra considerar que el espacio desconocido es libre. 
-% Para validar la construccion incremental del GVD esta se compara contra la
-% construccion no incremental. En el caso de la identificación de objetivos esta se
-% comparan contra identificar todas las fronteras como objetivos, y la tecnica
-% que obtiene los objetivos simplicando dichas fronteras a partir K-Means. Por
-% ultimo, la consideracion del espacio desconocido en la contruiccion del GVD se
-% valida comparandola contra considerar que el espacio desconocido es libre. 
-
-
-% En esta sección se comparan los resultados de las pruebas realizadas con
-% solución propuesta que construye el GVD de forma incremental contra los de una
-% variante que solo difiere en que la construcción del GVD es no incremental. Las
-% métricas a analizar para estas pruebas se encuentran en la tabla \ref{tab:inc1}
-% y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
-% \ref{fig:gra:inc:gvdt}.
-
-% En esta sección se realiza un analisis comparativo de los resultados obtenidos
-% en pruebas realizadas con tres soluciones distintas que difieren unicamente en
-% el metodo usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
-% metodos son: la simplificación de fronteas basada en cubrimiento propuesta en
-% este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
-% \cite{amorin2019novel} y la identificación de fronteras (sin simplificar)
-% introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas a
-% analizar se presentan en la tabla \ref{tab:inc1} y se encuentran graficadas en
-% las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
-% \ref{fig:gra:inc:gvdt}.
-
 Las pruebas analizadas en esta sección corresponden a las realizadas con
 soluciones que varian unicamente en la forma de considerar el espacio
-desconocido al construir el GVD. Las formas en cuestion son dos: considerar las
+desconocido al construir el GVD. Dichas formas son dos: considerar las
 celdas desconocidas como libres y considerar que las celdas desconocidas no
 propagan olas y que el conjunto $\mli{UF}$ de celdas desconocidas que son
 adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF} \subseteq
-\mli{CGen}$). Ambas descritas en la seccion \ref{subsec:espDesc}.
+\mli{CGen}$). Ambas son descritas en la seccion \ref{subsec:espDesc}. Los
+resultados obtenidos en estas pruebas exponen en la tabla \ref{tab:inc1} y sus
+grafican en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
+\ref{fig:gra:inc:gvdt}.
+
+Considerar que las celdas desconocidas no propagan olas y que $\mli{UF}
+\subseteq \mli{CGen}$ logra una reduccion de ${\smallsim}61\%$ en el tiempo
+promedio de construcción del GVD en cada nivel de granularidad, respecto a
+considerar a las celdas desconocidas como libres. Estos resultados validan que
+restringir la construcción del GVD al espacio conocido lleva a mejoras en los
+tiempos de contruiccion del GVD. 
+
+
+Adicionalente tanto el tiempo de exploracion como las distancias totales
+recorridas por las flota son reducidas al considerar que las celdas
+desconocidas no propagan olas y que $\mli{UF} \subseteq \mli{CGen}$. La
+reducción del tiempo de exploración comienza siendo de ${\smallsim}3\%$ en el
+nivel de granularidad mas bajo, llegando a una reducción de ${\smallsim}29\%$
+en el nivel mas alto. Mientras que la reducción de la distancia total recorrida
+por la flota fluctua entre ninguna reducción y una reducción de
+${\smallsim}9\%$. Esto puede ser causado porque la reduccion de los tiempos de
+construcción del GVD implica una reduccion en los tiempos de asignación de
+tareas y esto ultimo se asocia a reducciónes en los tiempos de exploración y de
+las distancias totales recorridas por la flota, como se explica en la sección
+\ref{sec:exp:inc} donde se compara la construcción incremental y no incremental
+del GVD. Aunque en este caso las reducciónes de los tiempos de contruicción del
+GVD son menores y por lo tanto los efectos sobre las metricas son menos
+pronunciados. A su vez, considerar el espacio desconocido de distinta manera
+cambia significativamente la forma del GVD lo cual también puede afectar a los
+caminos de los robots sobre este y por lo tanto a las métricas en cuestion.
+
+
+% Con respecto a los tiempos de exploración, estos tambien son reducidos al
+% contruir el GVD de forma incremental. La reducción comienza siendo de un
+% ${\smallsim}8\%$ en el nivel de granularidad mas bajo, y mediante se aumenta el
+% nivel de granularidad las reducciones tambien aumentan hasta llegar a una
+% reducción de ${\smallsim}63\%$ en el nivel mas alto. Esto se explica porque el
+% tiempo de construcción de GVD impacta directamente al tiempo que ocurre desde
+% que un robot pide un tarea y una le es asignada, por ser una parte necesaria y
+% no paralelizada de la etapa de obtención de información (sección
+% \ref{subsec:obtInfo}) de cada asignación de tareas (sección \ref{sec:asigTar}).
+% Y los tiempos de asignación de tareas impactan a los tiempos de exploración,
+% pero en este caso el impacto no es directo. Esto se debe a que una asignación
+% de tareas en curso solo asegura que un unico robot esta osicoso, porque
+% mientras que un robot pide una tarea y una le es asignada el resto puede estar
+% completando tareas asignadas previamente. Cuanto mas corta es la demora en la
+% asignación de tareas mas probable es que un unico robot quede osicoso, mientras
+% que si dicha demora aumenta, también lo hace la probabilidad que en el
+% transcurso de la asignacion mas robots completen sus tareas y requieran tareas,
+% quedando ociosos. 
+% no son
+% monótonamente crecientes ni decrecientes respecto a la granularidad
+
+% las reducciones no son significativas. Especificamente, 
+% y adicionalmente las diferencias entre los promedios de
+% esta metrica son similares a sus desviaciones estándar
+
+% Construir el GVD de forma incremental también parece reducir las distancias
+% totales recorridas por la flota en todas las granularidades, aunque en este
+% caso las reducciones estan comprendidas entre $2\%$ y $7\%$, fluctuando al
+% aumentar los niveles de granularidad. Esto puede deberse a que tiempos más
+% rapidos de asignación de objetivos hacen mas probable que los robots cambien su
+% trayectoria a un nuevo objetivo antes de llegar a la ubicación exacta del
+% objetivo previamente completado. Esto puede reducir la distancia recorrida por
+% el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
+
+
+
 
 \input{tablas/desconocido1}
 
@@ -669,7 +699,7 @@ adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF} \subseteq
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_mean.png}
 
-  \caption{Grafica de la sumatoria del tiempo en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
+  \caption{Grafica del tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
 
 \end{figure}
 
