@@ -1,19 +1,211 @@
-En este ultimo capitulo se plantean las concluciones del del trabajo realizado
-en el proyecto de grado y se establecen aspectos que pueden ser retomados como
-trabajo futuro.
-
+En este ultimó capitulo se plantean las conclusiones derivadas del trabajo
+realizado en el proyecto de grado y se establecen aspectos que pueden ser
+retomados como trabajo futuro.
 
 \section{Conclusiones}
 
-En este proyecto se describio y desarrollo una solucion al problema de
-exploracion multirobot que se basa en \cite{wurm2008coordinated} que porpone el
-uso de un GVD para identificar y distribuir los robots sobre las habitaciones y
-corredores con porciones sin explorar. La solucion desarrollada adapta e
-integra el algoritmo incremental para la contruccion de un GVD
+Este proyecto de grado se planteo como objetivo mejorar la propuesta de
+coordinación para la exploración multirobot de \cite{wurm2008coordinated} en la
+que se establece que la exploración debe realizase maximizando la distribución
+de los robots sobre las habitaciones y corredores (segmentos), los cuales son
+identificados a partir de un GVD. Para esto se evaluaron varios aspectos de la
+propuesta en cuestión y del problema de exploración multirobot en general
+relevando una serie de potenciales mejoras. Estas fueron implementadas como
+parte de una solución al problema de exploración multirobot \footnote{Disponible en línea:\\
+\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con la cual se
+experimento dentro de un simulador con el propósito de validar su impacto.
+
+En general, a partir de los resultados obtenidos de la experimentación se
+concluye que la solución desarrollada logra resolver el problema de exploración
+multirobot de forma satisfactoria en términos de los mapas generados.
+
+Se puede concluir que es posible realizar de forma incremental, tanto la
+construcción del GVD, como la obtención de información secundaria relacionada a
+este que es necesaria para identificar los segmentos. Esto se logra adaptando
+el algoritmo presentado en \cite{Lau2013} para que se incluya dicha
+información. Adicionalmente los datos experimentales permiten concluir que la
+construcción incremental del GVD acelera significativamente los tiempos de
+construcción del GVD y de exploración frente a realizar una construcción no
+incremental como en la propuesta original. Esto es una mejora considerable en
+tanto hace viable aplicar la estrategia de coordinación en la exploración de
+entornos de mayor tamaño o que requieran mapas con un mayor nivel de detalle.
+
+También se concluye que el espacio desconocido puede ser considerado de
+distintas maneras en la construcción del GVD. En especial que puede considerase de
+forma de limitar la construcción del GVD al espacio conocido, lo cual lleva a
+una reducción de los tiempos de construcción del GVD y de exploración, con
+respecto a realizar la construcción en todo el espacio, como es usual.
+
+% tambien se concluye que al construir el gvd el espacio desconocido puede
+% considerase de forma de limitar la construcción al espacio conocido, lo cual
+% lleva a una reduccion de los tiempos de construcción del gvd y de
+% exploración, con respecto a realizar la construcción en todo el espacio como
+% es usual.
+
+En relación a la identificación de objetivos, según los resultados
+experimentales se concluye que utilizar todas las fronteras como objetivos
+tiene un impacto negativo considerable en los tiempos de exploración y en menor
+medida en la distancia que recorren los robots, frente a reducir el numero de
+objetivos simplificando las fronteras en sus partes mas significativas.
+Adicionalmente se mencionan dos métodos de simplificación de fronteras la
+simplificación basada en K-Mean que se encuentra presente en el estado del arte y
+la simplificación basada en cubrimiento propuesta en este proyecto como mejora
+de la anterior. Los resultados experimentales permiten concluir que la
+simplificación basada en cubrimiento logra una mejor reducción de objetivos que la
+simplificación basada en K-Means, pero tiene un rendimiento inferior en
+términos de costo computacional. 
+
+Adicionalmente existen dos potenciales mejoras sobre las cuales únicamente se
+puede concluir que funcionan correctamente por formar parte de la solución
+realizada, pero que su impacto no fue aislado y estudiado en la
+experimentación. La primera es el modelo de planificación jerárquica que
+combina la planificación sobre el GVD y sobre todo el espacio libre, que
+debería implicar reducciones en las distancias recorridas frente a navegar
+únicamente sobre el GVD y de costos computacionales frente a calcular los
+caminos directamente sobre todo el espacio libre. La segunda es el algoritmo de
+asignación de objetivos propuesto como alterativa al método húngaro como es
+utilizado en el trabajo original de \cite{wurm2008coordinated}. La ventaja del
+algoritmo propuesto es que este logra distribuir los robots sobre los segmentos
+considerando el numero de objetivos que existen en estos, lo cual evita dejar
+robots ociosos por asignar mas robots a un segmento que los objetivos que se
+encuentran en él.
 
 
-\todo[inline]{seguir con las dos mejoras, ir mezclando las conclusiones de las pruebas capaz.}
+% La conclusion principal es que el objetivo se cumplio de forma satisfactoria,
+% varias mejoras relacionadas a los aspectos de asignación de tareas, construcción
+% del GVD y planificación, fueron presentadas y validadas con la solución
+% dearrollada. 
 
+% Las mejoras estan asociadas construcción del GVD y identificación de objetivos.
 
+% La principal mejora consiste en hacer uso de un algoritmo incremental para
+% contruccion del GVD en lugar de uno no incremental como en la propuesta
+% original.
+
+% el desarrollo una solucion al problema de
+% exploracion multirobot basada en \cite{wurm2008coordinated} 
+
+% Uno de
+% los aspectos principales de la exploración multirobot 
+
+% En este proyecto se trabajo sobre el problema de exploración multirobot. 
+
+% En este proyecto se describio y 
+
+% Varios aspectos de la exploración
+% multirobot fueron analizados derivando en propuestas 
+
+% La solucion desarrollada a
+
+% \todo[inline]{seguir con las dos mejoras, ir mezclando las conclusiones de las pruebas capaz.}
+
+% El trabajo desarrollado trata sobre el problema de exploración utilizando un
+% grupo de robots, más específicamente sobre como lograr distribución eficiente
+% de los robots en el espacio para una mayor coordinación en la exploración. Para
+% esto, en lugar de distribuir los robots sobre las fronteras entre el espacio
+% conocido y el desconocido, como es usual, la propuesta apunta a identificar
+% porciones del espacio similares a habitaciones o corredores, llamados
+% segmentos, para luego distribuir los robots primero sobre dichos segmentos y
+% luego sobre las fronteras de los mismos.
+
+% punteo
+% * La exploración es un problema complejo:
+%   * involucr varios subprobleaas de la robtica que deben interactuar entre si para lograr
+% * La
 
 \section{Trabajo a futuro}
+
+Existen varias lineas de trabajo que pueden ser retomadas a futuro. Una de
+ellas es la remocion de algunas de las hipotesis.
+
+\subsection{Remocion de hipotesis}
+
+Se podria trabajar para remover la hipotesis de comunicacion ideal, esto introduce el desafio de considerar los problemas de comunicacion
+
+% * comunicacion ahora es ideal, si quisieramos simular mejores comuniciaiones nosotros deberiamos investigar co-simulacion (simulador de fisicas gazebo y simulador dee redes).
+%     * Ver de comentar cocosim
+
+%   * ubiacion ahora es ideal podria ver que desafios introduce el uso la remocion de esta restriccion
+
+
+% Hipotesis de saber las dimenciones del mapa estaria buena removerla , dar ideas
+
+% * Hay que comentar homogeneidad como restriccion que estamos tomando:
+%   * Ahora las fronteras accesibles en la grilla son accesibles por todos los robots 
+%     * Por ser homogeneos y cierculares los robots se puede engordar los obstaculos por el radio del robot y eso asegura lo del punto antesrior.
+%   * De lo contrario si los tamanio 
+%   * tipos de fronteras dependiendo de la accesibilidad : de percepcion y de movilidad
+%     * se podria asignar dimendsiones minimas de lso robots a las fronteras (para un camino tengo los vertices y cada uno tiene distancia minima a los obstaculos entoces la minima distancia a un obstaculo es tu dimencion maxima si no te vas a chochar). 
+
+
+%   * Por ahora los entornos se considerarn estaticos, y en mayor parte lo son (solo los demas robots son dinamicos). Levantar esta restriccion tambien es un trabajo a futuro interesante. Ver de modelar puertas personas , etc y como manejarlas. Puertas como cosas que se pueden abrir. Personas como cosas a esquivar pero que no queneran segmentos etc.
+
+
+% \subsection{Identificacin de objetivos }
+% Comentar que el entorno en el que se realizan las pruebas pone a prueba los
+% algorimos de simplificacion principalmente en la habitacion grande del centro,
+% siendo las demas demasiado pequeñas como para favorecer que se generen
+% fronteras con las condiciones de ser largas y serperteantes, de forma de
+% generar las condiciones necesaria para que la simplificacion de K-Means
+% funcione peor. Quizas el generar un conjunto distinto de pruebas viene bien
+% junto a hacerlo mas eficiente y tambien compara contra affinity propagation
+
+% Cuidado con la simplificacion de fronteras y los obstaculos que pueden llegar a
+% ocluir las fornteras (modificar la def de cubrimiento para que no permita
+% oclucsiones)
+
+
+% \subsection{Mejoras de rendimiento generales}
+
+% podria ser que sea una buena idea  el identificar etapas paralelizables en la
+% obtencion de info (por ejemplo id de obj paralelo a la obtnecion de GVD y
+% posterior segmentacion)
+
+% Hacer incremental todo lo de la obtencion de info (id de obj y segmentacion)
+
+% Hacer segmentacion incremental, quizas tomar como base los de liu ming y siegwart
+
+% Ver posibilidades de un filtrado de fronteras (obtener fronteras sigificativas) de forma incremental
+
+
+% \subsection{Planificacion}
+% * Trabajar par evitar un planner global, que utlice algorimos sobre las
+%   grillas de ocupacion. Se podria utlizar carrot_planner pero este
+%   presento problemas. Se requiere mas experimentación y investigacion
+%   sobre el tema. Seguramnete un buen planer local sea necesario.
+
+
+% \subsection{Mapa topologico}
+% * Consolidar una la generacion un mapa topologico verdadero:
+%   * ahora el mapa topologico se compone de regiones sueltas y el gvd que
+%     permite navegar entre estas.
+%     * no es necesaria otra para lo que hice pero estaria bueno como herramienta
+%       generar un verdadero mapa topologico
+%   * La idae seria reducir los segmentos vertices ubicandos en sus centros de
+%     masa y las conexiones entre ellos (a travez del gvd/mapa metrico) a aristas
+%     punto a punto entre dichos vertices.
+
+% * Mejorar la segmentacion, por ejemplo con:
+%   * Trun y su mergeo de segmentos 
+%   * lo descrito en liu ming y siegwart spectral clustering
+
+% * Evaluar la segmentacion incremental con lo mencionado en la seccion de criterios del "estado del arte"
+
+% * Hacer la tencica de filtrado de puntos criticos de wurm (la de vecino de grado 3) de forma incremental
+
+% \subsection{producto}
+
+% * Hacer librerias con los timpos de datos utliados y algormios desarrollados (agnositcos de ros 1)
+%   * Esto se hizo (no seria trabajo futuro)
+
+% * Hacer paquetes de ros 1 que sigan los estandares, sean modulares y resutilizables 
+%   * Ahora esta todo junto dentro de un paquete pero los modulos son
+%     relativametne independientes entre si y podrian modularizarse para su
+%     reutlizacion y combinacion con otros paquetes
+
+% * Hacer lo mismo del punto anterior con ros2:
+%   * Discutir que esto es lo mas razonable ya que:
+%     * ROS 1 termna su soporte pronto
+%     * ROS 2 es ampliamente superior cuando se trata de multirobot (no es centralizado)
+
+
