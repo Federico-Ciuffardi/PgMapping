@@ -60,7 +60,9 @@ combinando dichas grillas con las ideas presentadas en
 \section{Hipótesis de trabajo}\label{sec:hip}
 La solución se desarrolla con las siguientes hipótesis de trabajo.
 \begin{enumerate}[label=(\roman*)]
-  \item Cada robot conoce en todo momento su ubicación (posición y orientación).
+  % \item Cada robot conoce en todo momento su ubicación (posición y orientación).
+  \item Cada robot puede obtener en todo momento su ubicación (posición y
+    orientación) sin errores.
   \item Las comunicaciones son ideales: sin perdida, de ancho de banda y rango infinito.
   \item Los robots son circulares e iguales entre sí.
   \item Los robots tienen la capacidad de detectar las superficies mas cercanas
@@ -288,7 +290,7 @@ a vecinos horizontales y $n_1, n_3, n_5, n_7$ se corresponden a los vecinos
 diagonales de $c$ segun se muestran en la figura \ref{fig:vecinos}.
 
 \begin{equation} 
- ady_4(c)=\{n_{k*2} : 1\leq i \leq 4, n_k \in C\}
+ ady_4(c)=\{n_{i*2} : 1\leq i \leq 4, n_{i*2} \in C\}
  \label{eq:vecinos4}
 \end{equation} 
 

@@ -4,16 +4,28 @@ retomados como trabajo futuro.
 
 \section{Conclusiones}
 
+% Este proyecto de grado se planteo como objetivo mejorar la propuesta de
+% coordinación para la exploración multirobot de \cite{wurm2008coordinated} en la
+% que se establece que la exploración debe realizase maximizando la distribución
+% de los robots sobre las habitaciones y corredores (segmentos), los cuales son
+% identificados a partir de un GVD. Para esto se evaluaron varios aspectos de la
+% propuesta en cuestión y del problema de exploración multirobot en general
+% relevando una serie de potenciales mejoras. Estas fueron implementadas como
+% parte de una solución al problema de exploración multirobot \footnote{Disponible en línea:\\
+% \url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con la cual se
+% experimento dentro de un simulador con el propósito de validar su impacto.
+
 Este proyecto de grado se planteo como objetivo mejorar la propuesta de
-coordinación para la exploración multirobot de \cite{wurm2008coordinated} en la
-que se establece que la exploración debe realizase maximizando la distribución
-de los robots sobre las habitaciones y corredores (segmentos), los cuales son
-identificados a partir de un GVD. Para esto se evaluaron varios aspectos de la
-propuesta en cuestión y del problema de exploración multirobot en general
-relevando una serie de potenciales mejoras. Estas fueron implementadas como
-parte de una solución al problema de exploración multirobot \footnote{Disponible en línea:\\
-\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con la cual se
-experimento dentro de un simulador con el propósito de validar su impacto.
+exploración multirobot de \cite{wurm2008coordinated} donde se establece que la
+exploración debe llevarse a cabo maximizando la distribución de los robots
+sobre las habitaciones y corredores (segmentos), los cuales son identificados a
+partir de un GVD. Para esto se evaluaron varios aspectos de la propuesta en
+cuestión y del problema de exploración multirobot en general relevando una
+serie de potenciales mejoras. Estas fueron implementadas como parte de una
+solución al problema de exploración multirobot \footnote{Disponible en línea:\\
+\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con
+la cual se experimento dentro de un simulador con el propósito de validar su
+impacto.
 
 En general, a partir de los resultados obtenidos de la experimentación se
 concluye que la solución desarrollada logra resolver el problema de exploración
@@ -115,33 +127,59 @@ encuentran en él.
 
 \section{Trabajo a futuro}
 
-Existen varias lineas de trabajo que pueden ser retomadas a futuro. Una de
-ellas es la remocion de algunas de las hipotesis.
+Esta sección se dedica a comentar las lineas de trabajo que surgen del proyecto
+realizado y pueden ser retomadas a futuro.
 
-\subsection{Remocion de hipotesis}
+\subsection{Experimentacion en la realidad}
 
-Se podria trabajar para remover la hipotesis de comunicacion ideal, esto introduce el desafio de considerar los problemas de comunicacion
+Una de estas líneas de trabajo es la de realizar pruebas en la realidad con el
+proposito de validar los resultados obtenidos de los experimentos simulados.
+Esto no es una tarea trivial ya que, ademas de requerir de hardware y de un
+entorno en donde hacer las pruebas, también implica remover las hipotesis de
+comunicación ideal y de localización trivial de los robots, ya que estas
+hipotesis no son viables en la realidad. Esto hace necesario alterar la
+asignación de tareas de forma que los problemas potenciales de comunicación
+sean considerados y evitados durante la exploración. Adicionalmente requiere
+integrar una solución de localización que permita obtener la ubicación de los
+robots en un escenario real.
 
-% * comunicacion ahora es ideal, si quisieramos simular mejores comuniciaiones nosotros deberiamos investigar co-simulacion (simulador de fisicas gazebo y simulador dee redes).
-%     * Ver de comentar cocosim
+\subsection{Identificación de objetivos}
+% esta relacionada al
+% metodo de identificación de objetivos que funciona simplificacando fronteras
+% basandose en el cubrimiento. Como se comento en la seccion de conclusiones,
+% dicho metodo obtiene una reduccion de objetivos mejo
 
-%   * ubiacion ahora es ideal podria ver que desafios introduce el uso la remocion de esta restriccion
+% ue se abre desde este proyecto
 
+% Se intuye que existe la
 
-% Hipotesis de saber las dimenciones del mapa estaria buena removerla , dar ideas
+% posiblidad de mejorar el rendimiento computacional del 
 
-% * Hay que comentar homogeneidad como restriccion que estamos tomando:
-%   * Ahora las fronteras accesibles en la grilla son accesibles por todos los robots 
-%     * Por ser homogeneos y cierculares los robots se puede engordar los obstaculos por el radio del robot y eso asegura lo del punto antesrior.
-%   * De lo contrario si los tamanio 
-%   * tipos de fronteras dependiendo de la accesibilidad : de percepcion y de movilidad
-%     * se podria asignar dimendsiones minimas de lso robots a las fronteras (para un camino tengo los vertices y cada uno tiene distancia minima a los obstaculos entoces la minima distancia a un obstaculo es tu dimencion maxima si no te vas a chochar). 
+También se abren dos líneas de trabajo que profundizan en el estudio y
+desarrollo de metodos de identificación de objetivos. La primera esta orientada
+al anlaisis del metodo de simplificación de fronteras basado en el cubrimiento
+en busca de posibles optimizaciones que logren mejorar su rendimiento
+computacional, que actualmente es su mayor desventaja. La segunda consiste en
+el desarrollo de variantes del metodo antes mencionado que en lugar de elegir
+las fronteras sigificativas de forma abitraria desde los conjuntos de fronteras
+candidatas lo hagan con algun criterio especifico, como por ejemplo elegir la
+frontera candidata con mayor ganancia de información \cite{amorin2019novel}.
+\todo{de tener una ref al metodo de affinity propagation lo agrego como trabajo futuro}
 
+% La tercera es
+% el estudio de otros metodos identificación de objetivos, como por ejemplo la simplificación.
 
-%   * Por ahora los entornos se considerarn estaticos, y en mayor parte lo son (solo los demas robots son dinamicos). Levantar esta restriccion tambien es un trabajo a futuro interesante. Ver de modelar puertas personas , etc y como manejarlas. Puertas como cosas que se pueden abrir. Personas como cosas a esquivar pero que no queneran segmentos etc.
+De seguir alguna de estas direcciones también sería conveniente diseñar nuevas
+pruebas que se concentren en evaluar la identificación de objetivos, ya que por
+ejemplo en el entorno utlizado la mayoria de habitaciones son pequeñas y no son
+propensas a generar fronteras con una complejidad suficiente como para
+presentar un desafio para los metodos de simplificación estudiados.
 
+ % analizar la posibilidad de optimizar 
 
-% \subsection{Identificacin de objetivos }
+% Como se comento en la seccion de conclusiones,
+% dicho metodo obtiene una reduccion de objetivos mejo
+
 % Comentar que el entorno en el que se realizan las pruebas pone a prueba los
 % algorimos de simplificacion principalmente en la habitacion grande del centro,
 % siendo las demas demasiado pequeñas como para favorecer que se generen
@@ -155,35 +193,21 @@ Se podria trabajar para remover la hipotesis de comunicacion ideal, esto introdu
 % oclucsiones)
 
 
-% \subsection{Mejoras de rendimiento generales}
 
-% podria ser que sea una buena idea  el identificar etapas paralelizables en la
-% obtencion de info (por ejemplo id de obj paralelo a la obtnecion de GVD y
-% posterior segmentacion)
+\subsection{Mapa topológico}
 
-% Hacer incremental todo lo de la obtencion de info (id de obj y segmentacion)
+En la solucion desarrollada la extension espacial de los segmentos es la unica
+información necesaria y que se tiene disponible relacionada al mapa topologico.
+Por lo que una direccion de trabajo posible seria la de procesar esta
+información para obtener un mapa topológico completo. Por ejemplo un grafo que
+contenga un vertice por segmento y las conexines entre dichos vertices implique
+puertas entre los segmentos.
 
-% Hacer segmentacion incremental, quizas tomar como base los de liu ming y siegwart
-
-% Ver posibilidades de un filtrado de fronteras (obtener fronteras sigificativas) de forma incremental
-
-
-% \subsection{Planificacion}
-% * Trabajar par evitar un planner global, que utlice algorimos sobre las
-%   grillas de ocupacion. Se podria utlizar carrot_planner pero este
-%   presento problemas. Se requiere mas experimentación y investigacion
-%   sobre el tema. Seguramnete un buen planer local sea necesario.
-
-
-% \subsection{Mapa topologico}
-% * Consolidar una la generacion un mapa topologico verdadero:
-%   * ahora el mapa topologico se compone de regiones sueltas y el gvd que
-%     permite navegar entre estas.
-%     * no es necesaria otra para lo que hice pero estaria bueno como herramienta
-%       generar un verdadero mapa topologico
-%   * La idae seria reducir los segmentos vertices ubicandos en sus centros de
-%     masa y las conexiones entre ellos (a travez del gvd/mapa metrico) a aristas
-%     punto a punto entre dichos vertices.
+Evaluar los mapas topológicos generados por la solucion desarrollada con las
+ideas presentadas en la sección \ref{sec:evalTop} también se presenta como una
+linea de trabajo interesante. Al igual que el estudio, implementación y
+validación de tecnicas que proponen mejorar la segmentación como las que se
+describen en \cite{Thrun1998,Liu2015,wurm2008coordinated}.
 
 % * Mejorar la segmentacion, por ejemplo con:
 %   * Trun y su mergeo de segmentos 
@@ -193,7 +217,71 @@ Se podria trabajar para remover la hipotesis de comunicacion ideal, esto introdu
 
 % * Hacer la tencica de filtrado de puntos criticos de wurm (la de vecino de grado 3) de forma incremental
 
-% \subsection{producto}
+
+% tiene consite de sus segmentos sueltas y el gvd que
+%     permite navegar entre estas.
+%     * no es necesaria otra para lo que hice pero estaria bueno como herramienta
+%       generar un verdadero mapa topologico
+
+% Auque en la solucion del proyecto desarrollado se identifican los segmentos del entorno
+
+% es la de probar distintas formas de sementacion, estudiar el impacto de cada 
+% * Consolidar una la generacion un mapa topologico verdadero:
+%   * ahora el mapa topologico se compone de regiones sueltas y el gvd que
+%     permite navegar entre estas.
+%     * no es necesaria otra para lo que hice pero estaria bueno como herramienta
+%       generar un verdadero mapa topologico
+%   * La idae seria reducir los segmentos vertices ubicandos en sus centros de
+%     masa y las conexiones entre ellos (a travez del gvd/mapa metrico) a aristas
+%     punto a punto entre dichos vertices.
+
+
+\subsection{Asignación de objetivos y Planificación}
+
+Realizar pruebas que permitan comparar el impacto del algorimo de asignación de
+objetivos introducido contra con otros algorimos de asignación de objetivos,
+como por ejemplo el metodo húngaro, es otra posible direccion de trabajo que
+puede ser retomada a futuro.
+
+De forma similar otro trabajo futuro posible es el de validar el impacto de la
+planificación jerarquica presentada en este proyecto comparandola con otras
+estrategias alterativas de planificación. 
+
+\subsection{Potenciales mejoras de rendimiento}
+
+% varios trabajos a futuro que se .. .de esto
+
+Existen varias mejoras potenciales de rendimiento que pueden ser estudidadas,
+implementadas y validadas como trabajo fururo. A continuacion se presentan
+algunos ejemplos.
+
+Un ejemplo sería el paralelizar la contrucción del GVD y la identificación de
+objetivos en la etapa de obtención de información.
+
+Otro ejemplo consiste cambiar algoritmo de segmentación no incremental por una variante
+incremental de este, como la presentada en \cite{Liu2015}. 
+
+Los algorimos de simplificación de frontera son no incrementales y cambiarlos
+por variantes incrementales tambien seria un ejemplo. Aunque en este caso no se
+encontro información al respecto por lo que se deberia estudiar la posibilidad
+de desarrollar las variantes incrementales.
+
+% Ver posibilidades de un filtrado de fronteras (obtener fronteras sigificativas) de forma incremental
+
+
+\subsection{Reusabilidad}
+
+Otro trabajo futuro posible es el de refcatorizar, organizar y documentar cada
+modulo de la solucion ya disponible en linea, con el proposito de proporcionar
+dichos modulos como nodos de ROS independientes, siguiendo los estandares
+propuestos por la comunidad de dicha herramienta. De esta forma se facilita la
+reutilizacion de lo desarrollado en este proyecto con lo que se lograra
+alcanzar a mas investigadores y estudantes.
+
+Relacionado a la anterior adaptar la solución actual que utliza la primera
+verision de ROS (ROS 1) a su segunda versión (ROS 2), puede ser otra linea de
+trabajo de interes pensando en la reusabilidad a fururo esto ya que ROS 1
+termina su soporte en el 2025.
 
 % * Hacer librerias con los timpos de datos utliados y algormios desarrollados (agnositcos de ros 1)
 %   * Esto se hizo (no seria trabajo futuro)
@@ -207,5 +295,27 @@ Se podria trabajar para remover la hipotesis de comunicacion ideal, esto introdu
 %   * Discutir que esto es lo mas razonable ya que:
 %     * ROS 1 termna su soporte pronto
 %     * ROS 2 es ampliamente superior cuando se trata de multirobot (no es centralizado)
+
+% \subsection{Remocion de hipotesis}
+
+% X Se podria trabajar para remover la hipotesis de comunicacion ideal, esto introduce el desafio de considerar los kkkkk
+
+% X comunicacion ahora es ideal, si quisieramos simular mejores comuniciaiones nosotros deberiamos investigar co-simulacion (simulador de fisicas gazebo y simulador dee redes).
+%     * Ver de comentar cocosim
+
+% X ubiacion ahora es ideal podria ver que desafios introduce el uso la remocion de esta restriccion
+
+
+% * Hipotesis de saber las dimenciones del mapa estaria buena removerla , dar ideas
+
+% * Hay que comentar homogeneidad como restriccion que estamos tomando:
+%   * Ahora las fronteras accesibles en la grilla son accesibles por todos los robots 
+%     * Por ser homogeneos y cierculares los robots se puede engordar los obstaculos por el radio del robot y eso asegura lo del punto antesrior.
+%   * De lo contrario si los tamanio 
+%   * tipos de fronteras dependiendo de la accesibilidad : de percepcion y de movilidad
+%     * se podria asignar dimendsiones minimas de lso robots a las fronteras (para un camino tengo los vertices y cada uno tiene distancia minima a los obstaculos entoces la minima distancia a un obstaculo es tu dimencion maxima si no te vas a chochar). 
+
+
+%   * Por ahora los entornos se considerarn estaticos, y en mayor parte lo son (solo los demas robots son dinamicos). Levantar esta restriccion tambien es un trabajo a futuro interesante. Ver de modelar puertas personas , etc y como manejarlas. Puertas como cosas que se pueden abrir. Personas como cosas a esquivar pero que no queneran segmentos etc.
 
 
