@@ -4,13 +4,12 @@ multirobot\footnote{Disponible en línea:\\
 requiere soluciones para varios problemas relacionados a diversos aspectos de
 la exploración multirobot, este proyecto se concentrara en algunos de ellos.
 
-Para el problema de asignación de tareas (sección \ref{sec:exploracion}) se
+Para el problema de asignación de objetivos (sección \ref{sec:exploracion}) se
 presentan soluciones para cada una de sus partes. Para la identificación de
 objetivos se propone una técnica novedosa basada en el rango de sensado de los
 robots que determina como objetivos a un subconjunto de los puntos fronterizos.
-Con respecto a la asignación de objetivos a robots, esta se resuelve de forma
-coordinada aplicando una variante de lo presentado en la sección
-\ref{subsec:wurmCoord}.
+La distribución de objetivos a robots, se resuelve de forma coordinada
+aplicando una variante de lo presentado en la sección \ref{subsec:wurmCoord}.
 
 La asignación requiere de la construcción de un mapa topológico, para esto se
 implementa la técnica descrita en la sección \ref{subsec:mapaTopGVD} que
@@ -19,9 +18,9 @@ del algoritmo \emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}).
 
 Luego de asignado a un objetivo el robot deberá llegar hasta el, para esto es
 necesario solucionar el problema de planificación. La solución desarrollada
-aplica la idea de planificación jerárquica presentadas en la sección
-\ref{subsec:mapas}, con el motivo de permitir una planificación eficiente sin
-resultar en caminos innecesariamente largos.
+aplica la idea de planificación jerárquica mencionada en la sección
+\ref{subsec:mapas}, con el motivo de permitir una planificación
+computacionalmente eficiente sin resultar en caminos innecesariamente largos.
 
 El problema construir el mapa de un entrono inicialmente desconocido a partir
 de los datos sensoriales de varios robots se soluciona, contruyendo en cada
@@ -172,16 +171,6 @@ El nodo \emph{recovery\_behaviors} permite ejecutar comportamientos de
 recuperación de detectarse que el robot no esta avanzando de forma correcta al
 objetivo. Para la solucion desarrollada solo se hace uso del comportamientos de
 recuperación que consite en que el robot rote en el lugar.
-%en el lugar y forzar que recalculen porciones del mapa.
-
-% El \emph{global\_planner} hace uso de un mapa global, este mapa es provisto por 
-
-
-% lograr esto cuando se establece un objetivo de navegación,
-
-
-% de permitir que un robot pueda mover que a partir de información sobre la ubicación, sensores del robot, v 
-
 
 \subsection{Combinador de mapas}
 El modulo \emph{Combinador de mapas} es el encargado de mantener el mapa del entorno
@@ -195,29 +184,15 @@ cabo alguna de sus tareas.
 
 \subsection{Controlador central}
 
-El modulo \emph{Controlador central} lleva a cabo la identificacion de objetivos, es decir detectar en
-el mapa actual los potenciales objetivos de exploracion. 
-
-A su vez es el principal responsable de realizar la asignacion de objetivos.
-Específicamente la asignacion de objetivos consiste en una subasta en la cual
-este modulo actua como subastador. La subasta se puede resumir de la siguiente
-manera, los objetivos de exploracion identificados son transmitidos desde el
-\emph{controlador central} a los robots los cuales valuan a dichos objetivos segun que
-tan conveniente les es llegar a ellos. Los robots envian sus valuaciones a la
-central la cual aplica una algorimo para determinar que objetivo le corresponde
-a cada robot y posteriormente le informa a cada robot que objetivo le
-corresponde.
-
-% tiene el
-% siguiente funciona en la cual  de objetivos consite en tomar los objetivos
-% identificados y coordinar
-
-% La prinicpal es la de llevar a cabo la identificación de tareas y ser el 
-
-% e encarga de coordinar las subastas de segmentos, es decir, genera la
-% información necesaria para esta, decide cuando comienza la subasta y cuando
-% termina el plazo para ofertar, computa los resultados y se encarga de las
-% comunicaciones necesarias para llevarla a cabo.
+El modulo \emph{Controlador central} es el responsable de orquestrar la
+asignacion de objetivos. Específicamente la asignacion de objetivos consiste en
+una subasta en la cual este modulo actua como subastador. La subasta se puede
+resumir de la siguiente manera, los objetivos de exploracion identificados son
+transmitidos desde el \emph{controlador central} a los robots los cuales valuan
+a dichos objetivos segun que tan conveniente les es llegar a ellos. Los robots
+envian sus valuaciones a la central la cual aplica una algorimo para determinar
+que objetivo le corresponde a cada robot y posteriormente le informa a cada
+robot que objetivo le corresponde.
 
 \subsection{Controlador de movimiento}
 El modulo \emph{Contrador de movimiento} es como su nombre lo indica el modulo
@@ -235,19 +210,14 @@ existe algun problema.
 
 \subsection{Controlador del robot}
 El \emph{Controlador del robot} es el modulo que se encarga de valuar los
-objetivos cuando ocurre una subasta. A su vez se encarga de procesar las
-asignaciones de objetivos determinadno el camino que lleva al objetivo y
+objetivos cuando ocurre una subasta. A su vez se encarga de procesar los
+objetivos asignados determinadno el camino que lleva al objetivo y
 enviandolo al modulo \emph{Controlador de movimiento}. 
 
 Tambien es responsable por solicitar el inicio de una subasta al
 \emph{Controlado central} cuando el \emph{Controlador de moviemiento} indica el
 exito o el fracaso en seguir el camino asignado.
 
-% Tambien pide la subasta.\todo{explicar mejor}
-
-% \section{Ciclo de robot}
-
-% \section{Ciclo de la central}
 \section{Definiciones}
 Esta seccion esta dedicada a formalizar conceptos que serán utilizados en lo que resta
 del capitulo.
@@ -677,12 +647,12 @@ verde, siendo las circunferencias rojas de radio $rango=5.6$ (largos de celda) c
 \end{figure}
 
 
-\section{Asignación de tareas}\label{sec:asigTar}
+\section{Asignación de objetivos}\label{sec:asigTar}
 % Comentar el tema de que uso wurm, que cambio como obtengo el gvd haciendo uso de una variante del metodo inc presentado en Lau que tenia esas mejoras que se mencionaron en \ref{subsec:constGVDInc}. Decir que se va a comentar a detalle las variaciones desarrolladas la seccion \ref{sec:MiConstGVD}. 
 
 Cuando un robot se encuentra ocioso este le solicita a la central que le asigne
-una nueva tarea, esto desencadena un proceso de asignacion de
-tareas que se describe a lo largo de esta seccion.
+un nuevo objetivo, esto desencadena el proceso de asignacion de
+objetivos que se describe a lo largo de esta seccion.
 
 La asignación de objetivos se basa en la idea presentada en
 \ref{subsec:wurmCoord}, que sostiene que es conveniente que los robots se
@@ -705,11 +675,11 @@ estos, la asignacion de objetivos a robots segun la valoraciones y los
 segmentos a los cuales pertenece cada objetivo, finalizando con la notificacion
 del objetivo que le fue asignado a cada robot.
 
-Con respecto a la separacion del problema de asignación de tareas mencionada en
-la seccion \ref{sec:exploracion}, que establece dos partes, la identificacion
-de objetivos y la asignación de objetivos; la primera forma parte de la
-\emph{obtencion de informacion}, y la segunda se corresponde con el el resto de
-lo que se describe en esta seccion.
+Con respecto a la separación del problema de asignación de objetivos mencionada
+en la seccion \ref{sec:exploracion}, la parte de identificacion de objetivós
+esta incluida en la \emph{obtencion de informacion}, y la parte de
+distribuición de objetivos se corresponde con el el resto de lo que se describe
+en esta seccion.
 
 % Para que la subasta sea llevada a cabo se deben distribuir los objetivos de
 % exploracion entre los robots para que estos asignen valores a cada uno segun
@@ -759,34 +729,31 @@ lo que se describe en esta seccion.
 % Mandar asignaciones es casi que trivial
 
 \subsection{Obtencion de informacion}\label{subsec:obtInfo}
-Como se menciono todo comienza cuando un robot ocioso solicita un tarea a la
-central, esto desencadana una nueva subasta de no encontrarse una en curso. Si
-existe una en curso el robot recibira una tarea cuando esta termine, no es
-necesario iniciar otra.
-
-La etapa de \emph{obtencion informacion} es la primera etapa en llevase a cabo
-al iniciarse la subasta. La informacion que se obtiene en esta son los
-objetivos de exploracion, un GVD y las regiones del mapa mapa topológico del
-entorno explorado que con el motivo de identificar en que segmento se encuentra
-cada objetivo de exploracion, para porsteriomente poder asignar distribuyendo a
-los robots sobre estos. 
+Como se menciono anteriormente cuando un robot ocioso solicita un objetivo a la
+central y se da comienzo a una nueva subasta.%, esto desencadana una nueva subasta de no encontrarse una en curso.
+% Notar que si existe una subasta en curso el robot va recibir un objetivo cuando
+% esta termine, por lo que puede no ser necesario iniciar otra.
+La etapa de \emph{obtencion informacion} es la primera etapa de la subasta. La
+informacion que se obtiene en esta son los objetivos de exploracion, un GVD y
+las regiones del mapa mapa topológico del entorno explorado que con el motivo
+de identificar en que segmento se encuentra cada objetivo de exploracion, para
+porsteriomente poder asignar distribuyendo a los robots sobre estos. 
 
 La identificacion de objetivos se lleva a cabo con el metodo descrito en la
 sección \ref{subsec:MiSimp}.
 
-El mapa topológico necesario para saber cuales son los segmentos sobre
-los cuales distribuir a los robots, se construye en esta etapa con una
-tecnica que al igual que en el trabajo original de
-\cite{wurm2008coordinated} se basa en la tecnica de \cite{Thrun1998}
-explicada en la seccion \ref{subsec:mapaTopGVD} que hace uso de 
-un GVD (detalles de la implementación de esta tecnica se tratan en
-\ref{subsec:mapaTopGVDGrid}). Uno de los cambios principales con
-respecto al trabajo original de \cite{wurm2008coordinated} es la forma
-en la cual se contruye el GVD. En el trabajo original se hace uso de un
-metodo de construccion no incremental, en este proyecto con el motivo de
-alcanzar una implementación que logre funcionar en tiempo real (seccion
+La identificación de los segmentos que es necesaria para distribuir los robots
+sobre dichos segmentos, se lleva a cabo en esta etapa con una tecnica que al
+igual que en el trabajo original de \cite{wurm2008coordinated} se basa en la
+tecnica de \cite{Thrun1998} explicada en la seccion \ref{subsec:mapaTopGVD} que
+hace uso de un GVD (detalles de la implementación de esta tecnica se tratan en
+\ref{subsec:mapaTopGVDGrid}). Uno de los cambios principales con respecto al
+trabajo original de \cite{wurm2008coordinated} es la forma en la cual se
+contruye el GVD. En el trabajo original se hace uso de un metodo de
+construccion no incremental, en este proyecto con el motivo de alcanzar una
+implementación eficiente para su uso en tiempo real (seccion
 \ref{subsec:constGVDInc}) se reemplaza por una variante del algoritmo
-incremental \emph{brushfire dinamico} que se presentará en la seccion
+incremental \emph{brushfire dinamico} que se presenta en la seccion
 \ref{sec:MiConstGVD}.
 
 
@@ -875,6 +842,11 @@ conjnto considerada una valuacion. %\todo{o mensaje de valuacion, como quede mej
 % la central. 
 
 \subsection{Resolución} \label{subsec:MiResSub}
+La resolucion comienza con la central recibiendo las valuaciones realizadas por
+los robots. Al recibirse la primera valuacion existe una ventana de tiempo en
+la que la central continuara recibiendo nuevas valuaciones. Terminada esta
+ventana se ejecuta un algoritmo que resulta en la asignacion de objetivos a los
+robots. Finalmente las asignaciones realizadas son comunicadas a los robots.
 % La resolucion es el proceso de asignar los objetivos La resolucion contempla
 % la recepcion de las valoraciones por la central, la asignacion de objetivos a
 
@@ -882,16 +854,14 @@ conjnto considerada una valuacion. %\todo{o mensaje de valuacion, como quede mej
 % de exploracion a los
 % robots. 
 \subsubsection{Recepcion de valuaciones}
-La resolucion comienza con la recepcion de las valuaciones realizadas por
-los robots. Al recibirse la primera valuacion existe una ventana de tiempo en
-la que la central continuara recibiendo nuevas valuaciones. Terminada esta
-ventana se ejecuta un algoritmo que resulta en la asignacion de objetivos a
-los robots.
+Como se menciono anteriormente luego de recibida la primera valuacion existe
+una ventana de tiempo en la que la central continuara recibiendo nuevas
+valuaciones luego de la cual se da por concluida la recepcion de valuaciones. 
 
-El proposito de la ventana es que en escenarios reales los robots pueden dejar
-de comunicarse por alguna razón (desconexiones de red, accidentes que dejen a
-los robots sin funcionar, entre otros), por lo tanto esperar por las
-valuaciones de todos los robots puede ser una espera infinita.
+El proposito de utlizar una ventana es que en escenarios reales los robots
+pueden dejar de comunicarse por alguna razón (desconexiones de red, accidentes
+que dejen a los robots sin funcionar, entre otros), por lo tanto esperar por
+las valuaciones de todos los robots puede ser una espera infinita.
 
 Dado que el problema que los robots deben resolver para generar las valoraciones es
 similar, se asume que el tiempo se demora en generar las valoraciones tambien
@@ -1127,11 +1097,11 @@ todos los robots estan asignados o que no quedan mas objetivos por asignar
 % , estos se calculan de forma que todos los segmentos tengan todos sus objetivos asignados a robots, un numero de robots asignadosk
 
 En resumen, la central asigna a los robots a objetivos considerando los costos
-de forma voraz y con la restriccion de distribuir los robots sobre los
-segmentos considerando la cantidad de objetivos que contienen. Luego de
-ejecutar el algorimo de asignacion la central informa a cada robot el objetivo
-que le fue asignado, quedando a la espera de nuevos pedidos por parte de los
-robots para comenzar una nueva subasta. 
+y la restriccion de distribuir los robots sobre los segmentos considerando la
+cantidad de objetivos que contienen. Luego de ejecutar el algorimo de
+asignacion la central informa a cada robot el objetivo que le fue asignado,
+quedando a la espera de nuevos pedidos por parte de los robots para comenzar
+una nueva subasta. 
 
 \section{Segmentación}\label{subsec:mapaTopGVDGrid}
 % segun si las celdas ocupadas mas cercanas $oc_1$ y $oc_2$ de
