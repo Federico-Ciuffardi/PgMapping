@@ -15,9 +15,6 @@ exploración es fundamental en tareas de limpieza \cite{luo2002real}, operacione
 de búsqueda y rescate \cite{Liu2015}, misiones extra planetarias
 \cite{schuster2019towards}, entre otras tareas en las cuales se desconozca
 el entorno y sea ineficiente o directamente inviable teleoperar a un robot.
-%Por lo tanto en
-%dicho tipo de tareas que el robot pueda explorar el entorno de forma autónoma
-%es una característica deseable.
 
 Uno de los principales aspectos de la exploración autónoma es el problema de la
 asignación de tareas de exploración. Este suele separarse en dos partes
@@ -36,7 +33,7 @@ usualmente se asocia al tamaño de la porción explorada al completar el
 objetivo. %\todowarn{la importancia/prioridad de la tarea si la tuvieran}.
 
 Otro aspecto fundamental es el denominado criterio de parada según el cual se
-determina cuando la exploración se considera finalizada.  Uno de los criterios
+determina cuando la exploración se considera finalizada. Uno de los criterios
 de parada tomados usualmente es detener la exploración cuando el mapa
 construido alcanza cierto porcentaje de cubrimiento del entorno
 \cite{Yan2015}. Aunque este es usualmente utilizado para evaluaciones de
@@ -131,55 +128,6 @@ La simplicidad mencionada también tiene ventajas computacionales, ya que para u
 Dadas las ventajas y desventajas mencionadas existen trabajos \cite{Thrun1998,wurm2008coordinated,Liu2015} que proponen el uso simultáneo de mapas topológicos y métricos para \say{ganar lo mejor de los dos mundos} al tener disponible abstracción y detalle a la vez. Un ejemplo de cómo combinar las ventajas de ambos tipos de mapa es la planificación jerárquica descrita en \cite{Thrun1998} donde se utiliza un mapa topológico y uno métrico de un mismo entorno para generar planes para navegar en el entorno. El mapa topológico es utilizado para generar un plan de navegación topológico que consiste en una secuencia de corredores y habitaciones que se deben atravesar para llegar a un objetivo, plan que aunque es fácil de generar no posee suficiente detalle como para traducirse directamente en acciones que el robot pueda realizar para llegar al objetivo. Por lo tanto se introduce una segunda etapa de planificación que consiste en utilizar la representación métrica del entono para generar planes métricos que permitan al robot moverse entre los segmentos que componen al plan topológico. En este acercamiento se hace un único plan topológico sobre todo el entorno y varios planes métricos sobre porciones reducidas del entorno, lo cual resulta en una reducción del costo computacional en comparación a hacer un único plan métrico sobre el entorno entero.
 
 Los tres trabajos antes mencionados utilizan una misma estrategia para lograr construir un mapa topológico y uno métrico, asegurando que estos son congruentes entre si. La estrategia consiste en construir una grilla de ocupación a partir de los datos obtenidos por los sensores de los robots. Dicha grilla de ocupación es utilizada tanto como mapa métrico, como para generar una estructura intermedia llamada \emph{grafo generalizado de Voronoi}, con el cual es posible detectar los segmentos que constituyen un mapa topológico basado en regiones. Este proceso es una parte fundamental del trabajo desarrollado en este proyecto y se detallará a lo largo de las siguientes secciones.%\todo{durante este proyecto?} 
-
-%\subsection{Mapa métrico basado en polígonos}
-%Las grillas de ocupación son los mapas métricos mas utilizadas en el contexto de exploración multirobot, sin embargo, estas grillas no son apropiadas para entornos que son muy grandes o cuyos límites no están bien delimitados desde el comienzo de la exploración. En contraste, las representaciones poligonales no tienen tales limitaciones.
-
-%El artículo \cite{wu2007voronoi} propone utilizar una representación poligonal en la cual el mapa consiste en la union de conjunto de polígonos cerrados de forma y tamaño arbitrario, que pueden estar libres, no explorados u ocupados. 
-
-%Para comprobar y validar la representación propuesta se adapta la estrategia de exploración multirobot presentada en \cite{Solanas2004} (cuya técnica de coordinación fue mencionada en \ref{subsec:coordNoTop}) que originalmente se basa en grillas de ocupación, para que funcione utilizando una representación poligonal.
-
-%De las pruebas realizadas los autores concluyen que una representación poligonal es más compacta, flexible y logra aumentar significativamente la eficiencia.
-
-%\subsubsection{Representación poligonal}
-%Inicialmente, todo el mapa estará constituido por un solo polígono desconocido. A partir de lo sensado por cada robot, se incluye nueva información sobre entorno a la representación agregando polígonos libres y ocupados que son substraídos de los polígonos desconocidos a los que pertenecían.
-
-%Los objetivos de exploración se determinan a partir de las aristas entre polígonos desconocidos y polígonos libres denominadas como aristas frontera que son análogas a las celdas frontera de las grillas de ocupación.
-
-%El trabajo propone asignar tareas a partir de la division el entorno desconocido en tantas regiones como robots existan en la flota, para luego asignar a cada robot la tarea de explorar una region diferente. El entorno se divide a partir de un algoritmo que adapta al algoritmo K-Means para funcionar a partir de la representación poligonal propuesta, este algoritmo se explica en la sección\ref{subsubsec:particionamientovoronoi}.  \todo{agregar img}
-
-%%La division del entorno se logra adaptando el algoritmo K-means para funcionar en utilizado para encontrar los centroides correspondientes a las agrupaciones de áreas desconocidas, ya que se asume que estos serán los puntos más provechosos para que los robots exploren.
-
-%Finalmente, la planificación del camino del robot es realizada en el interior de los polígonos libres, cosa que se puede hacer a partir de la aplicación de cualquier algoritmo de descomposición celular, por ejemplo el que se explica en \cite{schachter1978decomposition}.
-   
-%\subsubsection{Particionamiento basado en polígonos}\label{subsubsec:particionamientovoronoi}
-%El diagrama de Voronoi\cite{fortune1987sweepline} de un conjunto de puntos 2D, también conocidos como generadores, $C_{i} , 1 \leq i \leq K$, es una partición de ese espacio en $K$ regiones convexas disjuntas conocidas como células Voronoi. Cada región $V_i$ está definida por los puntos en el espacio que están más cerca de $C_{i}$ que a cualquier otro $C_{j}$, $j\neq i$. \todo{este párrafo bebería escribirse pensando en las definiciones que ya se realizaron. referenciarlas y destacar qué agrega}
-
-%Sea $n$ numero de robots, el resultado deseado es obtener un conjunto de $K=n$ celdas de Voronoi para las cuales, sus centroides (centros de masa) y sus generadores estén a una distancia menos que cierta tolerancia $\varepsilon$. % cerradas que están globalmente delimitadas por el polígono a dividir
-
-%La generación de estas celdas se realiza a partir del algoritmo \ref{alg:particionamientovoronoi} que adapta, utilizado diagramas de Voronoi, al algoritmo K-Means utilizado en la implantación base, que no es compatible con una representación poligonal.
-
-%\begin{algorithm}
-%\SetAlgoLined
-%    Elegir aleatoriamente $K$ puntos $C_i$, $1 \leq i \leq K$, contenidos en los polígonos correspondientes a las regiones desconocidas actuales en el mapa.\\
-%    Calcular el diagrama de Voronoi asociado con el conjunto actual de $C_i$.\\
-%    Restringir las celdas del diagrama de Voronoi a los polígonos desconocidos actuales.\\
-%    Determinar el centro de masa $M_i$ de cada celda Voronoi restringida.\\
-%    \eIf{$C_i - M_i < \varepsilon\ \forall i$}{
-%        Saltar al paso 11.\\
-%    }{
-%        Sustituir cada $C_i$ por su $M_i$ correspondiente.\\ Volver al paso 2.\\
-%    }
-    
-%    Dividir el conjunto de polígonos desconocidos en $K$ regiones disjuntas según las celdas de Voronoi restringidas encontradas.\\
-%    \caption{Particionamiento basado en Voronoi}
-%    \label{alg:particionamientovoronoi}
-    
-%\end{algorithm}
-
-%Notar que el algoritmo trabaja con celdas de Voronoi restringidas, estas son las celdas resultantes de un diagrama de Voronoi restringidas a los limites del mapa conocidos por hipótesis.\todo{agregaría una img que ayude a entender cómo funciona}
-
-
 
 \subsection{Mapa de carreteras}\label{subsec:mapacarr}
 % Un \emph{mapa de carreteras} (del ingles road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos ubicaciónes distantes, por ejemplo dos depatamentos distintos, en lugar de considerar cada camino posible, normalemte planificamos primero un camino hacia una red de carreteras, luego a lo largo de la red de carreteras y, finalmente, desde la red de carreteras hacia el destino. %(ver figura \ref{fig:ejemplovial}). 
@@ -797,9 +745,16 @@ obtiene mejores resultados en general.
 % % Otra criterio de evaluación es el utilizado en \cite{Fermin-Leon2017} el cual compara la segmentación a evaluar $R_{seg}$ contra segmentaciones realizadas por humanos $R_{human}$. La comparación consiste en para cada pixel comprobar si este esta asignado a una misma region en ambas segmentaciones, lo cual se considera como un verdadero positivo $vp$, los falsos positivos $fp$ son los pixeles que están en la segmentación a evaluar pero no en la humana, o no, que se considera  
 
 \section{Coordinación en la exploración multirobot}
-Como fue mencionado en la sección \ref{subsec:expmutirob}, la coordinación es un aspecto crítico en problema de exploración multirobot, por lo tanto a lo largo del tiempo fuero desarrolladas varias propuestas para una exploración multirobot coordinada. A continuación se describen técnicas de coordinación que consisten en primero segmentar el espacio, asignar segmentos a los robots, para finalmente establecer los objetivos de exploración de robots teniendo en cuenta el segmento asignado y el segmento al que pertenece el objetivo. Las propuestas se dividen en las que segmentan el espacio considerando la topología del mismo los que segmentan según criterios no topológicos.
- % para la coordinación de una flota robótica durante la tarea de exploración de un entorno desconocido
-% para la exploración multi-robot 
+Como fue mencionado en la sección \ref{subsec:expmutirob}, la coordinación es
+un aspecto crítico en problema de exploración multirobot, por lo tanto a lo
+largo del tiempo fuero desarrolladas varias propuestas para una exploración
+multirobot coordinada. A continuación se describen técnicas de coordinación que
+consisten en primero segmentar el espacio, asignar segmentos a los robots, para
+finalmente establecer los objetivos de exploración de robots teniendo en cuenta
+el segmento asignado y el segmento al que pertenece el objetivo. Las propuestas
+se dividen en las que segmentan el espacio considerando la topología del mismo
+los que segmentan según criterios no topológicos.
+
 \subsection{Coordinación a partir de mapas topológicos} \label{subsec:wurmCoord}
 % En \cite{wurm2008coordinated} se describe y analiza un enfoque de coordinación que se basa en la distribución eficiente de los robots durante la exploración, teniendo en cuenta la estructura del entorno a partir del uso de mapas topológicos.
 
@@ -837,21 +792,6 @@ La técnica de coordinación explicada en esta sección se resume en el algoritm
     \caption{Asignación de objetivos}
     \label{alg:asignacionobjetivos}
 \end{algorithm}
-
-%Finalmente los pasajes reconocidos determinan una partición del grafo que a su vez determina los segmentos, que por estar entre pasajes serán corredores y habitaciones.
-
-% Usando este enfoque, cada uno de los corredores es explorado completamente por uno de los robots revelando rápidamente la estructura de un edificio, mientras que se asignarán otros robots a las habitaciones accesibles desde los corredores a medida que estas se vayan detectando.
-% Para llevar a cabo esta técnica de coordinación es necesario reconocer los segmentos del entorno, para esto se construye un mapa topológico
-% su mayoria  una tareas que no se solapan
-% que al asignar los robots a distintos segmentos estos podrán 
-% la separación que existe entre segmentos permite que
-%   que componen a un mapa topológico. 
-% Los autores proponen que distribuir 
-% en dado un mapa topologico que segmente el un entorno estructurado en habitaciones y corredores
-% en este caso se basa en la heurística 
-% se divide en segmentos, por ejemplo, correspondientes a habitaciones y corredores. Luego, las asignaciones de robots a objetivos se hacen considerando que los robots deben ser distribuidos de forma uniforme sobre los segmentos identificados. 
-% En \cite{wurm2008coordinated} se propone el uso de un mapas topológicos para lograr la coordinación de una flota robótica durante la exploración. La idea base es que 
-% Incluir acá a wurm la parte de coordinacion
 
 \subsection{Coordinación a partir de segmentaciones no topológicas}\label{subsec:coordNoTop}
 Existen métodos de coordinación que se basan en segmentar el espacio sin considerar su topología, uno de estos es el propuesto en \cite{Solanas2004}. En este la segmentación se basa en agrupar el espacio desconocido en tantos grupos como robots se utilizan para explorar. Las agrupaciones se determinan utilizando el algoritmo K-Means\cite{hartigan1979ak}. En la figura \ref{fig:ejemploCoodGrill} se muestra un ejemplo de esta segmentación con K = 8.  %\todo{típicamente, la codificación de colores se coloca en el caption de la figura}.
@@ -894,131 +834,6 @@ Una vez calculados, cada segmento $S_i$ es asignado al robot $R_i$. En este mét
 \end{equation}
 Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada sumando de la ecuación, la distancia $d$ es la definida en el método anterior, $\phi_i(c_j)$ es el angulo que queda definido entre la orientación del robot y el vector con origen en la posiciones del robot $C_i$, y fin en el centro de celda $c_j$. 
 
-% \section{ Trabajos relacionados }
-% A lo largo de esta sección se describen diferentes acercamientos para solucionar el problema de exploración multirobot. El primero es el presentado en \cite{amorin2019novel} en el cual se define un criterio para detener la exploracion multirobot basado en el concepto de ganacia de información. El siguiente, articulo \cite{wu2007voronoi} en el cual se 
-
-%\subsection{Criterio de parada}
-%Uno de los aspectos no mencionados hasta el momento sobre el problema de exploración es el denominado criterio de parada según el cual se determina cuando la exploración se considera finalizada. 
-%Una de los criterios de parada tomados usualmente es de detener la exploración cuando el mapa construido alcanza cierto un porcentaje de cubrimiento del entorno, por ejemplo 99\% \cite{Yan2015}. Esta es usualmente utilizada para evaluaciones de rendimiento donde el entorno explorado es conocido, pero no suele ser útil en práctica, ya que para utilizarse se requiere tener conocimiento previo de las dimensiones del entorno a explorar, de lo contrario es imposible saber el porcentaje de cubrimiento.
-
-%Otro posible criterio es el de explorar el entorno hasta que no quede ninguna posibilidad de obtener nueva información de el, osea que no exista ningún espacio desconocido que sea accesible. La desventaja de este criterio es que se fuerza a una exploration exhaustiva del entorno, lo cual puede ser indeseable por cuestiones de costos, tanto temporales, como de recursos como la energía de los robots, o su desgaste.
-
-%En \cite{amorin2019novel} se propone un criterio de parada que carece de la necesidad de conocer las dimensiones del entorno de antemano, haciendo factible su uso en la práctica y que a su vez evita una exploración exhaustiva. El criterio se basa en el concepto de ganancia de información que hace referencia a la cantidad de información que el robot agrega al mapa construido al completar un objetivo de exploración. 
-
-%Para experimentar y describir con detalle al criterio de parada este se define integrado a una solución en particular del problema de exploración multirobot, los aspectos de dicha solución se describen a continuación con el propósito de explicar el criterio de parada, pero también por su relevancia como ejemplo de una posible solución al problema de exploración multirobot.
-
-%El mapa es representado como una grilla de ocupación, en este contexto la ganancia de información hace referencia a las celdas del mapa cuyo contenido es determinado luego de que un objetivo es completado. 
-
-%La flota se compone de $N$ robots móviles circulares rígidos con capacidad para percibir toda la circunferencia alrededor con un radio $r$. Existe una estación central encargada de la tarea de reconocimiento de objetivos y asignación de los mismos. Los robots serán quienes recopilen la información del entorno y la central la encargada de crear un mapa global a partir de esta. Se consideran comunicaciones ideales, suponiendo que los robots no tienen restricciones de comunicación (por ejemplo, sin errores ni pérdidas con ancho de banda y alcance ilimitados). %Cabe aclarar que las comunicaciones inalámbricas son importantes en el contexto de exploración multi-robot.
-
-%Para determinar los potenciales objetivos de exploración se utiliza el concepto de fronteras, que aplicado a una grilla de ocupación se asocia a las denominadas celdas fronteras son las celdas consideradas como libres y a su vez adyacentes a celdas desconocidas. Sin embargo, se argumenta que tratar todas las celdas frontera como tareas de exploración diferentes podría ser computacionalmente prohibitivo. Por lo tanto, para reducir el costo computacional, se intenta reducir los objetivos de exploración a las celdas frontera mas representativas. Para determinar que celdas frontera serán las mas representativas, primero, las fronteras se dividen en conjuntos disjuntos $F_i$. Luego, las fronteras mas representativas de cada conjunto $F_i$ se obtienen agrupando las celdas fronteras con el algoritmo k-means con $k=\frac{|F_i|}{2r}$ donde $r$ es el radio de sensado del robots. Este proceso busca reducir los objetivos de exploración de forma de que cada frontera sea perceptible desde al menos uno de los objetivos y a su vez minimizar las celdas frontera que pueden ser percibidas desde mas de un objetivo. La figura \ref{fig:ejemploFrontSig} contiene un ejemplo de las distintas partes del proceso de extracción de fronteras significativas con $r=6.l$ siendo $l$ el largo de un lado de celda.
-%\begin{figure}[H]
-%  \centering
-%  \subfloat[Se identifican las celdas frotneras,  marcadas con amarillo.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/a.png}}
-%  \qquad
-%  \subfloat[Se Determinan los conjuntos de fornteras disjuntos $F_i$, cada color distinto representa un $i$ distinto.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/b.png}}
-%  \qquad
-%  \subfloat[Se obtienen las celdas frontera significativas de cada $F_i$ indicados con verde.]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/fronterasSig/c.png}}
-
-%  \caption[Proceso de extracción de fronteras representativas.]{Proceso de extracción de fronteras representativas. Cada figura corresponde a una etapa distinta para un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Extraído de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
-%\end{figure}
-
-%La asignación de objetivos de exploración se resuelve organizando una subasta entre robots, con la estación central como mediadora, es decir, encargada de dar inicio a la subasta, recibir las ofertas de los robots, determinar los resultados de la subasta e informárselos a los robots. A continuación se detallan las etapas de una subasta.
-
-%Cuando un robot completa un objetivo de exploración (alcanza la celda frontera significativa asignada) este envía una notificación a la estación central que indica que se debe iniciar una subasta. Para dar comienzo a la subasta la estación central notifica a todos los robots sin objetivos, los cuales durante un corto período de tiempo, pueden enviar una oferta a la misma. Cada oferta consiste en una lista de pares objetivo-utilidad, donde la utilidad de un objetivo $c$ es igual a $\frac{\overline{\mli{IG}}_c}{\mli{PC}_c}$ donde $\overline{\mli{IG}}_c$ es una estimación de ganancia de información al alcanzar $c$ que se explicara más adelante y $\mli{PC}_c$ es el costo asociado a la ruta necesaria para llegar a $c$, es decir su distancia. Finalmente la central, a partir de las ofertas de todos los postores, resuelve la subasta de forma voraz, para luego notificar a cada robot su tarea asignada.
-
-%% Dada la falta de conocimiento sobre el entorno, la mejor opción para los robots es visitar los lugares donde la ganancia de información puede ser potencialmente mayor, sin dejar de considerar el esfuerzo necesario llegar al objetivo, por lo tanto, los robots priorizarán las tareas por el coeficiente entre la ganancia de información esperada y el esfuerzo esperado necesario para completar la tarea.
-
-%La ganancia de información estimada que es utilizada en el calculo de la utilidad y en el criterio de parada que se presentara a continuación, se calcula según \eqref{ec:infGain}. 
-%%varios conceptos.  Para cada celda $c$ de la grilla de ocupacion las coordenadas $(x_c,y_c)$ son las correspondientes al centro de la celda $c$.
-%\begin{equation}\label{ec:infGain}
-%  \overline{\mli{IG}}_c = \overline{\mli{IG}}_{(x_c,y_c)} = |{c_i}|
-%\end{equation}
-%Donde toda celda $c_i$ cumple con:
-%\begin{enumerate}[label=(\roman*)]
-%  \item $c_i$ es una celda desconocida.
-%  \item $c_i$ se puede percibir desde $c$:
-%  \begin{itemize}
-%    \item $c_i$ esta en rango del sensor desde $c$: $\sqrt{(x_c - x_{c_i})^2 + (y_c - y_{c_i})^2}\leq r$
-%    \item No existe celda $c_o$ ocupada que obstruya a $c_i$ desde $c$:\\
-%      $\nexists\ c_o \ ocupada \ \land \ \frac{ |(\frac{y_{c_o}-y_c}{x_{c_o}-x_c})(x_{c_i}-x_c) - y_{c_i} - y_{c}| }{\sqrt{(\frac{y_{c_o}-y_c}{x_{c_o}-x_c})+1}}\leq \delta $
-%  \end{itemize}
-%\end{enumerate}
-
-%Siendo el valor $\delta$ igual a la mitad de longitud diagonal de una celda, por ser este la maxima distancia que puede existir entre una celda ocupada $c_o$ y el segmento de recta definido entre $c$ y $c_i$ sin que $c_o$ obstruya a $c_i$ desde $c$. En la figura \ref{fig:ejemploOclusionAm} se muestra un ejemplo de celdas que cumplen con las condiciones antes mencionadas y celdas que las cumplen, haciendo énfasis en dos celdas particulares una obstruida y otra no obstruida.
-
-%\begin{figure}[H]
-%  \centering
-%  \subfloat[La celda con sus centro indicado en azul se puede precibir, esta dentro del rango del sensor y no existe un obstaculo que la obstruya.]{\includegraphics[clip=true, width=0.47\linewidth]{imagenes/oclusion/a.png}}
-%  \qquad
-%  \subfloat[La celda con su centro indicado en azul \textbf{no} se puede precibir, esta dentro del rango del sensor pero existe un obstaculo que la obstruye.]{\includegraphics[clip=true, width=0.47\linewidth]{imagenes/oclusion/b.png}}
-
-%  \caption[Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información.]{Condiciones que debe cumplir una celda para contabilizar en el calculo de la ganancia de información. Lo representado por las celdas blancas, grises, negras, verdes y amarillas coincide con lo que estas representan en la figura \ref{fig:ejemploFrontSig}. Las condiciones se comprueban tomando la celda cuyo centro se marca con un punto negro como la celda $c$ y las celdas que cumplen con las condiciones se colorean con naranja. Extraído de \cite{Amorin2019}.}\label{fig:ejemploOclusionAm}
-%\end{figure}
-
-
-
-% % esto mejora sus habilidades para predecirlo de forma continua hasta que sus habilidades de predicción serán lo suficientemente buenas
-%El criterio de parada propuesto en el articulo, se basa en la idea de que durante la exploración los robots obtienen conocimiento sobre el entorno, y que llegado un punto su conocimiento sobre el entorno sera lo suficientemente bueno como para estimar el estado de las zonas desconocidas del mapa de forma precisa.
-
-%Teniendo en cuenta que una suposición básica es que la flota explora entornos limitados, las hipótesis necesarias para que el criterio de parada propuesto sea valido son dos. La primera es que existe un momento a partir del cual la estimación de la ganancia de información se puede hacer con precisión (es decir, el error cometido por el estimador tiende a cero). Y la segunda es que dicho momento puede determinarse en línea mediante robots que calculan su propio error en sus estimaciones de ganancia de información. 
-
-%El criterio de parada consiste en finalizar la exploración cuando todos los robots, de forma independiente, determinan concluir su participación en la exploración. El criterio que un robot individual usa para determinar cuando debe dejar de explorar, es el de tener $\eta$ predicciones acertadas. Dado un umbral de tolerancia $\chi$ una una predicción es acertada cuando, al completar objetivo $c$ la diferencia entre la estimación de ganancia de información $\overline{\mli{IG}}_c$ y la ganancia de información real $\mli{IG}_c$ es menor a $\chi$ \eqref{ec:sthit}. 
-%\begin{equation}\label{ec:sthit}
-%  |\overline{\mli{IG}}_c - \mli{IG}_c| \leq \chi
-%\end{equation}
-%La idea subyacente de este criterio es al experimentar $\eta$ predicciones acertadas un robot tiene la suficiente información sobre el entorno como para poder estimar la porción inexplorada con precisión, y por lo tanto podrá detenerse.
-
-%%%%%%%
-% Desde acá proyecto de grado redactado
-%%%%%%%
-
-% \subsection[Distributed Multi-robot Exploration Based on Scene Partitioning and Frontier Selection]{Distributed Multi-robot Exploration Based on\\ Scene Partitioning and Frontier Selection}
-% \subsection{Exploración multirobot distribuida} \todo{esta sección iría arriba, luego de exploración multirobot pero hay que ver bien qué se espera. es decir, el tema es vasto pero se nombra sólo una ref. tendrá algo de especial. pensaría bien cuál es el objetivo y vería}
-% % Al considerase una solución para el problema de exploración hay dos aspectos centrales a resolver, identificar posibles objetivos de exploración y como priorizar estos objetivos de forma de priorizar los mas relevantes.
-
-% En \cite{Lopez-Perez2018} se propone una solución completamente distribuida al problema de exploración multirobot. Este tipo de resolución implica descentralización, lo que aumenta tanto la robustez del sistema como su autonomía en tanto solo se requiere del equipo robótico para explorar el entorno, sin depender de una entidad central para coordinar ningún aspecto de la solución. %, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
-
-% \subsubsection{Formulación del problema}
-% La variante del problema de exploración multi-robot tratada en este articulo es la de explorar un entorno desconocido $W\in R^2$ utilizando un conjunto de robots $R={R_1,R_2,...,R_n}$. Se utiliza una grill  de ocupación, por lo que el entorno se descompone en un conjunto de celdas $C={c_1,c_2,...,c_n}$. Cada robot $R_i$ posee: 
-% \begin{enumerate}
-%   \item Un mapa $M_i \in CxL$ donde $L$ son las diferentes estados en los que puede estar una celda. 
-%   \item Una posición inicial $q_{init}^{i}\in R^2 \times [-\pi,\pi]$. 
-%   \item Un sensor $S_i$ para explorar el entorno desconocido.
-% \end{enumerate}
-
-% Adicionalmente se asume que existe siempre un cuadro delimitador de $W$ que puede ser establecido, aunque sea de forma aproximada, antes de que la exploración comience, comunicación perfecta (sin perdida y de rango infinito) y que cada robot tiene acceso a su posición respecto a un marco de referencia común.
-
-% \subsubsection{Descripción del sistema}
-% El sistema tiene un diseño modular, este consta de 4 módulos que se encuentran replicados en cada robot, el modulo de distribución de información, el modulo de asignación de zonas, el modulo de adquisición de información y el modulo de exploración. Estos se describen en las siguientes secciones. 
-
-% \paragraph{Modulo de distribución de información}
-% Este modulo se encarga de distribuir a los demás robots la posición del robot al que pretence, las ubicaciones que conoce de los demás robots y su mapa $M_i$. 
-
-% \paragraph{Modulo de asignación de zonas }
-% El entorno es segmentado en zonas y la exploración cada una de estas es asignada a un robot. El modulo de asignación de zonas es el responsable de realizar la segmentación en zonas y su posterior asignación a los robots. La segmentación genera tantas zonas $E_i$ como robots $R_i$ que $E_i$ se define en \eqref{ec:zones} a partir de la posición $C_i$ de $R_i$. .
-% \begin{equation}\label{ec:zones}
-%   E_i=\{c_j:d_g(C_i,c_j)\leq d_g(V_i(k),c_j) \forall i \neq k , c_j \in U_i\}
-% \end{equation}
-% Donde $U_i \subset M_i$ son la celdas desconocidas del mapa asociado al robot $R_i$ y $d_g(c',c'')$ es la distancia geodésica, que indica el camino compuesto de centros de celdas mas corto entre dos celdas $c'$ y $c''$ que respecta la conectividad entre las celdas que lo componen.
-
-% Cada zona $E_i$ es asignada al robot $R_i$ y este explorara las celdas de $E_i$ según lo determine el \hyperref[par:estar:moduloexp]{modulo de exploración}.
-
-% \paragraph{Modulo de adquisición de información}
-% El propósito de este es el de actualizar el mapa $M_i$ de el robot $R_i$ según la información obtenida por su sensor $S_i$ y su posición $C_i$.
-
-% \paragraph{Modulo de exploración}\label{par:estar:moduloexp}
-% El modulo de exploración esta compuesto por tres submódulos. 
-
-% El primero de ellos es el submódulo de asignación de objetivos, como su nombre lo indica, este se encarga de seleccionar un objetivo de todos los pertenecientes a la zona asignada $E_i$ para asignarlo al robot $R_i$. El objetivo seleccionado $G_i$ es el que alcanza el menor valor para la función de peso $f_p$ que se computa como \eqref{ec:weight}.
-% \begin{equation}\label{ec:weight}
-%   f_p(c_j) = k_d.d_g(C_i,c_j) + k_a.\phi_i(c_j)
-% \end{equation}
-% Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada sumando, $d_g(C_i,c_j)$ hace referencia a la distancia geodésica mencionada anteriormente, $\phi_i(c_j)$ es el angulo entre la orientación del robot y el vector con origen en la posiciones del robot $C_i$, y fin en el centro de celda $c_j$. 
-
-% Luego esta el submódulo de planificación de ruta, este se encarga de generar una ruta que le permita al robot llegar al objetivo asignado. Esto se logra a partir del algoritmo $A*$, para la ejecución de este se asume que las celdas desconocidas son libres. En el caso de encontrarse un obstáculo en la ruta planificada se replanifica ejecutando nuevamente el algoritmo $A*$ en la version mas reciente del mapa.
-
-% El último es el submódulo de ejecución de trayectoria que se encarga de generar los comandos de actuación para seguir una ruta planeada.
 \section{Simuladores}\label{sec:sim}
 
 % Introducción sobre porque simular esta bueno.
@@ -1053,16 +868,6 @@ y Webots\footnote{\url{http://cyberbotics.com}}.
 En las siguientes secciones se realiza un análisis comparativo de los simuladores
 candidatos que concluye con la elección de uno de ellos para su uso en el
 proyecto.
-
-%Esto en primer lugar permite concentrarse en los aspectos
-%más fundamentales de lo que se prueba ya que permite facilidades que en la realidad no son posibles como evitar aspectos de comunicación, 
-
-% Las principales ventajas asociadas a la simulación se derivan del 
-
-% tienen como propósito replicar escenarios 
-
-% permite realizar experimentos evitando   e una alternativa que permite validar propuestas de forma
-
 
 \subsection{Características}
 % Presentar tabla. Describir características, basado en articulos. 
@@ -1239,7 +1044,13 @@ Otro aspecto que complejizó la integración de ROS en Webots es que su sistema
 de coordenadas por defecto (NUE) difiere del utilizado por ROS y Gazebo (ENU).
 Fue posible configurar Webots para utilizar ENU pero se requirió hacer algunos
 cambios como rotar los elementos  del entorno manualmente.
-% - Diferentes estandares en los sistemas coordenadas entre ROS("ENU") y Webots("NUE") que aunque Webots permite cambiarlo esto solo altera las traslaciones pero no las rotaciones, por lo tanto, ademas de tener que rotar todos los objetos en el mapa, otras consideraciones pueden ser necesarias. El ejemplo que se presenteo durante el desarrollo del bechmark fue la necesidad rotar los frames de referencia de los datos un lidar para visulaizarlos correctamente en rviz.
+% - Diferentes estandares en los sistemas coordenadas entre ROS("ENU") y
+%   Webots("NUE") que aunque Webots permite cambiarlo esto solo altera las
+%   traslaciones pero no las rotaciones, por lo tanto, ademas de tener que
+%   rotar todos los objetos en el mapa, otras consideraciones pueden ser
+%   necesarias. El ejemplo que se presenteo durante el desarrollo del bechmark
+%   fue la necesidad rotar los frames de referencia de los datos un lidar para
+%   visulaizarlos correctamente en rviz.
 
 Al ejecutar las simulaciones en Gazebo el comportamiento fue el esperado, en
 Webots los robots se balanceaban notoriamente de adelante hacia atrás al
@@ -1267,300 +1078,3 @@ principalmente al hacer uso del modo \emph{headless}.
 
 Por estas razones se decidió que el simulador más adecuado para utilizar en el
 proyecto es Gazebo.
-
-% Como a nivel de simulacion:
-% - Los robots se tambalean hacia adelante y hacia atras mientras se mueven.
-% - Las medidas del lidar estan levenemente inclinadas horizontalmente.
-
-% Mientras que en gazebo dichos problemas no estuvieron presentes.
-
-% Por lo tanto se tomo la decicion de utlizar gazebo.
-
-% == Pruebas ==
-% Se hicieron 2 pruebas a maxima velocidad para corroborar que la performance de webots no amerite solucionar las problematicas antes mencionadas.
-
-% == Webots ==
-% Se ejecuto el benchmark de webots por 5 minutos, deteniendolo a mano, corroborando el tiempo real segun el comando time de linux y el tiempo simulado a travez de la interfaz.
-% `time roslaunch webots_benchmark benchmark.launch`
-% 111.91s user 63.17s system 55% cpu 5:13.42 total
-
-% Y en dicho timepo real se alcanzo un tiempo de simulacion de 11 minutos y 30.4.
-% por lo tanto la aceleracion de tiempo fue de (60*11+30.4)/(5*60+13.42) = 2.20279497160359900453 
-
-% == Gazebo ==
-% Se ejecuto el benchmark de gazebo por 5 minutos, deteniendolo a mano, corroborando el tiempo real segun el comando time de linux y el tiempo simulado a travez de la interfaz.
-% `time roslaunch gazebo_benchmark benchmark.launch`
-% entregando los siguientes resultados
-% 357.46s user 168.51s system 161% cpu 5:26.20 total
-
-% Y en dicho timepo real alcanzo un tiepo de simulacion de 19 minutos y 39.882 segundos
-% por lo tanto la aceleracion de tiempo fue de (19*60+30.882)/(60*5+26.20) = 3.58946045370938074801 
-
-% == Gazebo Headless ==
-% Se ejecuto el benchmark de gazebo En modo headless por 5 minutos, deteniendolo a mano, corroborando el tiempo real segun el comando time de linux y el tiempo simulado con el comando `gz stats`.
-
-% `time roslaunch gazebo_benchmark benchmark.launch`
-% entregando los siguientes resultados
-% 405.09s user 212.40s system 203% cpu 5:04.04 total
-
-% Y en dicho timepo real alcanzo un tiempo de simulacion de 1429.75 segundos
-% por lo tanto la aceleracion de tiempo fue de 1429.75/(5*60+4.04) = 4.70250624917773977108
-
-% == Webots Headless ==
-% No tiene modo headless
-
-% == Juicio de rendimiento ==
-% Gazebo obtuvo un rendimiento superior que webots (1.6 veces mas rapido). Adicionalmente gazebo tiene un modo headless que le permite correr la simulacion sin necesidad e un interfaz grafica (GUI) mientras que webots no tiene dicho modo, lo cual hace la diferencia de rendimiento aun mas grande (2.1 mas rapido).
-
-% flata de modo headless y rendimiento peor que gazebo siendo mucho peor si se compara con gazebo corriendo en modo headless
-
-% == Jucio final ==
-% Dadas los problemas expermientados en webots tanto a nivel de implementacion como a nivel de simulacion sumado a que segun las pruebas realizadas su rendimiento es peor que el de Gazebo, se tomo la decicion de utilizar a gazebo como el simulador del proyecto.
-
-
-
-% \subsection{Benchmark}
-% Dado un mapa con las siguientes características:
-% \begin{itemize}
-%   \item Piso sin textura
-%   \item 2 paredes sin textura de 20m de largo, paralelas entre si con 10m entre medio de ellas
-%   \item 3 robots pionieer 3dx con un sensor lidar de 360 grados, que:
-%   \begin{itemize}
-%       \item se encontraran equidistantes a las paredes (a 5m de ambas)
-%       \item las orientaciones de las ruedas de los robots serán perpendiculares a la pared
-%       \item el robot p3dx\_2 se encuentra en el $(0,0,0)$ y los demás estarán separados 5m entre si, habiendo un robot a cada lado de p3dx\_2  
-%   \end{itemize}
-% \end{itemize}
-
-% Los robots entonces deberán avanzar hasta estar a 1 metro de la pared, para luego cambiar el sentido de su movimiento hasta estar nuevamente a 1 metro de una pared, repitiendo este comportamiento hasta pasar cierto tiempo u otra condición (por ejemplo cierto desviamiento de la linea de movimiento ideal).
-
-% Los objetivos que pensé para el benchmark son probar:
-% \begin{itemize}
-%   \item la aceleración del tiempo 
-%   \begin{itemize}
-%     \item que tanto acelera (valor que puedo mirar a ojo o buscar si se puede obtener el valor de forma programática y promediar o algo así)
-%     \begin{itemize}
-%       \item Maxima velocidad (sin degradar)
-%       \begin{itemize}
-%         \item para ver resultados grabar el tiempo de simulación total para un tiempo real fijo
-%       \end{itemize}
-%       \item ver si se puede forzar a una velocidad (degradando)
-%       \begin{itemize}
-%         \item concentrarse en la evaluación la precision
-%       \end{itemize}
-%     \end{itemize}
-%     \item la precision, algunas posibilidades:
-%     \begin{itemize}
-%       \item mirar el desviamiento de los robots de la linea de movimiento ideal
-%       \item reducir la distancia de cambio de movimiento de forma de dar poco margen de cambio de dirección y forzar a que si la simulación 
-%            es imprecisa los robots se choquen, contar estos choques con perturbaciones de la altura o de la rotación
-%       \item distancia recorrida (mas distancia peor precision)
-%       \item grabar todo con un bag para luego hacer un estudio posterior
-%     \end{itemize}
-%   \end{itemize}
-
-%   \item Simular usando robots iguales (mismos tipos de sensores y características de los mismos) y trabajar con ros para poder predecir que problemas que se pueden tener al adaptar
-    
-%   \item Lograr tener la misma información que se tenia en el trabajo anterior:
-%   \begin{itemize}
-%     \item la Pose del robot
-%     \item la misma info provista por los sensores en el mismo formato
-%   \end{itemize}
-
-%   \item poder visualizar todo en rviz 
-
-%   \item considerar que tan automatizarle es la simulación, se puede correr con un comando? Se puede parametrize para por ejemplo indicar el numero de robots a simular? 
-%   \begin{itemize}
-%     \item ver de poder reiniciar la simulación dentro de la misma  
-%   \end{itemize}
-% \end{itemize}
-
-
-% \subsubsection{Proceso}
-% \paragraph{Gazebo}
-% \begin{enumerate}
-%   \item Instalar ros desktop full (incluye a gazebo)
-    
-%      En mi distro (arch): yay -S ros-noetic-desktop-full
-
-%   \item descargar modelo pionieer 3dx: \href{https://github.com/mario-serna/pioneer_p3dx_model}{link}
-%   \item modificar características de lidar en
-
-%         $p3dx\_description/urdf/pioneer3dx.gazebo$
-%   \begin{itemize}
-%        \item rango  
-%        \item min\_angle y max\_angle  
-%        \item ver bien en git 
-%   \end{itemize}
-%   \item Como levantar el entorno a simular con los robots
-%   \begin{enumerate}
-%     \item hacer paquete gazebo\_benchmark con launch que permite indicar:
-%     \begin{itemize}
-%        \item Que se utilizara gazebo, algunos parámetros para este y el mundo que debe cargar
-%        \item Los robots a utilizar y sus posiciones
-%     \end{itemize}
-%     \item también es posible correr el launch correspondiente a un mundo de gazebo sin robots y de forma independiente correr los launch de los robots a utilizar
-%     \item NOTA: Esto hace fácil hacer un script que posicione un numero arbitrario de robots en un mapa
-%   \end{enumerate}
-%   \item El mundo correspondiente al benchmark fue generado a partir de el mundo vació por defecto, siendo las paredes posicionadas con la herramienta `building editor` que permite generar las paredes como si se tratara de un plano (también permite puertas, ventanas y hasta escaleras que llevan a distintas plantas)
-% \end{enumerate}
-
-% \paragraph{Webots}
-% \begin{enumerate}
-%   \item Instalar webots
-%      en mi distro (arch): yay -S webots
-
-%   \item Modelo del robot ya incluido
-%   \item Al modelo le falta lidar pioneer3dx en este simulador por defecto viene con 16 sonares como se indica en \href{https://cyberbotics.com/doc/guide/pioneer-3dx}{link} por lo tanto el lidar debió ser agregado a mano:
-%   \begin{itemize}
-%     \item Descomponer el nodo que correspondiente al robot 
-%     \item agregando un sensor lidar de los incluidos
-%     \item Descomponer el nodo correspondiente al sensor
-%     \item Cambiar el nombre (se utiliza para la integración con ros)
-%   \end{itemize}
-%   \item compatibilidad con ros:
-%   \begin{enumerate}
-%     \item Cambiar el controlador del robot al controlador estándar de ROS, que esta disponible para todos los modelos robots y levanta un nodo que actúa como una capa de compatibilidad entre ros y webots. (provee servicios y tópicos para interacción webots-ros)
-%     \item establecer  el argumento name de este controlador para indicar el identificador del robot dentro del namespace de ros
-%     \item Instalar el paquete $webots\_ros$
-%   \end{enumerate}
-%   \item Como levantar el entorno a simular con los robots
-%   \begin{enumerate}
-%     \item Es necesario configurar cada robot a mano en la interfaz lo mas rápido es:
-%     \begin{itemize}
-%       \item hacer uno y luego copiar lo las veces que se requiera
-%       \item cambiando el argumento name del controlador y su posición
-%     \end{itemize}
-%     \item dado que el formato en el que se guarda un mundo es de texto plano existe la posibilidad de hacer un script que genere a partir de un mapa vació un mapa con n robots copiando descripciones bas del robot (texto plano) en las cuales se permita establecer el argumento name el controlador y posición en un mundo. 
-%     \item NOTA: la scriptiablidad es cuestionable habría que indagar que tan factible es lo descripto en 5.b 
-%   \end{enumerate}
-%   \item El mundo correspondiente al benchmark fue generado a partir de el mundo vació por defecto, las paredes se agregan de igual manera que se agrega el robot, luego su posición y dimensiones se modifican dentro del programa, se debe agregar el piso, y también modificar sus dimensiones.
-% \end{enumerate}
-
-% \subsubsection{Juicio sobre implementación}
-% \paragraph{webots} La integración con ros parece ser buena pero la documentación no es es muy buena, a pesar de esto a partir de los ejemplos que se encuentran en el paquete de ros $webots\_ros$ (que es necesario instalar para poder crear un nodo de ros que se integre con ros), se puede lograr llegar deducir ciertos aspectos que no son incluidos en la documentación:
-% \begin{itemize}
-%   \item Por ejemplo cada sensor debe ser encendido a partir de un servicio con le formato $[robot]/[sensor]/enable$ y esto no esta indicado en la documentación de como integrar con ROS (en esta se especifica el estándar a partir del cual se nombran los tópicos y servicios) y a partir de este enable se activan los tópicos que dan la información pertinente de los sensores. (esto se encuentra en la referencia que explica cada función de los sensores que también incluye los servicio y tópicos de cada sensor)
-%   \item En el código no se explica ciertas cosas que se hacen. Por ejemplo el control del tiempo.
-% \end{itemize}
-
-
-% Después de leer la documentación mas a fondo (cosas que no son de ros) comencé a ver una correspondencia entre el código de $webots\_ros$ y los ejemplos/conceptos que se documentan para las librerías "nativas" de we bots. Que me facilito la búsqueda de información, esto es porque puede buscar conceptos genéricos de webots para luego relacionarlos con los de webots-ro así solucione las dudas anteriores (enable de los sensores/actuadores y el control de tiempo).
-
-% Los motores se comandan a partir de servicios (uno para cada motor) y donde es posible establecer la velocidad angular para cada uno.
-
-% Algunos errores en $webots\_ros$ por ejemplo
-% \begin{itemize}
-%   \item usan names relativos para cosas que son globales
-%   \item si se ejecutaba la llamada de un servicio muy ripio este falla, esto no se contemplaba matando a los nodos incorrectamente
-% \end{itemize}
-
-% Funcionamiento de la integración con ros:
-
-% $NODOS\_ROS$
-
-% $<->$ (tópicos/servicios)
-
-% $CONTROLADOR\_WEBOTS\_ROS$
-
-% $<->$ (librería de webots en c++)
-
-% $WEBOTS$ 
-
-% TODO: explicar como es maso el flujo
-
-
-% \paragraph{Gazebo}
-% La integracion con ros es buena y simple, 
-
-%   - los topicos de los sensores se encuentran desde el principio activos sin necesidad de ser activados con un llamado a un servicio como en webots.
-
-%   - Existe un topico $cmd\_vel$ donde  se publica la velocidad lineal y angular que se desea que el robot tenga y esa informacion llegara a un controlador diferencial que movera los motores de forma de lograr dichas velocidades.
-
-% \paragraph{Conclusion}
-% En comparacion el uso de topicos ante servicios en el caso de los motores y el hecho de que los topicos estan activos desde un principio hacen que el codigo en el  caso gazebo sea mas simple.
-
-
-% \subsubsection{Adaptando la velocidad}
-% \begin{itemize}
-%   \item gazebo usa $m/s$
-%   \item webots usa $rad/s$ (wb\_motor\_set\_velocity(motor, 6.28);  // 1 rotation per second)
-% \end{itemize}
-
-% para lograr la correspondecia busque las dimiensiones de las ruedas en la documentacion del oficial del robot (esperando que el simulador sea realista en las dimensiones) \href{https://www.generationrobots.com/media/Pioneer3DX-P3DX-RevA.pdf}{link}. La informacion que encontre en dicha documentacion es que el diametro de las ruedas es de $0.195$ metros.
-
-% Y esto lo pude confirmar en el simulador, en la composicion del robot indica que para cualquiera de las ruedas el BoundingObjec (que indica las dimensiones para determinar colisiones) de las mismas es el grupo BOUNDING\_WHEEL y este consiste de un cilindro de radio 0.0975, osea diametro 0.195 siendo la unidade de estos valores metros.
-
-% \subsubsection{Obteniendo pose}
-% \paragraph{Gazebo}
-
-% \href{http://docs.ros.org/en/electric/api/gazebo_plugins/html/group__GazeboRosP3D.html}{GazeboRosP3D}
-
-% Es un plugin de gazebo que permite publicar la pose del robot a partir de un mensaje nav\_msgs::Odometry, configurandolo publique esta info en /[nombre\_robot]/pose
-
-% Notar que no es un mensaje de tivo geometry\_msgs::Pose pero se podria convertir en uno extrayendo la pose del mensaje de odometrai
-
-% \paragraph{Webots}
-% Para publicar la pose del robot se modifico el controlador intermedio entre webots y ros esta decicion se tomo porque de las otras alternativas que fuer on descartadas:
-% \begin{itemize}
-%   \item usar servicios de ROS ya provistos, fue descartada porque era necesario utilizar varios servicos y luego ensamblar la Pose:
-%   \begin{itemize}
-%     \item uno para obtener un ID a partir de un nombre
-%     \item otro para obtener la posicion a partir del ID 
-%     \item otro para obtener la orientacion a partir de la ID
-%     \item luego pasar la orientacion de matriz de rotaciones a quaterniones
-%     \item combinar posicion y orientacion en una Pose 
-%   \end{itemize}
-% \item usar un GPS, esto podria generar un punto extra de falla, por lo que intento primero modificar el controlador 
-% \end{itemize}
-
-% Para modificar el controlador se copio el original y se agrego al proyecto, dentro de la carpeta controllers.
-
-% Para lograr la publicar la pose en el cotnrolador se hizo un proceso similar al necesario al utilizar servicos de ROS provsitos por webots, la diferencia es que esto se hace de forma interna en el controlador utilizando funciones de la biblioteca de webots evitando asi el overhead del uso de servicios  y el codigo extra necesario para que nodo utilizando los servicois compile una pose.
-
-% Es darle al controlador la capacidad de proveer de forma nativa la pose como la queremos.
-
-% \subsubsection{rviz}
-% \paragraph{Gazebo}
-% El paquete que permite generar robots p3dx ya publica los tf que son marcos de referecia, que permiten ubicar a los robots en el mundo (?), necesarios para lograr visualizar al robot en rviz.
-
-% Fue necesartrio cambiar el parametro <frameName>map</frameName>\\ recomendado por la doc a el siguiente valor <frameName>/map</frameName>\\ (esto es porque solo map es un camino relativo y esto causa que al usar muchos robots se haga referencia a `/robot\_name/map` en lugar de `/map` como se deberia)
-
-% Para evitar warnigs de tf repetidos (TF\_REPEATED\_DATA) se cambio a false la parametro	<publishWheelTF>  del plugin diff\_drive de gazebo, porque hay un nodo que ya publica el tf de las ruedas
-
-% Observaciones: A pesar de esto quedan warnings de tf repetidos, en tiempo real son ocacionales (antes eran constantes) y en tiempo acelerado son constanes.
-
-% \paragraph{Webots}
-% En este caso los tf deben ser publicados a mano, para esto se modifico nuevamente el controlador de ros, para publicar los tf haciendo algo similar a los motrado en el siguiente tutorial:
-% \url{http://wiki.ros.org/tf/Tutorials/Writing%20a%20tf%20broadcaster%20%28C%2B%2B%29}
-
-% para lo cual fue necesario agregar la flag `-ltf` a la variable LIBRARIES del makefile del controlador de webots-ROS (si no el linker no encontraba las funiciones de tf)
-
-% Al lograr visualizar por primera vez en rviz se noto que los ejes estaban cambiados, esto es porque el sistema de coordenadas de webots estaba configurada como "NUE" mientras que "ENU" es la convencion mas usada en ros
-
-% Para esto fue de utilidad un script provisto por webots \url{https://github.com/cyberbotics/webots/tree/master/scripts/converter} que permite rotar el entorno de simulacion entero para que este quede bien al cambiar de una convencion a otra (para visualizar, si no se rotara la gravedad seria se veria horizontal)
-
-% La misma rotacion fue necesaria en la orientacion del robot, ya que el cambio de NUE a ENU no altero la forma de medir rotaciones
-
-% Observaciones: Se nota que el lidar capta la pared levenmente inclinada aunque no deberia, probe a rotarlo de forma que el lidar pueda sensar al piso y siguio pasando algo similar. Inspeccionanod el topico tambien se puede notar la diferencia entre las medidas de una parte de la "simetria" y la otra
-% Observaciones: El robot se mece (fisicamente se inclina hacia adelante y hacia atras mientras se mueve)
-
-
-
-% Cuidado con obteniend pose y tf en webots. En julio 16 (yo probe antes por lo que no pude aprovechar, capaz la wiki cambio) el \href{https://www.cyberbotics.com/doc/reference/changelog-r2021?tab-language=ros}{change log} dice esto:
-
-% Integrated ros\_control (activated through the --use-ros-control flag) to allow the usage of a $diff\_drive\_controller$ and $joint\_state\_controller$ from the $ros\_controllers package$.
-
-% Con lo que se propria facilitar el proceso de interactuar con el robot y obtener tf y pose/odom
-
-% También menciona la flag --auto-publish  que arranca todos los servicios de una.
-
-% Muy bueno, hace que webots se ponga interesante.
-
-% \subsection{No olvidarse de pasar lo que quedo en las notas}
-% == Jucio de usabilidad ==
-
-% En webots se experimentaron problemas, tanto a nivel de implementacion debido a las dificultades que dio con la integracion de ros:
-% - La documentacion sobre la integracion con ROS es brave, mas que nada menciona como cargar el controlador estandar de ros en un robot, menciona el estandar que dicho controlador utiliza nombrar topicos y servicios, y dirige al usuario a ejemplos de codigo que estan disponibles en github. Ademas de esto se cuenta con el Manual de Refencia que cuenta con las funciones de webots que, aunque tiene como foco el uso de C tambien se muestran las funciones correspondientes en varios otros lenguajes y adicionalmente el topico/servicio de ROS que provee la misma funcionalidad de la funcion.
-% Como punto final de la documentacion se menciona la posibilidad de un controlador personalizado dada la posibilidad de que con dicho controlado no sea posible cumplir con alguna tarea o que el cumplirla sea muy ineficiente.
-
