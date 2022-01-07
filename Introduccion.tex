@@ -1,17 +1,55 @@
-La exploración es un problema clásico de la robótica
-móvil autónoma que consiste en utilizar un robot con el objetivo de obtener
-información de un entorno desconocido generando un mapa que lo represente. La
-exploración es fundamental en tareas de limpieza \cite{luo2002real}, operaciones
-de búsqueda y rescate \cite{Liu2015}, misiones extra planetarias
-\cite{schuster2019towards}, entre otras tareas en las cuales se desconozca
-el entorno y sea ineficiente o directamente inviable teleoperar a un robot.
+La exploración es un problema clásico de la robótica móvil autónoma que
+consiste en utilizar un robot con el objetivo de obtener información de un
+entorno desconocido con sus sensores para generar un mapa que lo represente. La
+exploración es una parte fundamental en tareas de limpieza \cite{luo2002real},
+operaciones de búsqueda y rescate \cite{Liu2015}, misiones extra planetarias
+\cite{schuster2019towards}, entre otras tareas en las cuales se desconozca el
+entorno y sea ineficiente, o directamente inviable teleoperar a un robot.
+
+La exploración suele ser una tarea altamente paralelizable, al ser usual que en
+un mismo instante de tiempo existan varios lugares del entorno de los cuales un
+robot puede obtener información novedosa. Esto causa que sea actractivo el uso
+de varias robots para acelerar la exploración. Al usar varios robots el
+problema pasa a conocerse como el de exploración multirobot.
+
+Sin embargo al tener varios robots dedicados en la tarea de exploración es
+necesario algun mecanismo de coordinacion que logre explotar el paralelismo en
+la exploración. Para esto se debe evitar situaciones suboptimas como que varios
+robots realicen trabajo redundante al explorar los mismos lugares
+desaprovechando sus capacidades sensoriales, como tambien que estos interfieran
+entre sí, causando perdidas de tiempo en desvíos para evitar colisiones.
+
+En \cite{wurm2008coordinated} se propone una tecnica de coordinación en la
+exploración multirobot que establece que la exploración debe llevarse a cabo
+maximizando la distribución de los robots sobre las habitaciones y corredores
+(segmentos), que componen a un entorno estructurado. Esta tecnica se basa en
+que las exploraciones de segmentos diferentes suelen independientes entre sí,
+mientras que en que los segmentos pueden ser demasiado pequeños para que un
+segundo robot acelere su exploración, y que de haber mas de un robot explorando
+un mismo segmento estos pueden bloquearse entre sí mientras intentan
+abandonarlo.
+
+El proyecto de grado se propone mejorar la propuesta de
+\cite{wurm2008coordinated}, para esto se evaluaron varios aspectos de la
+propuesta en cuestión y del problema de exploración multirobot en general
+relevando una serie de potenciales mejoras. Estas fueron implementadas como
+parte de una solución al problema de exploración multirobot
+\footnote{Disponible en línea:\\
+\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con
+la cual se experimento dentro de un simulador con el propósito de validar su
+impacto.
 
 \section{Principales aportes}
-Propuesta y estudio de un algoritmo novedoso para identificación de objetivos
-basado en la simplificacion de fronteras.
+
+Integración de la contrucción incremental de un Diagrama Generalizado de
+Voronoi (GVD por sus siglas en ingles) necesario para identificar los segentos
+del entorno.
 
 Estudiar el impacto al de utlizar una construcción incremental del GVD en la
 tecnica de coordinación que se propone en \cite{wurm2008coordinated}. 
+
+Propuesta y estudio de un algoritmo novedoso para identificación de objetivos
+basado en la simplificacion de fronteras a partir del rango de .
 
 Adicionalmente se estudia un aspecto critico que no esta explicito en el estado
 del arte, el problema de como como tratar las porciones desconocidas al
@@ -19,9 +57,8 @@ contruir un GVD en un entorno parcialemnte explorado. Para este problema se
 comentan posibles alternativas, pasando por la que esta presente en el estado
 del arte y una técnica novedosa que permite una mayor eficiencia.
 
-
 \section{Organizacion del documento}
 El documento se organiza de la siguiente manera.
-
+El capitulo \ref{cha:marco} \ref{cha:central} \ref{cha:exp} \ref{cha:concl}
 
 
