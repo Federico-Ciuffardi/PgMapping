@@ -8,15 +8,15 @@ entorno y sea ineficiente, o directamente inviable teleoperar a un robot.
 
 La exploración suele ser una tarea altamente paralelizable, al ser usual que en
 un mismo instante de tiempo existan varios lugares del entorno de los cuales un
-robot puede extraer información novedosa. Esto causa que sea actractivo el uso
+robot puede extraer información novedosa. Esto causa que sea atractivo el uso
 de varias robots para acelerar la exploración. Al usar varios robots el
 problema pasa a conocerse como el de exploración multirobot.
 
 Sin embargo, al tener varios robots dedicados en la tarea de exploración es
-necesario algun mecanismo de coordinacion que logre explotar el paralelismo.
+necesario algún mecanismo de coordinación que logre explotar el paralelismo.
 Para esto se debe evitar situaciones suboptimas como que varios robots realicen
 trabajo redundante al explorar los mismos lugares, desaprovechando sus
-capacidades sensoriales, como tambien que estos interfieran entre sí, causando
+capacidades sensoriales, como también que estos interfieran entre sí, causando
 perdidas de tiempo en desvíos para evitar colisiones.
 
 En \cite{wurm2008coordinated} se propone una estrategia de coordinación para la
@@ -24,10 +24,10 @@ exploración multirobot que consiste en llevar a cabo la exploración maximizand
 la distribución de los robots sobre las habitaciones y corredores (llamados
 segmentos), que componen a un entorno estructurado. La estrategia se fundamenta
 en que las exploraciones de segmentos diferentes suelen ser independientes
-entre sí, por lo cual asignar robots a diferentes segemtnos ayuda a evitar
-redundacia en la exploración. En que los segmentos pueden ser demasiado
+entre sí, por lo cual asignar robots a diferentes segmentos ayuda a evitar
+redundancia en la exploración. En que los segmentos pueden ser demasiado
 pequeños para que un segundo robot acelere su exploración. Y en que de haber
-mas de un robot explorando un mismo segmento estos pueden bloquearse entre sí
+más de un robot explorando un mismo segmento estos pueden bloquearse entre sí
 mientras intentan abandonarlo.
 
 % El principal objetivo de este proyecto de grado es mejorar la propuesta de
@@ -38,25 +38,82 @@ mientras intentan abandonarlo.
 El proyecto de grado se propone mejorar la propuesta de
 \cite{wurm2008coordinated}, para esto se evaluaron varios aspectos de la
 propuesta en cuestión y del problema de exploración multirobot en general
-relevando una serie de potenciales mejoras. El primer aspecto que para el cual se propone mejoras esta relacionado a la
-identificación de los segmentos del entorno (segmentación). Uno de los metodos
-mas populares y eficientes para segmentar, que es también utlizado en la
-propuesta origial basa en utlizar una estructura llamada diagrama generalizado
-de voronoi (GVD por sus siglas en ingles). Dado que para aplicar la estrategia
-los segmetos deben mantenerse actualizados durante la exploración, el GVD
-tambien debe mantenerse actualizado. En la propuesta original el GVD se mantine
-actualizado reconstruyendolo completamente segun sea necesario, aplicando un
-algoritmo no incremental. Dado que gran parte del GVD se mantiene igual con
-respecto a su ultima actualizacion, la recontruccion completa se considera
-ineficiente. Visto esto la primera mejora potencial asociada a la segmentación
-consiste en aplicar un algoritmo incremental para lograr mantener el GVD
-actualizado solo cambiando las partes necesarias para que la ultima version
-disponible del GVD quede actualiazada. Por otro lado dado que la definicion de
-GVD no establece como tratar las porciones desconocidas de un entorno
-parcialemnte explorado, se propone una forma novedosa de tratar con dichas
-porciones que busca reducir el procesamiento a las areas conocidas en lugar de
-en todo el entorno (conocido y desconocido) como se hace en la propuesta
-original.
+relevando una serie de potenciales mejoras, que resultan en las contribuciones
+que se describen a continuación.
+
+% . Las principales mejoras potenciales
+% tratadas a lo largo del proyecto se
+
+% El primer aspecto que para el cual se propone mejoras esta relacionado a la
+% identificación de los segmentos del entorno (segmentación).
+
+\section{Contribuciones}
+
+La estrategia de coordinación requiere identificar los segmentos del entorno,
+lo cual se conoce como segmentación. Uno de los métodos más populares y
+eficientes para segmentar, que es también utilizado en la propuesta original, se
+basa en utilizar una estructura llamada Diagrama Generalizado de Voronoi (GVD
+por sus siglas en ingles). Dado que para aplicar la estrategia de coordinación
+los segmentos deben mantenerse actualizados durante la exploración, el GVD
+también debe mantenerse actualizado. En la propuesta original el GVD se
+mantiene actualizado aplicando un algoritmo no incremental, es decir que se
+reconstruye completamente en cada actualización. Dado que gran parte del GVD se
+mantiene igual con respecto a su ultima actualización, la reconstrucción
+completa se considera ineficiente. Visto esto la primera contribución
+consiste en adaptar e integrar a la propuesta original un algoritmo incremental
+que optimize la actualización del GVD solo cambiando las partes necesarias para
+que la ultima version disponible del GVD sean actualizadas. 
+
+% Por otro la definicion de GVD no establece como tratar las porciones
+% desconocidas de un entorno parcialmente explorado. Por lo tanto la segunda
+% contribucion consiste en un estudio de como se trata dichas porciones
+% durante la contrucción del GVD en las propuestas del estado del arte (dado que
+% esto no se considera de forma explicita) y la propuesta de una forma
+% novedosa que reduce la construcción a las areas conocidas en lugar de contruir
+% sobre todo el entorno (conocido y desconocido) como se hace en el resto de
+% trabajos.
+
+Por otro lado la definición de GVD no establece como tratar las porciones
+desconocidas de un entorno parcialmente explorado. La segunda contribución
+consiste en una forma novedosa de tratar con dichas porciones durante la
+construcción del GVD, que logra optimizar la construcción reduciéndola a las areas
+conocidas en lugar de construir sobre todo el entorno (conocido y desconocido)
+como se hace usualmente.
+
+Uno de los principales problemas de la exploración multirobot consiste en
+determinar los lugares a los que enviar a los robots a explorar. Para este
+problema se deben identificar dichos lugares, conocidos como objetivos de
+exploración, para luego distribuir dichos objetivos entre los robots.
+
+Respecto a la identificación de objetivos de exploración, se tiene que
+identificar grandes cantidades de objetivos puede ser computacionalmente
+restrictivo. La tercera contribución es un método novedoso que busca reducir la
+cantidad de objetivos identificados eliminado objetivos redundantes basándose en
+las capacidades sensoriales de los robots. 
+
+Respecto a la distribución de objetivos de exploración, en el contexto de la
+estrategia de coordinación de \cite{wurm2008coordinated} esta debe asegurar que
+los objetivos sean distribuidos de forma que maximizar la distribución de los
+robots sobre los segmentos. Para lograr esto la propuesta original primero
+asigna robots a los segmentos y luego distribuye los objetivos de dicho segmento
+sobre los robots asignados a dicho segmento. El problema es que esto lo hace sin
+considerar los objetivos que hay en cada segmento por lo tanto se puede dar la
+posibilidad de asignar más robots a un segmento lo que los objetivos que en el
+hay disponibles dejando robots  ociosos. La cuarta contribución consiste en un
+algoritmo de asignación de objetivos que logra maximizar la distribución de los
+robots sobre los segmentos, a la vez que considera los objetivos de cada
+segmento para evitar robot ociosos.
+
+Luego de que un robot recibe un objetivo de exploración este debe moverse hacia
+él, esto introduce la necesidad de planificar caminos hacia los objetivos. En el
+contexto del trabajo desarrollado hay dos métodos de planificar que son de
+especial interés: planificar sobre el GVD, y planificar sobre todo el espacio
+libre. La planificación sobre el GVD es la más rápida, y genera caminos más
+seguros, mientra que planificar sobre todo el espacio libre lleva a caminos más
+cortos. La quinta contribución es la propuesta de un método de planificación
+que combina los métodos antes descritos de forma jerárquica para obtener la
+velocidad de la planificación sobre el GVD y el largo de los caminos
+planificados sobre todo el espacio libre.
 
 % Las potenciales mejoras buscan acelerar el rendimiento del
 % proceso de identificar los segentos del entorno. 
@@ -79,18 +136,22 @@ original.
 % se comentan posibles alternativas, pasando por la que esta presente en el
 % estado del arte y una técnica novedosa que permite una mayor eficiencia.
 
-Las mejoras potenciales previamente descritas fueron implementadas como parte
-de una solución al problema de exploración multirobot \footnote{Disponible en
-línea:\\
-\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con
-la cual se realizaron experimentos dentro de un simulador con el propósito de
-validar su impacto.
+Las contribuciones antes mencionadas se implementaron como parte de una
+solución al problema de exploración multirobot. Esta solución fue alisada para
+realizar pruebas dentro de un simulador con el propósito de validar y estudiar
+la utilidad las contribuciones. La solución implementada se encuentra disponible
+en
+línea\footnote{\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}}
+y es la sexta contribución de este proyecto.
 
-
-Aca comentar  como resultaron las mejoras
-
-\section{Organizacion del documento}
-El documento se organiza de la siguiente manera.
-El capitulo \ref{cha:marco} \ref{cha:central} \ref{cha:exp} \ref{cha:concl}
+\section{Organización del documento}
+El resto del documento se organiza de la siguiente manera. En capitulo
+\ref{cha:marco} introduce problemas, artículos, herramientas y conceptos que
+conforman la base del trabajo desarrollado. En el capitulo \ref{cha:central} se
+describe la solución al problema multirobot implementada incluyendo las mejoras
+potenciales. El capitulo \ref{cha:exp} se dedica especificar las pruebas
+realizadas, presentar sus resultados y analizarlos. Por ultimo en el capitulo
+\ref{cha:concl} se plantean las conclusiones del proyecto de grado y se
+mencionan líneas de trabajo futuro que surgen a partir del trabajo realizado.
 
 
