@@ -1,0 +1,94 @@
+La exploración es un problema fundamental de la robótica móvil autónoma que
+consiste en utilizar un robot con el objetivo de obtener información de un
+entorno desconocido con sus sensores para generar un mapa que lo represente. La
+exploración es una parte fundamental en tareas de limpieza, operaciones de
+búsqueda y rescate, misiones extra planetarias, entre otras tareas en las
+cuales se desconozca el entorno y sea ineficiente, o directamente inviable
+teleoperar a un robot.
+
+Por motivos de eficiencia y robustes la exploración suele llevarse a cabo con
+más de un robot. Para optimizar el uso de los robots es necesario algún
+mecanismo de coordinación para que los robots cooperen de forma optima,
+evitando explorar los mismos lugares o interferir entre sí.
+
+Una estrategia de coordinación para la exploración multirobot consiste en
+llevar a cabo la exploración maximizando la distribución de los robots sobre
+las habitaciones y corredores (llamados segmentos), que componen a un entorno
+estructurado. 
+
+El proyecto de grado en primer lugar se propone mejorar dicha estrategia
+coordinación a partir de acelerar la contruccion de una estructura llamada
+grafo generalizado de voronoi, que es escencial para reconocer los segmentos
+sobre los cuales distribuir a los robots durante la exploración.
+
+Por otro lado durante la exploración es necesario identificar lugares a los
+cuales enviar a los robots conocidos como objetivos de exploración. 
+
+% y del problema de exploración multirobot en general.
+% . Las principales mejoras potenciales
+% tratadas a lo largo del proyecto se
+
+% El primer aspecto que para el cual se propone mejoras esta relacionado a la
+% identificación de los segmentos del entorno (segmentación).
+
+% La estrategia de coordinación requiere identificar los segmentos del entorno,
+% lo cual se conoce como segmentación. Uno de los métodos más populares y
+% eficientes para segmentar, que es también utilizado en la propuesta original, se
+% basa en utilizar una estructura llamada Diagrama Generalizado de Voronoi (GVD
+% por sus siglas en ingles). Dado que para aplicar la estrategia de coordinación
+% los segmentos deben mantenerse actualizados durante la exploración, el GVD
+% también debe mantenerse actualizado. En la propuesta original el GVD se
+% mantiene actualizado aplicando un algoritmo no incremental, es decir que se
+% reconstruye completamente en cada actualización. Dado que gran parte del GVD se
+% mantiene igual con respecto a su ultima actualización, la reconstrucción
+% completa se considera ineficiente. Visto esto la primera contribución
+% consiste en adaptar e integrar a la propuesta original un algoritmo incremental
+% que optimize la actualización del GVD solo cambiando las partes necesarias para
+% que la ultima version disponible del GVD sean actualizadas. 
+
+% Por otro lado la definición de GVD no establece como tratar las porciones
+% desconocidas de un entorno parcialmente explorado. La segunda contribución
+% consiste en una forma novedosa de tratar con dichas porciones durante la
+% construcción del GVD, que logra optimizar la construcción reduciéndola a las areas
+% conocidas en lugar de construir sobre todo el entorno (conocido y desconocido)
+% como se hace usualmente.
+
+% Uno de los principales problemas de la exploración multirobot consiste en
+% determinar los lugares a los que enviar a los robots a explorar. Para este
+% problema se deben identificar dichos lugares, conocidos como objetivos de
+% exploración, para luego distribuir dichos objetivos entre los robots.
+
+% Respecto a la identificación de objetivos de exploración, se tiene que
+% identificar grandes cantidades de objetivos puede ser computacionalmente
+% restrictivo. La tercera contribución es un método novedoso que busca reducir la
+% cantidad de objetivos identificados eliminado objetivos redundantes basándose en
+% las capacidades sensoriales de los robots. 
+
+% Respecto a la distribución de objetivos de exploración, en el contexto de la
+% estrategia de coordinación de  esta debe asegurar que
+% los objetivos sean distribuidos de forma que maximizar la distribución de los
+% robots sobre los segmentos. Para lograr esto la propuesta original primero
+% asigna robots a los segmentos y luego distribuye los objetivos de dicho segmento
+% sobre los robots asignados a dicho segmento. El problema es que esto lo hace sin
+% considerar los objetivos que hay en cada segmento por lo tanto se puede dar la
+% posibilidad de asignar más robots a un segmento lo que los objetivos que en el
+% hay disponibles dejando robots  ociosos. La cuarta contribución consiste en un
+% algoritmo de asignación de objetivos que logra maximizar la distribución de los
+% robots sobre los segmentos, a la vez que considera los objetivos de cada
+% segmento para evitar robot ociosos.
+
+% Luego de que un robot recibe un objetivo de exploración este debe moverse hacia
+% él, esto introduce la necesidad de planificar caminos hacia los objetivos. En el
+% contexto del trabajo desarrollado hay dos métodos de planificar que son de
+% especial interés: planificar sobre el GVD, y planificar sobre todo el espacio
+% libre. La planificación sobre el GVD es la más rápida, y genera caminos más
+% seguros, mientra que planificar sobre todo el espacio libre lleva a caminos más
+% cortos. La quinta contribución es la propuesta de un método de planificación
+% que combina los métodos antes descritos de forma jerárquica para obtener la
+% velocidad de la planificación sobre el GVD y el largo de los caminos
+% planificados sobre todo el espacio libre.
+
+% Las contribuciones antes mencionadas se implementaron como parte de una
+% solución al problema de exploración multirobot. Esta solución fue alisada para
+% realizar pruebas dentro de un simulador con el propósito de validar y estudiar
+% la utilidad las contribuciones. La solución implementada se encuentra
