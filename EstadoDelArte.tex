@@ -8,14 +8,19 @@ una discusión sobre una herramienta fundamental para el proyecto, la
 simulación.
 
 \section{Exploración}\label{sec:exploracion}
-La exploración es un problema clásico de la robótica móvil autónoma que
-consiste en utilizar un robot con el objetivo de obtener información de un
-entorno desconocido generando un mapa que lo represente. La información del
-entorno es recopilada por los sensores del robot. Dado que dichos sensores
-tienen un rango máximo y también suelen existir obstáculos que limitan aun más
-ese rango, lo normal es que sea necesario que el robot se mueva para que los
-sensores logren obtener información de cada parte del entorno y poder generar
-un mapa completo que lo represente.
+La exploración es un problema clásico de la robótica
+móvil autónoma que consiste en utilizar un robot con el objetivo de obtener
+información de un entorno desconocido generando un mapa que lo represente. La
+exploración es fundamental en tareas de limpieza \cite{luo2002real}, operaciones
+de búsqueda y rescate \cite{Liu2015}, misiones extra planetarias
+\cite{schuster2019towards}, entre otras tareas en las cuales se desconozca
+el entorno y sea ineficiente o directamente inviable teleoperar a un robot.
+
+La información del entorno es recopilada por los sensores del robot. Dado que
+dichos sensores tienen un rango máximo y también suelen existir obstáculos que
+limitan aun más ese rango, lo normal es que sea necesario que el robot se mueva
+para que los sensores logren obtener información de cada parte del entorno y
+poder generar un mapa completo que lo represente.
 
 Determinar el siguiente lugar al cual el robot debe moverse para obtener
 información del entorno es uno de los principales problemas de la exploración
