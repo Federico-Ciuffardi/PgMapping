@@ -1,33 +1,33 @@
 La exploración es un problema fundamental de la robótica móvil autónoma que
-consiste en utilizar un robot con el objetivo de obtener información de un
-entorno desconocido con sus sensores para generar un mapa que lo represente.
-
-Determinar el siguiente lugar al cual el robot debe moverse para obtener
-información del entorno es uno de los principales aspectos de la exploración
-conocido como el problema de asignación objetivos de exploración, donde por
-\say{objetivo de exploración} se entiende uno de estos lugares convenientes. 
-
+consiste en utilizar un robot para a través de sus sensores obtener información
+de un entorno desconocido con el objetivo de generar un mapa que lo represente.
 Por motivos de eficiencia y robustez la exploración suele llevarse a cabo con
-más de un robot. Al utilizar varios robots es deseable que la asignación de
-objetivos se lleve a cabo siguiendo una estrategia de coordinación para que los
-robots cooperen de forma optima, evitando explorar los mismos lugares o
-obstaculizarse entre sí.
+más de un robot, en este caso el problema se conoce como el de exploración multirobot.
 
-Los entornos estructurados normalmente están compuestos de habitaciones y
-corredores (conocidos como segmentos). Para este tipo de entornos una
-estrategia de coordinación consiste en llevar a cabo la exploración maximizando
-la distribución de los robots sobre los segmentos. 
+Uno de los principales problemas de la exploración es determinar los lugares a
+los cuales los robot deben moverse para obtener información del entorno. Esto
+se conoce como el problema de asignación objetivos de exploración, donde por
+\say{objetivo de exploración} se entiende uno de estos lugares. Cuando se
+utiliza mas de un robot es deseable que la asignación de objetivos se lleve
+a cabo siguiendo una estrategia de coordinación para evitar que los robots
+exploren los mismos lugares o que se obstaculicen entre sí.
 
-El proyecto se plantea como objetivo mejorar dicha estrategia coordinación,
-para esto se realizan cinco propuestas que buscan mejorar aspectos específicos
-de la estrategia y del problema de exploración multirobot en general.
+Los entornos estructurados como edificios, hogares y otras construcciones
+humanas son entornos que penden dividirse en segmentos, como como habitaciones
+y corredores. En este tipo de entornos una posible estrategia de coordinación
+es la de llevar a cabo la exploración maximizando la distribución de los
+robots sobre los segmentos. 
+
+El proyecto se planteó como objetivo mejorar dicha estrategia coordinación,
+resultando en cinco propuestas que buscan mejorar aspectos específicos de la
+estrategia y del problema de exploración multirobot en general.
 
 Dos de las propuestas se concentran en acelerar la construcción de una
 estructura llamada Diagrama Generalizado de Voronoi (GVD por sus siglas en
 ingles), que es esencial mantener actualizada para reconocer los segmentos
 sobre los cuales distribuir a los robots durante la exploración. La primera
 propuesta optimiza la actualización solo modificando las partes desactualizadas 
-de la ultima version del GVD. La segunda reduce la contracción del GVD a las
+de la última version del GVD. La segunda reduce la construcción del GVD a las
 partes conocidas del entorno, ahorrando el tiempo de construir sobre las
 partes desconocidas.
 
@@ -35,19 +35,19 @@ La tercera propuesta consiste en forma novedosa de identificar los objetivos
 que se basa en las capacidades sensoriales de los robots para evitar
 identificar objetivos redundantes.
 
-La cuarta propuesta es algoritmo de asignación de objetivos de exploración que
+La cuarta propuesta es un algoritmo de asignación de objetivos de exploración que
 logra asignar los objetivos identificados maximizando la distribución de los
 robots sobre los segmentos. La principal ventaja de este algoritmo es que la
 asignación considera la cantidad de objetivos que existen en un segmento.
 
-La quinta y ultima propuesta consiste en un método de planificar caminos hacia
+La quinta y última propuesta consiste en un método de planificar caminos hacia
 los objetivos de exploración que hace uso del GVD (ya disponible por ser usando
 en la identificación de segmentos) para optimizar los tiempos de planificación
-pero permitiendo que los caminos no estén completamente sobre el GVD evitando
-generar caminos innecesariamente largos.
+pero a su vez permite que los caminos no sean completamente sobre el GVD evitando
+planificar caminos innecesariamente largos.
 
 Las propuestas se implementaron como parte de una solución al problema de
 exploración multirobot completa con la cual se realizaron pruebas dentro de un
 simulador. Los resultados de las pruebas en general indican que las propuestas
 logran su objetivo de mejorar los resultados, siendo las propuestas asociadas a
-la aceleración de la contracción del GVD las de mayor impacto.
+la aceleración de la construcción del GVD las de mayor impacto.
