@@ -396,10 +396,10 @@ esqueletización. La idea se basa en asignar identificadores a cada
 conjunto conexo de celdas ocupadas, y luego según la interpretación de
 brushfire como ondas, las ondas provenientes de celdas ocupadas con
 identificadores distintos colisionan en las celdas que deben pertenecer
-al GVD. Una colision de ondas involucra dos celdas $c$ y $c'$, y ocurre cuando
-una celda $c$ recien extraida de la cola de prioridad no reemplaza la distancia
+al GVD. Una colisión de ondas involucra dos celdas $c$ y $c'$, y ocurre cuando
+una celda $c$ recién extraída de la cola de prioridad no reemplaza la distancia
 $d_{c'}$ de una celda adyacente $c'$, con distancia tentativa $\mli{dt}_{c'}$
-calculada segun \ref{ec:dtBrushFire}, por ser la  $\mli{dt}_{c'}\geq d_{c'}$.
+calculada según \ref{ec:dtBrushFire}, por ser la  $\mli{dt}_{c'}\geq d_{c'}$.
 Notar que dos ondas pueden generar multiples choques de ondas.  
 
 La asignación de identificadores presentada causa los problemas asociados a
@@ -407,9 +407,9 @@ generadores cóncavos comentados en la sección \ref{subsec:GVD}, en la sección
 \ref{subsec:constGVDInc} se describe una solución. 
 
 \subsection{Construcción incremental de un GVD}\label{subsec:constGVDInc}
-% A lo largo de la exploración el mapa construido recibirá, de forma frecuente, actualizaciones que solo modifican una pequeña porción del mismo. Dado esto, por motivos de eficiencia, se busca que los algoritmos que utilizan al mapa como una entrada eviten recomputarse completamente en cada actualización y que en su lugar actualicen el último resultado obtenido para que sea consistente con la última version del mapa.
+% A lo largo de la exploración el mapa construido recibirá, de forma frecuente, actualizaciones que solo modifican una pequeña porción del mismo. Dado esto, por motivos de eficiencia, se busca que los algoritmos que utilizan al mapa como una entrada eviten re computarse completamente en cada actualización y que en su lugar actualicen el último resultado obtenido para que sea consistente con la última version del mapa.
 
-% Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la última entrada son llamados \emph{algoritmos incrementales}.
+% Los algoritmos que requieren re computarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la última entrada son llamados \emph{algoritmos incrementales}.
 
 % Los algoritmos de generación de GVD, y de segmentación a partir de un GVD descritos anteriormente son no incrementales, por lo tanto dado el problema de eficiencia que esto implica es de interés describir variantes incrementales para los mismos.
 
@@ -607,7 +607,7 @@ celda a los obstáculos que tiene a su alrededor. Estos atributos se utilizan
 para entrenar un modelo de clasificación denominado \emph{AdaBoost}
 \cite{schapire1999improved} que es usado para clasificar celdas libres en
 categorías semánticas como por ejemplo puerta, habitación o corredor. Luego en
-la practica a partir de los valores de los atributos y el modelo entrenado se
+la práctica a partir de los valores de los atributos y el modelo entrenado se
 clasifica cada celda libre. Las regiones que conforman el mapa topológico se
 obtienen agrupando las celdas con una misma categoría. La figura
 \ref{fig:ejMartinezTop} muestra un ejemplo de la clasificación y su posterior
@@ -676,7 +676,7 @@ de calidad de la segmentación.
 
 \subsubsection{Criterio de calidad basado en la segmentación humana}
 En \cite{bormann2016room} se propone que la calidad de una segmentación
-corresponde a su semejanza a la segmentación humana y se proporciona un metodo
+corresponde a su semejanza a la segmentación humana y se proporciona un método
 para medirla.  
 
 En el contexto del articulo la segmentación humana se aproxima como la
@@ -985,7 +985,7 @@ en la eficiencia.
 
 
 ROS \cite{ros} es un framework que facilita el desarrollo de aplicaciones
-robóticas, utlizarlo evita \say{reinventar la rueda} y permite dedicarse
+robóticas, utilizarlo evita \say{reinventar la rueda} y permite dedicarse
 a los aspectos principales de un proyecto. 
 %Otro aspecto importante es que implementar con ROS
 %puede facilitar la migración de la implementación desarrollado en el
@@ -1071,7 +1071,7 @@ tiempo real que tome ejecutarla $tr$. A mayor $R_{sim}$ mayor rendimiento.
 
 El software utilizado fue Ubuntu \emph{20.04}, ROS \emph{Noetic}, Gazebo \emph{11.4.0} y Webots \emph{R2021a}. 
 
-El hardware utlizado consiste de un procesador Intel Core i3-9100F, un procesador
+El hardware utilizado consiste de un procesador Intel Core i3-9100F, un procesador
 gráfico GeForce GTX 660 y 16GB de memoria RAM.
 
 \subsubsection{Resultados}
