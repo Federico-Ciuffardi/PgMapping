@@ -1,19 +1,20 @@
 La exploración es un problema fundamental de la robótica móvil autónoma que
-consiste en utilizar un robot para a través de sus sensores obtener información
-de un entorno desconocido con el objetivo de generar un mapa que lo represente.
-Por motivos de eficiencia y robustez la exploración suele llevarse a cabo con
-más de un robot, en este caso el problema se conoce como el de exploración multirobot.
+consiste en utilizar un robot para obtener información de un entorno
+desconocido, a través de sus sensores, con el objetivo de generar un mapa que lo
+represente. Por motivos de eficiencia y robustez la exploración suele llevarse
+a cabo con más de un robot, en este caso el problema se conoce como el de
+exploración multirobot.
 
 Uno de los principales problemas de la exploración es determinar los lugares a
 los cuales los robot deben moverse para obtener información del entorno. Esto
 se conoce como el problema de asignación objetivos de exploración, donde por
 \say{objetivo de exploración} se entiende uno de estos lugares. Cuando se
-utiliza mas de un robot es deseable que la asignación de objetivos se lleve
+utiliza más de un robot es deseable que la asignación de objetivos se lleve
 a cabo siguiendo una estrategia de coordinación para evitar que los robots
 exploren los mismos lugares o que se obstaculicen entre sí.
 
 Los entornos estructurados como edificios, hogares y otras construcciones
-humanas son entornos que penden dividirse en segmentos, como como habitaciones
+humanas son entornos que pueden dividirse en segmentos, como como habitaciones
 y corredores. En este tipo de entornos una posible estrategia de coordinación
 es la de llevar a cabo la exploración maximizando la distribución de los
 robots sobre los segmentos. 
@@ -42,7 +43,7 @@ asignación considera la cantidad de objetivos que existen en un segmento.
 
 La quinta y última propuesta consiste en un método de planificar caminos hacia
 los objetivos de exploración que hace uso del GVD (ya disponible por ser usando
-en la identificación de segmentos) para optimizar los tiempos de planificación
+en la identificación de segmentos) para reducir los tiempos de planificación
 pero a su vez permite que los caminos no sean completamente sobre el GVD evitando
 planificar caminos innecesariamente largos.
 
