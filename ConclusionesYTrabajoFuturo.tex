@@ -1,6 +1,19 @@
+En este proyecto de grado se planteo el objetivo de mejorar la solución del
+problema de exploración multirobot propuesta en \cite{wurm2008coordinated},
+donde se propone una estrategia de coordinación para  entornos estructurados
+que consiste en explorar maximizando la distribución de los robots sobre los
+segmentos (habitaciones y corredores), los cuales se identifican a partir de un
+GVD. Para esto se evaluaron varios aspectos de la propuesta en cuestión y del
+problema de exploración multirobot en general relevando una serie de
+potenciales mejoras. Estas fueron implementadas como parte de una solución al
+problema de exploración multirobot\footnote{Disponible en línea:\\
+\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con
+la cual se experimento dentro de un simulador con el propósito de validar su
+impacto.
+
 En este ultimó capitulo se plantean las conclusiones derivadas del trabajo
-realizado en el proyecto de grado y se establecen aspectos que pueden ser
-retomados como trabajo futuro.
+realizado en el proyecto de grado y se establecen líneas de trabajo que pueden ser
+retomadas en el futuro.
 
 \section{Conclusiones}
 
@@ -15,38 +28,37 @@ retomados como trabajo futuro.
 % \url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con la cual se
 % experimento dentro de un simulador con el propósito de validar su impacto.
 
-Este proyecto de grado se planteo como objetivo mejorar la propuesta de
-exploración multirobot de \cite{wurm2008coordinated} donde se establece que la
-exploración debe llevarse a cabo maximizando la distribución de los robots
-sobre las habitaciones y corredores (segmentos), los cuales son identificados a
-partir de un GVD. Para esto se evaluaron varios aspectos de la propuesta en
-cuestión y del problema de exploración multirobot en general relevando una
-serie de potenciales mejoras. Estas fueron implementadas como parte de una
-solución al problema de exploración multirobot \footnote{Disponible en línea:\\
-\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}} con
-la cual se experimento dentro de un simulador con el propósito de validar su
-impacto.
+En general, a partir de los resultados obtenidos en la experimentación, se
+concluye que la solución desarrollada resuelve el problema de exploración
+multirobot de forma satisfactoria en términos de los mapas generados. 
 
-En general, a partir de los resultados obtenidos de la experimentación se
-concluye que la solución desarrollada logra resolver el problema de exploración
-multirobot de forma satisfactoria en términos de los mapas generados.
-
-Se puede concluir que es posible realizar de forma incremental, tanto la
-construcción del GVD, como la obtención de información secundaria relacionada a
-este que es necesaria para identificar los segmentos. Esto se logra adaptando
-el algoritmo presentado en \cite{Lau2013} para que se incluya dicha
-información. Adicionalmente los datos experimentales permiten concluir que la
-construcción incremental del GVD acelera significativamente los tiempos de
-construcción del GVD y de exploración frente a realizar una construcción no
-incremental como en la propuesta original. Esto es una mejora considerable en
-tanto hace viable aplicar la estrategia de coordinación en la exploración de
+Por otro lado se puede concluir que es posible realizar la construcción del GVD
+de forma incremental sin perder la información secundaria necesaria para
+identificar los segmentos. Es decir, que es posible aplicar la estrategia de
+coordinación de \cite{wurm2008coordinated} construyendo el GVD de forma
+incremental. Esto se logró adaptando el algoritmo presentado en \cite{Lau2013}
+para incluir la información necesaria. A su vez los datos experimentales permiten
+concluir que la construcción incremental del GVD acelera significativamente los
+tiempos de construcción del GVD y de exploración, frente a realizar una
+construcción no incremental como en la propuesta original. Esto es una mejora
+considerable en tanto hace viable aplicar la estrategia de coordinación en
 entornos de mayor tamaño o que requieran mapas con un mayor nivel de detalle.
 
+% lagf exploración de
+
 También se concluye que el espacio desconocido puede ser considerado de
-distintas maneras en la construcción del GVD. En especial que puede considerase de
-forma de limitar la construcción del GVD al espacio conocido, lo cual lleva a
-una reducción de los tiempos de construcción del GVD y de exploración, con
-respecto a realizar la construcción en todo el espacio, como es usual.
+distintas maneras en la construcción del GVD. En especial que puede considerase
+de forma de limitar la construcción del GVD al espacio conocido, lo cual lleva
+a una reducción de los tiempos de construcción del GVD y de exploración, con
+respecto a realizar la construcción en todo el espacio (conocido y desconocido)
+como es usual.
+
+% También se concluye que el espacio desconocido puede ser considerado de
+% distintas maneras en la construcción del GVD. En especial que puede considerase de
+% forma de limitar la construcción del GVD al espacio conocido, lo cual lleva a
+% una reducción de los tiempos de construcción del GVD y de exploración, con
+% respecto a realizar la construcción en todo el espacio, como es usual.
+
 
 % tambien se concluye que al construir el gvd el espacio desconocido puede
 % considerase de forma de limitar la construcción al espacio conocido, lo cual
@@ -57,30 +69,33 @@ respecto a realizar la construcción en todo el espacio, como es usual.
 En relación a la identificación de objetivos, según los resultados
 experimentales se concluye que utilizar todas las fronteras como objetivos
 tiene un impacto negativo considerable en los tiempos de exploración y en menor
-medida en la distancia que recorren los robots, frente a reducir el numero de
-objetivos simplificando las fronteras en sus partes mas significativas.
-Adicionalmente se mencionan dos métodos de simplificación de fronteras la
-simplificación basada en K-Mean que se encuentra presente en el estado del arte y
-la simplificación basada en cubrimiento propuesta en este proyecto como mejora
-de la anterior. Los resultados experimentales permiten concluir que la
-simplificación basada en cubrimiento logra una mejor reducción de objetivos que la
-simplificación basada en K-Means, pero tiene un rendimiento inferior en
-términos de costo computacional. 
+medida en la distancia que recorren los robots, frente a reducir el número de
+objetivos simplificando las fronteras a sus partes más significativas.
+Respecto a la simplificación de fronteras se mencionan dos métodos, la
+simplificación basada en K-Means que se encuentra presente en el estado del
+arte, y la simplificación basada en cubrimiento que es propuesta en este proyecto como
+mejora de la anterior. Los resultados experimentales permiten concluir que la
+simplificación basada en cubrimiento logra una mayor reducción de objetivos que
+la simplificación basada en K-Means, pero lleva más tiempo.
+% pero tiene un rendimiento inferior en términos de costo computacional.
 
-Adicionalmente existen dos potenciales mejoras sobre las cuales únicamente se
+Adicionalmente existen dos mejoras potenciales sobre las cuales únicamente se
 puede concluir que funcionan correctamente por formar parte de la solución
-realizada, pero que su impacto no fue aislado y estudiado en la
-experimentación. La primera es el modelo de planificación jerárquica que
-combina la planificación sobre el GVD y sobre todo el espacio libre, que
-debería implicar reducciones en las distancias recorridas frente a navegar
-únicamente sobre el GVD y de costos computacionales frente a calcular los
-caminos directamente sobre todo el espacio libre. La segunda es el algoritmo de
-asignación de objetivos propuesto como alterativa al método húngaro como es
-utilizado en el trabajo original de \cite{wurm2008coordinated}. La ventaja del
-algoritmo propuesto es que este logra distribuir los robots sobre los segmentos
-considerando el numero de objetivos que existen en estos, lo cual evita dejar
-robots ociosos por asignar mas robots a un segmento que los objetivos que se
-encuentran en él.
+implementada, pero que su impacto no fue aislado y estudiado experimentalmente.
+La primera es el modelo de planificación que combina jerárquicamente la
+planificación sobre el GVD, y la planificación sobre todo el espacio libre.
+Esta forma de planificar debería implicar reducciones en las distancias
+recorridas frente a navegar únicamente sobre el GVD y de costos computacionales
+frente a calcular los caminos directamente sobre todo el espacio libre. La
+segunda es el algoritmo de asignación de objetivos que fue propuesto como
+alterativa al utilizado en el trabajo original de \cite{wurm2008coordinated}.
+La ventaja del algoritmo propuesto es que logra maximizar la distribución de
+los robots sobre los segmentos a la vez que evita asignar más robots a un
+segmento que los objetivos contenidos de él.
+
+% como si puede
+% ocurrir en la propuesta original por asignarse más robots a un segmento que los
+% objetivos que se encuentran en él.
 
 
 % La conclusion principal es que el objetivo se cumplio de forma satisfactoria,
@@ -127,172 +142,169 @@ encuentran en él.
 
 \section{Trabajo a futuro}
 
-Esta sección se dedica a comentar las lineas de trabajo que surgen del proyecto
+Esta sección se dedica a comentar las líneas de trabajo que surgen del proyecto
 realizado y pueden ser retomadas a futuro.
 
-\subsection{Experimentacion en la realidad}
+\subsection{Experimentación en la realidad}
 
-Una de estas líneas de trabajo es la de realizar pruebas en la realidad con el
-proposito de validar los resultados obtenidos de los experimentos simulados.
-Esto no es una tarea trivial ya que, ademas de requerir de hardware y de un
-entorno en donde hacer las pruebas, también implica remover las hipotesis de
-comunicación ideal y de localización trivial de los robots, ya que estas
-hipotesis no son viables en la realidad. Esto hace necesario alterar la
-asignación de objetivos de forma que los problemas potenciales de comunicación
-sean considerados y evitados durante la exploración. Adicionalmente requiere
-integrar una solución de localización que permita obtener la ubicación de los
-robots en un escenario real.
+Una de estas líneas de trabajo es la de realizar experimentos en la realidad
+con el propósito de validar los resultados obtenidos en los experimentos
+simulados. Esto no es una tarea trivial ya que, ademas de requerirse hardware y
+un entorno en donde hacer las pruebas, también se deben remover las hipótesis de
+comunicación ideal y de localización trivial de los robots, dado que estas
+no son viables en la realidad. Esto hace necesario alterar la
+asignación de objetivos de forma que los potenciales problemas de comunicación
+sean considerados y evitados durante la exploración. Y por otro lado requiere
+integrar una solución de localización que permita estimar la ubicación de los
+robots.% en un escenario real.
 
 \subsection{Identificación de objetivos}
 % esta relacionada al
-% metodo de identificación de objetivos que funciona simplificacando fronteras
-% basandose en el cubrimiento. Como se comento en la seccion de conclusiones,
-% dicho metodo obtiene una reduccion de objetivos mejo
+% método de identificación de objetivos que funciona simplificando fronteras
+% basándose en el cubrimiento. Como se comento en la secón de conclusiones,
+% dicho método obtiene una reducción de objetivos mejo
 
-% ue se abre desde este proyecto
-
-% Se intuye que existe la
-
-% posiblidad de mejorar el rendimiento computacional del 
+% posibilidad de mejorar el rendimiento computacional del 
 
 También se abren dos líneas de trabajo que profundizan en el estudio y
-desarrollo de metodos de identificación de objetivos. La primera esta orientada
-al anlaisis del metodo de simplificación de fronteras basado en el cubrimiento
+desarrollo de métodos de identificación de objetivos. La primera esta orientada
+al análisis del método de simplificación de fronteras basado en el cubrimiento
 en busca de posibles optimizaciones que logren mejorar su rendimiento
 computacional, que actualmente es su mayor desventaja. La segunda consiste en
-el desarrollo de variantes del metodo antes mencionado que en lugar de elegir
-las fronteras sigificativas de forma abitraria desde los conjuntos de fronteras
-candidatas lo hagan con algun criterio especifico, como por ejemplo elegir la
-frontera candidata con mayor ganancia de información \cite{amorin2019novel}.
-\todo{de tener una ref al metodo de affinity propagation lo agrego como trabajo futuro}
+el desarrollo de variantes del método antes mencionado, que en lugar de
+determinar de forma arbitraria cual frontera es la significativa del conjunto
+de candidatas, se determine con algún criterio específico, como por ejemplo elegir la
+frontera candidata con mayor ganancia de información \cite{Amorin2019}.
 
 % La tercera es
-% el estudio de otros metodos identificación de objetivos, como por ejemplo la simplificación.
+% el estudio de otros métodos identificación de objetivos, como por ejemplo la simplificación.
 
 De seguir alguna de estas direcciones también sería conveniente diseñar nuevas
 pruebas que se concentren en evaluar la identificación de objetivos, ya que por
-ejemplo en el entorno utlizado la mayoria de habitaciones son pequeñas y no son
+ejemplo en el entorno utilizado la mayoría de habitaciones son pequeñas y no son
 propensas a generar fronteras con una complejidad suficiente como para
-presentar un desafio para los metodos de simplificación estudiados.
+presentar un desafió a los métodos de simplificación estudiados.
 
  % analizar la posibilidad de optimizar 
 
-% Como se comento en la seccion de conclusiones,
-% dicho metodo obtiene una reduccion de objetivos mejo
+% Como se comento en la sección de conclusiones,
+% dicho método obtiene una reducción de objetivos mejo
 
 % Comentar que el entorno en el que se realizan las pruebas pone a prueba los
-% algorimos de simplificacion principalmente en la habitacion grande del centro,
-% siendo las demas demasiado pequeñas como para favorecer que se generen
-% fronteras con las condiciones de ser largas y serperteantes, de forma de
-% generar las condiciones necesaria para que la simplificacion de K-Means
-% funcione peor. Quizas el generar un conjunto distinto de pruebas viene bien
-% junto a hacerlo mas eficiente y tambien compara contra affinity propagation
+% algoritmos de simplificación principalmente en la habitación grande del centro,
+% siendo las demás demasiado pequeñas como para favorecer que se generen
+% fronteras con las condiciones de ser largas y serpentean tes, de forma de
+% generar las condiciones necesaria para que la simplificación de K-Means
+% funcione peor. Quizás el generar un conjunto distinto de pruebas viene bien
+% junto a hacerlo más eficiente y también compara contra affinity propagation
 
-% Cuidado con la simplificacion de fronteras y los obstaculos que pueden llegar a
-% ocluir las fornteras (modificar la def de cubrimiento para que no permita
-% oclucsiones)
+% Cuidado con la simplificación de fronteras y los obstáculos que pueden llegar a
+% ocluir las fronteras (modificar la def de cubrimiento para que no permita
+% oclusiones)
 
 
 
 \subsection{Mapa topológico}
 
-En la solucion desarrollada la extension espacial de los segmentos es la unica
-información necesaria y que se tiene disponible relacionada al mapa topologico.
-Por lo que una direccion de trabajo posible seria la de procesar esta
-información para obtener un mapa topológico completo. Por ejemplo un grafo que
-contenga un vertice por segmento y las conexines entre dichos vertices implique
-puertas entre los segmentos.
+En la solución desarrollada la extensión de los segmentos es la única
+información necesaria y que se tiene disponible relacionada al mapa topológico.
+Por lo que una dirección de trabajo posible sería la de desarrollar un método
+para procesar dicha información con el propósito obtener un mapa topológico
+completo, como por ejemplo un grafo que contenga un vértice por segmento y las
+conexiones entre dichos vertices implique la existencia de puertas entre los segmentos.
 
-Evaluar los mapas topológicos generados por la solucion desarrollada con las
-ideas presentadas en la sección \ref{sec:evalTop} también se presenta como una
-linea de trabajo interesante. Al igual que el estudio, implementación y
-validación de tecnicas que proponen mejorar la segmentación como las que se
+Evaluar los mapas topológicos generados a partir de la solución desarrollada
+con las ideas presentadas en la sección \ref{sec:evalTop} también se presenta
+como una línea de trabajo interesante. Al igual que el estudio, implementación
+y validación de técnicas que proponen mejorar la segmentación como las que se
 describen en \cite{Thrun1998,Liu2015,wurm2008coordinated}.
 
-% * Mejorar la segmentacion, por ejemplo con:
-%   * Trun y su mergeo de segmentos 
-%   * lo descrito en liu ming y siegwart spectral clustering
+% * Mejorar la segmentación, por ejemplo con:
+%   * Trun y su mergo de segmentos 
+%   * lo descrito en lie Ming y siege wart spectral clustering
 
-% * Evaluar la segmentacion incremental con lo mencionado en la seccion de criterios del "estado del arte"
+% * Evaluar la segmentación incremental con lo mencionado en la sección de criterios del "estado del arte"
 
-% * Hacer la tencica de filtrado de puntos criticos de wurm (la de vecino de grado 3) de forma incremental
+% * Hacer la técnica de filtrado de puntos críticos de warm (la de vecino de grado 3) de forma incremental
 
 
-% tiene consite de sus segmentos sueltas y el gvd que
+% tiene consiste de sus segmentos sueltas y el GVD que
 %     permite navegar entre estas.
-%     * no es necesaria otra para lo que hice pero estaria bueno como herramienta
-%       generar un verdadero mapa topologico
+%     * no es necesaria otra para lo que hice pero estaría bueno como herramienta
+%       generar un verdadero mapa topológico
 
-% Auque en la solucion del proyecto desarrollado se identifican los segmentos del entorno
+% Aoque en la solución del proyecto desarrollado se identifican los segmentos del entorno
 
-% es la de probar distintas formas de sementacion, estudiar el impacto de cada 
-% * Consolidar una la generacion un mapa topologico verdadero:
-%   * ahora el mapa topologico se compone de regiones sueltas y el gvd que
+% es la de probar distintas formas de segmentación, estudiar el impacto de cada 
+% * Consolidar una la generación un mapa topológico verdadero:
+%   * ahora el mapa topológico se compone de regiones sueltas y el GVD que
 %     permite navegar entre estas.
-%     * no es necesaria otra para lo que hice pero estaria bueno como herramienta
-%       generar un verdadero mapa topologico
-%   * La idae seria reducir los segmentos vertices ubicandos en sus centros de
-%     masa y las conexiones entre ellos (a travez del gvd/mapa metrico) a aristas
+%     * no es necesaria otra para lo que hice pero estaría bueno como herramienta
+%       generar un verdadero mapa topológico
+%   * La idea sería reducir los segmentos vertices ubicándoos en sus centros de
+%     masa y las conexiones entre ellos (a través del GVD/mapa métrico) a aristas
 %     punto a punto entre dichos vertices.
 
 
-\subsection{Algorimo de asignación de objetivos y Planificación}
+\subsection[Algoritmo de asignación de objetivos y Planificación]{Algoritmo de asignación de objetivos y\\ Planificación}
 
-Realizar pruebas que permitan comparar el impacto del algorimo de asignación de
-objetivos introducido contra con otros algorimos de asignación de objetivos,
-como por ejemplo el metodo húngaro, es otra posible direccion de trabajo que
-puede ser retomada a futuro.
+Otra posible dirección de trabajo que puede ser retomada a futuro es la de
+realizar pruebas que permitan comprobar el impacto del algoritmo de asignación
+de objetivos introducido en este proyecto, comparándolo contra con otros algoritmos de
+asignación de objetivos, como por ejemplo el método húngaro como es utilizado
+en \cite{wurm2008coordinated}.
 
 De forma similar otro trabajo futuro posible es el de validar el impacto de la
-planificación jerarquica presentada en este proyecto comparandola con otras
+planificación jerárquica presentada en este proyecto comparándola con otras
 estrategias alterativas de planificación. 
 
 \subsection{Potenciales mejoras de rendimiento}
 
 % varios trabajos a futuro que se .. .de esto
 
-Existen varias mejoras potenciales de rendimiento que pueden ser estudidadas,
-implementadas y validadas como trabajo fururo. A continuacion se presentan
+Existen varias mejoras potenciales de rendimiento que pueden ser estudiadas,
+implementadas y validadas como trabajo futuro. A continuación se presentan
 algunos ejemplos.
 
 Un ejemplo sería el paralelizar la segmentación y la identificación de
 objetivos en la etapa de obtención de información.
 
-Otro ejemplo consiste cambiar algoritmo de segmentación no incremental por una variante
+Otro ejemplo consiste en cambiar el algoritmo de segmentación no incremental por una variante
 incremental de este, como la presentada en \cite{Liu2015}. 
 
-Los algorimos de simplificación de frontera son no incrementales y cambiarlos
-por variantes incrementales tambien seria un ejemplo. Aunque en este caso no se
-encontro información al respecto por lo que se deberia estudiar la posibilidad
-de desarrollar las variantes incrementales.
+Los algoritmos de simplificación de frontera son no incrementales y cambiarlos
+por variantes incrementales también es un un ejemplo. Aunque en este caso no se
+encontró información al respecto por lo que se debería estudiar si esto es
+posible.
 
-% Ver posibilidades de un filtrado de fronteras (obtener fronteras sigificativas) de forma incremental
+% Ver posibilidades de un filtrado de fronteras (obtener fronteras significativas) de forma incremental
 
 
 \subsection{Reusabilidad}
 
-Otro trabajo futuro posible es el de refcatorizar, organizar y documentar cada
-modulo de la solucion ya disponible en linea, con el proposito de proporcionar
-dichos modulos como nodos de ROS independientes, siguiendo los estandares
-propuestos por la comunidad de dicha herramienta. De esta forma se facilita la
-reutilizacion de lo desarrollado en este proyecto con lo que se lograra
-alcanzar a mas investigadores y estudantes.
+Otro trabajo futuro posible es el de refactorizar, organizar y documentar cada
+modulo de la solución desarrollada, con el propósito de proporcionar dichos
+módulos como nodos de ROS independientes, que sigan los estándares propuestos
+por la comunidad de dicha herramienta. De esta forma se facilita la
+reutilización de lo desarrollado en este proyecto permitiendo
+alcanzar a más investigadores y estudiantes.
 
-Relacionado a la anterior adaptar la solución actual que utliza la primera
-verision de ROS (ROS 1) a su segunda versión (ROS 2), puede ser otra linea de
-trabajo de interes pensando en la reusabilidad a fururo esto ya que ROS 1
-termina su soporte en el 2025.
+Actualizar la solución actual que utiliza la primera versión de ROS (ROS 1)
+para utilizar en su lugar a su segunda versión (ROS 2), puede ser otra línea de
+trabajo de interés pensando en la reusabilidad a futuro, ya que ROS 1 termina
+su soporte en el 2025.
 
 % * Hacer librerias con los timpos de datos utliados y algormios desarrollados (agnositcos de ros 1)
-%   * Esto se hizo (no seria trabajo futuro)
+%   * Esto se hizo (no sería trabajo futuro)
 
 % * Hacer paquetes de ros 1 que sigan los estandares, sean modulares y resutilizables 
 %   * Ahora esta todo junto dentro de un paquete pero los modulos son
 %     relativametne independientes entre si y podrian modularizarse para su
 %     reutlizacion y combinacion con otros paquetes
 
+
 % * Hacer lo mismo del punto anterior con ros2:
-%   * Discutir que esto es lo mas razonable ya que:
+%   * Discutir que esto es lo más razonable ya que:
 %     * ROS 1 termna su soporte pronto
 %     * ROS 2 es ampliamente superior cuando se trata de multirobot (no es centralizado)
 

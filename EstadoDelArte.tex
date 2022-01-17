@@ -56,7 +56,7 @@ obtener nueva información de él, osea que no exista ningún espacio desconocid
 que sea accesible. La desventaja de este criterio es que se fuerza a una
 exploración exhaustiva del entorno, lo cual puede ser indeseable por cuestiones
 de costos, tanto temporales, como de recursos como la energía de los robots, o
-su desgaste. En \cite{amorin2019novel} se propone un criterio de parada cuyo
+su desgaste. En \cite{Amorin2019} se propone un criterio de parada cuyo
 uso es factible para la exploración de entornos cerrados y que a
 su vez evita una exploración exhaustiva. La idea subyacente de este criterio es
 que es posible determinar cuando los robots recopilan suficiente información de
@@ -188,7 +188,7 @@ Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inici
 \subsection{Diagrama de Voronoi}\label{sec:VD}
 Dado un espacio euclídeo $W \subseteq R^2$, y $G \subset W$ un conjunto de puntos llamados \emph{generadores}. Sea $p\in W$, la función $d_p : W \rightarrow R$ qué computa la distancia desde $p$ a otro punto en $W$. 
 
-% Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos mas cercanos a un generador $s_i\in G$ particular: 
+% Una \emph{region de Voronoi} $R_i\subset W$ es el conjunto de puntos más cercanos a un generador $s_i\in G$ particular: 
 % \begin{equation}
 %   R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in G,s_j \neq s_i\}\label{eq:regV}
 % \end{equation}
@@ -245,10 +245,10 @@ generalizada y se define según se muestra en \eqref{eq:GVD}.
 %, a partir de los cuales se puede definir los puntos base generalizados $\mli{GBP}_p$ de un punto $p$ como los puntos pertenecientes a los generadores de $\mli{GBG}_p$ que son más cercanos a $p$ \eqref{eq:GBP}. 
 
 %\todo{de acuerdo, GBG no aporta, alcanza con GG}
-% \todo[inline]{En la def de GBP si en la U se usa GG entonces por cada conjunto de puntos que compone obstaculo $s_i$ en $GG$ se tiene al menos un punto base (argmin se aplica a cada obstaculo individualmente) entoces si hay dos obstaculos ya se tiene que todo punto pertenece al GVD, restingir la U a solo los obstaculos a mínima distancia soluciona esto. Otra solucion es redefinir GBP para decir algo como: los puntos a mínima distancia de cualquier obstaculo, pero me parece mas claro usar GBG y la U de argmin. Cambie el principio del parrafo para indicar que es util mas que necesario, igual lo hablamos a ver que es mejor de las alternativas| para mi GBG no es necesario, con GG alcanza. sacaría}La definición $\mli{GVD}$ es análoga a su contra parte no generalizada y se define según se muestra en \eqref{eq:GVD}. 
-% Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de Voronoi $\mli{GVD}$ son las definiciones mas similares a sus contra partes no generalizadas y se definen según se muestra en \eqref{eq:GR} y \eqref{eq:GVD} respectivamente. 
+% \todo[inline]{En la def de GBP si en la U se usa GG entonces por cada conjunto de puntos que compone obstaculo $s_i$ en $GG$ se tiene al menos un punto base (argmin se aplica a cada obstaculo individualmente) entoces si hay dos obstaculos ya se tiene que todo punto pertenece al GVD, restingir la U a solo los obstaculos a mínima distancia soluciona esto. Otra solucion es redefinir GBP para decir algo como: los puntos a mínima distancia de cualquier obstaculo, pero me parece más claro usar GBG y la U de argmin. Cambie el principio del parrafo para indicar que es util más que necesario, igual lo hablamos a ver que es mejor de las alternativas| para mi GBG no es necesario, con GG alcanza. sacaría}La definición $\mli{GVD}$ es análoga a su contra parte no generalizada y se define según se muestra en \eqref{eq:GVD}. 
+% Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de Voronoi $\mli{GVD}$ son las definiciones más similares a sus contra partes no generalizadas y se definen según se muestra en \eqref{eq:GR} y \eqref{eq:GVD} respectivamente. 
 
-% Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los generadores generalizados mas cercanos $\mli{GBG}_p$\ref{eq:GBS}, solo devuelve los puntos mas cercanos de estos.
+% Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los generadores generalizados más cercanos $\mli{GBG}_p$\ref{eq:GBS}, solo devuelve los puntos más cercanos de estos.
 
 
 % \begin{equation}
@@ -310,8 +310,8 @@ En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD que es posible
 \end{figure}
 
 
-% vértices son los puntos pertenecientes al GVD, y las aristas están entre los vértices adyacentes en el espacio. Por otro lado otra forma mas compacta es que los 
-% Para referirse a la segunda forma, mas compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
+% vértices son los puntos pertenecientes al GVD, y las aristas están entre los vértices adyacentes en el espacio. Por otro lado otra forma más compacta es que los 
+% Para referirse a la segunda forma, más compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
 % Los GVD suelen ser representados con un grafo en el cual los vértices son los puntos $p$ pertenecientes al GVD que son adyacentes a obstáculos o que cumplen con $|\mli{GBP}_p|\geq 3$, mientras que las aristas\todo{muy entreverado. en un grafo las aristas conectan vértices. de hecho, ahora que lo observo, lo de la fig.1.5b no es un grafo. las aristas no son curvas ya que no modelan dicha información.} se encuentran entre los vértices que se encuentran conectados por caminos disjuntos formados por puntos pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo asociado al GVD de la figura \ref{fig:ejemploGVD}, donde los círculos rojos son los vértices del grafo y las líneas negras las aristas. %(aunque no son visibles existen aristas entre los vértices correspondientes a puntos que son tan cercanos que se solapan)\todo{no creo que este paréntesis aporte}.
 
 En \cite{choset2005principles} se demuestra que los GVD que utilizan los
@@ -326,14 +326,14 @@ el contexto de la navegación robótica. De ahora en adelante al hablar de GVD s
 hace referencia a GVD generado considerando a los conjuntos conexos y convexos
 de puntos obstaculizados como generadores.
 
-% Otra definición alternativa de GVD se muestra en \eqref{eq:GVDalt}, esta definición es mas restrictiva que la anterior en tanto no permite que un punto pertenezca si tiene mas de dos puntos bases pero estos pertenecen a un mismo generador. Esta definición trae problemas ya que distintas formas de separar a los obstáculos en generadores puede causar distintos GVD. Por ejemplo si se considera u generador como un conjunto conexo de puntos ocupados se tiene que en el interior de las habitaciones con una entrada no se generara GVD, ya que sus paredes por estar conectadas serán un solo generador, y por lo tanto los puntos $p$ interiores a la habitación aunque pueden cumplir con $|GBP_p| \geq 2$ no cumplirán con $|GBS_p| \geq 2$.
+% Otra definición alternativa de GVD se muestra en \eqref{eq:GVDalt}, esta definición es más restrictiva que la anterior en tanto no permite que un punto pertenezca si tiene más de dos puntos bases pero estos pertenecen a un mismo generador. Esta definición trae problemas ya que distintas formas de separar a los obstáculos en generadores puede causar distintos GVD. Por ejemplo si se considera u generador como un conjunto conexo de puntos ocupados se tiene que en el interior de las habitaciones con una entrada no se generara GVD, ya que sus paredes por estar conectadas serán un solo generador, y por lo tanto los puntos $p$ interiores a la habitación aunque pueden cumplir con $|GBP_p| \geq 2$ no cumplirán con $|GBS_p| \geq 2$.
 % \begin{equation}
 %   \mli{GVD}  = \{p \in W : |GBS_p| \geq 2\}\label{eq:GVDalt}
 % \end{equation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% Esto  necesita asumir que los obstáculos son convexos para poder entenderse porque por ejemplo si se considera las 4 paredes de una habitación como un único obstáculo eso seria un único generador generalizado y no formaría un GVD.
+% Esto  necesita asumir que los obstáculos son convexos para poder entenderse porque por ejemplo si se considera las 4 paredes de una habitación como un único obstáculo eso sería un único generador generalizado y no formaría un GVD.
 
 % En la def que use también es necesario  porque podrían darse pequeñas imperfecciones en un espacio continuo que generen que lo que a escala macroscópica es una pared a escala microscópica sean tenga pequeñas hendiduras circulares que causen puntos pertenecientes al GVD en lugares no deseados. Esto se evita considerando obstáculos convexos. 
 
@@ -347,7 +347,7 @@ Una idea intuitiva para construir un GVD en un espacio representado con una gril
 
 En \cite{wurm2008coordinated} se propone un método que logra construir un GVD evitando los problemas de discretización mencionados. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda esta ocupada o libre, resultando en un mapa que contiene para cada celda la distancia al obstáculo más cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. Finalmente GVD se obtiene aplicando un algoritmo de esqueletización \cite{zhang1984fast} al mapa de distancia construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}. En esta propuesta es clave el uso del algoritmo de esqueletización, que retrae el mapa de distancias a un esqueleto discreto que se aproxima al GVD que se generaría en el espacio continuo.   
 
-% que consiste en erosionar las celdas mas cercanas a los obstáculos hasta llegar a las celdas mas distantes a estos siendo estas últimas las celdas que se asignan al GVD construido. Un ejemplo de este proceso se puede ver en la figur
+% que consiste en erosionar las celdas más cercanas a los obstáculos hasta llegar a las celdas más distantes a estos siendo estas últimas las celdas que se asignan al GVD construido. Un ejemplo de este proceso se puede ver en la figur
 \begin{figure}[H]
   \centering
   \subfloat[Mapa original]{\includegraphics[clip=true, width=0.29\linewidth]{imagenes/wurmSeg/a.png}\label{fig:ejWurmA}}
@@ -430,7 +430,7 @@ El uso de algoritmos no incrementales como los presentados en la sección \ref{s
 
 % El algoritmo \emph{brushfire dinámico} es una variante incremental del algoritmo brushfire descrito hasta el momento presentada en \cite{kalra2009incremental}.
 
-% Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la última ejecución, y a partir de estos modificar solo las porciones del último resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser ocupado a ser libre (se quita una celda ocupada) o viceversa (se agrega una celda ocupada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios alteran la distancia mínima a un obstáculo calculada previamente. Cuando se quita una celda ocupada, son aquellas celdas que estaban más cerca de esta que de otra. Mientras que cuando se agrega una celda de ocupada, los cambios se dan en las celdas que pasan a tener esta nueva celda ocupada mas cerca que las demás.
+% Como se comento anteriormente, los algoritmos incrementales fundamentalmente consisten en tomar como entrada los cambios ocurridos desde la última ejecución, y a partir de estos modificar solo las porciones del último resultado necesarias para que vuelva a ser consistente. En este caso los cambios ocurridos corresponden a un conjunto de celdas en las que su estado pasa de ser ocupado a ser libre (se quita una celda ocupada) o viceversa (se agrega una celda ocupada). Y las porciones necesarias a modificar son las que al darse uno de los posibles cambios alteran la distancia mínima a un obstáculo calculada previamente. Cuando se quita una celda ocupada, son aquellas celdas que estaban más cerca de esta que de otra. Mientras que cuando se agrega una celda de ocupada, los cambios se dan en las celdas que pasan a tener esta nueva celda ocupada más cerca que las demás.
 Como se comento anteriormente, los algoritmos incrementales se basan en
 mantener un resultado consistente con una entrada que sufre modificaciones a lo
 largo del tiempo, solo actualizando las porciones del resultado que quedan
@@ -524,7 +524,7 @@ hojas) y que su remoción no desconecta al GVD. A la derecha de la figura
 % \end{figure} 
 
 % La esqueletización es usada en lugar de s
-% Este método evita problemas que se pueden dar al generar un GVD discretizado a partir de la definición de pertenencia al GVD directamente adaptada a un espacio discretizado en celdas, donde una celda pertenece al GVD si tiene dos o mas celdas ocupadas a una misma distancia. Un ejemplo de este tipo de problemas es el que se genera en los corredores cuya discretización tiene una cantidad par de celdas entre sus paredes, en este caso si se aplica la definición de GVD a las celdas ninguna debería pertenecer al GVD dado que ninguna celda tendría una misma distancia a dos celdas ocupadas (paredes del corredor). Este comportamiento no es deseable ya que se debe a una discretización particular del espacio, si el tamaño de las celdas fuera otro y en lugar de ser un numero par fuera uno impar se tendría un GVD a lo largo del centro del corredor, y mas importante aun, un GVD sobre un corredor en un espacio continuo siempre genera una linea sobre el centro del corredor. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
+% Este método evita problemas que se pueden dar al generar un GVD discretizado a partir de la definición de pertenencia al GVD directamente adaptada a un espacio discretizado en celdas, donde una celda pertenece al GVD si tiene dos o más celdas ocupadas a una misma distancia. Un ejemplo de este tipo de problemas es el que se genera en los corredores cuya discretización tiene una cantidad par de celdas entre sus paredes, en este caso si se aplica la definición de GVD a las celdas ninguna debería pertenecer al GVD dado que ninguna celda tendría una misma distancia a dos celdas ocupadas (paredes del corredor). Este comportamiento no es deseable ya que se debe a una discretización particular del espacio, si el tamaño de las celdas fuera otro y en lugar de ser un numero par fuera uno impar se tendría un GVD a lo largo del centro del corredor, y más importante aun, un GVD sobre un corredor en un espacio continuo siempre genera una línea sobre el centro del corredor. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
 
 % \begin{figure}
 %   \centering
@@ -557,7 +557,7 @@ ilustra estos conceptos.
 \begin{figure}[H]
   \center
   \includegraphics[width=0.75\linewidth]{imagenes/CritsSharpMono.png}
-  \caption[Puntos críticos y lineas críticas.]{Puntos críticos y líneas críticas. Los puntos críticos se indican con círculos y las líneas críticas con líneas punteadas. Notar que el despeje en puntos críticos se corresponde con el largo sus líneas críticas asociadas. Extraído de \cite{Thrun1998}.}\label{fig:crits}
+  \caption[Puntos críticos y líneas críticas.]{Puntos críticos y líneas críticas. Los puntos críticos se indican con círculos y las líneas críticas con líneas punteadas. Notar que el despeje en puntos críticos se corresponde con el largo sus líneas críticas asociadas. Extraído de \cite{Thrun1998}.}\label{fig:crits}
 \end{figure} 
 
 
@@ -568,7 +568,7 @@ El algoritmo comienza determinando el estado (ocupado o libre) para cada celda d
   \centering
   \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/a.png}\label{fig:ejThrunTopA}}
   \qquad
-  \subfloat[Lineas criticas]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/b.png}\label{fig:ejThrunTopB}}
+  \subfloat[líneas criticas]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/b.png}\label{fig:ejThrunTopB}}
   \qquad
   \subfloat[Regiones]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/c.png}\label{fig:ejThrunTopC}}
   \qquad
@@ -731,13 +731,13 @@ obtiene mejores resultados en general.
 % % \todo[inline]{conviene utilizar captions más cortos. ej. Regiones convexas. Las líneas sólidas delimitan las regiones y las punteadas sus envolventes convexas. además, delante de la llaves, en la defición del caption, conviene agregar entre paréntesis rectos el 'nombre' de la figura. esto será tomado para generar el índice de figuras de modo que no te queden entradas quilométricas}
 
 % \paragraph{Compacidad}
-% % Cuanto mas cercanos son los puntos que componen una region a su centro mas compacta sera la region.
+% % Cuanto más cercanos son los puntos que componen una region a su centro más compacta sera la region.
 % La compacidad de una region mide la distribución una region con respecto a su centro de masa. La compacidad $s_i$\todo{$s_i$ ya se usaba para los generadores de V} de una region $R_i$ se calcula a partir de una discretization de dicha region en celdas de dimensiones y peso uniforme, llamadas elementos de masa. En \eqref{ec:compacidad} se define la compacidad $s_i$ para un region $R_i$, donde $x_j$ e $y_j$ son las coordenadas $x$ e $y$ de los elementos de masa\todo{qué sería un elemento de masa? una molécula? un átomo?} de $R_i$, $M_i$ es igual a la cantidad de dichos elementos de masa y $x_0$ e $y_0$ son las coordenadas del centro de gravedad\todo{de masa?} de $R_i$.
 % \begin{equation}
 %   s_i=\frac{1}{M_iA_i}\sum_j \frac{(x_j-x_0)^2 + (y_j-y_0)^2}{A_i} \label{ec:compacidad}
 % \end{equation}
 % \todo[inline]{si $M_i$ es igual a la suma de esos elementos, los elementos tienen masa elemental/unitaria. pero eso es menos genérico que considerar que cada elemento podría tener masa $m_i$ distinta y que $M_i=\sum m_i$. en ese caso, la masa $m_i$ debería multiplicar a cada término de la sumatoria. lo que nos lleva a una definición muy alineada con la de centro de masa. por otro lado, $A_i$ ya está dividiendo afuera, no creo que vaya también en la sumatoria. además, unidades no cierran. asumo que la compacidad no tiene unidad y para ello falta que aparezca la masa en el numerardor. finalmente, me parece raro que no aparezca el volumen. o en realidad, no se para qué aparece la masa.}
-% Notar que cuanto mas compacta sea una region menor sera su valor $s_i$ (si se entiende por region compacta una region en la cual sus puntos interiores son cercanos al centro de masa).
+% Notar que cuanto más compacta sea una region menor sera su valor $s_i$ (si se entiende por region compacta una region en la cual sus puntos interiores son cercanos al centro de masa).
 
 % \subsubsection{Calidad de segmentación}
 % Para determinar la calidad general de la segmentación, sera necesaria, ademas de la calidad de cada region, la calidad de las características globales de la segmentación. Para lograr determinar dichas características se definen varios indicadores que se mencionarán a continuación.
@@ -994,7 +994,7 @@ De los simuladores candidatos
 todos menos ARGoS proveen de soporte oficial para ROS. Para ARGoS existe una
 extension \cite{argos_bridge} que permite conectar a ROS con ARGoS que se
 encuentra inactiva. %hace cinco años.
-% \todoremark{La introducción a ros, no se si deberia estar aca. La parte de migrar se entiende? deberia fundamentar mas? sacarla?}
+% \todoremark{La introducción a ros, no se si deberia estar aca. La parte de migrar se entiende? deberia fundamentar más? sacarla?}
 
 %utilizando las
 %facilidades estándar (por ejemplo el stack de navegación) es que el código
@@ -1016,7 +1016,7 @@ con propósitos educacionales, es deseable el uso de alternativas libres.
 
 En \cite{Pitonakova2018} se presenta un estudio comparativo de eficiencia entre
 CoppeliaSim, Gazebo y ARGoS. El estudio se basa en experimentos que consisten
-en distintas cantidades de robots (1, 5, 10 y 50) que se mueven en linea recta por un minuto
+en distintas cantidades de robots (1, 5, 10 y 50) que se mueven en línea recta por un minuto
 evitando obstáculos en tiempo real. Esto se repitió en dos entornos distintos
 uno simple y otro complejo. Los experimentos evaluaron el rendimiento (a través
 de la aceleración de tiempo) y el uso de recursos (RAM y CPU). CoppeliaSim
@@ -1077,7 +1077,7 @@ gráfico GeForce GTX 660 y 16GB de memoria RAM.
 \subsubsection{Resultados}
 %\cite{gazebo_benchmark}
 Las implementaciones del escenario de prueba en Gazebo y Webots se encuentran
-disponible en linea\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/gazebo_benchmark}}
+disponible en línea\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/gazebo_benchmark}}
 \footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/webots_benchmark}}. 
 
 La construcción del entorno fue similar en ambos simuladores siendo

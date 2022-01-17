@@ -40,7 +40,7 @@ combinando dichas grillas con las ideas presentadas en
 % Propuesta  de un algoritmo de construcción incremental de un GVD basado en
 % \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando
 % principalmente la forma de determinar las celdas pertenecientes al GVD.
-% Proponer un algoritmo novedoso para la simplificacion de conjuntos de
+% Proponer un algoritmo novedoso para la simplificación de conjuntos de
 % fronteras que ... (no se que poner aca, pongo) Estudiar la coordinacion
 % propuesta une wurm utilizando un  GVD incremental ya que de lo contrario no
 % es escalable. Y que adicionalmente se implemento una construiccion de GVD
@@ -53,7 +53,7 @@ combinando dichas grillas con las ideas presentadas en
 % entorno abierto es consistente con esta tecnica, en el codigo de lau tambien)
 % que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo
 % desconocido es libre. En este trabajo se propone una tecnica novedosa que
-% soluciona este problema de forma mas eficiente evitando procesar todo el
+% soluciona este problema de forma más eficiente evitando procesar todo el
 % espacio desconocido mientras se va explorando.
 
 \section{Hipótesis de trabajo}\label{sec:hip}
@@ -64,7 +64,7 @@ La solución se desarrolla con las siguientes hipótesis de trabajo.
     orientación) sin errores.
   \item Las comunicaciones son ideales: sin perdida, de ancho de banda y rango infinito.
   \item Los robots son circulares e iguales entre sí.
-  \item Los robots tienen la capacidad de detectar las superficies mas cercanas
+  \item Los robots tienen la capacidad de detectar las superficies más cercanas
     que se encuentran dentro de un circulo de radio $rango$ centrado en el
     robot.
   \item El entorno a explorar es cerrado.
@@ -99,7 +99,7 @@ dimenciones suficientes para representar todo el entrono a explorar.
 La arquitectura se divide en dos tipos de componentes robots y unidad central.
 Existe una unica unidad central que se encarga de centralizar la información
 del entrono explorado y de coordinar a los varios robots que pueden existir.
-Cada componente esta asociado a un hardware especifico, siendo los robots móviles
+Cada componente esta asociado a un hardware específico, siendo los robots móviles
 y la estación central estática. 
 %Los robots pueden ser uno o más mientras que la estación central es única. 
 Cada componente esta a su vez compuesto de módulos los cuales cuales se
@@ -145,7 +145,7 @@ al robot al objetivo sin colisiones.
 
 El camino generado por el \emph{global\_planner} es enviado al nodo
 \emph{local\_planner} que se encarga de tomar el plan en alto nivel y
-traducirlo a la secuencia las velocidades lineales y angulares que un robot
+traducirlo a la secuencia las velocidades líneales y angulares que un robot
 debe tener a lo largo del tiempo para seguir el global. A dicha secuencia de
 velocidades se le conoce como plan local.
 
@@ -176,7 +176,7 @@ recuperación que consite en que el robot rote en el lugar.
 El modulo \emph{Combinador de mapas} es el encargado de mantener el mapa del entorno
 explorado. Este recibe las actualizaciónes de los mapas globales que son
 generados por el nodo \emph{global\_costmap} del stack de navegacion de cada
-robot y las combina en un unico mapa que contenga toda la información
+robot y las combina en un único mapa que contenga toda la información
 recopilada del entorno. Cuando el mapa combinado global se actualiza este
 retrasmite lo actualizado a diversos componentes del sistema (ver figura
 \ref{fig:arquitectura}) que utlizan el mapa del entorno explorado para llevar a
@@ -345,10 +345,10 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
 \end{algorithm}
 
 Este algoritmo se resume en elegir una celda $c\in C$ que no este aun en una
-componente conexa (linea 6), aplicar un \emph{depth-first search} (DFS)
+componente conexa (línea 6), aplicar un \emph{depth-first search} (DFS)
 partiendo $c$ agregado todas las celdas recorridas a una misma componente
-conexa (lineas 7-19). Repetir dicho procedimiento hasta que todas las celdas
-pertenezcan a alguna componente conexa (linea 4). Este algoritmo es analogo al
+conexa (líneas 7-19). Repetir dicho procedimiento hasta que todas las celdas
+pertenezcan a alguna componente conexa (línea 4). Este algoritmo es analogo al
 que esta presente en \cite{hopcroft1973algorithm}.
 
 \section{Identificación de objetivos}\label{sec:pc:idobj}
@@ -359,7 +359,7 @@ de exploración (seccion \ref{sec:exploracion}).
 % En el contexto del trabajo desarrollado al utlizarse una grilla de ocupacion
 % como mapa los 
 % se hablara de celdas en lugar de puntos, existiendo una correspondencia entre
-% cada celda y un unico punto en el espacio, su centro.
+% cada celda y un único punto en el espacio, su centro.
 
 \subsection{Fronteras}
 En \cite{yamauchi1998frontier} se propone que los lugares que permiten
@@ -376,11 +376,11 @@ fronteras $F$ segun se definen en (\ref{eq:fronteras}).
   \label{eq:fronteras}
 \end{equation}
 
-\subsection{Simplificacion de Fronteras basada en K-Means}
-En \cite{amorin2019novel} se argumenta que tratar todas las celdas fronteras
+\subsection{simplificación de Fronteras basada en K-Means}
+En \cite{Amorin2019} se argumenta que tratar todas las celdas fronteras
 como objetivos de exploración diferentes podría ser computacionalmente
 prohibitivo. Por lo tanto, para reducir el costo computacional, se intenta
-reducir los objetivos de exploración a las celdas frontera mas representativas,
+reducir los objetivos de exploración a las celdas frontera más representativas,
 a las cuales se denominaran como fronteras significativas.
 
 Para determinar las fronteras significativas, primero, las celdas fronteras $F$
@@ -392,8 +392,8 @@ Luego se determinan las fronteras significativas $\mli{FS}_i$ de cada
 componente conexa $F_i\in \mli{FC}$. Esto se hace agrupando las fronteras de
 $F_i$ con el algoritmo K-Means \cite{macqueen1967some}, y determinando una
 frontera significativa por cada una de las $k$ agrupaciones, la
-frontera mas cercana de $F_i$ al centroide de la agrupacion (una arbitraria de
-las mas cercanas en el caso de que exista mas de una). Un ejemplo de las
+frontera más cercana de $F_i$ al centroide de la agrupacion (una arbitraria de
+las más cercanas en el caso de que exista más de una). Un ejemplo de las
 fronteras significativas  $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ obtenidas con
 este metodo se muestra en la figura \ref{fig:fronterasSig}.
 
@@ -424,12 +424,12 @@ repite el proceso.
   \qquad
   \subfloat[Se logra el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/d.png}\label{fig:fronterasSigCub}}
 
-  \caption[Proceso de simplificacion de fronteras según K-Means.]{Proceso de
-    simplificacion de fronteras según K-Means. Las circunferencias rojas
+  \caption[Proceso de simplificación de fronteras según K-Means.]{Proceso de
+    simplificación de fronteras según K-Means. Las circunferencias rojas
     centradas en las fronteas significativas tienen radio $rango=4$ (largos de celda) indicando su
     cubrimiento.
   \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
-  % \caption[Proceso de simplificacion de fronteras según K-Means.]{Proceso de simplificacion de fronteras según K-Means. Cada figura corresponde a un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Basada en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
+  % \caption[Proceso de simplificación de fronteras según K-Means.]{Proceso de simplificación de fronteras según K-Means. Cada figura corresponde a un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Basada en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
 \end{figure}
 
 % En la seccion anterior se presento un metodo que soluciona el siguiente
@@ -462,7 +462,7 @@ el cubrimiento.
   \qquad
   \subfloat[Dos de las fronteras significativas de la parte inferior derecha de (a) no son necesarias para lograr el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/b.png}}
 
-  \caption[Simplificacion de fronteras suboptima resultante del metodo basado en K-Means.]{Simplificacion de fronteras suboptima resultante del metodo basado en K-Means. Las fronteras de $F_i$ se indican con azul, las fornteras significativas con verde y las
+  \caption[simplificación de fronteras suboptima resultante del metodo basado en K-Means.]{simplificación de fronteras suboptima resultante del metodo basado en K-Means. Las fronteras de $F_i$ se indican con azul, las fornteras significativas con verde y las
     circunferencias rojas centradas en estas tienen radio $rango=5.6$ (largos de celda) indicando su
     cubrimiento. Extraída de implementacion desarrollada\footnotemark.}\label{fig:ejemploFSKMMal}
 \end{figure}
@@ -470,19 +470,19 @@ el cubrimiento.
 
 Resultados suboptimos similares se experimentan de forma consistente %al aplicarse la simplficacion 
 sobre componentes conexas con forma serpenteante\todo{no se si este termino se entiende, me es dificil explicarlo bien, con forma de S?},
-asimetricas y lo suficientemente extensas como para requerir mas de 4
+asimetricas y lo suficientemente extensas como para requerir más de 4
 fornteras significativas para su cubrimiento, 
 %con un largo mayor a $rango*8$ 
 % \todo[inline]{se entiende la idea del largo aplicada a esto? Creo que puede
-% quedar claro mirando la foto pero tengo mis dudas. La idea en realidad seria
+% quedar claro mirando la foto pero tengo mis dudas. La idea en realidad sería
 % decir que la solucion no es lo suficientemente simple, por ejemplo si con 1
 % sola frontera sig ya se cubre todo entonces no va haber problema sin importar
 % que tan serpenteante o asimetrica sea. Se me ocurre que puedo tratar la simpleza hablando por el largo puede
-% quedar mas claro o mas oscuro, es decir por que 8? fue para poner un valor
+% quedar más claro o más oscuro, es decir por que 8? fue para poner un valor
 % similar al de la foto que necesita 5 fronteras para cubrir }
 empeorando (mayor cantidad de fornteras significativas
 innecesarias para el cubrimiento) a medida que las componentes conexas de
-fronteras son mas extensas y las curvas son mas intrincadas.
+fronteras son más extensas y las curvas son más intrincadas.
 
 % (comentarlos, distribuciones desparejas, acumulacion, no
 % equidistantes) 
@@ -511,7 +511,7 @@ no son fronteras. Estos se deben traducir a fronteras posteriormente.
 % experimentalmente es que en ciertos casos el resultado  la discribucion de las
 % fronteras significativas es mala, se concentran mucho en ciertas porciones y se alejan 
 
-\subsection{Simplificacion de fronteras basada en cubrimiento}\label{subsec:MiSimp}
+\subsection{simplificación de fronteras basada en cubrimiento}\label{subsec:MiSimp}
 Con esto en mente se desarrolla un metodo novedoso que considera los dos puntos
 destacados anteriormente. (i) Tomando en cuenta el cubrimiento y su
 optimizacion como parte fundamental del algorimo. (ii) Dando directamente
@@ -566,7 +566,7 @@ $\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
   }
   \Return $\mli{FS}_i$ 
 
-  \caption{Simplificacion de fronteras basada en cubrimiento}
+  \caption{simplificación de fronteras basada en cubrimiento}
   \label{alg:IdObjGeo}
 \end{algorithm}
 
@@ -576,21 +576,21 @@ todas las fronteras que resta cubrir $\mli{UF}$ (siglas del ingles
 \emph{uncovered frontiers}), y  una cola FIFO $\mli{PF}$ en donde se almacenan 
 los proximas fronteras a cubrir.
 
-$\mli{FS}_i$ se inicializa vacia y $\mli{UF}$ como $F$ (lineas 1 y 2). Por otro
+$\mli{FS}_i$ se inicializa vacia y $\mli{UF}$ como $F$ (líneas 1 y 2). Por otro
 lado $\mli{PF}$ se inicializa encolando en cualquier orden a las celdas
 fronteras adyacentes a celdas cuyo estado es ocupado, de no existir ninguna se
-encola una unica frontera arbitraria de $F_i$ (lineas 3-13). 
+encola una unica frontera arbitraria de $F_i$ (líneas 3-13). 
 
 Luego el algoritmo se basa en elegir una frontera de $\mli{UF}$ como frontera
-significativa $\mli{fs}$ (lineas 15-20). Posteriomente se actualizan las
-estructuras mantenidas en funcion de la nueva $\mli{fs}$ (lineas 21-27), notar
+significativa $\mli{fs}$ (líneas 15-20). Posteriomente se actualizan las
+estructuras mantenidas en funcion de la nueva $\mli{fs}$ (líneas 21-27), notar
 que esto implica reducir el numero de celdas en $\mli{UF}$ ya que como minimo
 $\mli{fs}$ se cubre a si misma. Este proceso de eleccion y actualizacion se
-repite hasta que $\mli{UF}$ queda vacia (linea 14). Luego de lo cual se
-devuevlven las fronteras significativas $\mli{FS_i}$ resultantes (linea 29).
+repite hasta que $\mli{UF}$ queda vacia (línea 14). Luego de lo cual se
+devuevlven las fronteras significativas $\mli{FS_i}$ resultantes (línea 29).
  
-Ahora se profundizara sobre los procesos de eleccion (lineas 15-20) y
-acutualizacion (lineas 21-27).
+Ahora se profundizara sobre los procesos de eleccion (líneas 15-20) y
+acutualizacion (líneas 21-27).
 
 El proceso de eleccion de $\mli{fs}$ utlizado tiene como objetivo el asegurar
 que se cubra una frontera previamente no cubierta $\mli{pf}$ (obtenida de
@@ -603,7 +603,7 @@ las fronteras significativas que queden en el centro del conjunto de celdas
 nuevas que van a cubrir de $\mli{UF}$. con esto en cuenta se determina un
 conjunto de de fronteras significativas candidatas $\mli{FSC}$ como el conjunto
 de celdas que pertenecen a $\mli{UF}$ y a la circunferencia discretizada
-\todo[inline]{este concepto capaz no queda claro. Es muy especifico y explicarlo me paree que corta un poco la narrativa. Dado el conjunto $Cir=\{f\in F_i : d_{\mli{fp}}(f) \leq radio\}$ son los puntos de $Cir$ que tienen un adyacente fuera de $Cir$ } %\cite{foleyphillips}
+\todo[inline]{este concepto capaz no queda claro. Es muy específico y explicarlo me paree que corta un poco la narrativa. Dado el conjunto $Cir=\{f\in F_i : d_{\mli{fp}}(f) \leq radio\}$ son los puntos de $Cir$ que tienen un adyacente fuera de $Cir$ } %\cite{foleyphillips}
 de $radio = min \{dCen, rango\}$ centrada en $\mli{PF}$ denotada como
 $\mathscr{C}(\mli{pf},rango)$. Finalmente para elegir una nueva frontera
 significativa $\mli{fs}$ se debe elegir una frontera de $\mli{FSC}$, en esta
@@ -637,8 +637,8 @@ detalle.
   \subfloat[Resultado final.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal2.png}}
   % \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal3.png}}
 
-  \caption[Proceso de simplificacion de fronteras según cubrimiento.]{Proceso
-    de simplificacion de fronteras según cubrimiento.  Las fronteras de
+  \caption[Proceso de simplificación de fronteras según cubrimiento.]{Proceso
+    de simplificación de fronteras según cubrimiento.  Las fronteras de
     $F_i$ se indican con azul si pertenecen a $\mli{UF}$ y con amarillo de lo
     contrario. Con magenta se indican las celdas en $\mli{FP}$ siendo la
   numeracion su orden en la cola y $\mli{fp}$ la ultima desencolada. Las fronteras significativas se indican con
@@ -688,7 +688,7 @@ en esta seccion.
 
 % la cual debera resolver que
 % objetivo le corresponde a que robot segun las valuaciones recibidas y los
-% segmentos en dode se ubican los objetivos, procurando distribuir lo mas posible
+% segmentos en dode se ubican los objetivos, procurando distribuir lo más posible
 % a los robots sobre los segmentos. %, el metodo utlizado para lograr este se
 % describe en \ref{subsec:MiResSub}. Finalmente la central notifica a cada robot
 % su objetivo asignado.
@@ -808,7 +808,7 @@ camnino no trivial.
 
   \caption[Camino.]{Caminos calculados desde la posición del robot indicada en
   rojo, hasta el objetivo indicado en verde. Los puntos del camino se conectan
-entre si con lineas magenta.}\label{fig:camino}
+entre si con líneas magenta.}\label{fig:camino}
 
 \end{figure}
 
@@ -911,7 +911,7 @@ pruebas realizadas.
 \subsubsection{Algoritmo de asignacion de objetivos}
 % Segun lo explicado en la seccion anterior
 Cuando la central recibe una valuacion de un robot $r_i$, esta se encarga de
-procesar la informacion contenida en la valuacion de forma de obtener un unico
+procesar la informacion contenida en la valuacion de forma de obtener un único
 costo $c_{i,j}$ del robot $r_i$ a cada objetivo $o_j$. Para un objetivo en
 $o_j$ la valuacion del robot $r_i$ contiene el costo $\mli{cca}_{i,j}$ del camino de
 $r_i$ a $o_j$ y el costo $\mli{cco}_{i,j}$ asociado a la complejidad de dicho camino.
@@ -1056,7 +1056,7 @@ el numero de objetivos en un segmento.
 \end{algorithm}
 
 El algorimo se puede dividir en dos partes, el \emph{calculo de valores}
-$cocienteDist$, $restoDist$ (lineas 1-18) y la \emph{asignacion distribuida} (lineas
+$cocienteDist$, $restoDist$ (líneas 1-18) y la \emph{asignacion distribuida} (líneas
 19-36). 
 
 Los valores $cocienteDist$ y $restoDist$ se utlizan para lograr una asignacion
@@ -1066,7 +1066,7 @@ hacer $N$ rondas en las que se asigna un solo robot por segmento con tenga
 objetivos sin asignar. La ronda $N$ termina cuando no quedan robots o objetivos
 por asignar. Si existen menos objetivos que robots se tiene que la ronda $N$
 culmina con todos los objetivos asignados y algunos robots ociosos. De existir
-mas objetivos que robots luego de la ronda $N$ se pueden tener segmentos cuyos
+más objetivos que robots luego de la ronda $N$ se pueden tener segmentos cuyos
 objetivos estan todos asignados y se tienen segmentos dentro de los que 
 existen objetivos sin asignar, la distribucion sera unfirme sobre estos ultimos
 segmentos. Es decir los $K$ segmentos que tienen objetivos sin asignar
@@ -1074,25 +1074,25 @@ cumpliran con (\ref{ec:uniform}), existiendo $restoDist$ segmentos con
 $N=cocienteDist+1$ robots asignados y $K-restoDist$ segmentos con
 $cocienteDist$ robots asignados. El \emph{calculo de valores} se lleva a cabo
 inicializando $cocienteDist$ y $restoDist$ asumiendo una distribucion
-completamente uniforme (lineas 5-6 y 9-10 primera iteracion), sin considerar si
+completamente uniforme (líneas 5-6 y 9-10 primera iteracion), sin considerar si
 es posible dado el numero de objetivos en cada segmento. Luego de forma
 iterativa, segmento a segmento y comenzando por los que tienen menos objetivos
-(lineas 11-12), comprobar si son de los segmentos cuyos objetivos seran todos
-asignados (linea 13) y de serlo ajustar los valores para que la distribucion
-sea uniforme en el resto de conjuntos (lineas 14-17 y 9-10). Las iteraciones
+(líneas 11-12), comprobar si son de los segmentos cuyos objetivos seran todos
+asignados (línea 13) y de serlo ajustar los valores para que la distribucion
+sea uniforme en el resto de conjuntos (líneas 14-17 y 9-10). Las iteraciones
 continuan hasta que solo quedan los segmentos en los que quedaran objetivos sin
-asignar (linea 8), cuando esto sucede se dice que $cocienteDist$ y $restoDist$
+asignar (línea 8), cuando esto sucede se dice que $cocienteDist$ y $restoDist$
 convergen.
 % a los valores consistentes con la distribucion deseada.
 
 Con los valores $cocienteDist$ y $restoDist$ calculados la \emph{asignacion
 distribuida} consiste en retirar las tuplas $(c_{i,j},r_i,o_j)$ de $Costos$
-comenzando por las de menor costo $c_{i,j}$ (lineas 22-23) y para cada una de
-estas asignar $r_i$ a $o_j$ (lineas 27-33), si $r_i$ y $o_j$ no forman parte de
+comenzando por las de menor costo $c_{i,j}$ (líneas 22-23) y para cada una de
+estas asignar $r_i$ a $o_j$ (líneas 27-33), si $r_i$ y $o_j$ no forman parte de
 ninguna de las asiganciones realizadas hasta el momento, y si la asignacion
-mantiene la distribuicion deseada (lineas 25-26). Esto se repite hasta que
-todos los robots estan asignados o que no quedan mas objetivos por asignar
-(linea 21).
+mantiene la distribuicion deseada (líneas 25-26). Esto se repite hasta que
+todos los robots estan asignados o que no quedan más objetivos por asignar
+(línea 21).
 
 % , estos se calculan de forma que todos los segmentos tengan todos sus objetivos asignados a robots, un numero de robots asignadosk
 
@@ -1104,19 +1104,19 @@ quedando a la espera de nuevos pedidos por parte de los robots para comenzar
 una nueva subasta. 
 
 \section{Segmentación}\label{subsec:mapaTopGVDGrid}
-% segun si las celdas ocupadas mas cercanas $oc_1$ y $oc_2$ de
+% segun si las celdas ocupadas más cercanas $oc_1$ y $oc_2$ de
 
 La segmentacion del entorno se basa en el metodo que comentado en la seccion
 \ref{subsec:mapaTopGVD}. Dado que el entorno se representa con grillas
 discretas en lugar de ser un espacio continuo, es necesario definir los
-equivalentes discretizados de GVD, como tambien de los puntos criticos y lineas
+equivalentes discretizados de GVD, como tambien de los puntos criticos y líneas
 criticas asociadas según los cuales se dividen los segmentos.
 
 Un \emph{GVD discretizado} consiste en el conjunto $\mli{GVDD}$ de celdas que
 pertenecen al GVD discretizado, la construccion de este se trata en la seccion
 \ref{sec:MiConstGVD}. Desde este punto se referira al GVD discretizado
 simplemente como GVD.
-%y que los conceptos de puntos y lineas criticas
+%y que los conceptos de puntos y líneas criticas
 % se definen en espacios continuos es necesario adaptarlos. 
 
 % considerando el mapa de distancia
@@ -1152,8 +1152,8 @@ presentadas en la figura \ref{fig:ejSegGVDGrid:CRI}, donde se puede observar un
 portar horizontal que lleva de un corredor (arriba) a una habitacion (abajo).
 El punto critico que se ubica dicho portal no es un minimo local (la celda del
 GVD ubicada arriba tiene igual despeje), por lo que si estas fueran las
-condiciones este no seria un critico y tanto el corredor como la habitacion
-serian unico segmento, lo cual no es deseable. El resultado se mejora al
+condiciones este no sería un critico y tanto el corredor como la habitacion
+serían único segmento, lo cual no es deseable. El resultado se mejora al
 considerar las condiciones planteadas en \ref{eq:critDisc} ya que como se
 menciono, la celda de arriba tiene igual despeje y la de abajo tiene un despeje
 mayor. 
@@ -1166,9 +1166,9 @@ mayor.
 % condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
 % utilizados para los puntos criticos.
 
-Para adaptar el concepto de las lineas criticas a un espacio discreto, primero
+Para adaptar el concepto de las líneas criticas a un espacio discreto, primero
 es necesario adaptar el concepto de puntos base de un punto $p$, que refieren
-al conjunto de puntos pertenecientes a generadores que son mas cercanos a $p$.
+al conjunto de puntos pertenecientes a generadores que son más cercanos a $p$.
 Sea $\mli{CGen}$ el conjunto formado por todas las celdas pertenecientes a
 algun generador, las \emph{celdas base} (puntos base discretizados) $\mli{CB}_c$ de
 un a celda $c$ se definen como el conjunto de las celdas pertenecientes a
@@ -1233,7 +1233,7 @@ distancias de puntos bases es $L$.
 % $DBP_c$ . 
 % Adaptar directamente la definicion de punto base en espacio continuo a celda base en el espacio discreto resulta en que solo
 % las celdas que estan a una distanicia $\mli{DD}(c)$ de $c$, son las que estan a
-% minima distancia de $c$, estas serian las unicas celdas base de $c$ si se adaptara de
+% minima distancia de $c$, estas serían las unicas celdas base de $c$ si se adaptara de
 % forma directa la definicion de punto base en espacio continuo. Sin embargo al adaptar
 % de forma directa la definicion existen casos donde los resultados difieren de
 % los que se obtienen en el espacio continuo. 
@@ -1258,9 +1258,9 @@ distancias de puntos bases es $L$.
 % celda base agrega una tolerancia que permite una correcta generacion del GVD
 % discretizado, esta tol
 
-% a celda base seria entoces la celdas pertenecientes a un generador tal que su distancia
+% a celda base sería entoces la celdas pertenecientes a un generador tal que su distancia
 % , y dado que $minD$ de
-% dichas deldas mas cercanas a $c$, tambien se incluyen las celdas que estan a $minD+L$
+% dichas deldas más cercanas a $c$, tambien se incluyen las celdas que estan a $minD+L$
 
 % 1 defino minD 
 
@@ -1275,18 +1275,18 @@ distancias de puntos bases es $L$.
 % \todo{explicar
 % problemas de dicretizacion (ming-siegwart)}.
 
-Finalmente las \emph{lineas criticas discretizadas} se definen como las lineas
+Finalmente las \emph{líneas criticas discretizadas} se definen como las líneas
 discretizadas \cite{foleyphillips} definidas entre los centros de las celdas
 criticas y cada una de sus celdas base discritizados. El conjunto de todas las
-celdas pertenecientes a lineas criticas discretizadas se conoce como
+celdas pertenecientes a líneas criticas discretizadas se conoce como
 $\mli{LCrD}$.
 
-Una vez determinadas las celdas criticas y las lineas criticas discretizadas es
+Una vez determinadas las celdas criticas y las líneas criticas discretizadas es
 posible obtener la segmentacion en regiones topologicas con la aplicacion de un
 algorimo de descomposicion en componentes conexas (seccion
 \ref{subsec:CompComp}) donde el conjunto que se descompone (la entrada del
 algorimo) es el que esta compuesto por las celdas libres de $\mli{CG}$ que no son
-celdas criticas ni forman parte de una linea critica discretizada, es decir: 
+celdas criticas ni forman parte de una línea critica discretizada, es decir: 
 \begin{align*}
 C := \{ c \in \mli{CG} : estado(c) = libre, c \notin \mli{CCr}, c \notin{LCrD}\}
 \end{align*}
@@ -1294,7 +1294,7 @@ C := \{ c \in \mli{CG} : estado(c) = libre, c \notin \mli{CCr}, c \notin{LCrD}\}
 En la figura \ref{fig:ejSegGVDGrid} se muestra el proceso de segmentacion
 completo, desde la grilla de ocupacion usada como entrada
 \ref{fig:ejSegGVDGrid:GRID}, pasando por el GVD generado
-\ref{fig:ejSegGVDGrid:GVD}, la detección de celdas criticas y lineas criticas discretizadas
+\ref{fig:ejSegGVDGrid:GVD}, la detección de celdas criticas y líneas criticas discretizadas
 \ref{fig:ejSegGVDGrid:CRI}, terminando con la segmentacion del entorno
 \ref{fig:ejSegGVDGrid:SEG}.
 
@@ -1307,7 +1307,7 @@ completo, desde la grilla de ocupacion usada como entrada
   \subfloat[GVD]{\includegraphics[clip=true,
   width=0.40\textwidth]{imagenes/GVDDisc/b.png}\label{fig:ejSegGVDGrid:GVD}}
 
-  \subfloat[Celdas criticas contienen cuadrados amarillos y las pertinentes a lineas criticas discretizadas contienen cuadrados grises]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/c.png}\label{fig:ejSegGVDGrid:CRI}}
+  \subfloat[Celdas criticas contienen cuadrados amarillos y las pertinentes a líneas criticas discretizadas contienen cuadrados grises]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/c.png}\label{fig:ejSegGVDGrid:CRI}}
   \qquad
   \subfloat[Segmentación del entorno, cada segmento se indica con un
   color distinto]{\includegraphics[clip=true,
@@ -1320,10 +1320,10 @@ completo, desde la grilla de ocupacion usada como entrada
 
 Una consideracion a tener en cuenta es que el algoritmo \ref{alg:compcon} debe
 ejecutarse con $ady_4$ como funcion de adyacencia (seccion
-\ref{subsec:Grilla}), ya que si se usa $ady_8$ las lineas criticas
-discretizadas diagonales no separan segmentos. Esto se debe a que las celdas a ambos lados de una linea
+\ref{subsec:Grilla}), ya que si se usa $ady_8$ las líneas criticas
+discretizadas diagonales no separan segmentos. Esto se debe a que las celdas a ambos lados de una línea
 discretizada diagonal son adyacentes diagonalmente como se muestra en la figura
-\ref{fig:probDiagSeg}, por lo tanto al usar $ady_4$ la linea critica separa dos
+\ref{fig:probDiagSeg}, por lo tanto al usar $ady_4$ la línea critica separa dos
 componentes conexas al no permitir la adyacencia entre las celdas a sus lados
 mientras que usando $ady_8$ si se permite dicha adyacencia con lo cual resulta
 en una unica componente.
@@ -1331,21 +1331,21 @@ en una unica componente.
 \begin{figure}[H]
   \centerfloat
 
-% , c es adyacente a n3, lo que causa un unico segmento.
+% , c es adyacente a n3, lo que causa un único segmento.
 
   \subfloat[Usando $ady_8$]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/probDiagSeg/0_33_8conRojov3.png}}
   \qquad
   \subfloat[Usando $ady_4$]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/probDiagSeg/0_33_4con.png}}
 
-  \caption[Linea critica discretizada diagonal, y sus efectos en la
-  segmentacion al usar $ady_4$ o $ady_8$.]{Linea critica discretizada diagonal, y sus efectos en la
+  \caption[línea critica discretizada diagonal, y sus efectos en la
+  segmentacion al usar $ady_4$ o $ady_8$.]{línea critica discretizada diagonal, y sus efectos en la
   segmentacion al usar $ady_4$ o $ady_8$. La celda $c$ se da como ejemplo de
-una celda de un lado de la linea que es adyacente segun $ady_8$ a la celda $n3$ al 
-otro lado de la linea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
+una celda de un lado de la línea que es adyacente segun $ady_8$ a la celda $n3$ al 
+otro lado de la línea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 
 \end{figure}
 
-% Tambien se filtran las lineas criticas, como las ideas es que estas se ubiquen en umbrales 
+% Tambien se filtran las líneas criticas, como las ideas es que estas se ubiquen en umbrales 
 
 % Desribir problemas de desconexion presentados en las diversas implementaciones? 
 % \begin{itemize}
@@ -1355,11 +1355,11 @@ otro lado de la linea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 % \end{itemize}
 
 % Aunque existe una etapa de erosion posterior como en Lau para asegurar la
-% sparceness. Comentar que se basa en el A de zhang, que en principio es mas
+% sparceness. Comentar que se basa en el A de zhang, que en principio es más
 % eficiente que chequear patrones
 
 % Se mantienen todos los obts a minima distancia, y los que \say{casi} estan a
-% minima distancia, siendo estos los puntos bases (puntos mas cercanos a
+% minima distancia, siendo estos los puntos bases (puntos más cercanos a
 % generadosres base) tomados en cuenta, segun estos se define si un punto pertenece o no al GVD.
 
 
@@ -1457,19 +1457,19 @@ corresponde los valores del mapa de distancia calculado.
   \label{alg:celdasBase}
 \end{algorithm}
 
-El algoritmo procesa cada celda $cA$ adyacente a $c$ (linea 2) obteniendo el
-candidato a ser una celda base de $c$ (linea 3) y comprobando una serie de
-condiciones para que este candidato pueda ser una celda base de $c$ (lineas
-4-6). La condicion que se comprueba en la linea 4 es que el punto base
+El algoritmo procesa cada celda $cA$ adyacente a $c$ (línea 2) obteniendo el
+candidato a ser una celda base de $c$ (línea 3) y comprobando una serie de
+condiciones para que este candidato pueda ser una celda base de $c$ (líneas
+4-6). La condicion que se comprueba en la línea 4 es que el punto base
 candidato este dentro del intervalo definido por la tolerancia como fue
-definido en la seccion \ref{subsec:mapaTopGVDGrid}. En la linea 5 la condicion
+definido en la seccion \ref{subsec:mapaTopGVDGrid}. En la línea 5 la condicion
 verifica que el candidato no puede ser la celda perteneciente a un generador
-mas cercana a $c$ ni adyacente a esta. Finalmente la condicion presente en la
-linea 6 establece que el candidato actual debe tener una distanica a $c$ menor
+más cercana a $c$ ni adyacente a esta. Finalmente la condicion presente en la
+línea 6 establece que el candidato actual debe tener una distanica a $c$ menor
 que la de los candidatos procesados anteriormente que cumplen el resto de las
 condiciones. Al finalizar la ejecucion se devuelve como celdas bases a la celda
 perteneciente a un generador que es cercana a $c$ y en el caso de que exista al
-ultimo candidato en cumplir todas las condiciones (lineas 12-16).
+ultimo candidato en cumplir todas las condiciones (líneas 12-16).
 
 %(sacr de la implementacion) (notar que gens a igual distancia tambien se encuentran, igual no comentar por las dudas)
 
@@ -1494,12 +1494,12 @@ $gen$), similar a como se trabaja en el \emph{brushfire dinamico} original. La
 segunda es que solo se permiten dos celdas base. En la seccion
 \ref{algComp:celdasbase} se presenta el algormitmo completo para obtener las
 celdas base sin las simplificaciones mencionadas, es decir que maneja todas las
-celdas pertenecientes a generadores que estan a minima distnacia y permite mas
+celdas pertenecientes a generadores que estan a minima distnacia y permite más
 de dos celdas base.
 
 % \todo[inline]{Es queda bien este parrafo? Si es
 %   asi tambien me gustaria aclarar un poco que el motivo por el cual se presenta
-%   la simplificacion: permite transmitir las ideas principales del algorimo que
+%   la simplificación: permite transmitir las ideas principales del algorimo que
 % esta en la implementacion evitando las complicaciones de genralizar, y
 % explerimentalmente se obtienen resultados similares. No se si tiene sentido
 % agregar esto, ni como escribirlo bien}
@@ -1614,7 +1614,7 @@ metodos otros si lo hacen.
 % que las ondas se propagan por el espacio desconocido, generado GVD fuera del
 
 % al explorar donde en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas desconocidas,
-% Llamado de atencion al problema de conectividad de un GVD al explorar donde en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas desconocidas, las cuales no se consideran en los articulos del estado del arte. Estos se asume (no se explicita pero en Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien) que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo desconocido es libre. En este trabajo se propone una tecnica novedosa que soluciona este problema de forma mas eficiente evitando procesar todo el espacio desconocido mientras se va explorando.
+% Llamado de atencion al problema de conectividad de un GVD al explorar donde en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas desconocidas, las cuales no se consideran en los articulos del estado del arte. Estos se asume (no se explicita pero en Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien) que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo desconocido es libre. En este trabajo se propone una tecnica novedosa que soluciona este problema de forma más eficiente evitando procesar todo el espacio desconocido mientras se va explorando.
 
 \begin{figure}[H]
   \centerfloat
@@ -1632,7 +1632,7 @@ metodos otros si lo hacen.
 % 2. incrementalmente si se agregan celdas libres que no son obstaulos entonces igual es necesario actualizar el GVD
 
 % , la alternativa de que los bordes no sean
-% Obstaculos (como esta no aplica a entornos abiertos y genera mas costos) y
+% Obstaculos (como esta no aplica a entornos abiertos y genera más costos) y
 
 
 % Explicar el problema de considerar lo desconocido, como no hacerlo lleva a GVD
@@ -1643,7 +1643,7 @@ metodos otros si lo hacen.
 % costos para mapas cuando estos se comienzan a explorar y se componen de muchas
 % celdas desconocidas.
 
-% Comentar que las celdas con lo desconocido como punto base no genera lineas ni
+% Comentar que las celdas con lo desconocido como punto base no genera líneas ni
 % puntos criticos.
 
 % \todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}
@@ -1723,7 +1723,7 @@ cumplir con el proposito de la complecion forzosa, para esto debe considerarse
 las principalmente las dimenciones del robot.
 
 Por otro lado para la compleción normal existen dos condiciones, la primera es
-que exista una linea de ancho $Seg$ entre el robot y el punto del camino que al
+que exista una línea de ancho $Seg$ entre el robot y el punto del camino que al
 discretizarse en celdas no contiene ninguna ocupada. La segunda, en el caso del
 ultimo punto del camino (el objetivo) la distancia en entre este y el robot
 debe ser menor a $\mli{DistNo}$, en el resto de los puntos (subobjetivos) la distnacia debe
@@ -1761,7 +1761,7 @@ puntos del espacio, al igual que las grillas de ocupación.
 La diferencia de tamaños implica que los caminos generados sobre el GVD tienen
 una menor en costo computacional que los calculados sobre la grillas de
 ocupación. Pero a su vez, los caminos generados sobre el GVD se encuentran lo
-mas alejado posible de los obtaculos (seccion \ref{subsec:GVD}), lo que lleva a
+más alejado posible de los obtaculos (seccion \ref{subsec:GVD}), lo que lleva a
 caminos que aunque son seguros, pueden resultar innecesariamente largos.
 
 La motivacion de la planificación jerarquica es aprovechar la eficiencia de los
@@ -1792,11 +1792,11 @@ $\mli{Seg}$ mayor al tamaño de los portales de transicion entre
 segmentos (puertas, pasajes abiertos). De esta forma asumiendo segmentos
 despejados, todos los subobjetivos asociados a un segmento en el que se
 encuentra un robot son completados de forma normal. Por lo tanto en en
-caminos largos que abarcan varios segmentos, los unicos subobjetivos
+caminos largos que abarcan varios segmentos, los únicos subobjetivos
 enviados a \emph{move base} son los que se ubican en las portales entre
 un segmento y el siguiente en el camino, los cuales no son completados
 de forma normal ya que dicha transicion consiste en un portal de ancho
-menor a $\mli{Seg}$ que no permite la existencia de una linea
+menor a $\mli{Seg}$ que no permite la existencia de una línea
 discretizada de ancho $\mli{Seg}$ que no contenga obstaculos.
 
 En la figura \ref{fig:navjer} se muestra un ejemplo en el cual se puede
@@ -1931,7 +1931,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % los caminos originales generados sobre el GVD.
 
 % (en su mayor parte compuesto por centros de celdas pertencientes a GVD) p
-% que son mas
+% que son más
 % eficientes computacionalmente que los generados sobre todo el espacio libre de
 % la grilla, sin las desventajas.
 % no trivales se calcula sobre las celdas pertencientes al GVD, lo cual tiene
@@ -1945,7 +1945,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % caminos sobre el GVD, pero los caminos resultantes pueden ser innecesariamente
 % largos, mientras que \emph{move base} con la configuracion correcta, permite
-% ejecutar de forma eficiente caminos cercanos a los lineales. De esta manera se
+% ejecutar de forma eficiente caminos cercanos a los líneales. De esta manera se
 % aporvecha la eficiencia del calaculo de caminos sobre el GVD, y se evitan los
 % desvios que dichos camnios tienen, solo utlizando de estos los subobjetivos que
 % se ubican en portales, 
@@ -1961,10 +1961,10 @@ mantener actualizado un mapa completo del entorno explorado.
 % Recordando que los caminos originales se contruyen principalmente sobre el GVD,
 % los niveles de jerarquia son do
 
-% Por e dado un valor de $\mli{DistNs}$ mas grande que elPara ejemp esto  esto porque los subobjetivos
-% para los cuales exite una linea  
+% Por e dado un valor de $\mli{DistNs}$ más grande que elPara ejemp esto  esto porque los subobjetivos
+% para los cuales exite una línea  
 
-%   \item Existe una linea recta de grosor minDesiredDistance que lo conectan con el
+%   \item Existe una línea recta de grosor minDesiredDistance que lo conectan con el
 %     robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a minDesiredDistance. 
 %   \item Esta a meno de una distancia Z (Z puede estar entre forcedCompletionTolerance y alcance de sensado)
 
@@ -1974,7 +1974,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % segmento utiliza el gvd para pasar por los pasajes estrechos que consituyen las
 % puertas.
 
-% En el caso de un Y pequeño se tiene una navegacion que sigue de forma mas estricta al GVD.
+% En el caso de un Y pequeño se tiene una navegacion que sigue de forma más estricta al GVD.
 
 
 
@@ -2024,7 +2024,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % Un subobjetivo se considera completo si:
 % \begin{itemize}
-%   \item Existe una linea recta de grosor minDesiredDistance que lo conectan con
+%   \item Existe una línea recta de grosor minDesiredDistance que lo conectan con
 %     el robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a
 %     minDesiredDistance. 
 %   \item Esta a meno de una distancia Y (Y puede estar entre
@@ -2040,7 +2040,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % Un objetivo se considera completo si:
 % \begin{itemize}
-%   \item Existe una linea recta de grosor minDesiredDistance que lo conectan con el
+%   \item Existe una línea recta de grosor minDesiredDistance que lo conectan con el
 %     robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a minDesiredDistance. 
 %   \item Esta a meno de una distancia Z (Z puede estar entre forcedCompletionTolerance y alcance de sensado)
 % \end{itemize}
@@ -2051,7 +2051,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % \end{itemize}
 
 % \subsection{Objetivos triviales}
-% Estos objetivos son los que tienen una linea recta de grosor X que lo conectan
+% Estos objetivos son los que tienen una línea recta de grosor X que lo conectan
 % con el robot sin solaparse con ningun obstaculo y tampoco tienen obtaculos a
 % X. X puede ser el maximo tamaño de una puerta o la minDesiredDistance.
 % \begin{itemize}
@@ -2083,10 +2083,10 @@ mantener actualizado un mapa completo del entorno explorado.
 % segmento utiliza el gvd para pasar por los pasajes estrechos que consituyen las
 % puertas.
 
-% En el caso de un Y pequeño se tiene una navegacion que sigue de forma mas estricta al GVD.
+% En el caso de un Y pequeño se tiene una navegacion que sigue de forma más estricta al GVD.
 
 % % Entiendo que Y grande es mejor:
-% %   `Una prueba para validar esto seria probar: Y en [50,10,5 2.5]`
+% %   `Una prueba para validar esto sería probar: Y en [50,10,5 2.5]`
 
 % \subsection{Recupaeracion}
 
@@ -2130,7 +2130,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % $oc_1\neq oc_2$ y no son adyacentes, 
 
 % Hablar de la necesidad de encontrar las celdas base para lograr definir la
-% lineas criticas y posteriormente lograr segmentar (seccion \ref{subsec:mapaTopGVDGrid}).
+% líneas criticas y posteriormente lograr segmentar (seccion \ref{subsec:mapaTopGVDGrid}).
 
 % Mencionar la solucion a la que se llego, y cual es la definicion de celda base.
 % Dos caminos (I) mi definicion que separa los basis en sources y pseudosources. O (II)
@@ -2139,7 +2139,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % (II) tiene la ventaja que es facil de explicar y permite basarse en lo que ya
 % esta bien fundamnetado (Lau), por otro lado (I) es lo que se implemento, pero
-% puede ser dificil de explicar, sin tener mucho fundamento mas que el
+% puede ser dificil de explicar, sin tener mucho fundamento más que el
 % generalizar y definir bien para el haberlo hecho asi. (puedo tomarme un tiempo
 % para pensar en algun acaso claro y facil de epxlicar donde (I) esto funcione
 % mejor pero no se)
@@ -2155,21 +2155,21 @@ mantener actualizado un mapa completo del entorno explorado.
 %%%%%%%%%%%%%
 
 % Comentar como a partir de esta definicion de celda base, y las nociones de no
-% adyacentes ni iguales entoces diferentes generadores (parrafo mas abajo) se
-% logra una nueva condicion de pertenencia al GVD, la cual esta mas cercana a la
+% adyacentes ni iguales entoces diferentes generadores (parrafo más abajo) se
+% logra una nueva condicion de pertenencia al GVD, la cual esta más cercana a la
 % definicion de GVD en el espacio continuo. (aunque aca cuidado, que tan distinta
-% es al final? no se hace algo similar pero solo usando el obstaculo mas
-% cercano?) capaz puedo ir por ese lado y siendo mas facil basarse en el trabajo
+% es al final? no se hace algo similar pero solo usando el obstaculo más
+% cercano?) capaz puedo ir por ese lado y siendo más facil basarse en el trabajo
 % de lau que redefinir sin mucho fundamento.
 
 % Bueno hay una diferencias, la condicion de distancias de liu ming, y que no se
 % permiten pseudosources adyacentes entre si. Ademas que se mantiene un registro
 % de pseudosources.
 
-% Son detalles que estan buenos para mi, porque son mas generales mejor definidos
+% Son detalles que estan buenos para mi, porque son más generales mejor definidos
 % pero no se que tanto puedo fundamentar su necesidad, y por lo tanto no se que
 % tanto aporta dar toda la epxlicacion para lo que cuesta explicar y entender, creo que se
-% puede epxlicar mas facilmente con un solo obstaculo y esableciendo los oc que
+% puede epxlicar más facilmente con un solo obstaculo y esableciendo los oc que
 % hicieron que pertenezca al GVD.
 
 % fue necesario analizar el
@@ -2232,7 +2232,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % El cambio que se hace es en el criterio con el cual se comprueba la pertenencia
 % de una celda. En el \emph{brushfire dinamico} original se hace EXPLICAR
-% CON LO DE MAS ABAJO. En esta implementacion cambia, al existir un choque de
+% CON LO DE más ABAJO. En esta implementacion cambia, al existir un choque de
 % olas primero se establecen los pseudosources y luego de existir dos
 % pseudosources no adjacentes entre si la celda pertenece.
 
@@ -2242,7 +2242,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % Capaz que explicar que el evitar generar si no hay dos basis no vecions es el evitar generar incorrectamente gvd en corredores diagonales. (aunque puede dar lugar a la discucion de que pasa si no es completamente diagonal, cosa que sospecho que puede dar problemas similares)
 
 % Oportunidad de comentar que mejora sobre lau porque perminte generar gvd en
-% lugares a dist 1 (ver bien que), cosa que lau no permite por resistencia al ruido pero que con el metodo actual no llevo mayores inconvenientes permitiendo generar gvd en grillas con el maximo tamaño de celda posible en el cual las puertas mas chicas consisten de una unica celda ejemplo de algo asi: (esta en comentarios de latex)
+% lugares a dist 1 (ver bien que), cosa que lau no permite por resistencia al ruido pero que con el metodo actual no llevo mayores inconvenientes permitiendo generar gvd en grillas con el maximo tamaño de celda posible en el cual las puertas más chicas consisten de una unica celda ejemplo de algo asi: (esta en comentarios de latex)
 
 %   mio            lau
 % - - | - -      - - - - -
@@ -2256,7 +2256,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % \subsection{Filtrado}\label{subsec:filt}
 % Los vetices que en una iteracion se determina que deben pertenecer al GVD segun
 % el criterio de pertenecia aplicado en las celdas en las cuales se detiene una
-% ola consistente, pasan por un filtrado extra. Este filtrado busca evitar lineas
+% ola consistente, pasan por un filtrado extra. Este filtrado busca evitar líneas
 % discretizadas de dos celdas de grosor que violan la propiedad \say{sparceness}
 % GVD.
 
@@ -2298,11 +2298,11 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % Explicar caso corredor(SACAR DE LAS NOTAS). comentar que no se considera en
 % lau, quizas este es un problema que se arregla no permitiendo dist = 1. Aunque
-% mas analisis son necesarios
+% más analisis son necesarios
 
 % \subsection{Limpieza de aristas}
 % La limpieza de aristas es una tecnica aplicada solo en la implementación del
-% proyecto esta permite generar GVD mas limpios. 
+% proyecto esta permite generar GVD más limpios. 
 
 
 % \subsection{Segmentacion}
@@ -2312,13 +2312,13 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % Quizas mencionar que se usa la descomposicion en componentes conexas y como. 
 
-% Mencionar el uso de sources y pseudosources para hacer lineas criticas. Discretizacion de lineas?
+% Mencionar el uso de sources y pseudosources para hacer líneas criticas. Discretizacion de líneas?
 
 % Algunos resultados?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 
-% basura de: \subsection{Simplificacion de fronteras basada en cubrimiento}
+% basura de: \subsection{simplificación de fronteras basada en cubrimiento}
 
  %  \item Actualizar $\mli{FS_i}$ agregando $\mli{fs}$:
 
@@ -2346,7 +2346,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % completamente con una unica frontera significativa $\mli{fs}$ esta se deberia
 % elegir para que este centrada en $\mli{UF}$.
 %%acatoy
-% Se asume que las fornteras mas centradas se encuentran a una
+% Se asume que las fornteras más centradas se encuentran a una
 % distancia $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{UF} \}/2$ de
 % $\mli{fp}$. 
 
@@ -2380,14 +2380,14 @@ mantener actualizado un mapa completo del entorno explorado.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% De los pasos presentados el primero es el principal y tambien el mas complejo
+% De los pasos presentados el primero es el principal y tambien el más complejo
 % del algorimo.
 
 % Los pasos del 2 al 4 no presentan ambigüedad, siendo el paso 1 en el que resta
 % aclarar, especificamente lo que resta aclarar es el criterio con el que se
 % elige la frontera significativa. La eleccion en un principio podria ser
 % aleatoria y el algoritmo daria resultados validos, pero esto dejaria a la
-% suerte la calidad de la solucion. La idea seria elegir de forma determinista a
+% suerte la calidad de la solucion. La idea sería elegir de forma determinista a
 % una frontera significativa buscando que cubra la mayor cantidad de frotneras
 % mientras se evita cubrir nuevamente fronteras que ya sean cubiertas por otra
 % frotntera significativa. 
@@ -2397,7 +2397,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % El proceso para elegir una nueva forntera significativa $\mli{fs}$ consiste en
 % desencolar una frontera $\mli{PF}$ de $\mli{PF}$ para posteriomente determinar
 % el conjunto de fronteras significativas candidatas $\mli{FSC}$ como las
-% fronteras sin cubrir desde las cuales se cubre a $\mli{PF}$ estando lo mas
+% fronteras sin cubrir desde las cuales se cubre a $\mli{PF}$ estando lo más
 % alejadas posible de esta, es decir, que $\mli{FSC}$ %$= \{f\in \mli{UF} : d_{\mli{fs}}(\mli{PF})= rango$\}
 % sera el conjunto de celdas en $\mli{UF}$ que solapen con la circunferencia del
 % circulo de radio $rango$ centrada en $\mli{PF}$ denotada como $\mathscr{C}(\mli{PF},rango)$.
@@ -2409,13 +2409,13 @@ mantener actualizado un mapa completo del entorno explorado.
 % $\mli{PF}$ cuando no existen fronteras adyacentes a obstaculos, cuando esto
 % sucede para inciar el algorimo basta con agregar una unica frontera arbitraria
 % de $F_i$ a $\mli{PF}$. El otro caso es el que se presenta si $\mli{FSC} = \emptyset$
-% \todo{esto esta mal, en realidad esta mal desde antes cuando se presenta FSC, FSC busca que las candidatas queden centradas. Por lo que el radio puede ser menor al rango aunque haya una (o mas) celda solapada conla circunferencia de radio rango}
+% \todo{esto esta mal, en realidad esta mal desde antes cuando se presenta FSC, FSC busca que las candidatas queden centradas. Por lo que el radio puede ser menor al rango aunque haya una (o más) celda solapada conla circunferencia de radio rango}
 % , es
 % decir la circunferencia del circulo de radio $rango$ centrada en $\mli{PF}$ no
 % se solapa con ninguna celdas en $\mli{UF}$. Cuando esto sucede lo que se hace
 % es reducir el radio del circulo a $\frac{max\{ d_{\mli{PF}}(\mli{f}) :
 % f\in\mli{UF} \}}{2}$ la divicion entre dos busca que la circunferencia se
-% solape sobre el punto medio entre $\mli{PF}$  y la celda de $\mli{UF}$ mas
+% solape sobre el punto medio entre $\mli{PF}$  y la celda de $\mli{UF}$ más
 % alejada de $\mli{PF}$, quedando la nueva frontera significativa centrada
 % (figura ejemplo de esto).
 
