@@ -1,17 +1,17 @@
 % En este capitulo se presentan y analizan los resultados experimentales de la
-% solucion para el problema de al exploracion multirobot coordinada que fue
+% solucion para el problema de al exploración multi-robot coordinada que fue
 % desarrollada en este proyecto.
 
 % Las pruebas realizadas se separan en tres secciones segun su proposito. La
 % primera estudia el impacto de construir el GVD de forma incremental. La
-% segunda compara las diversas tecnicas de identificacion de objetivos. Y la
+% segunda compara las diversas tecnicas de identificación de objetivos. Y la
 % tercera analiza la influencia de las diversas formas de considerar el espacio
 % desconocido. 
 
 
 % Las pruebas realizadas tienen  propositos,  para estudiar el impacto de
 % construir el GVD de forma incremental. Para comparar las diversas tecnicas de
-% identificacion de objetivos. Y finalmente para analizar la influencia de las
+% identificación de objetivos. Y finalmente para analizar la influencia de las
 % diversas formas de considerar el espacio desconocido. 
 
 % , se presentan los resultados obtenidos y analizan
@@ -25,19 +25,19 @@
 
 Este capitulo esta dedicado a describir las pruebas realizadas y analizar los
 resultados obtenidos. Las pruebas se ejecutaron de forma simuladas y consisten
-en resolver una instacia del problema de la exploracion multirobot coordinada
+en resolver una instancia del problema de la exploración multi-robot coordinada
 con distintas soluciones.
-Los resultados de las pruebas separan en cuatro secciones segun su proposito.
-En la seccion \ref{sec:exp:cubcal} se evaluan los mapas contruidos en las
-purebas. En la seccion \ref{sec:exp:inc} se estudia el impacto de construir el
-GVD de forma incremental. En la seccion \ref{sec:exp:idobj} se compara las
-diversas tecnicas de identificacion de objetivos. Y finalmente, en la seccion
+Los resultados de las pruebas separan en cuatro secciones según su propósito.
+En la sección \ref{sec:exp:cubcal} se evalúan los mapas construidos en las
+pruebas. En la sección \ref{sec:exp:inc} se estudia el impacto de construir el
+GVD de forma incremental. En la sección \ref{sec:exp:idobj} se compara las
+diversas técnicas de identificación de objetivos. Y finalmente, en la sección
 \ref{sec:exp:desco} se analiza la influencia de las formas de considerar el
 espacio desconocido. 
 
 \section{Especificación de las pruebas}
 
-En esta se seccion se especifican las pruebas realizadas en este
+En esta se sección se especifican las pruebas realizadas en este
 proyecto y presentadas a lo largo de este capitulo.
 
 % * Pruebas realizadas, cosas generales:
@@ -47,7 +47,7 @@ proyecto y presentadas a lo largo de este capitulo.
 %     * sensor 
 %     * robot en si
 %   * El entorno de pruebas
-%   * Criterios utlizados para analizar los resultados: 
+%   * Criterios utilizados para analizar los resultados: 
 %     * Referencias
 %     * Explicar cuales son
 %   * Cantidad de pruebas, promedio y varianza
@@ -71,16 +71,16 @@ proyecto y presentadas a lo largo de este capitulo.
 
 % \subsection{Tipos de prueba}
 % El proposito de las pruebas presentadas es evaluar el desempeño de diversos aspectos de una
-% solucion al problema de la exploción multirobot. 
+% solucion al problema de la exploción multi-robot. 
 % Los tipos de prueba quedan definidos 
 
 % Las pruebas tienen como proposito validar las variantes presentadas para la
-% solucion de diviersos aspectos de la del problema de exploracion multirobot.
+% solucion de diviersos aspectos de la del problema de exploración multi-robot.
  
 % Para lograr esto se definen pruebas consisten en reslover una instancia de
 % dicho problema, cambiando la forma de resolver cada aspecto a validar.
 
-% La instancia del problema de exploracion a resolver es el de explorar un
+% La instancia del problema de exploración a resolver es el de explorar un
 % entorno cerrado con una flota de robots, hasta que no exista espacio sin
 % explorar.
 
@@ -103,33 +103,33 @@ proyecto y presentadas a lo largo de este capitulo.
 % Dado que se quiere comparar la utilidad entre las variantes para ciertas partes de
 % la solución, se definen tipos de prueba según las variantes utilizadas. 
 % En esta sección se describe el tipo de prueba que se denominara como $base$. Este consiste
-% en una solucion del problema de exploracion multirobot que 
+% en una solucion del problema de exploración multi-robot que 
  % La solución base consiste en resolver la
 % asignación de tareas basada en cubrimiento (seccion \ref{subsec:MiSimp}). La as La construccion de GVD
 % incremental como es comentada en \ref{sec:MiConstGVD} con
 
 \subsection{Simulador}
 Las pruebas fueron simuladas con Gazebo \cite{gazebo}, el cual fue elegido a
-partir del analisis comparativo entre varios simuladores candidatos realizado
+partir del análisis comparativo entre varios simuladores candidatos realizado
 en la sección \ref{sec:sim}). 
 
 \subsection{Tipos de pruebas}
-Las pruebas tienen como proposito validar ciertos aspectos de la
-solucion al problema de exploracion multirobot propuesta en este proyecto.
+Las pruebas tienen como propósito validar ciertos aspectos de la
+solución al problema de exploración multi-robot propuesta en este proyecto.
  
 Para lograr esto se define caso de prueba que permite evaluar el desempeño de
-una solucion que resueve dicho problema. El caso de pruebas definido consiste
-en reslover una instancia de dicho problema, especificamente en explorar un
+una solución que resuelve dicho problema. El caso de pruebas definido consiste
+en resolver una instancia de dicho problema, específicamente en explorar un
 entorno cerrado con una flota de robots, hasta que no exista espacio sin
-explorar. El tipo de mapa generado en la exploración es una grilla de ocupacion
+explorar. El tipo de mapa generado en la exploración es una grilla de ocupación
 de un tamaño fijo suficiente para representar el entrono explorado.
 
 Para poder validar los aspectos, se prueba la solución propuesta cambiando
-unicamente el aspecto a validar. Los aspectos a validar son: la construccion
+únicamente el aspecto a validar. Los aspectos a validar son: la construcción
 incremental del GVD (sección \ref{sec:MiConstGVD}). La identificación de
-objetivos que simplifica las fronteras basandose en el cubrimiento (seccion
-\ref{subsec:MiSimp}). Y la consideracion del espacio desconocido al construir
-el GVD presentada en la seccion \ref{subsec:espDesc}, donde las celdas
+objetivos que simplifica las fronteras basándose en el cubrimiento (sección
+\ref{subsec:MiSimp}). Y la consideración del espacio desconocido al construir
+el GVD presentada en la sección \ref{subsec:espDesc}, donde las celdas
 desconocidas no propagan olas y el conjunto $\mli{UF}$ de celdas desconocidas
 que son adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF}
 \subseteq \mli{CGen}$).
@@ -141,25 +141,25 @@ que son adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF}
 % K-Means, y simplificarlas basandose en el cubrimiento. Por ultimo, la
 % consideracion del espacio desconocido en la contruiccion del GVD se valida
 % comparandola contra considerar que el espacio desconocido es libre. 
-Para validar la construccion incremental del GVD esta se compara contra la
-construccion no incremental. En el caso de la identificación de objetivos esta se
-comparan contra identificar todas las fronteras como objetivos, y la tecnica
-que obtiene los objetivos simplicando dichas fronteras a partir K-Means. Por
-ultimo, la consideracion del espacio desconocido en la contruiccion del GVD se
-valida comparandola contra considerar que el espacio desconocido es libre. 
+Para validar la construcción incremental del GVD esta se compara contra la
+construcción no incremental. En el caso de la identificación de objetivos esta se
+comparan contra identificar todas las fronteras como objetivos, y la técnica
+que obtiene los objetivos simplificando dichas fronteras a partir K-Means. Por
+ultimo, la consideración del espacio desconocido en la construcción del GVD se
+valida comparándola contra considerar que el espacio desconocido es libre. 
 
-Se evaluan entonces cinco soluciones, la que utiliza todos los aspectos a
+Se evalúan entonces cinco soluciones, la que utiliza todos los aspectos a
 validar a la vez, y cada una de las que cambian uno de dichos aspectos.
 
 Con el motivo de probar distintas cargas computacionales, cada prueba se repite
-cambiando la granularidad de la grilla de ocupacion utlizada para representar
-el entorno explorado. La granularidad se indica a traves de las celdas de una
+cambiando la granularidad de la grilla de ocupación utilizada para representar
+el entorno explorado. La granularidad se indica a través de las celdas de una
 grilla que se corresponden con un metro cuadrado de la realidad. Los valores de
 granularidad utilizados para las pruebas son $1,4,9$ y $16$ celdas
 por metro cuadrado ($\frac{celdas}{m^2}$). 
 
-Adicionalente debido a que es posible que ejecuciones de un misma simulacion
-lleven a distintos resutlados, con el fin de obtener resultados
+Adicionalmente debido a que es posible que ejecuciones de un misma simulación
+lleven a distintos resultados, con el fin de obtener resultados
 estadísticamente significativos cada prueba fue ejecutada 20 veces. Siendo 
 $5*4*20=400$ el total de pruebas ejecutadas.
 % las tres tecnicas, identfica todas las fornteras como objetivos, 
@@ -172,7 +172,7 @@ $5*4*20=400$ el total de pruebas ejecutadas.
 \subsection{Entorno}
 Las pruebas se realizan en un entrono cerrado que tiene un area explorable de
 aproximadamente $10000m^2$. El entorno esta estructurado en habitaciones,
-puertas y corredores de varios tamaños. Los únicos obstaculos presentes en él
+puertas y corredores de varios tamaños. Los únicos obstáculos presentes en él
 son paredes y los mismos robots que pueden obstaculizarse entre
 sí. Un mapa de este entrono se muestra en la figura
 \ref{fig:willow}.
@@ -186,7 +186,7 @@ sí. Un mapa de este entrono se muestra en la figura
 
 El entorno fue construido a partir de un modelo que se encuentra disponible por
 defecto en Gazebo, llamado \say{Willow Garage}, el cual se modifico para
-reducir el area a exporar y que sea cerrado (sin salidas al exterior).
+reducir el area a explorar y que sea cerrado (sin salidas al exterior).
 
 \subsection{Robots}
 Los robots simulados\footnote{Especificación disponible en línea:\\
@@ -194,8 +194,8 @@ Los robots simulados\footnote{Especificación disponible en línea:\\
 pruebas modelan al robot diferencial Pioneer 3-DX \cite{p3dx} (figura
 \ref{fig:p3dx}). Cada robot esta equipado con un sensor LiDAR basado en el
 modelo URG-04LX-UG01 \cite{hokuyo}, que permite tomar medidas de distancia de
-hasta $5.6m$, utilizando una frecuencia de $10hz$ de un maximo de $36hz$.
-Adicionalente el sensor fue alterado para tomar medidas en los $360$\textdegree
+hasta $5.6m$, utilizando una frecuencia de $10hz$ de un máximo de $36hz$.
+Adicionalmente el sensor fue alterado para tomar medidas en los $360$\textdegree
 al rededor del robot y para proporcionar medidas perfectas (sin ruido).
 
 \begin{figure}[H]
@@ -224,33 +224,33 @@ prueba fueron ejecutados en una computadora personal equipada con un procesador
 Intel Core i3-9100F, un procesador gráfico GeForce GTX 660 y 16GB de memoria
 RAM.
 
-\section{Metricas}
-Con el proposito comparar cuantitativamente los resultados de las pruebas se
-establece un conjunto de metricas. 
+\section{Métricas}
+Con el propósito comparar cuantitativamente los resultados de las pruebas se
+establece un conjunto de métricas. 
 
-Una parte de las metricas utlizadas se proponen en \cite{yan2015metrics} y
-evaluan el problema de exploración en general, estas son: \emph{tiempo de
+Una parte de las métricas utilizadas se proponen en \cite{yan2015metrics} y
+evalúan el problema de exploración en general, estas son: \emph{tiempo de
 exploración}, \emph{distancia total recorrida por la flota}, \emph{completitud
 del mapa} y \emph{calidad del mapa}. 
 
 El \emph{tiempo de exploración} refiere al tiempo desde que los robots
-comienzan con la primera asignación de tareas (seccion \ref{sec:asigTar}) hasta
+comienzan con la primera asignación de tareas (sección \ref{sec:asigTar}) hasta
 que no se detecta más espacio desconocido por explorar y se da por terminada la exploración.
 
 La \emph{distancia total recorrida por la flota} es la suma las distancias
 recorridas por cada robot de la flota a lo largo de la exploración. En
-\cite{yan2015metrics} esta metrica se presenta como \emph{costo de
+\cite{yan2015metrics} esta métrica se presenta como \emph{costo de
 exploración}, ya que los autores la consideran como una buena aproximación del
-costo energetico del robot. 
+costo energético del robot. 
 
  % mapas de referencia para evaluar los mapas resultantes de las pruebas,
 
-Para calcular las metricas de \emph{completitud} y \emph{calidad} de los mapas
+Para calcular las métricas de \emph{completitud} y \emph{calidad} de los mapas
 es necesario contar con mapas de referencia considerados como correctos. En
-este proyecto estos se representan a traves de grillas de ocupacion al igual
+este proyecto estos se representan a través de grillas de ocupación al igual
 que los generados en la exploración. Se definen cuatro mapas de
-referencia, uno por cada nivel de granularidad utlizado en las pruebas, con el
-proposito de poder comparar cualquiera de los mapas obtenidos en pruebas con
+referencia, uno por cada nivel de granularidad utilizado en las pruebas, con el
+propósito de poder comparar cualquiera de los mapas obtenidos en pruebas con
 un mapa de referencia de igual granularidad. Los mapas de referencia se pueden
 apreciar en la figura \ref{fig:mref}. 
 
@@ -265,14 +265,14 @@ apreciar en la figura \ref{fig:mref}.
   \qquad
   \subfloat[$16 \frac{celda}{m^2}$]{\includegraphics[clip=true, width=0.22\textwidth]{imagenes/willow_ref/0_250000m.png}}
 
-  \caption[Mapas de referencia utlizados.]{Mapas de referencia utlizados. En negro se indican las paredes, en blanco el espacio libre y en gris el espacio desconocido por ser inaccesible.}\label{fig:mref}
+  \caption[Mapas de referencia utilizados.]{Mapas de referencia utilizados. En negro se indican las paredes, en blanco el espacio libre y en gris el espacio desconocido por ser inaccesible.}\label{fig:mref}
    % A la izquierda se muestra el robot real, y a la derecha su version simulada.
 
 \end{figure}
 
 Notar que existe espacio desconocido en los mapas de referencia, esto se debe a
-que la grilla de ocupación no se ajusta al espacio explorable. En terminos de
-las metricas calculadas, el espacio desconocido en los mapas de referencia no es
+que la grilla de ocupación no se ajusta al espacio explorable. En términos de
+las métricas calculadas, el espacio desconocido en los mapas de referencia no es
 considerado como parte de los mapas, tanto en los mapas de referencia como en
 los obtenidos en las pruebas.
 
@@ -283,7 +283,7 @@ los obtenidos en las pruebas.
 % esta forma los mapas de referencia no contienen celdas desconocidas, a
 % diferencia de los mapas resultantes de las pruebas los cuales si pueden.
 
-La \emph{completitud del mapa} se define segun (\ref{eq:metComp}) donde
+La \emph{completitud del mapa} se define según (\ref{eq:metComp}) donde
 $M_{exp}$ es el area conocida del mapa obtenido en la exploración y $M_{ref}$
 es el area del mapa de referencia.
 
@@ -293,20 +293,20 @@ completitud\ del\ mapa = \frac{M_{exp}}{M_{ref}}
 
 La \emph{calidad del mapa} se establece en (\ref{eq:metCal}) donde se introduce
 $E_{exp}$ equivalente al área ocupada por las celdas del mapa obtenido en
-la exploración cuyo estado difiere del estado de su celda correpondiente en el
+la exploración cuyo estado difiere del estado de su celda correspondiente en el
 mapa de referencia.
 
 \begin{equation} \label{eq:metCal}
 calidad\ del\ mapa = \frac{M_{exp}-E_{exp}}{M_{ref}}
 \end{equation}
 
-El resto de las metricas fueron diseñadas especificamente para este proyecto,
+El resto de las métricas fueron diseñadas específicamente para este proyecto,
 estas son: \emph{tiempo promedio en construcción de GVD} y \emph{tiempo
 promedio en simplificación de fronteras}.
 
 El \emph{tiempo promedio en construcción de GVD} es el promedio del tiempo que
 toma construir el GVD en las etapas de obtención de información en cada
-asignación de tareas (seccion \ref{sec:asigTar}).
+asignación de tareas (sección \ref{sec:asigTar}).
 
 El \emph{tiempo promedio en simplificación de fronteras} es el tiempo promedio
 que se demora en simplificar las fronteras para identificar los objetivos en
@@ -317,9 +317,9 @@ cada asignación de tareas.
 \setlength{\graphlen}{0.75\textwidth}
 
 
-Los resultados explerimentales obtenidos son presentados y analizados en esta
-seccion. Las tablas que se presentan a lo largo de la sección indican para cada
-prueba los promedios y desviaciones estandar de las metricas en las 20
+Los resultados experimentales obtenidos son presentados y analizados en esta
+sección. Las tablas que se presentan a lo largo de la sección indican para cada
+prueba los promedios y desviaciones estándar de las métricas en las 20
 repeticiones que se hacen debido al no determinismo del simulador.
 
 \subsection{Cubrimiento y calidad de los mapas} \label{sec:exp:cubcal}
@@ -333,18 +333,18 @@ En la tabla \ref{tab:todo3} se muestra la completitud y calidad de los mapas
 obtenidos en todas las pruebas realizadas. 
 
 Con respecto a la completitud es posible apreciar que no existen diferencias
-mayores entre las variantes de la implemetnación, teniendo todos los mapas
+mayores entre las variantes de la implementación, teniendo todos los mapas
 generados una completitud alta. Dado que el criterio de parada es que no se
 detecte más espacio por explorar, estos valores hablan principalmente de la
 capacidad de detectar el espacio desconocido explorable que tienen las
-soluciones. Todas las soluciones detectan expacio desconocido explorable
+soluciones. Todas las soluciones detectan espacio desconocido explorable
 mientras exista una un celda $c_1$ libre y otra $c_2$ desconocida tal que $c_1
-\in ady_4(c_2)$ (seccion \ref{subsec:Grilla}), principalemente porque en estas
-condiciones se asume que los robots no pueden atravezar de $c_1$ a $c_2$. Dicho
+\in ady_4(c_2)$ (sección \ref{subsec:Grilla}), principalmente porque en estas
+condiciones se asume que los robots no pueden atravesar de $c_1$ a $c_2$. Dicho
 esto se presume que la completitud de los mapas no es perfecta debido a la
 presencia de celdas ubicadas en esquinas de paredes que que a pesar de no
-cumplir con las codiciones de ser detectadas como explorables, lo son. Un
-ejempo de este tipo de celda se muestra en la figura \ref{fig:faltaCub}. Sin
+cumplir con las condiciones de ser detectadas como explorables, lo son. Un
+ejemplo de este tipo de celda se muestra en la figura \ref{fig:faltaCub}. Sin
 embargo los valores de completitud obtenidos indican que este tipo de
 situaciones son despreciables.
 
@@ -363,21 +363,21 @@ como tal. Ambos mapas corresponden a una granularidad de una celda por metro cua
 \end{figure}
 
 Los resultados de calidad de los mapas obtenidos son similares a los de
-completitud, los mapas contruidos tienen una calidad alta, sin existir
+completitud, los mapas construidos tienen una calidad alta, sin existir
 diferencias significativas entre las variantes. Esto es esperable ya que
 los sensores simulados fueron configurados para proporcionar medidas perfectas.
 Aunque a pesar de esto la calidad no perfecta, esto puede se explica en primer
 lugar por el impacto de la completitud del mapa en su calidad. En segundo lugar
-por la existencia de varios robots que pueden detectase como obstaculos entre
+por la existencia de varios robots que pueden detectase como obstáculos entre
 sí, generado celdas obstaculizadas que no se encuentran en el mapa de
 referencia. Y en tercer lugar porque a pesar de las configuración de los
 sensores, sus medidas tienen un ruido pequeño.
 
 Estos resultados de completitud y calidad del mapa permiten concluir que todas
 las variantes logran resolver de manera satisfactoria el problema de la
-exploración multirobot, en terminos de los mapas contruidos. Las
+exploración multi-robot, en términos de los mapas construidos. Las
 siguientes secciones se dedican a discutir los impactos que las diferentes
-variantes en terminos de tiempo y costo de exploracion.
+variantes en términos de tiempo y costo de exploración.
 
 
 \input{tablas/todo3}
@@ -416,10 +416,10 @@ del GVD es más eficiente que su contraparte no incremental.
 % granularidad más alta (tiempos de construcción de
 % GVD más altos).
 
-Con respecto a los tiempos de exploración, estos tambien son reducidos al
-contruir el GVD de forma incremental. La reducción comienza siendo de un
+Con respecto a los tiempos de exploración, estos también son reducidos al
+construir el GVD de forma incremental. La reducción comienza siendo de un
 ${\smallsim}8\%$ en el nivel de granularidad más bajo, y mediante se aumenta el
-nivel de granularidad las reducciones tambien aumentan hasta llegar a una
+nivel de granularidad las reducciones también aumentan hasta llegar a una
 reducción de ${\smallsim}63\%$ en el nivel más alto. Esto se explica porque el
 tiempo de construcción de GVD impacta directamente al tiempo que ocurre desde
 que un robot pide un tarea y una le es asignada, por ser una parte necesaria y
@@ -427,12 +427,12 @@ no paralelizada de la etapa de obtención de información (sección
 \ref{subsec:obtInfo}) de cada asignación de tareas (sección \ref{sec:asigTar}).
 Y los tiempos de asignación de tareas impactan a los tiempos de exploración,
 pero en este caso el impacto no es directo. Esto se debe a que una asignación
-de tareas en curso solo asegura que un único robot esta osicoso, porque
+de tareas en curso solo asegura que un único robot esta ocioso, porque
 mientras que un robot pide una tarea y una le es asignada el resto puede estar
 completando tareas asignadas previamente. Cuanto más corta es la demora en la
-asignación de tareas más probable es que un único robot quede osicoso, mientras
+asignación de tareas más probable es que un único robot quede ocioso, mientras
 que si dicha demora aumenta, también lo hace la probabilidad que en el
-transcurso de la asignacion más robots completen sus tareas y requieran tareas,
+transcurso de la asignación más robots completen sus tareas y requieran tareas,
 quedando ociosos. 
 % no son
 % monótonamente crecientes ni decrecientes respecto a la granularidad
@@ -443,9 +443,9 @@ quedando ociosos.
 
 Construir el GVD de forma incremental también parece reducir las distancias
 totales recorridas por la flota en todas las granularidades, aunque en este
-caso las reducciones estan comprendidas entre $2\%$ y $7\%$, fluctuando al
+caso las reducciones están comprendidas entre $2\%$ y $7\%$, fluctuando al
 aumentar los niveles de granularidad. Esto puede deberse a que tiempos más
-rapidos de asignación de objetivos hacen más probable que los robots cambien su
+rápidos de asignación de objetivos hacen más probable que los robots cambien su
 trayectoria a un nuevo objetivo antes de llegar a la ubicación exacta del
 objetivo previamente completado. Esto puede reducir la distancia recorrida por
 el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
@@ -473,7 +473,7 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_time.png}
 
-  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:inc:et}
+  \caption{Gráfica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:inc:et}
 
 \end{figure}
 
@@ -482,7 +482,7 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_cost.png}
 
-  \caption{Grafica de distancia total recorrida por la flota  en función de celdas por metro cuadrado.}\label{fig:gra:inc:ec}
+  \caption{Gráfica de distancia total recorrida por la flota  en función de celdas por metro cuadrado.}\label{fig:gra:inc:ec}
 
 \end{figure}
 
@@ -491,16 +491,16 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_mean.png}
 
-  \caption{Grafica del tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
+  \caption{Gráfica del tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
 
 \end{figure}
 
 
 \subsection{Identificación de objetivos}\label{sec:exp:idobj}
-En esta sección se realiza un analisis comparativo de los resultados obtenidos
-en pruebas realizadas con tres soluciones distintas que difieren unicamente en
-el metodo usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
-metodos son: la simplificación de fronteas basada en cubrimiento propuesta en
+En esta sección se realiza un análisis comparativo de los resultados obtenidos
+en pruebas realizadas con tres soluciones distintas que difieren únicamente en
+el método usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
+métodos son: la simplificación de fronteras basada en cubrimiento propuesta en
 este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
 \cite{Amorin2019} y la identificación de fronteras (sin simplificar)
 introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas a
@@ -508,8 +508,8 @@ analizar se presentan en la tabla \ref{tab:inc1} y se encuentran graficadas en
 las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 \ref{fig:gra:inc:gvdt}.
 
-Es posible apreciar que los metodos que identifican los objetivos simplificando
-las fronteras reducen los tiempos de exploración con respecto al metodo que
+Es posible apreciar que los métodos que identifican los objetivos simplificando
+las fronteras reducen los tiempos de exploración con respecto al método que
 identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
 de granularidad más bajo las reducciones son menores a ${\smallsim}5\%$, estas crecen junto
 a la granularidad hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
@@ -519,52 +519,52 @@ factores con mayor impacto sobre los tiempos de asignación de tareas son dos:
 el tiempo de simplificación de fronteras y la cantidad de objetivos
 identificados. Mayores tiempos de simplificación fronteras retrasan la
 identificación de objetivos, parte necesaria y no paralelizada de la etapa de
-obtencion de información (sección \ref{subsec:obtInfo}) en la asignacion de
+obtención de información (sección \ref{subsec:obtInfo}) en la asignación de
 tareas. Mientras que disminuir la cantidad de objetivos identificados implica
-reducciones en la duracion de las etapas de valuación (sección
+reducciones en la duración de las etapas de valuación (sección
 \ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
 menor la cantidad de objetivos a valuar y a considerar en la resolución. Entonces lo que se evidencia
 en los resultados obtenidos, es que invertir tiempo en disminuir los objetivos
-identificados simplificando las fronteras lleva a una reduccion total de los
+identificados simplificando las fronteras lleva a una reducción total de los
 tiempos de asignación de tareas, y en consecuencia de los tiempos de exploración
-frente a no invertir dicho tiempo y utlizar todas las fronteras sin
-simplificar. Otra razon posible para las reducciones del tiempo de exploración
+frente a no invertir dicho tiempo y utilizar todas las fronteras sin
+simplificar. Otra razón posible para las reducciones del tiempo de exploración
 es que simplificar las fronteras puede aportar a la coordinación de los robots.
 Por ejemplo de no simplificarse las fronteras se permite que un robot sea
 asignado a un objetivo adyacente a una pared o que dos robots sean asignados a
 objetivos adyacentes entre sí, situaciones en las cuales se desaprovecha
-capacidad de sensado, y se complejiza la navegacion. Al simplificarse las
-fronteras, especialemente cuando se logra el cubrimiento minimizando los
+capacidad de sensado, y se complejizó la navegación. Al simplificarse las
+fronteras, especialmente cuando se logra el cubrimiento minimizando los
 objetivos resultantes, se evitan situaciones como las descritas lo cual puede
 verse como una coordinación pasiva. \todo{o implicita?}
 
-De acuerdo con los resultados simplificar las fronteras en la identificacion de
+De acuerdo con los resultados simplificar las fronteras en la identificación de
 objetivos también reduce las distancias totales recorridas por la flota frente
 a no simplificarlas. Estas reducciones son en general de ${\smallsim}10\%$, y
 pueden ser causadas por la disminución del tiempo de asignación de tareas,
-debido a las mismas razones que se explican en la seccion \ref{sec:exp:inc}.
+debido a las mismas razones que se explican en la sección \ref{sec:exp:inc}.
 Aunque la coordinación pasiva también puede estar jugando un rol al evitar que
-los robots se transladen a objetivos que desaprovechan las capacidades
-sensoriales del robot o que puedan llevar a inconvenientes en la navegacion.
+los robots se trasladen a objetivos que desaprovechan las capacidades
+sensoriales del robot o que puedan llevar a inconvenientes en la navegación.
 
-Con respecto a los dos metodos que simplifican las fornteras para 
+Con respecto a los dos métodos que simplifican las fronteras para 
 identificar objetivos, en el nivel de granularidad más bajo, la
 simplificación basada en cubrimiento logra una reducción con respecto a la
 basada en K-Means de ${\smallsim}3\%$ en la distancia total recorrida por la
 flota y de ${\smallsim}5\%$ en los tiempo de exploración. Esto se invierte a
 medida que aumenta el nivel de granularidad, hasta que en el nivel más alto en
-lugar de reducirse, las metricas aumentan. La distancia total recorrida por la
+lugar de reducirse, las métricas aumentan. La distancia total recorrida por la
 flota aumenta en un ${\smallsim}3\%$ y el tiempo de exploración en un
-${\smallsim}6\%$. Por otro lado segun los resultados obtenidos del tiempo
+${\smallsim}6\%$. Por otro lado según los resultados obtenidos del tiempo
 promedio en simplificación de fronteras, la simplificación basada en
 cubrimiento en todo nivel de granularidad es entre $2$ y
 $4$ veces más lenta que la basada en K-Means. Estos resultados
 parecen indicar que la simplificación basada en cubrimiento toma más tiempo
 pero logra mejores reducciones de objetivos que la basada en K-Means. En el
 nivel de granularidad más bajo el aumento de tiempo de simplificación no es tan
-relevante como la reduccion de objetivos, por lo tanto la simplificación basada
-en cubrimiento obtiene un mejor redimiento. A medida la granularidad crece el
-aumento de tiempo de simplificación se torna más relevante que la reduccion de
+relevante como la reducción de objetivos, por lo tanto la simplificación basada
+en cubrimiento obtiene un mejor rendimiento. A medida la granularidad crece el
+aumento de tiempo de simplificación se torna más relevante que la reducción de
 objetivos, por lo que la simplificación basada en K-Means obtiene un
 rendimiento superior.  
 
@@ -575,7 +575,7 @@ rendimiento superior.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_time.png}
 
-  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
+  \caption{Gráfica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
 
 \end{figure}
 
@@ -584,7 +584,7 @@ rendimiento superior.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_cost.png}
 
-  \caption{Grafica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
+  \caption{Gráfica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
 
 \end{figure}
 
@@ -593,48 +593,48 @@ rendimiento superior.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/obj_id_time_mean.png}
 
-  \caption{Grafica del tiempo promedio en obtencion de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
+  \caption{Gráfica del tiempo promedio en obtención de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
 
 \end{figure}
 
-\subsection{Consideracion del espacio desconocido}\label{sec:exp:desco}
+\subsection{Consideración del espacio desconocido}\label{sec:exp:desco}
 
 Las pruebas analizadas en esta sección corresponden a las realizadas con
-soluciones que varian unicamente en la forma de considerar el espacio
+soluciones que varían únicamente en la forma de considerar el espacio
 desconocido al construir el GVD. Dichas formas son dos: considerar las
 celdas desconocidas como libres y considerar que las celdas desconocidas no
 propagan olas y que el conjunto $\mli{UF}$ de celdas desconocidas que son
 adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF} \subseteq
-\mli{CGen}$). Ambas son descritas en la seccion \ref{subsec:espDesc}. Los
+\mli{CGen}$). Ambas son descritas en la sección \ref{subsec:espDesc}. Los
 resultados obtenidos en estas pruebas exponen en la tabla \ref{tab:inc1} y sus
-grafican en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
+gráficas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 \ref{fig:gra:inc:gvdt}.
 
 Considerar que las celdas desconocidas no propagan olas y que $\mli{UF}
-\subseteq \mli{CGen}$ logra una reduccion de ${\smallsim}61\%$ en el tiempo
+\subseteq \mli{CGen}$ logra una reducción de ${\smallsim}61\%$ en el tiempo
 promedio de construcción del GVD en cada nivel de granularidad, respecto a
 considerar a las celdas desconocidas como libres. Estos resultados validan que
 restringir la construcción del GVD al espacio conocido lleva a mejoras en los
-tiempos de contruiccion del GVD. 
+tiempos de construcción del GVD. 
 
 
-Adicionalente tanto el tiempo de exploracion como las distancias totales
+Adicionalmente tanto el tiempo de exploración como las distancias totales
 recorridas por las flota son reducidas al considerar que las celdas
 desconocidas no propagan olas y que $\mli{UF} \subseteq \mli{CGen}$. La
 reducción del tiempo de exploración comienza siendo de ${\smallsim}3\%$ en el
 nivel de granularidad más bajo, llegando a una reducción de ${\smallsim}29\%$
 en el nivel más alto. Mientras que la reducción de la distancia total recorrida
-por la flota fluctua entre ninguna reducción y una reducción de
-${\smallsim}9\%$. Esto puede ser causado porque la reduccion de los tiempos de
-construcción del GVD implica una reduccion en los tiempos de asignación de
-tareas y esto ultimo se asocia a reducciónes en los tiempos de exploración y de
+por la flota fluctúa entre ninguna reducción y una reducción de
+${\smallsim}9\%$. Esto puede ser causado porque la reducción de los tiempos de
+construcción del GVD implica una reducción en los tiempos de asignación de
+tareas y esto ultimo se asocia a reducciones en los tiempos de exploración y de
 las distancias totales recorridas por la flota, como se explica en la sección
 \ref{sec:exp:inc} donde se compara la construcción incremental y no incremental
-del GVD. Aunque en este caso las reducciónes de los tiempos de contruicción del
-GVD son menores y por lo tanto los efectos sobre las metricas son menos
+del GVD. Aunque en este caso las reducciones de los tiempos de construcción del
+GVD son menores y por lo tanto los efectos sobre las métricas son menos
 pronunciados. A su vez, considerar el espacio desconocido de distinta manera
 cambia significativamente la forma del GVD lo cual también puede afectar a los
-caminos de los robots sobre este y por lo tanto a las métricas en cuestion.
+caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 
 
 % Con respecto a los tiempos de exploración, estos tambien son reducidos al
@@ -681,7 +681,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestion.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_time.png}
 
-  \caption{Grafica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
+  \caption{Gráfica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
 
 \end{figure}
 
@@ -690,7 +690,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestion.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_cost.png}
 
-  \caption{Grafica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
+  \caption{Gráfica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
 
 \end{figure}
 
@@ -699,7 +699,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestion.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_mean.png}
 
-  \caption{Grafica del tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
+  \caption{Gráfica del tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
 
 \end{figure}
 
@@ -743,7 +743,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestion.
 % fronteras a sus celdas más significativas.
 %%% 3 %%%%
 % Es posible apreciar que los metodos que identifican los objetivos simplificando
-% las fronteras reducen los tiempos de exploración con respecto al metodo que
+% las fronteras reducen los tiempos de exploración con respecto al método que
 % identifica a las fronteras sin idenficar como obtivos. Aunque en el nivel más
 % bajo de granularidad las reducciones son despreciables estas crecen junto a la
 % granularidad, hasta alcanzarse una reducción de ${\smallsim}29\%$ en el nivel
@@ -776,7 +776,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestion.
 % simplificación basada en cubrimiento tiene siempre un mayor costo temporal que
 % la basada en K-Means pero logra obtener
 
-% Lo cual implica que el metodo que simplifica basadose en el cubrimiento tiene
+% Lo cual implica que el método que simplifica basadose en el cubrimiento tiene
 % una inversion mayor de tiempo, y a pesar.
 % En este caso ambos metodos invierten tiempo en disminuir los
 % objetivos identificados a partir de simplificar las fronteras.
@@ -841,7 +841,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestion.
 % la navegación y aprovechandose las capacidades sensoriales de los robots. Esto
 
 % A simple vista este factor parece contradecir los resultados obtenidos, ya
-% que el metodo que obtiene los peores resultados es el menos impactado por
+% que el método que obtiene los peores resultados es el menos impactado por
 % este factor ya que no simplifica las fronteras. Lo que sucede es que el
 % tiempo de simplificación es en realidad una inversion de tiempo que se hace
 % para reducir la cantidad de objetivos

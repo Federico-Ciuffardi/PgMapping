@@ -1,8 +1,8 @@
 Durante el proyecto se implemento una solución al problema de exploración
-multirobot\footnote{Disponible en línea:\\
+multi-robot\footnote{Disponible en línea:\\
 \url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}}. Esto
 requiere soluciones para varios problemas relacionados a diversos aspectos de
-la exploración multirobot, este proyecto se concentrara en algunos de ellos.
+la exploración multi-robot, este proyecto se concentrara en algunos de ellos.
 
 Para el problema de asignación de objetivos (sección \ref{sec:exploracion}) se
 presentan soluciones para cada una de sus partes. Para la identificación de
@@ -13,7 +13,7 @@ aplicando una variante de lo presentado en la sección \ref{subsec:wurmCoord}.
 
 La asignación requiere de la construcción de un mapa topológico, para esto se
 implementa la técnica descrita en la sección \ref{subsec:mapaTopGVD} que
-requiere de un GVD, el cual se contruye de forma incremental con una variante
+requiere de un GVD, el cual se construye de forma incremental con una variante
 del algoritmo \emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}).
 
 Luego de asignado a un objetivo el robot deberá llegar hasta el, para esto es
@@ -23,43 +23,15 @@ aplica la idea de planificación jerárquica mencionada en la sección
 computacionalmente eficiente sin resultar en caminos innecesariamente largos.
 
 El problema construir el mapa de un entrono inicialmente desconocido a partir
-de los datos sensoriales de varios robots se soluciona, contruyendo en cada
-robot, segun la información sensorial que estos recolectan, una grilla de
+de los datos sensoriales de varios robots se soluciona, construyendo en cada
+robot, según la información sensorial que estos recolectan, una grilla de
 ocupación con el nodo de ROS \emph{costmap\_2d} \cite{ROS-costmap_2d} y luego
 combinando dichas grillas con las ideas presentadas en
 \cite{stachniss2009robotic}.
 
-
- % que se presenta al contruir un GVD sobre espacio parcialmente explorado, que consiste en 
-
-% Adicionalmente se estudia un aspecto critico que no esta explicito en el estado
-% del arte, el problema de como como tratar las porciones desconocidas existentes
-% en un entorno parcialemnte explorado al contruir un GVD.
-
-% que no se basa en un algoritmo de clasificación no supervisada (p.e. K-Means).
-% Propuesta  de un algoritmo de construcción incremental de un GVD basado en
-% \emph{brushfire dinámico} según se describe en \cite{Lau2013} cambiando
-% principalmente la forma de determinar las celdas pertenecientes al GVD.
-% Proponer un algoritmo novedoso para la simplificación de conjuntos de
-% fronteras que ... (no se que poner aca, pongo) Estudiar la coordinacion
-% propuesta une wurm utilizando un  GVD incremental ya que de lo contrario no
-% es escalable. Y que adicionalmente se implemento una construiccion de GVD
-% novedosa que basa su construiccion en sources y pseudosources (la idea
-% intuitiva pero considerando los potenciales problemas de discretizacion)
-% Llamado de atencion al problema de conectividad de un GVD al explorar donde
-% en un mapa no solo hay obtaculos y celdas libres si no que tambien hay celdas
-% desconocidas, las cuales no se consideran en los articulos del estado del
-% arte. Estos se asume (no se explicita pero en Kalra se ve que el mapa para
-% entorno abierto es consistente con esta tecnica, en el codigo de lau tambien)
-% que implementan la tecnica de "los limites de mi mapa son obstaculos" y lo
-% desconocido es libre. En este trabajo se propone una tecnica novedosa que
-% soluciona este problema de forma más eficiente evitando procesar todo el
-% espacio desconocido mientras se va explorando.
-
 \section{Hipótesis de trabajo}\label{sec:hip}
 La solución se desarrolla con las siguientes hipótesis de trabajo.
 \begin{enumerate}[label=(\roman*)]
-  % \item Cada robot conoce en todo momento su ubicación (posición y orientación).
   \item Cada robot puede obtener en todo momento su ubicación (posición y
     orientación) sin errores.
   \item Las comunicaciones son ideales: sin perdida, de ancho de banda y rango infinito.
@@ -68,11 +40,8 @@ La solución se desarrolla con las siguientes hipótesis de trabajo.
     que se encuentran dentro de un circulo de radio $rango$ centrado en el
     robot.
   \item El entorno a explorar es cerrado.
-  \item Se conocen las dimenciones del entorno a explorar.
-  % \item El entorno es estático.
+  \item Se conocen las dimensiones del entorno a explorar.
 \end{enumerate}
-
-% \todo{necesito agregar que las dimenciones del entorno osn conocidas para armar un mapa}
 
 Estas hipótesis tienen el motivo de simplificar algunos aspectos del
 problema de exploración permitiendo que el trabajo se pueda enfocar en otros.
@@ -80,7 +49,7 @@ problema de exploración permitiendo que el trabajo se pueda enfocar en otros.
 La hipótesis (I) resuelve trivialmente el problema de localización \cite{slam}. 
 
 Las hipótesis (II) y (III) simplifican la coordinación. La (II) al no tener que hacer
-consideraciones especiales dependiendo de las dimenciones del robot. La (III) por
+consideraciones especiales dependiendo de las dimensiones del robot. La (III) por
 no tener que considerarse los posibles problemas de comunicación que pueden
 haber de asignar robots a objetivos muy distantes o con obstrucciones entre si. 
 
@@ -88,16 +57,16 @@ Las hipótesis (IV) establece la capacidad sensorial del robot, que se pueda
 sensar un circulo centrado en el robot, evita considerar la orientación de este
 para extraer información.
 
-La hipótesis (V) es util para poder aplicar el criterio de parada que consiste
+La hipótesis (V) es útil para poder aplicar el criterio de parada que consiste
 en detener la exploración al no tener más objetivos restantes (sección
 \ref{sec:exploracion}). 
 
 Finalmente la hipótesis (VI) permite establecer una grilla de ocupación con las
-dimenciones suficientes para representar todo el entrono a explorar. 
+dimensiones suficientes para representar todo el entrono a explorar. 
 
 \section{Arquitectura}\label{sec:arqui}
 La arquitectura se divide en dos tipos de componentes robots y unidad central.
-Existe una unica unidad central que se encarga de centralizar la información
+Existe una única unidad central que se encarga de centralizar la información
 del entrono explorado y de coordinar a los varios robots que pueden existir.
 Cada componente esta asociado a un hardware específico, siendo los robots móviles
 y la estación central estática. 
@@ -107,14 +76,14 @@ encargan de tareas específicas.
 
 En la figura \ref{fig:arquitectura} se resume la arquitectura en un diagrama en
 el cual es posible ver los componentes, sus módulos y como estos distribuyen
-entre los componentes. Tambien es posible aprciar una simplificación de las
-comunicaciones que ocurren entre dichos modulos.
+entre los componentes. También es posible apreciar una simplificación de las
+comunicaciones que ocurren entre dichos módulos.
 
 
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/arquitectura.png}
-  \caption[Arquitectura de la solucion propuesta.]{Arquitectura de la solución propuesta. El modulo coloreado con azul es provisto por ROS. Los módulos no coloreados fueron  implementados en esta propuesta.}
+  \caption[Arquitectura de la solucion propuesta.]{Arquitectura de la solución propuesta. Los módulos no coloreados fueron implementados en esta propuesta.}
   \label{fig:arquitectura}
 \end{figure} 
 
@@ -128,7 +97,7 @@ ejecutar y interactuar con el \emph{stack de navegación} de ROS
 
 El stack de navegación de ROS es un conjunto de nodos que tienen como propósito
 que un robot pueda navegar el entorno hacia objetivos dentro del mismo. En la
-figura \ref{fig:move_base} se muestra un diagrama que repesenta a los nodos que
+figura \ref{fig:move_base} se muestra un diagrama que representa a los nodos que
 componen al stack de navegación de ROS y sus interacciones.
 
 \begin{figure}[H]
@@ -145,7 +114,7 @@ al robot al objetivo sin colisiones.
 
 El camino generado por el \emph{global\_planner} es enviado al nodo
 \emph{local\_planner} que se encarga de tomar el plan en alto nivel y
-traducirlo a la secuencia las velocidades líneales y angulares que un robot
+traducirlo a la secuencia las velocidades lineales y angulares que un robot
 debe tener a lo largo del tiempo para seguir el global. A dicha secuencia de
 velocidades se le conoce como plan local.
 
@@ -169,75 +138,75 @@ centra en el robot).
 
 El nodo \emph{recovery\_behaviors} permite ejecutar comportamientos de
 recuperación de detectarse que el robot no esta avanzando de forma correcta al
-objetivo. Para la solucion desarrollada solo se hace uso del comportamientos de
-recuperación que consite en que el robot rote en el lugar.
+objetivo. Para la solución desarrollada solo se hace uso del comportamientos de
+recuperación que consiste en que el robot rote en el lugar.
 
 \subsection{Combinador de mapas}
 El modulo \emph{Combinador de mapas} es el encargado de mantener el mapa del entorno
-explorado. Este recibe las actualizaciónes de los mapas globales que son
-generados por el nodo \emph{global\_costmap} del stack de navegacion de cada
+explorado. Este recibe las actualizaciones de los mapas globales que son
+generados por el nodo \emph{global\_costmap} del stack de navegación de cada
 robot y las combina en un único mapa que contenga toda la información
 recopilada del entorno. Cuando el mapa combinado global se actualiza este
-retrasmite lo actualizado a diversos componentes del sistema (ver figura
-\ref{fig:arquitectura}) que utlizan el mapa del entorno explorado para llevar a
+retransmite lo actualizado a diversos componentes del sistema (ver figura
+\ref{fig:arquitectura}) que utilizan el mapa del entorno explorado para llevar a
 cabo alguna de sus tareas. 
 
 \subsection{Controlador central}
 
-El modulo \emph{Controlador central} es el responsable de orquestrar la
-asignacion de objetivos. Específicamente la asignacion de objetivos consiste en
-una subasta en la cual este modulo actua como subastador. La subasta se puede
-resumir de la siguiente manera, los objetivos de exploracion identificados son
-transmitidos desde el \emph{controlador central} a los robots los cuales valuan
-a dichos objetivos segun que tan conveniente les es llegar a ellos. Los robots
-envian sus valuaciones a la central la cual aplica una algorimo para determinar
+El modulo \emph{Controlador central} es el responsable de orquestar la
+asignación de objetivos. Específicamente la asignación de objetivos consiste en
+una subasta en la cual este modulo actúa como subastador. La subasta se puede
+resumir de la siguiente manera, los objetivos de exploración identificados son
+transmitidos desde el \emph{controlador central} a los robots los cuales valúan
+a dichos objetivos según que tan conveniente les es llegar a ellos. Los robots
+envían sus valuaciones a la central la cual aplica una algoritmo para determinar
 que objetivo le corresponde a cada robot y posteriormente le informa a cada
 robot que objetivo le corresponde.
 
 \subsection{Controlador de movimiento}
-El modulo \emph{Contrador de movimiento} es como su nombre lo indica el modulo
+El modulo \emph{Controlador de movimiento} es como su nombre lo indica el modulo
 que se encarga de controlar el movimiento del robot. Específicamente recibe
-caminos compuesto por celdas de la grilla de ocupacion que en secuencia llevan
-a un objetivo de exploracion, y se encarga de ir enviando objetivos de
-navegacion al modulo \emph{Move Base} para que el camino sea ejecutado de forma
-rapida evitando maniobras innecesarias.
+caminos compuesto por celdas de la grilla de ocupación que en secuencia llevan
+a un objetivo de exploración, y se encarga de ir enviando objetivos de
+navegación al modulo \emph{Move Base} para que el camino sea ejecutado de forma
+rápida evitando maniobras innecesarias.
 
-Tambien lleva a cabo una capa superior de comportamientos de recuperacion
+También lleva a cabo una capa superior de comportamientos de recuperación
 extendiendo los provistos por el modulo \emph{Move Base}.
 
-Indica al \emph{Controlador del robot} si se completo el camino con exito, o
-existe algun problema.
+Indica al \emph{Controlador del robot} si se completo el camino con éxito, o
+existe algún problema.
 
 \subsection{Controlador del robot}
 El \emph{Controlador del robot} es el modulo que se encarga de valuar los
 objetivos cuando ocurre una subasta. A su vez se encarga de procesar los
-objetivos asignados determinadno el camino que lleva al objetivo y
-enviandolo al modulo \emph{Controlador de movimiento}. 
+objetivos asignados determinando el camino que lleva al objetivo y
+enviándolo al modulo \emph{Controlador de movimiento}. 
 
-Tambien es responsable por solicitar el inicio de una subasta al
-\emph{Controlado central} cuando el \emph{Controlador de moviemiento} indica el
-exito o el fracaso en seguir el camino asignado.
+También es responsable por solicitar el inicio de una subasta al
+\emph{Controlado central} cuando el \emph{Controlador de movimiento} indica el
+éxito o el fracaso en seguir el camino asignado.
 
 \section{Definiciones}
-Esta seccion esta dedicada a formalizar conceptos que serán utilizados en lo que resta
+Esta sección esta dedicada a formalizar conceptos que serán utilizados en lo que resta
 del capitulo.
 
-\subsection{Grillas de ocupacion}\label{subsec:Grilla}
-En el contexto de este trabajo se utlizara las siguientes definiciones referentes a
-grillas de ocupacion, introducidas en la seccion \ref{subsec:mapas}.
+\subsection{Grillas de ocupación}\label{subsec:Grilla}
+En el contexto de este trabajo se utilizará las siguientes definiciones referentes a
+grillas de ocupación, introducidas en la sección \ref{subsec:mapas}.
 
 El conjunto $\mli{CG}\subseteq R^2$ esta conformado de los centros de cada celda de la
-grilla de ocupacion. Las celdas se repreresentan segun sus centros y viceversa
+grilla de ocupación. Las celdas se representan según sus centros y viceversa
 sin ambigüedad, por lo tanto en lo que resta de este informe se usaran ambos
-terminos de forma indistinta.
+términos de forma indistinta.
 
 Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|x_{1:t},z_{1:t})$
 de estar ocupada, donde $z_{1:t}$ es la secuencia de medidas obtenidas de los
 sensores desde las posiciones $x_{1:t}$.
 
-La funcion $e : \mli{CG} \rightarrow E$ dado un centro de celda, devuelve uno de los
-tres estados posibles $E=\{libre, ocupado, desconocido\}$ segun la probabilidad
-asociada a $c$. En el contexto de este proyecto la funcion $e$ se define segun
+La función $e : \mli{CG} \rightarrow E$ dado un centro de celda, devuelve uno de los
+tres estados posibles $E=\{libre, ocupado, desconocido\}$ según la probabilidad
+asociada a $c$. En el contexto de este proyecto la función $e$ se define según
 (\ref{eq:estado}).
 \begin{equation} 
   e(c)= 
@@ -251,13 +220,13 @@ asociada a $c$. En el contexto de este proyecto la funcion $e$ se define segun
   \label{eq:estado}
 \end{equation}
 
-La funcion $ady_4 : \mli{CG} \rightarrow P(\mli{CG})$ dada una celda $c$ devuelve el conjunto
-de celdas horizontalmente adyacentes y la funcion $ady_8 : \mli{CG} \rightarrow P(\mli{CG})$
+La función $ady_4 : \mli{CG} \rightarrow P(\mli{CG})$ dada una celda $c$ devuelve el conjunto
+de celdas horizontalmente adyacentes y la función $ady_8 : \mli{CG} \rightarrow P(\mli{CG})$
 devuelve el conjunto de celdas adyacentes horizontal y diagonalmente. Las
 definiciones de $ady_4$ y $ady_8$ se presentan en (\ref{eq:vecinos4}) y
 (\ref{eq:vecinos8}) respectivamente donde $n_2, n_4, n_6, n_8$ se corresponden
 a vecinos horizontales y $n_1, n_3, n_5, n_7$ se corresponden a los vecinos
-diagonales de $c$ segun se muestran en la figura \ref{fig:vecinos}.
+diagonales de $c$ según se muestran en la figura \ref{fig:vecinos}.
 
 \begin{equation} 
  ady_4(c)=\{n_{i*2} : 1\leq i \leq 4, n_{i*2} \in C\}
@@ -276,15 +245,15 @@ diagonales de $c$ segun se muestran en la figura \ref{fig:vecinos}.
   \label{fig:vecinos}
 \end{figure} 
 
-Desde este punto se utlizara la funcion $ady$ como una funcion de adyacencia
-generica que puede ser tanto $ady_4$ como $ady_8$ a no ser que se indique lo
+Desde este punto se utilizará la función $ady$ como una función de adyacencia
+genérica que puede ser tanto $ady_4$ como $ady_8$ a no ser que se indique lo
 contrario.
-Notar que la relacion de adyacencia es simetrica por lo que $c_1 \in ady(c_2)
+Notar que la relación de adyacencia es simétrica por lo que $c_1 \in ady(c_2)
 \Leftrightarrow c_2 \in ady(c_1)$.
 % This map is obtained from the occupancy probability grid by a simple clipping operation with a threshold of 0.5. The gray areas of the maximum-likelihood map correspond to cells that have not been sensed by the robot.
 
 \subsection{Componentes conexas} \label{subsec:CompComp}
-Una descomposicion en componentes conexas de un conjunto de
+Una descomposición en componentes conexas de un conjunto de
 celdas $C \subseteq \mli{CG}$ es un conjunto $CC\in P(C)$ compuesto por $N$ conjuntos $C_i$ con
 $i\in[1,N]$ tales que:
 \begin{itemize}
@@ -294,7 +263,7 @@ $i\in[1,N]$ tales que:
   \item No existen $i,j \in [1,N]$ tales que existan $c_1 \in C_i$ y $c_2 \in C_j$ que cumplan con $c_1 \in ady(c_2)$ 
 \end{itemize}
 
-Un ejemplo de una descomposicion en componentes conexas se muestra en la figura \ref{fig:fronterasCompCon}.
+Un ejemplo de una descomposición en componentes conexas se muestra en la figura \ref{fig:fronterasCompCon}.
 
 \begin{figure}[H]
   \centering
@@ -302,10 +271,10 @@ Un ejemplo de una descomposicion en componentes conexas se muestra en la figura 
   \qquad
   \subfloat[Cada componente conexa de $C$ se contornea con rojo.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/compCon/b2.png}}
 
-  \caption{Descompocicion en componentes conexas.}\label{fig:descCompCon}
+  \caption{Descomposición en componentes conexas.}\label{fig:descCompCon}
 \end{figure}
 
-Es posible obtener las compnentes conexas de un conjunto cualquiera de
+Es posible obtener las componentes conexas de un conjunto cualquiera de
 celdas $C$ con el algoritmo \ref{alg:compcon}.
 
 \begin{algorithm}[H]
@@ -314,7 +283,7 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
   \Input{$C$}
   $restantes := C$ \\
   $CC := \emptyset$ \\
-  $pila :=$ Pila vacia \\
+  $pila :=$ Pila vacía \\
   $i := 1$ \\
   \While{ $\neg restantes.vacia()$ } {
     $C_i := \emptyset $ \\
@@ -340,7 +309,7 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
   }
   \Return $CC$ 
 
-  \caption{Descomposicion en componentes conexas de $C$}
+  \caption{Descomposición en componentes conexas de $C$}
   \label{alg:compcon}
 \end{algorithm}
 
@@ -348,29 +317,25 @@ Este algoritmo se resume en elegir una celda $c\in C$ que no este aun en una
 componente conexa (línea 6), aplicar un \emph{depth-first search} (DFS)
 partiendo $c$ agregado todas las celdas recorridas a una misma componente
 conexa (líneas 7-19). Repetir dicho procedimiento hasta que todas las celdas
-pertenezcan a alguna componente conexa (línea 4). Este algoritmo es analogo al
+pertenezcan a alguna componente conexa (línea 4). Este algoritmo es análogo al
 que esta presente en \cite{hopcroft1973algorithm}.
 
 \section{Identificación de objetivos}\label{sec:pc:idobj}
 El problema de identificación de objetivos consiste en determinar los puntos
 del espacio a los cuales es conveniente enviar robots para recolectar nueva
-informacion sobre el entorno explorado. Estos puntos son los llamdos objetivos
-de exploración (seccion \ref{sec:exploracion}). 
-% En el contexto del trabajo desarrollado al utlizarse una grilla de ocupacion
-% como mapa los 
-% se hablara de celdas en lugar de puntos, existiendo una correspondencia entre
-% cada celda y un único punto en el espacio, su centro.
+información sobre el entorno explorado. Estos puntos son los llamados objetivos
+de exploración (sección \ref{sec:exploracion}). 
 
 \subsection{Fronteras}
 En \cite{yamauchi1998frontier} se propone que los lugares que permiten
-recolectar la mayor cantidad de nueva informacion sobre el entorno son las
+recolectar la mayor cantidad de nueva información sobre el entorno son las
 fronteras entre el espacio conocido y desconocido. Y que por lo tanto dichas
-fornteras deben ser los objetivos de exploración.
-Al utlizar una grilla de ocupacion como mapa, las fronteras se definen como las
+fronteras deben ser los objetivos de exploración.
+Al utilizar una grilla de ocupación como mapa, las fronteras se definen como las
 celdas cuyo estado asociado es $libre$ y son adyacentes a una celda cuyo estado
 asociado es $desconocido$ (figura \ref{fig:fronteras}).
-Por lo tanto segun Yamauchi los objetivos de exploración seran las celdas
-fronteras $F$ segun se definen en (\ref{eq:fronteras}).
+Por lo tanto según Yamauchi los objetivos de exploración serán las celdas
+fronteras $F$ según se definen en (\ref{eq:fronteras}).
 \begin{equation} 
   F = \{ c \in \mli{CG} : e(c) = libre, \exists n \in ady(c), e(n) = desconocido  \}
   \label{eq:fronteras}
@@ -385,19 +350,19 @@ a las cuales se denominaran como fronteras significativas.
 
 Para determinar las fronteras significativas, primero, las celdas fronteras $F$
 se descomponen en sus componentes conexas $\mli{FC}=\{F_1,F_2,...F_N\}$
-(seccion \ref{subsec:CompComp}), un ejemplo de este tipo de descomposicion se
+(sección \ref{subsec:CompComp}), un ejemplo de este tipo de descomposición se
 puede ver en la figura \ref{fig:fronterasCompCon}.
 
 Luego se determinan las fronteras significativas $\mli{FS}_i$ de cada
 componente conexa $F_i\in \mli{FC}$. Esto se hace agrupando las fronteras de
 $F_i$ con el algoritmo K-Means \cite{macqueen1967some}, y determinando una
 frontera significativa por cada una de las $k$ agrupaciones, la
-frontera más cercana de $F_i$ al centroide de la agrupacion (una arbitraria de
+frontera más cercana de $F_i$ al centroide de la agrupación (una arbitraria de
 las más cercanas en el caso de que exista más de una). Un ejemplo de las
 fronteras significativas  $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ obtenidas con
-este metodo se muestra en la figura \ref{fig:fronterasSig}.
+este método se muestra en la figura \ref{fig:fronterasSig}.
 
-El $k$ utilizado para ejecutar K-Means es el minimo que logra que para toda
+El $k$ utilizado para ejecutar K-Means es el mínimo que logra que para toda
 frontera $f\in F_i$ existe $\mli{fs} \in FS_i$ tal que $d_{\mli{fs}}(f) \leq
 rango$ siendo $rango$ el alcance de los sensores del robot. Es decir, el
 conjunto de fronteras significativas $\mli{FS}_i \subset F_i$ cumple con que
@@ -405,11 +370,11 @@ cada frontera esta dentro del rango del sensado de alguna frontera
 significativa, cuando esto se cumple se dice que $\mli{FS}_i$ cubre a $F_i$, o
 que $FS_i$ logra el cubrimiento. En la figura \ref{fig:fronterasSigCub} se
 puede ver como las fronteras significativas obtenidas $FS$ logran el
-cubrimiento, ya que todas los centros de las fronteras $F$ estan contenidos en
+cubrimiento, ya que todas los centros de las fronteras $F$ están contenidos en
 las circunferencias de radio $rango$ centradas en las fronteras significativas
 $FS$.
 
-Para encontrar el minimo $k$ con las que se logra un $\mli{FS}_i$ que cubra a
+Para encontrar el mínimo $k$ con las que se logra un $\mli{FS}_i$ que cubra a
 $F_i$, se parte con $k=1$, si el resultado no logra cubrir incrementa $k$ y se
 repite el proceso.
 
@@ -426,52 +391,51 @@ repite el proceso.
 
   \caption[Proceso de simplificación de fronteras según K-Means.]{Proceso de
     simplificación de fronteras según K-Means. Las circunferencias rojas
-    centradas en las fronteas significativas tienen radio $rango=4$ (largos de celda) indicando su
-    cubrimiento.
-  \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
+    centradas en las fronteras significativas tienen radio $rango=4$ (largos de celda) indicando su
+    cubrimiento. Basado en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
   % \caption[Proceso de simplificación de fronteras según K-Means.]{Proceso de simplificación de fronteras según K-Means. Cada figura corresponde a un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Basada en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
 \end{figure}
 
-% En la seccion anterior se presento un metodo que soluciona el siguiente
-% problema. Dado un conjunto de  la descomposicion en componentes conexas de
+% En la seccion anterior se presento un método que soluciona el siguiente
+% problema. Dado un conjunto de  la descomposición en componentes conexas de
 % $F$, $\mli{FC}=\{F_1,F_2,...F_N\}$ se obteniene como salida el conjunto
 % $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ que cumple con la restriccion de que
 % para todo $i \in [1,N]$ $\mli{FS}_i$ cubre a $F_i$.
 
 El problema descrito hasta el momento se puede resumir en el de  dado un
-conjunto de fornteras $F$, obtener un conjunto de fornteras significativas
-$\mli{FS}$ que cumplen con la restriccion de que $\mli{FS}$ cubre a $F$.
-Recordando que el proposito de usar $\mli{FS}$ como objetivos de exploracion en
-lugar de usar $F$ es reducir los objetivos de exploracion entoces es natural
-pensar que la soluciones optimas reducen al minimo el $\mli{FS}$ resultante,
-mientras mantienen la restriccion de cubrimiento.
+conjunto de fronteras $F$, obtener un conjunto de fronteras significativas
+$\mli{FS}$ que cumplen con la restricción de que $\mli{FS}$ cubre a $F$.
+Recordando que el propósito de usar $\mli{FS}$ como objetivos de exploración en
+lugar de usar $F$ es reducir los objetivos de exploración entonces es natural
+pensar que la soluciones optimas reducen al mínimo el $\mli{FS}$ resultante,
+mientras mantienen la restricción de cubrimiento.
 
 % Analizando la restriccion de cubrimiento, se puede ver que un indicador de que
-% una solucion es suboptima es que varias celdas $\mli{FS}$ se concentren,
+% una solucion es subóptima es que varias celdas $\mli{FS}$ se concentren,
 % solapandose las circunferencias de radio $rango$ centradas en ellas. Por
 % ejemplo 
 
 Dado esto es posible ver que en el ejemplo presentado en
-\ref{fig:ejemploFSKMMal} el resultado obtenido por el metodo presentado en esta
-seccion no es optimo ya que existen fronteras significativas innecesarias para
+\ref{fig:ejemploFSKMMal} el resultado obtenido por el método presentado en esta
+sección no es optimo ya que existen fronteras significativas innecesarias para
 el cubrimiento. 
 
 \begin{figure}[H]
   \centering
-  \subfloat[Fronteras significativas obtenidas segun el metodo basado en K-Means.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/a_sin_circ.png}}
+  \subfloat[Fronteras significativas obtenidas segun el método basado en K-Means.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/a_sin_circ.png}}
   \qquad
   \subfloat[Dos de las fronteras significativas de la parte inferior derecha de (a) no son necesarias para lograr el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/b.png}}
 
-  \caption[simplificación de fronteras suboptima resultante del metodo basado en K-Means.]{simplificación de fronteras suboptima resultante del metodo basado en K-Means. Las fronteras de $F_i$ se indican con azul, las fornteras significativas con verde y las
+  \caption[simplificación de fronteras subóptima resultante del método basado en K-Means.]{simplificación de fronteras subóptima resultante del método basado en K-Means. Las fronteras de $F_i$ se indican con azul, las fronteras significativas con verde y las
     circunferencias rojas centradas en estas tienen radio $rango=5.6$ (largos de celda) indicando su
-    cubrimiento. Extraída de implementacion desarrollada\footnotemark.}\label{fig:ejemploFSKMMal}
+    cubrimiento. Extraída de implementación desarrollada\footnotemark.}\label{fig:ejemploFSKMMal}
 \end{figure}
 % \footnotetext{Podria indicar el bag y el seg}
-
-Resultados suboptimos similares se experimentan de forma consistente %al aplicarse la simplficacion 
-sobre componentes conexas con forma serpenteante\todo{no se si este termino se entiende, me es dificil explicarlo bien, con forma de S?},
-asimetricas y lo suficientemente extensas como para requerir más de 4
-fornteras significativas para su cubrimiento, 
+%al aplicarse la simplificación 
+Resultados subóptimos similares se experimentan de forma consistente sobre
+componentes conexas con forma serpenteante asimétricas y lo suficientemente
+extensas como para requerir más de 4 fronteras significativas para su
+cubrimiento, 
 %con un largo mayor a $rango*8$ 
 % \todo[inline]{se entiende la idea del largo aplicada a esto? Creo que puede
 % quedar claro mirando la foto pero tengo mis dudas. La idea en realidad sería
@@ -480,7 +444,7 @@ fornteras significativas para su cubrimiento,
 % que tan serpenteante o asimetrica sea. Se me ocurre que puedo tratar la simpleza hablando por el largo puede
 % quedar más claro o más oscuro, es decir por que 8? fue para poner un valor
 % similar al de la foto que necesita 5 fronteras para cubrir }
-empeorando (mayor cantidad de fornteras significativas
+empeorando (mayor cantidad de fronteras significativas
 innecesarias para el cubrimiento) a medida que las componentes conexas de
 fronteras son más extensas y las curvas son más intrincadas.
 
@@ -494,30 +458,30 @@ fronteras son más extensas y las curvas son más intrincadas.
 % (casi a $rango$ de distancia una de la otra, el maximo). Esto lleva a pensar que K-Means se tiende a ubicar concentrar los centroides en una zona,
 
 Esto se presume que se debe principalmente a dos factores relacionados a
-K-Means. (i) K-Means no considera la restriccion de cubrimiento para generar sus
-resultados. La restriccion se fuerza ejecutando K-Means con el minimo $k$
-(obtenido con prueba y error) segun el cual las fronteras significativas
+K-Means. (i) K-Means no considera la restricción de cubrimiento para generar sus
+resultados. La restricción se fuerza ejecutando K-Means con el mínimo $k$
+(obtenido con prueba y error) según el cual las fronteras significativas
 resultantes logran el cubrimiento. (ii) Los centroides resultantes de K-Means
 no son fronteras. Estos se deben traducir a fronteras posteriormente.
 
-% \todo{Hay una arbitrariedad asociada a k-means tambien lo cual puede ser criticado tambien, aunque deberia estudiar mejor el tema, quizas no criticarlo aca pero destacar que el otro metodo es menos opaco en como elige las front sig}
+% \todo{Hay una arbitrariedad asociada a k-means tambien lo cual puede ser criticado tambien, aunque deberia estudiar mejor el tema, quizas no criticarlo aca pero destacar que el otro método es menos opaco en como elige las front sig}
 % Esto es la clase de pe la idea de obtener fornteras significativas es reducir el numero
-% de objetivos de exploracion,
+% de objetivos de exploración,
 
-% El metodo basado en K-Means aunque funciona bien al aplicase en componentes conexas pequeñas, 
+% El método basado en K-Means aunque funciona bien al aplicase en componentes conexas pequeñas, 
 
-% El metodo descrito en la seccion resulta en un conjunto de fronteras
+% El método descrito en la seccion resulta en un conjunto de fronteras
 % significativas que cubren a las fronteras, el problema que se detecto
 % experimentalmente es que en ciertos casos el resultado  la discribucion de las
 % fronteras significativas es mala, se concentran mucho en ciertas porciones y se alejan 
 
-\subsection{simplificación de fronteras basada en cubrimiento}\label{subsec:MiSimp}
-Con esto en mente se desarrolla un metodo novedoso que considera los dos puntos
+\subsection{Simplificación de fronteras basada en cubrimiento}\label{subsec:MiSimp}
+Con esto en mente se desarrolla un método novedoso que considera los dos puntos
 destacados anteriormente. (i) Tomando en cuenta el cubrimiento y su
-optimizacion como parte fundamental del algorimo. (ii) Dando directamente
+optimización como parte fundamental del algoritmo. (ii) Dando directamente
 fronteras como resultado.
 
-El algorimo al igual que el descrito en la seccion anterior comienza
+El algoritmo al igual que el descrito en la sección anterior comienza
 descomponiendo a las fronteras $F$ en sus componentes conexas
 $\mli{FC}=\{F_1,F_2,...F_N\}$ para luego obtener las fronteras significativas
 $\mli{FS}_i$ para cada componente $F_i$, siendo el conjunto total de fronteras
@@ -535,7 +499,7 @@ $\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
   $\mli{UF} := F_i$ \\
   $\mli{FS}_i := \emptyset$\\
 
-  $\mli{PF} :=$ Cola vacia \\
+  $\mli{PF} :=$ Cola vacía \\
   \ForEach { $f\in F_i$ } {
     \ForEach{ $\mli{fa} \in ady(f)$ } {
       \If { $e(\mli{fa}) = ocupado$ } {
@@ -570,234 +534,197 @@ $\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
   \label{alg:IdObjGeo}
 \end{algorithm}
 
-Para obtener las fronteras significativas de $F_i$ el algorimo parte mantiene
-las fronteras sigficativas determinadas $\mli{FS}_i$, el conjunto
+Para obtener las fronteras significativas de $F_i$ el algoritmo parte mantiene
+las fronteras significativas determinadas $\mli{FS}_i$, el conjunto
 todas las fronteras que resta cubrir $\mli{UF}$ (siglas del ingles
 \emph{uncovered frontiers}), y  una cola FIFO $\mli{PF}$ en donde se almacenan 
-los proximas fronteras a cubrir.
+los próximas fronteras a cubrir.
 
-$\mli{FS}_i$ se inicializa vacia y $\mli{UF}$ como $F$ (líneas 1 y 2). Por otro
+$\mli{FS}_i$ se inicializa vacía y $\mli{UF}$ como $F$ (líneas 1 y 2). Por otro
 lado $\mli{PF}$ se inicializa encolando en cualquier orden a las celdas
 fronteras adyacentes a celdas cuyo estado es ocupado, de no existir ninguna se
-encola una unica frontera arbitraria de $F_i$ (líneas 3-13). 
+encola una única frontera arbitraria de $F_i$ (líneas 3-13). 
 
 Luego el algoritmo se basa en elegir una frontera de $\mli{UF}$ como frontera
-significativa $\mli{fs}$ (líneas 15-20). Posteriomente se actualizan las
-estructuras mantenidas en funcion de la nueva $\mli{fs}$ (líneas 21-27), notar
-que esto implica reducir el numero de celdas en $\mli{UF}$ ya que como minimo
-$\mli{fs}$ se cubre a si misma. Este proceso de eleccion y actualizacion se
-repite hasta que $\mli{UF}$ queda vacia (línea 14). Luego de lo cual se
-devuevlven las fronteras significativas $\mli{FS_i}$ resultantes (línea 29).
+significativa $\mli{fs}$ (líneas 15-20). Posteriormente se actualizan las
+estructuras mantenidas en función de la nueva $\mli{fs}$ (líneas 21-27), notar
+que esto implica reducir el numero de celdas en $\mli{UF}$ ya que como mínimo
+$\mli{fs}$ se cubre a si misma. Este proceso de elección y actualización se
+repite hasta que $\mli{UF}$ queda vacía (línea 14). Luego de lo cual se
+devuelven las fronteras significativas $\mli{FS_i}$ resultantes (línea 29).
  
-Ahora se profundizara sobre los procesos de eleccion (líneas 15-20) y
-acutualizacion (líneas 21-27).
+Ahora se profundizara sobre los procesos de elección (líneas 15-20) y
+actualización (líneas 21-27).
 
-El proceso de eleccion de $\mli{fs}$ utlizado tiene como objetivo el asegurar
+El proceso de elección de $\mli{fs}$ utilizado tiene como objetivo el asegurar
 que se cubra una frontera previamente no cubierta $\mli{pf}$ (obtenida de
-desencolar a $\mli{PF}$), esto se traduce en la restriccion
-$d_{\mli{pf}}(\mli{fs}) \leq rango$. Adicionalmente se tiene una heuristica que
+desencolar a $\mli{PF}$), esto se traduce en la restricción
+$d_{\mli{pf}}(\mli{fs}) \leq rango$. Adicionalmente se tiene una heurística que
 establece que dado $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{UF} \}/2$ las
-fronteras que esten a $min \{dCen, rango\}$ de distancia de $\mli{pf}$ seran las
-mejores candidatas a ser fronteras significativas. La heuristica busca elegir a
+fronteras que estén a $min \{dCen, rango\}$ de distancia de $\mli{pf}$ serán las
+mejores candidatas a ser fronteras significativas. La heurística busca elegir a
 las fronteras significativas que queden en el centro del conjunto de celdas
-nuevas que van a cubrir de $\mli{UF}$. con esto en cuenta se determina un
+nuevas que van a cubrir de $\mli{UF}$. Con esto en cuenta se determina un
 conjunto de de fronteras significativas candidatas $\mli{FSC}$ como el conjunto
 de celdas que pertenecen a $\mli{UF}$ y a la circunferencia discretizada
-\todo[inline]{este concepto capaz no queda claro. Es muy específico y explicarlo me paree que corta un poco la narrativa. Dado el conjunto $Cir=\{f\in F_i : d_{\mli{fp}}(f) \leq radio\}$ son los puntos de $Cir$ que tienen un adyacente fuera de $Cir$ } %\cite{foleyphillips}
 de $radio = min \{dCen, rango\}$ centrada en $\mli{PF}$ denotada como
-$\mathscr{C}(\mli{pf},rango)$. Finalmente para elegir una nueva frontera
+$\mathscr{C}(\mli{pf},rango)$ (\ref{eq:cir}).
+% \todo[inline]{este concepto capaz no queda claro. Es muy específico y
+% explicarlo me paree que corta un poco la narrativa. Dado el conjunto
+% $Cir=\{f\in F_i : d_{\mli{pf}}(f) \leq radio\}$ son los puntos de $Cir$ que
+% tienen un adyacente fuera de $Cir$ }
+\begin{equation} \label{eq:cir}
+\begin{aligned}
+&\mathscr{D}(\mli{pf},rango) = \{c\in\mli{CG} : d_{\mli{pf}}(c) \leq radio\}\\ 
+&\mathscr{C}(\mli{pf},rango) = \{c\in\mathscr{D}(\mli{pf},rango) : \exists cA \in ady_8(c), cA \notin \mathscr{D}(\mli{pf},rango) \}
+\end{aligned}
+\end{equation}
+
+Finalmente para elegir una nueva frontera
 significativa $\mli{fs}$ se debe elegir una frontera de $\mli{FSC}$, en esta
-propuesta se hace de forma arbitraria.
+propuesta la elección se hace de forma arbitraria.
 
-El proceso de actualizacion consiste en agreagar $\mli{fs}$ a $\mli{FS}_i$, obtener el
+El proceso de actualización consiste en agregar $\mli{fs}$ a $\mli{FS}_i$, obtener el
 conjunto de fronteras cubiertas por $\mli{fs}$ las que se denominan como
-$\mli{RC}$ (siglas de recien cubiertas), las cuales se deben remover de
-$\mli{UF}$ y se utlizan para determinar que celdas encolar a $\mli{PF}$.
+$\mli{RC}$ (siglas de recién cubiertas), las cuales se deben remover de
+$\mli{UF}$ y se utilizan para determinar que celdas encolar a $\mli{PF}$.
 El encolar nuevas fronteras en $\mli{PF}$ es necesario para que el criterio de
-eleccion propuesto funcione de forma correcta, siendo las fronteras agregadas
-para ser cubiertas en proximas iteraciones las fronteras en $\mli{UF}$ que son
-adyacentes a las foronteras recien cubiertas.
+elección propuesto funcione de forma correcta, siendo las fronteras agregadas
+para ser cubiertas en próximas iteraciones las fronteras en $\mli{UF}$ que son
+adyacentes a las fronteras recién cubiertas.
 
-Un ejemplo de ejecucion para el caso presentado en la figura
+Un ejemplo de ejecución para el caso presentado en la figura
 \ref{fig:ejemploFSKMMal} se muestra en la figura \ref{fig:ejemploFSCub}. En el
-apendice \ref{EXE:sfbc} se muestra la misma ejecucion con un mayor nivel de
+apéndice \ref{EXE:sfbc} se muestra la misma ejecución con un mayor nivel de
 detalle.
 
 \begin{figure}[H]
   \centerfloat
-  \subfloat[Incializacion de $\mli{FP}$, $\mli{UF}$ y $\mli{FS_i}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a2.png}}
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b5.png}}
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/c5.png}}
+  \subfloat[Incializacion de $\mli{PF}$, $\mli{UF}$ y $\mli{FS_i}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a2.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{PF}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b5.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{PF}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/c5.png}}
 
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/d5.png}}
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/e5.png}}
-  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f4.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{PF}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/d5.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{PF}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/e5.png}}
+  \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{PF}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/f4.png}}
 
   \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
   \subfloat[Resultado final.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal2.png}}
-  % \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal3.png}}
 
   \caption[Proceso de simplificación de fronteras según cubrimiento.]{Proceso
     de simplificación de fronteras según cubrimiento.  Las fronteras de
     $F_i$ se indican con azul si pertenecen a $\mli{UF}$ y con amarillo de lo
-    contrario. Con magenta se indican las celdas en $\mli{FP}$ siendo la
-  numeracion su orden en la cola y $\mli{fp}$ la ultima desencolada. Las fronteras significativas se indican con
+    contrario. Con magenta se indican las celdas en $\mli{PF}$ siendo la
+  numeración su orden en la cola y $\mli{pf}$ la ultima desencolada. Las fronteras significativas se indican con
 verde, siendo las circunferencias rojas de radio $rango=5.6$ (largos de celda) centradas en estas indicadores de su cubrimiento.}\label{fig:ejemploFSCub}
 
 \end{figure}
 
 
 \section{Asignación de objetivos}\label{sec:asigTar}
-% Comentar el tema de que uso wurm, que cambio como obtengo el gvd haciendo uso de una variante del metodo inc presentado en Lau que tenia esas mejoras que se mencionaron en \ref{subsec:constGVDInc}. Decir que se va a comentar a detalle las variaciones desarrolladas la seccion \ref{sec:MiConstGVD}. 
 
 Cuando un robot se encuentra ocioso este le solicita a la central que le asigne
-un nuevo objetivo, esto desencadena el proceso de asignacion de
-objetivos que se describe a lo largo de esta seccion.
+un nuevo objetivo, esto desencadena el proceso de asignación de
+objetivos que se describe a lo largo de esta sección.
 
-La asignación de objetivos se basa en la idea presentada en
-\ref{subsec:wurmCoord}, que sostiene que es conveniente que los robots se
+La asignación de objetivos se basa en la estrategia de coordinación presentada
+en \ref{subsec:wurmCoord}, que sostiene que es conveniente que los robots se
 asignen a los objetivos de forma que estos se distribuyan uniformemente sobre
-las habitaciones y corredores de un entorno estructurado, que se corresponden
-las regiones (tambien llamados segmentos) de un mapa topológico (seccion
-\ref{subsec:mapas}).
+las habitaciones y corredores (segmentos) de un entorno estructurado, que se
+corresponden las regiones de un mapa topológico (sección \ref{subsec:mapas}).
 
 La asignación de objetivos consiste una subasta donde los objetivos de
-exploracion son subastados entre los robots. La subasta se puede separar en
-tres partes, \emph{obtencion de informacion}, \emph{valuacion} y
-\emph{resolucion}. La \emph{obtencion de informacion}, es la etapa en la cual
-todos los datos necesarios para llevar adelante la subasta (los objetivos de
-exploracion) son determinados. La \emph{valuacion} abarca la distribuicion de
-la informacion obtenida desde la central hacia los robots, el juicio de valor
-de cada robot a cada objetivo recibido y el posterior envio de estas
-valoraciones desde los robots hacia la central. La \emph{resolucion} contempla
-la recepcion de las valoraciones por la central, un postprocesamiento sobre
-estos, la asignacion de objetivos a robots segun la valoraciones y los
-segmentos a los cuales pertenece cada objetivo, finalizando con la notificacion
+exploración son subastados entre los robots. La subasta se puede separar en
+tres partes, \emph{obtención de información}, \emph{valuación} y
+\emph{resolución}. La \emph{obtención de información}, es la etapa en la cual
+todos los datos necesarios para llevar adelante la subasta (por ejemplo los objetivos de
+exploración) son determinados. La \emph{valuación} abarca la distribución de
+la información obtenida desde la central hacia los robots, el juicio de valor
+de cada robot a cada objetivo recibido y el posterior envió de estas
+valoraciones desde los robots hacia la central. La \emph{resolución} contempla
+la recepción de las valoraciones por la central, un postprocesamiento sobre
+estos, la asignación de objetivos a robots según la valoraciones y los
+segmentos a los cuales pertenece cada objetivo, finalizando con la notificación
 del objetivo que le fue asignado a cada robot.
 
 Con respecto a la separación del problema de asignación de objetivos mencionada
-en la seccion \ref{sec:exploracion}, la parte de identificacion de objetivós
-esta incluida en la \emph{obtencion de informacion}, y la parte de
-distribuición de objetivos se corresponde con el el resto de lo que se describe
-en esta seccion.
+en la sección \ref{sec:exploracion}, la parte de identificación de objetivos
+esta incluida en la \emph{obtención de información}, y la parte de
+distribución de objetivos se corresponde con el el resto de lo que se describe
+en esta sección.
 
-% Para que la subasta sea llevada a cabo se deben distribuir los objetivos de
-% exploracion entre los robots para que estos asignen valores a cada uno segun
-% que tan conveniente les es llegar a ellos. Posteriormente los robots deben
-% enviar las valuaciones realizadas a la central,
-
-% la cual debera resolver que
-% objetivo le corresponde a que robot segun las valuaciones recibidas y los
-% segmentos en dode se ubican los objetivos, procurando distribuir lo más posible
-% a los robots sobre los segmentos. %, el metodo utlizado para lograr este se
-% describe en \ref{subsec:MiResSub}. Finalmente la central notifica a cada robot
-% su objetivo asignado.
-
-% En resumen la subasta consiste en valuacion y resolucion. 
-% valuacion: mandar los objetivos y esperar por sus valuiaciones.
-% resolucion: resolucion y informar a laos robots
-
-% asignación de objetivos se puede resumir en:
-% \begin{enumerate}
-%   \item Identificación de objtivos
-% \end{enumerate}
-
-% Para esto, una vez identificados los objetivos segun lo que se presenta en la
-% sección \ref{subsec:MiSimp}, cada objetivo se le asigna la region que le
-% corresponde en el mapa topológico contruido (seccion \ref{subsec:MiMapTOp}(
-
-% \subsection{Mapa topológico}\label{subsec:MiMapTOp}
-
-
-% \subsection{Protocolo de susbasta}\label{subsec:MiProtSub}
-% Como se comentó anteriormente, la estación central es la encargada de la subasta de segmentos. Los robots son quienes recopilan la información, arman su mapa local y lo envían a la central, que por medio del modulo combinador de mapas, crea un mapa global. Este mapa global es convertido en una grilla de ocupación y segmentado a partr de un GVD. 
-% Adicionalmente, fue reutilizada la implementación del algoritmo K-means para obtener las fronteras más significativas según el radio del robot, como fue explicado en al sección 2.1.
-
-% Comentar proceso, enfasis en como es que funciona el flujo: pedido de los robots, identificacion, robots a valuar, recibir valuaciones, asignar y mandar asigaciones a los robots.
-
-% Deternerse en cada parte explicando detalles.
-
-% El pedido no es muy complejo.
-
-% ID ya se explico.
-
-% Envio es directo, la valuacion tiene algunos detalles.
-
-% \subsubsection{Recepcion de valuaciones}
-% Recepcion, aca esta el protocolo de recepcion, quizas es pertinente comentarlo por lo menos por arriba.
-% \subsubsection{Envio de asignaciones}
-% Mandar asignaciones es casi que trivial
-
-\subsection{Obtencion de informacion}\label{subsec:obtInfo}
-Como se menciono anteriormente cuando un robot ocioso solicita un objetivo a la
-central y se da comienzo a una nueva subasta.%, esto desencadana una nueva subasta de no encontrarse una en curso.
+\subsection{Obtención de información}\label{subsec:obtInfo}
+%, esto desencadena una nueva subasta de no encontrarse una en curso.
 % Notar que si existe una subasta en curso el robot va recibir un objetivo cuando
 % esta termine, por lo que puede no ser necesario iniciar otra.
-La etapa de \emph{obtencion informacion} es la primera etapa de la subasta. La
-informacion que se obtiene en esta son los objetivos de exploracion, un GVD y
-las regiones del mapa mapa topológico del entorno explorado que con el motivo
-de identificar en que segmento se encuentra cada objetivo de exploracion, para
-porsteriomente poder asignar distribuyendo a los robots sobre estos. 
+Como se menciono anteriormente cuando un robot ocioso solicita un objetivo a la
+central se da comienzo a una nueva subasta.
+La etapa de \emph{obtención información} es la primera etapa de la subasta. La
+información que se obtiene en esta etapa son los objetivos de exploración, un
+GVD y los segmentos del entorno explorado.
+% que con el motivo
+% de identificar en que segmento se encuentra cada objetivo de exploración, para
+% posteriormente poder distribuir a los robots sobre estos. 
 
-La identificacion de objetivos se lleva a cabo con el metodo descrito en la
+La identificación de objetivos se lleva a cabo con el método descrito en la
 sección \ref{subsec:MiSimp}.
 
-La identificación de los segmentos que es necesaria para distribuir los robots
-sobre dichos segmentos, se lleva a cabo en esta etapa con una tecnica que al
-igual que en el trabajo original de \cite{wurm2008coordinated} se basa en la
-tecnica de \cite{Thrun1998} explicada en la seccion \ref{subsec:mapaTopGVD} que
-hace uso de un GVD (detalles de la implementación de esta tecnica se tratan en
-\ref{subsec:mapaTopGVDGrid}). Uno de los cambios principales con respecto al
-trabajo original de \cite{wurm2008coordinated} es la forma en la cual se
-contruye el GVD. En el trabajo original se hace uso de un metodo de
-construccion no incremental, en este proyecto con el motivo de alcanzar una
-implementación eficiente para su uso en tiempo real (seccion
-\ref{subsec:constGVDInc}) se reemplaza por una variante del algoritmo
-incremental \emph{brushfire dinamico} que se presenta en la seccion
-\ref{sec:MiConstGVD}.
+La identificación de los segmentos se logra aplicando una técnica que se basa
+en la propuesta de \cite{Thrun1998} explicada en la sección
+\ref{subsec:mapaTopGVD}. Detalles de como esta técnica fue implementada se
+presentan en la sección \ref{subsec:mapaTopGVDGrid}. 
 
+El GVD requerido para identificar los segmentos se construye de forma
+incremental con una variante del \emph{brushfire dinámico} que se comenta en la
+sección \ref{sec:MiConstGVD}.
+% de no de los cambios principales con
+% respecto al trabajo original de \cite{wurm2008coordinated} es la forma en la
+% cual se contruye el GVD. En el trabajo original se hace uso de un método de
+% construccion no incremental, en este proyecto con el motivo de alcanzar una
+% implementación eficiente para su uso en tiempo real (seccion
+% \ref{subsec:constGVDInc})
 
-\subsection{Valuacion} \label{subsec:MiValSub}
+\subsection{Valuación} \label{subsec:MiValSub}
 
-Luego de obtenida la informacion comienza la etapa de \emph{valuacion}
+Luego de obtenida la información comienza la etapa de \emph{valuación}
 con la central distribuyendo los objetivos y el GVD hacia los robots. Cuando un
-robot recibe la informacion este asigna dos valores a cada objetivo, el largo
+robot recibe la información este asigna dos valores a cada objetivo, el largo
 del camino hacia a el y un costo asociado a la complejidad del camino.
 
 Calcular el largo de un camino implica determinar el camino en sí. En este
 proyecto los caminos se componen de una secuencia de puntos en el espacio que
-comienza en la posicion del robot y termina en el objetivo. Los caminos se
+comienza en la posición del robot y termina en el objetivo. Los caminos se
 calculan de forma distinta dependiendo de la clase de objetivo al que llevan,
 existiendo dos clases, trivial y no trivial.
 
 Los objetivos triviales se definen como los objetivos para los cuales el
 segmento de recta que existe entre el robot y el objetivo no contiene
-obstaculos, de lo contrario el objetivo es no trivial. Para determinar esto, se
+obstáculos, de lo contrario el objetivo es no trivial. Para determinar esto, se
 discretiza el segmento de recta en celdas \cite{foleyphillips} y se comprueba
-en el mapa global (grilla de ocupacion) almacenado en el robot, alguna de las
+en el mapa global (grilla de ocupación) almacenado en el robot, alguna de las
 celdas tiene un estado ocupado. 
 
 El camino hacia objetivos triviales se determina como los puntos ubicados en
 los extremos del segmento de recta que existe entre el robot y el objetivo, que
-se encuentra libre de obstaculos. Un ejemplo de un camino trivial se muestra
+se encuentra libre de obstáculos. Un ejemplo de un camino trivial se muestra
 en la figura \ref{fig:caminoT}.
 
 En el caso de los objetivos no triviales se hace uso del GVD recibido como
-parte de la informacion de la subasta, aprovechando que este constituye un
-\emph{roadmap} (seccion \ref{subsec:mapacarr}). El proceso para construir el
+parte de la información de la subasta, aprovechando que este constituye un
+\emph{roadmap} (sección \ref{subsec:mapacarr}). El proceso para construir el
 camino puede dividir en tres partes cada una asociada a una de las propiedades
 que caracterizan a un \emph{roadmap}: accesibilidad, conectividad y capacidad
 de salida. La parte asociada accesibilidad consiste en encontrar un camino
-desde el robot al GVD, lo cual se hace a traves de un \emph{breadth-first
-search} (BFS), comenzando en la celda asociada a la posicion del robot y
-deteniendose apenas se visita una celda $c_1$ perteneciente al GVD. La que se
-relaciona con la capacidad de salida es analoga a la accesibilidad pero el
+desde el robot al GVD, lo cual se hace a través de un \emph{breadth-first
+search} (BFS), comenzando en la celda asociada a la posición del robot y
+deteniéndose apenas se visita una celda $c_1$ perteneciente al GVD. La que se
+relaciona con la capacidad de salida es análoga a la accesibilidad pero el
 desde el objetivo a alguna celda $c_2$ perteneciente al GVD. Por ultimo la parte
 vinculada con la conectividad se basa en establecer un camino sobre las celdas
 pertenecientes al GVD desde $c_1$ a $c_2$, lo cual se hace aplicando algoritmo
 $A^*$. Conectando los centros de celdas de estos tres caminos se obtiene el
-camnino completo. En la figura \ref{fig:caminoNT} se presenta un ejemplo de un
-camnino no trivial.
+camino completo. En la figura \ref{fig:caminoNT} se presenta un ejemplo de un
+camino no trivial.
 
 \begin{figure}[H]
   \centerfloat
@@ -814,17 +741,17 @@ entre si con líneas magenta.}\label{fig:camino}
 
 
 El costo asociado a la complejidad en el caso de objetivos triviales se
-corresponde a una estimacion del tiempo que demora el robot en rotar de forma
+corresponde a una estimación del tiempo que demora el robot en rotar de forma
 que su parte delantera apunte hacia el objetivo. Y en el caso de objetivos no
-triviales se utiliza la maxima penalizacion usada para objetivos no triviales.
-El proposito de esto es diferenciar los objetivos triviales sin beneficiar a
+triviales se utiliza la maxima penalización usada para objetivos no triviales.
+El propósito de esto es diferenciar los objetivos triviales sin beneficiar a
 los objetivos no triviales. Este costo se aplica para incentivar a que el robot
 continue siendo asignado a los objetivos triviales que tiene por adelante al
 explorar.
 
-Obtenidos ambos valores para cada objetivo estos se envian hacia la central
-junto a la ubicacion actual del robot, siendo toda esta informacion en su
-conjnto considerada una valuacion. %\todo{o mensaje de valuacion, como quede mejor}
+Obtenidos ambos valores para cada objetivo estos se envían hacia la central
+junto a la ubicación actual del robot, siendo toda esta información en su
+conjunto considerada una valuación. %\todo{o mensaje de valuación, como quede mejor}
 
 % De esta
 % forma los objetivos triviales se valuan distinto segun que tanto tiene que
@@ -836,40 +763,40 @@ conjnto considerada una valuacion. %\todo{o mensaje de valuacion, como quede mej
 % tres propiedades de un roadmap: accesibilidad, conectividad y capacidad de
 % salida. La accesibilidad consiste en encontrar un camino desde el robot al GVD,
 
-% La valuacion abarca la distribuicion de los objetivos de exploracion desde la
+% La valuacion abarca la distribuicion de los objetivos de exploración desde la
 % central hacia los robots, la asignación de valores que cada robot debe hacer a
 % cada objetivo y el posterior envio de estas valoraciones desde los robots hacia
 % la central. 
 
 \subsection{Resolución} \label{subsec:MiResSub}
-La resolucion comienza con la central recibiendo las valuaciones realizadas por
-los robots. Al recibirse la primera valuacion existe una ventana de tiempo en
+La resolución comienza con la central recibiendo las valuaciones realizadas por
+los robots. Al recibirse la primera valuación existe una ventana de tiempo en
 la que la central continuara recibiendo nuevas valuaciones. Terminada esta
-ventana se ejecuta un algoritmo que resulta en la asignacion de objetivos a los
+ventana se ejecuta un algoritmo que resulta en la asignación de objetivos a los
 robots. Finalmente las asignaciones realizadas son comunicadas a los robots.
-% La resolucion es el proceso de asignar los objetivos La resolucion contempla
-% la recepcion de las valoraciones por la central, la asignacion de objetivos a
+% La resolución es el proceso de asignar los objetivos La resolución contempla
+% la recepción de las valoraciones por la central, la asignación de objetivos a
 
-% robots segun y la notificacion del objtivo asignado a los robots. 
-% de exploracion a los
+% robots según y la notificación del objetivo asignado a los robots. 
+% de exploración a los
 % robots. 
-\subsubsection{Recepcion de valuaciones}
-Como se menciono anteriormente luego de recibida la primera valuacion existe
+\subsubsection{Recepción de valuaciones}
+Como se menciono anteriormente luego de recibida la primera valuación existe
 una ventana de tiempo en la que la central continuara recibiendo nuevas
-valuaciones luego de la cual se da por concluida la recepcion de valuaciones. 
+valuaciones luego de la cual se da por concluida la recepción de valuaciones. 
 
-El proposito de utlizar una ventana es que en escenarios reales los robots
+El propósito de utilizar una ventana es que en escenarios reales los robots
 pueden dejar de comunicarse por alguna razón (desconexiones de red, accidentes
 que dejen a los robots sin funcionar, entre otros), por lo tanto esperar por
 las valuaciones de todos los robots puede ser una espera infinita.
 
 Dado que el problema que los robots deben resolver para generar las valoraciones es
-similar, se asume que el tiempo se demora en generar las valoraciones tambien
+similar, se asume que el tiempo se demora en generar las valoraciones también
 es similar, adicionalmente dicho tiempo es proporcional al area del
 mapa que se encuentra explorada, por lo tanto se opto por utilizar una ventana
 dinámica de un tamaño que, considerando lo que demoraron las valoraciones de
 los robots en la subasta anterior, sea lo suficientemente grande como para que
-todos los robots que esten en condiciones de responder con sus valoraciones
+todos los robots que estén en condiciones de responder con sus valoraciones
 tengan el tiempo necesario para hacerlo.
 
 Notar que una vez que se reciben las valoraciones de todos los robots
@@ -877,9 +804,9 @@ funcionales es innecesario continuar esperando, por lo tanto de recibirse
 dichas valoraciones la ventana de resolución es terminada prematuramente
 evitando esperas innecesarias.
 
-Siendo $tr_i$ el tiempo que paso desde la recepcion de la primera valuacion
-hasta el comienzo de la ejecucion del algoritmo de asignacion y $vr_i$ la
-duracion de la ventana $i$ definida en \ref{eq:ventanaVals}.
+Siendo $tr_i$ el tiempo que paso desde la recepción de la primera valuación
+hasta el comienzo de la ejecución del algoritmo de asignación y $vr_i$ la
+duración de la ventana $i$ definida en \ref{eq:ventanaVals}.
 
 \begin{equation} 
   vr_i = 
@@ -892,7 +819,7 @@ duracion de la ventana $i$ definida en \ref{eq:ventanaVals}.
   \label{eq:ventanaVals}
 \end{equation}
 
-El valor de la duracion $v_i$ resulta de asumir que de una subasta a la
+El valor de la duración $v_i$ resulta de asumir que de una subasta a la
 siguiente no se demorara más del doble del tiempo en obtener las valuaciones de
 todos los robots, dando un margen de error de 0.5 segundos, especialmente útil
 cuando $rt_i$ es muy pequeño. Lo asumido se corresponde con lo ocurre en las
@@ -908,92 +835,64 @@ pruebas realizadas.
 
 
 % y como estas se guardan al recibirse
-\subsubsection{Algoritmo de asignacion de objetivos}
-% Segun lo explicado en la seccion anterior
-Cuando la central recibe una valuacion de un robot $r_i$, esta se encarga de
-procesar la informacion contenida en la valuacion de forma de obtener un único
+\subsubsection{Algoritmo de asignación de objetivos}
+% Según lo explicado en la sección anterior
+Cuando la central recibe una valuación de un robot $r_i$, esta se encarga de
+procesar la información contenida en la valuación de forma de obtener un único
 costo $c_{i,j}$ del robot $r_i$ a cada objetivo $o_j$. Para un objetivo en
-$o_j$ la valuacion del robot $r_i$ contiene el costo $\mli{cca}_{i,j}$ del camino de
+$o_j$ la valuación del robot $r_i$ contiene el costo $\mli{cca}_{i,j}$ del camino de
 $r_i$ a $o_j$ y el costo $\mli{cco}_{i,j}$ asociado a la complejidad de dicho camino.
-Adicionalmente a traves de la posicion recibida de $r_i$ se determina un descuento 
+Adicionalmente a través de la posición recibida de $r_i$ se determina un descuento 
 $\mli{dse}_{i,j}$ que toma un valor constante menor a cero ($-10$ en al
-implemetnacion) si el robot $r_i$ pertence al mismo segmento que el objetivo
-$o_j$ y cero de lo contrario. Finalmente el costo $c_{i,j}$ se calcula segun la
-ecuacion \ref{eq:costoTot}.
+implementación) si el robot $r_i$ pertenece al mismo segmento que el objetivo
+$o_j$ y cero de lo contrario. Finalmente el costo $c_{i,j}$ se calcula según la
+ecuación \ref{eq:costoTot}.
 
 \begin{equation} 
   c_{i,j} = \mli{cca}_{i,j} + \mli{cco}_{i,j} + \mli{dse}_{i,j}
   \label{eq:costoTot}
 \end{equation}
 
-Los costos $\mli{cca}_{i,j}$ y $\mli{cco}_{i,j}$ tienen como proposito
-penalizar en la asignacion a los objetivos segun la dificicultad asociada a los
+Los costos $\mli{cca}_{i,j}$ y $\mli{cco}_{i,j}$ tienen como propósito
+penalizar en la asignación a los objetivos según la dificultad asociada a los
 caminos que llevan a esto. Por otro lado el descuento $\mli{dse}_{i,j}$
 incentiva que los robots se mantengan explorando un mismo segmento, lo cual
 desencadena comportamientos deseables como el de que un robot continue
-explorando un mismo corredor, revelando rapidamente la estructura de un entorno
-estrucutrado.
+explorando un mismo corredor, revelando rápidamente la estructura de un entorno
+estructurado.
 
-% Los robots envian a la central dos valores junto a su posicion, cuando la central lo recibe estos se 
-
-% esto, la posicion de dicho robot y
-% dos valores, al recibirse la valuacion en la central dichos valores son
-% procesados de forma
-
-
-% La version original de
-% \cite{wurm2008coordinated} lleva a cabo la asignacion utilizando el metodo
-% hungaro. Este logra la asignacion de forma optima en $O(n^3)$ siendo $n$ el numero de segmentos.
-% la cantidad de objetivos que contienen
-% \todo[inline]{El metodo hungaro capaz no considera que el numero de robots
-%   asigandos a un segmento debe ser menor que el numero de fronteras que tiene
-%   ya que no tiene sentido asignar a un robot a un segmento si este no tiene
-%   objetivos disponibles. Habria que ver bien como funciona el metodo hungaro,
-%   pero creo que es una asignacion robot-segmento que no considera otra cosa que
-%   el costo, num robots y num segmentos, por lo tanto el num de fronteras de un
-%   segmento no se estaria considerando.}
-
-% El algorimo \ref{alg:resolucionsubastasegmentos} presenta un pseudocodigo del
-% algoritmo de asigacion donde $R$ el conjunto de los identificadores de los
-% robots, $O$ el conjnto de los identificadores de los objetivos y $Costos$ el
-% conjunto los $c_{i,j}$ computados a partir de las valuaciones recibidas
-% Con estos costos como insumos se ejecuta un algorimo de asignacion de objetivos
-% a robots, que busca asignar a cada robot a su objetivo mejor valuado con la
-% restriccion de que los objetivos asignados deben estar distribuidos sobre los
-% segmentos (seccion \ref{subsec:wurmCoord}). 
-
-Con estos costos como insumos se ejecuta un algorimo de asignacion de objetivos
+Con estos costos como insumos se ejecuta un algoritmo de asignación de objetivos
 a robots, que busca asignar a cada robot a su objetivo mejor valuado con la
-restriccion de que los objetivos asignados deben estar distribuidos sobre los
-segmentos. Este algormitmo de asignacion tiene principalmente dos ventajas con
-respecto al presentado en la seccion \ref{subsec:wurmCoord}. La primera es que
-resuelve la asignacion de robots a objetivos directamente, en lugar de asignar
+restricción de que los objetivos asignados deben estar distribuidos sobre los
+segmentos. Este algoritmo de asignación tiene principalmente dos ventajas con
+respecto al presentado en la sección \ref{subsec:wurmCoord}. La primera es que
+resuelve la asignación de robots a objetivos directamente, en lugar de asignar
 primero robots a segmentos, y luego resolver asignaciones de los robots a
 objetivos localmente a cada segmento. La segunda es distribuye los robots en
 los segmentos considerando el numero de objetivos disponibles en cada segmento,
-en lugar de simplemente hacer una asignacion uniforme. Una situacion que
-ejemplifica el problema de una asignacion uniforme es una en la cual se tienen
+en lugar de simplemente hacer una asignación uniforme. Una situación que
+ejemplifica el problema de una asignación uniforme es una en la cual se tienen
 $10$ robots y $2$ segmentos, $s_1$ un solo objetivo y $s_2$ con $9$. Una
-asignacion uniforme resulta en asignar $5$ robots a cada segmento aunque esto
-implique que en $s_1$ quedeb $4$ robots ociosos (sin objetivo asignado). El
-algormitmo presentado a continuacion resuleve este tipo de problemas a la vez
+asignación uniforme resulta en asignar $5$ robots a cada segmento aunque esto
+implique que en $s_1$ quede $4$ robots ociosos (sin objetivo asignado). El
+algoritmo presentado a continuación resuelve este tipo de problemas a la vez
 que permite distribuciones uniformes de haber suficientes objetivos disponibles
-en cada segmento. Por ejemplo para el caso planteado anteriormente su ejecucion
+en cada segmento. Por ejemplo para el caso planteado anteriormente su ejecución
 resulta en un solo robot asignado en $s_1$ y los restantes $9$ asignados en
 $s_2$, mientras que para un caso alternativo en el que $s_1$ y $s_2$ tienen $5$
-objetivos cada uno, resulta en una asignacion uniforme.
+objetivos cada uno, resulta en una asignación uniforme.
 
-El algorimo de asignacion, se corresponde al algorimo
+El algoritmo de asignación, se corresponde al algoritmo
 \ref{alg:resolucionsubastasegmentos}, donde $R$ es el conjunto de los
 identificadores de los robots de los cuales se recibieron valuaciones, $O$ el
-conjnto de los identificadores de los objetivos valuados, $Costos$ un conjunto
+conjunto de los identificadores de los objetivos valuados, $Costos$ un conjunto
 de tuplas $(c_{i,j},r_i,o_j)$ los $c_{i,j}$ computados a partir de las
-valuacion recibida de $r_i$ para $o_j$ y $S$ el conjunto de
-segmentos. La funcion $segmento : O \rightarrow S$ dado un objetivo devulve el
-segmento al que pertence y la funcion $\#objetivos : S \rightarrow N$ devuelve
+valuación recibida de $r_i$ para $o_j$ y $S$ el conjunto de
+segmentos. La función $segmento : O \rightarrow S$ dado un objetivo devuelve el
+segmento al que pertenece y la función $\#objetivos : S \rightarrow N$ devuelve
 el numero de objetivos en un segmento.
 % Los conjuntos $O_1$,$O_2$,...,$O_k$,...,$O_{|S|}$ contienen los
-% objetivos que estan dentro de un segmento $s_k\in S$.
+% objetivos que están dentro de un segmento $s_k\in S$.
 
 \vspace{1cm}
   
@@ -1002,7 +901,7 @@ el numero de objetivos en un segmento.
   \SetKwInOut{Input}{Entrada}
   \Input{$R, O, S, Costos$} % O_1, O_2,...,O_{|S|}$}
 %   // PARTE 1
-    $segObjs :=$ Multiconjunto vacio 
+    $segObjs :=$ Multiconjunto vació 
 
   
 %   /// recorrida de todos los elementos del diccionario, con el propósito de construir segFrontColaPrio
@@ -1035,7 +934,7 @@ el numero de objetivos en un segmento.
     $segRobNums :=$ diccionario de $S$ a enteros, siendo 0 el entero asignado por defecto\\   
 
     \While{$R \neq \emptyset \land O \neq \emptyset$}{
-      $(c_{i,j}, r_i, o_j) := min\ Costos$ \tcp{Tupla de $Costos$ con minimo $c_{i,j}$}
+      $(c_{i,j}, r_i, o_j) := min\ Costos$ \tcp{Tupla de $Costos$ con mínimo $c_{i,j}$}
       $Costos := Costos - \{(c_{i,j}, r_i, o_j)\}$\\
       $s_k := segmento(o_j)$\\
       $distribuido := segRobNums[s_k] < cocienteDist \lor (restoDist > 0 \land segRobNums[s_k] < cocienteDist + 1)$\\
@@ -1049,82 +948,84 @@ el numero de objetivos en un segmento.
         }
       }
     }
-  \Return asgnaciones 
+  \Return asignaciones 
     
- \caption{Asignacion de robots a objetivos}
+ \caption{Asignación de robots a objetivos}
  \label{alg:resolucionsubastasegmentos}
 \end{algorithm}
 
-El algorimo se puede dividir en dos partes, el \emph{calculo de valores}
-$cocienteDist$, $restoDist$ (líneas 1-18) y la \emph{asignacion distribuida} (líneas
+\begin{permissive}
+El algoritmo se puede dividir en dos partes, el \emph{calculo de valores}
+$cocienteDist$, $restoDist$ (líneas 1-18) y la \emph{asignación distribuida} (líneas
 19-36). 
+\end{permissive}
 
-Los valores $cocienteDist$ y $restoDist$ se utlizan para lograr una asignacion
-distribuida sobre los segmentos conisderando los objetivos contenidos en cada
-uno. La distribucion deseada se corresponde con la distribucion que se logra al
+Los valores $cocienteDist$ y $restoDist$ se utilizan para lograr una asignación
+distribuida sobre los segmentos considerando los objetivos contenidos en cada
+uno. La distribución deseada se corresponde con la distribución que se logra al
 hacer $N$ rondas en las que se asigna un solo robot por segmento con tenga
 objetivos sin asignar. La ronda $N$ termina cuando no quedan robots o objetivos
 por asignar. Si existen menos objetivos que robots se tiene que la ronda $N$
 culmina con todos los objetivos asignados y algunos robots ociosos. De existir
 más objetivos que robots luego de la ronda $N$ se pueden tener segmentos cuyos
-objetivos estan todos asignados y se tienen segmentos dentro de los que 
-existen objetivos sin asignar, la distribucion sera unfirme sobre estos ultimos
+objetivos están todos asignados y se tienen segmentos dentro de los que 
+existen objetivos sin asignar, la distribución sera uniforme sobre estos últimos
 segmentos. Es decir los $K$ segmentos que tienen objetivos sin asignar
-cumpliran con (\ref{ec:uniform}), existiendo $restoDist$ segmentos con
+cumplirán con (\ref{ec:uniform}), existiendo $restoDist$ segmentos con
 $N=cocienteDist+1$ robots asignados y $K-restoDist$ segmentos con
 $cocienteDist$ robots asignados. El \emph{calculo de valores} se lleva a cabo
-inicializando $cocienteDist$ y $restoDist$ asumiendo una distribucion
-completamente uniforme (líneas 5-6 y 9-10 primera iteracion), sin considerar si
+inicializando $cocienteDist$ y $restoDist$ asumiendo una distribución
+completamente uniforme (líneas 5-6 y 9-10 primera iteración), sin considerar si
 es posible dado el numero de objetivos en cada segmento. Luego de forma
 iterativa, segmento a segmento y comenzando por los que tienen menos objetivos
-(líneas 11-12), comprobar si son de los segmentos cuyos objetivos seran todos
-asignados (línea 13) y de serlo ajustar los valores para que la distribucion
+(líneas 11-12), comprobar si son de los segmentos cuyos objetivos serán todos
+asignados (línea 13) y de serlo ajustar los valores para que la distribución
 sea uniforme en el resto de conjuntos (líneas 14-17 y 9-10). Las iteraciones
-continuan hasta que solo quedan los segmentos en los que quedaran objetivos sin
+continúan hasta que solo quedan los segmentos en los que quedaran objetivos sin
 asignar (línea 8), cuando esto sucede se dice que $cocienteDist$ y $restoDist$
 convergen.
-% a los valores consistentes con la distribucion deseada.
+% a los valores consistentes con la distribución deseada.
 
-Con los valores $cocienteDist$ y $restoDist$ calculados la \emph{asignacion
+Con los valores $cocienteDist$ y $restoDist$ calculados la \emph{asignación
 distribuida} consiste en retirar las tuplas $(c_{i,j},r_i,o_j)$ de $Costos$
 comenzando por las de menor costo $c_{i,j}$ (líneas 22-23) y para cada una de
 estas asignar $r_i$ a $o_j$ (líneas 27-33), si $r_i$ y $o_j$ no forman parte de
-ninguna de las asiganciones realizadas hasta el momento, y si la asignacion
-mantiene la distribuicion deseada (líneas 25-26). Esto se repite hasta que
-todos los robots estan asignados o que no quedan más objetivos por asignar
+ninguna de las asignaciones realizadas hasta el momento, y si la asignación
+mantiene la distribución deseada (líneas 25-26). Esto se repite hasta que
+todos los robots están asignados o que no quedan más objetivos por asignar
 (línea 21).
 
 % , estos se calculan de forma que todos los segmentos tengan todos sus objetivos asignados a robots, un numero de robots asignadosk
 
 En resumen, la central asigna a los robots a objetivos considerando los costos
-y la restriccion de distribuir los robots sobre los segmentos considerando la
-cantidad de objetivos que contienen. Luego de ejecutar el algorimo de
-asignacion la central informa a cada robot el objetivo que le fue asignado,
+y la restricción de distribuir los robots sobre los segmentos considerando la
+cantidad de objetivos que contienen. Luego de ejecutar el algoritmo de
+asignación la central informa a cada robot el objetivo que le fue asignado,
 quedando a la espera de nuevos pedidos por parte de los robots para comenzar
 una nueva subasta. 
 
 \section{Segmentación}\label{subsec:mapaTopGVDGrid}
 % segun si las celdas ocupadas más cercanas $oc_1$ y $oc_2$ de
 
-La segmentacion del entorno se basa en el metodo que comentado en la seccion
+La segmentación del entorno se basa en el método que comentado en la sección
 \ref{subsec:mapaTopGVD}. Dado que el entorno se representa con grillas
 discretas en lugar de ser un espacio continuo, es necesario definir los
-equivalentes discretizados de GVD, como tambien de los puntos criticos y líneas
+equivalentes discretizados de GVD, como también de los puntos críticos y líneas
 criticas asociadas según los cuales se dividen los segmentos.
 
 Un \emph{GVD discretizado} consiste en el conjunto $\mli{GVDD}$ de celdas que
-pertenecen al GVD discretizado, la construccion de este se trata en la seccion
-\ref{sec:MiConstGVD}. Desde este punto se referira al GVD discretizado
+pertenecen al GVD discretizado, la construcción de este se trata en la sección
+\ref{sec:MiConstGVD}. Desde este punto se referirá al GVD discretizado
 simplemente como GVD.
 %y que los conceptos de puntos y líneas criticas
 % se definen en espacios continuos es necesario adaptarlos. 
 
 % considerando el mapa de distancia
 % subproducto de \emph{brushfire dinamico}
-Dada funcion de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ que se
-corresponde con un mapa de distancia (seccion \ref{subsec:constGVD}) a las
+Dada función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ que se
+corresponde con un mapa de distancia (sección \ref{subsec:constGVD}) a las
 celdas pertenecientes a generadores, se define el conjunto de las \emph{celdas
-criticas} (puntos criticos discretizados) $\mli{CCr}$ segun
+criticas} (puntos críticos discretizados) $\mli{CCr}$ según
 (\ref{eq:critDisc}). 
 
 % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
@@ -1137,9 +1038,9 @@ criticas} (puntos criticos discretizados) $\mli{CCr}$ segun
 \label{eq:critDisc}
 \end{equation}
 
-Esta definicion traduce el concepto de entorno en el espacio continuo
+Esta definición traduce el concepto de entorno en el espacio continuo
 en el concepto de adyacencia del espacio discreto, aunque no solo se remite a
-traducir sino que se altera ligeramente la definicion ya que es conveniente no
+traducir sino que se altera ligeramente la definición ya que es conveniente no
 solo considerar las celdas del GVD que minimizan el despeje localmente, es
 decir las tienen un despeje menor que el de sus celdas adyacentes en el GVD, si
 no ademas incluir las celdas que tienen un despeje menor o igual que el de sus
@@ -1147,17 +1048,17 @@ celdas adyacentes en el GVD y adicionalmente al menos una de sus celdas
 adyacentes en el GVD tiene un despeje mayor.
 % donde de ser solo minimo local no hay criticos pero al decir que no hay menors
 % y hay al menos uno mayor si, 
-El motivo de esto es permitir puntos criticos en situaciones como la
+El motivo de esto es permitir puntos críticos en situaciones como la
 presentadas en la figura \ref{fig:ejSegGVDGrid:CRI}, donde se puede observar un
-portar horizontal que lleva de un corredor (arriba) a una habitacion (abajo).
-El punto critico que se ubica dicho portal no es un minimo local (la celda del
+portar horizontal que lleva de un corredor (arriba) a una habitación (abajo).
+El punto critico que se ubica dicho portal no es un mínimo local (la celda del
 GVD ubicada arriba tiene igual despeje), por lo que si estas fueran las
-condiciones este no sería un critico y tanto el corredor como la habitacion
+condiciones este no sería un critico y tanto el corredor como la habitación
 serían único segmento, lo cual no es deseable. El resultado se mejora al
 considerar las condiciones planteadas en \ref{eq:critDisc} ya que como se
 menciono, la celda de arriba tiene igual despeje y la de abajo tiene un despeje
 mayor. 
-% Por otro lado la condicion $|ady(c)\cup \mli{GVD}| = 2$ es parte de las condiciones de
+% Por otro lado la condición $|ady(c)\cup \mli{GVD}| = 2$ es parte de las condiciones de
 % filtrado de puntos criticos que no se ubican en portales que separan segmentos
 % se propuestas en \cite{wurm2008coordinated}.
 
@@ -1170,38 +1071,38 @@ Para adaptar el concepto de las líneas criticas a un espacio discreto, primero
 es necesario adaptar el concepto de puntos base de un punto $p$, que refieren
 al conjunto de puntos pertenecientes a generadores que son más cercanos a $p$.
 Sea $\mli{CGen}$ el conjunto formado por todas las celdas pertenecientes a
-algun generador, las \emph{celdas base} (puntos base discretizados) $\mli{CB}_c$ de
+algún generador, las \emph{celdas base} (puntos base discretizados) $\mli{CB}_c$ de
 un a celda $c$ se definen como el conjunto de las celdas pertenecientes a
-generadores que estan a una distancia menor o igual a $\mli{DD}(c)+L$, como se
+generadores que están a una distancia menor o igual a $\mli{DD}(c)+L$, como se
 expresa en (\ref{eq:bpDisc}), siendo $L$ el largo de las celdas.
 \begin{equation}
 \mli{CB}_c = \{ b \in \mli{CGen} : d_c(b) - \mli{DD}(c) \leq L\}
 \label{eq:bpDisc}
 \end{equation}
 
-Adaptar directamente la definicion de punto base en espacio continuo a celda
+Adaptar directamente la definición de punto base en espacio continuo a celda
 base en el espacio discreto resulta en que solo las celdas pertenecientes a
-generadores que estan a minima distancia de $c$ que a una minima distanicia
-$\mli{DD}(c)$ de $c$ son las celdas base. Sin embargo la definicion dada en
-(\ref{eq:bpDisc}) no se correponde con esta debido a que al adaptar de forma
+generadores que están a minima distancia de $c$ que a una minima distancia
+$\mli{DD}(c)$ de $c$ son las celdas base. Sin embargo la definición dada en
+(\ref{eq:bpDisc}) no se corresponde con esta debido a que al adaptar de forma
 directa existen casos donde los resultados difieren de los que se obtienen en
 el espacio continuo. 
 Uno de estos casos es el que se presenta en la figura \ref{fig:bptol} donde se
-tiene una seccion horizontal de un corredor. En el espacio continuo esto genera
-la pertenecia de los puntos del centro del corredor al GVD, donde cada punto
+tiene una sección horizontal de un corredor. En el espacio continuo esto genera
+la pertenencia de los puntos del centro del corredor al GVD, donde cada punto
 $p$ que pertenece al GVD tiene dos puntos base, uno a cada lado del corredor a
 distancia $d$ de $p$. 
-El problema ocurre cuando la discretizacion de dicho corredor resulta en un
+El problema ocurre cuando la discretizados de dicho corredor resulta en un
 numero par de celdas libres entre cada celda ocupada correspondiente a una
-pared del corredor, en esta situacion se tienen dos celdas $c_1$ y $c_2$ en el
+pared del corredor, en esta situación se tienen dos celdas $c_1$ y $c_2$ en el
 centro del corredor, con al menos una de estas perteneciendo al GVD en
-representacion de los puntos el centro del corredor que pertenecen al GVD continuo.
-Suponiendo sin perdida de generalidad que $c_1$ pertenece al GVD, entoces $c_1$
+representación de los puntos el centro del corredor que pertenecen al GVD continuo.
+Suponiendo sin perdida de generalidad que $c_1$ pertenece al GVD, entonces $c_1$
 tiene una celda $b_1 \in \mli{CGen}$ a minima distancia $d_{c_1}(b_1) = \mli{DD}(c_1) =
 d-\frac{L}{2}$, mientras que la celda $b_2 \in \mli{CGen}$ está en el otro lado del
-corrdor a distancia $d_{c_1}(b_2) = d+\frac{L}{2}$, dado lo que ocurre en el
-espacio continuo esta tambien debería ser una celda base aunque no este a
-minima distancia de $c_1$. Para considerar estos casos la definicion presentada
+corredor a distancia $d_{c_1}(b_2) = d+\frac{L}{2}$, dado lo que ocurre en el
+espacio continuo esta también debería ser una celda base aunque no este a
+minima distancia de $c_1$. Para considerar estos casos la definición presentada
 en (\ref{eq:bpDisc}) incluye en $\mli{CB}_{c_1}$ a las celdas en $\mli{CGen}$ que
 tienen una distancia a $c_1$ que esta entre la minima posible de $\mli{DD}(c_1)$ y
 una maxima tolerada de $\mli{DD}(c_1)+L$, siendo $L$ la diferencia entre ambos
@@ -1220,11 +1121,11 @@ extremos, conocida como tolerancia. De esta forma se obtiene que $b_2 \in
 
   \includegraphics[clip=true, width=0.80\textwidth]{imagenes/basis/horizontalMod.png}
 
-  \caption[Caso en el cual se requiere de una tolerancia para detectar correctmente a las celdas base.]{Caso en el cual se requiere de una tolerancia para detectar correctmente a las celdas base. Modificada de \cite{Liu2015}}\label{fig:bptol}
+  \caption[Caso en el cual se requiere de una tolerancia para detectar correctmente a las celdas base.]{Caso en el cual se requiere de una tolerancia para detectar correctamente a las celdas base. Modificada de \cite{Liu2015}}\label{fig:bptol}
 
 \end{figure}
 
-La definicion presentada en (\ref{eq:bpDisc}) se basa en el analisis realizado
+La definición presentada en (\ref{eq:bpDisc}) se basa en el análisis realizado
 en \cite{Liu2015} donde se resuelve que la tolerancia adecuada entre las
 distancias de puntos bases es $L$.
 
@@ -1277,25 +1178,25 @@ distancias de puntos bases es $L$.
 
 Finalmente las \emph{líneas criticas discretizadas} se definen como las líneas
 discretizadas \cite{foleyphillips} definidas entre los centros de las celdas
-criticas y cada una de sus celdas base discritizados. El conjunto de todas las
+criticas y cada una de sus celdas base discretizados. El conjunto de todas las
 celdas pertenecientes a líneas criticas discretizadas se conoce como
 $\mli{LCrD}$.
 
 Una vez determinadas las celdas criticas y las líneas criticas discretizadas es
-posible obtener la segmentacion en regiones topologicas con la aplicacion de un
-algorimo de descomposicion en componentes conexas (seccion
+posible obtener la segmentación en regiones topológicas con la aplicación de un
+algoritmo de descomposición en componentes conexas (sección
 \ref{subsec:CompComp}) donde el conjunto que se descompone (la entrada del
-algorimo) es el que esta compuesto por las celdas libres de $\mli{CG}$ que no son
+algoritmo) es el que esta compuesto por las celdas libres de $\mli{CG}$ que no son
 celdas criticas ni forman parte de una línea critica discretizada, es decir: 
 \begin{align*}
 C := \{ c \in \mli{CG} : estado(c) = libre, c \notin \mli{CCr}, c \notin{LCrD}\}
 \end{align*}
 
-En la figura \ref{fig:ejSegGVDGrid} se muestra el proceso de segmentacion
-completo, desde la grilla de ocupacion usada como entrada
+En la figura \ref{fig:ejSegGVDGrid} se muestra el proceso de segmentación
+completo, desde la grilla de ocupación usada como entrada
 \ref{fig:ejSegGVDGrid:GRID}, pasando por el GVD generado
 \ref{fig:ejSegGVDGrid:GVD}, la detección de celdas criticas y líneas criticas discretizadas
-\ref{fig:ejSegGVDGrid:CRI}, terminando con la segmentacion del entorno
+\ref{fig:ejSegGVDGrid:CRI}, terminando con la segmentación del entorno
 \ref{fig:ejSegGVDGrid:SEG}.
 
 \begin{figure}[H]
@@ -1318,15 +1219,15 @@ completo, desde la grilla de ocupacion usada como entrada
 \end{figure}
 
 
-Una consideracion a tener en cuenta es que el algoritmo \ref{alg:compcon} debe
-ejecutarse con $ady_4$ como funcion de adyacencia (seccion
+Una consideración a tener en cuenta es que el algoritmo \ref{alg:compcon} debe
+ejecutarse con $ady_4$ como función de adyacencia (sección
 \ref{subsec:Grilla}), ya que si se usa $ady_8$ las líneas criticas
 discretizadas diagonales no separan segmentos. Esto se debe a que las celdas a ambos lados de una línea
 discretizada diagonal son adyacentes diagonalmente como se muestra en la figura
 \ref{fig:probDiagSeg}, por lo tanto al usar $ady_4$ la línea critica separa dos
 componentes conexas al no permitir la adyacencia entre las celdas a sus lados
 mientras que usando $ady_8$ si se permite dicha adyacencia con lo cual resulta
-en una unica componente.
+en una única componente.
 
 \begin{figure}[H]
   \centerfloat
@@ -1339,8 +1240,8 @@ en una unica componente.
 
   \caption[línea critica discretizada diagonal, y sus efectos en la
   segmentacion al usar $ady_4$ o $ady_8$.]{línea critica discretizada diagonal, y sus efectos en la
-  segmentacion al usar $ady_4$ o $ady_8$. La celda $c$ se da como ejemplo de
-una celda de un lado de la línea que es adyacente segun $ady_8$ a la celda $n3$ al 
+  segmentación al usar $ady_4$ o $ady_8$. La celda $c$ se da como ejemplo de
+una celda de un lado de la línea que es adyacente según $ady_8$ a la celda $n3$ al 
 otro lado de la línea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 
 \end{figure}
@@ -1366,64 +1267,64 @@ otro lado de la línea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 
 \section{Grafo generalizado de Voronoi}\label{sec:MiConstGVD}
 
-Considerando los problemas de eficiencia del algorimo \emph{brushfire} (seccion
-\ref{subsec:constGVD}) y los problemas de su version incremental
-\emph{brushfire dinamico} (seccion \ref{subsec:constGVDInc}) como fue propuesta
-originalmente en \cite{kalra2009incremental}, se decidio basar la construccion
-del GVD en la version de \emph{brushfire dinamico} propuesta en \cite{Lau2013},
-a la que se estara haciendo refencia cuando se mencione \say{\emph{brushfire dinamico}
+Considerando los problemas de eficiencia del algoritmo no incremental \emph{brushfire} (sección
+\ref{subsec:constGVD}) y los problemas de su variante incremental
+\emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}) como fue propuesta
+originalmente en \cite{kalra2009incremental}, se decidió basar la construcción
+del GVD en la version de \emph{brushfire dinámico} propuesta en \cite{Lau2013},
+a la que se estará haciendo referencia cuando se mencione \say{\emph{brushfire dinámico}
 original} desde este punto.
 
 % (que se
-% corresponde con la funcion de despeje discretizado $\mli{DD} : \mli{CG}
+% corresponde con la función de despeje discretizado $\mli{DD} : \mli{CG}
 % \rightarrow R$)
 
-La implemetacion realizada en proyecto mantiene las olas conistentes e
-inconsistentes para el calulo incremental de un mapa de distancia.
+La implementación realizada en proyecto mantiene las olas consistentes e
+inconsistentes para el calculo incremental de un mapa de distancia.
 Adicionalmente mantiene que las olas inconsistentes y consistentes remueven las
 celdas que atraviesan del GVD, y que las celdas candidatas a pertenecer al GVD
 son las celdas en las que ocurren choques de ondas.
 
 Los cambios principales se dan en el criterio con el cual se determina la
 pertenencia de las celdas candidatas al GVD y en como se considera el espacio
-desconocido al construir el GVD durante la exploracion. Estos se tratan en las
+desconocido al construir el GVD durante la exploración. Estos se tratan en las
 siguientes secciones.
 
-\subsection{Criterio de pertenecia}\label{subsec:critPer}
+\subsection{Criterio de pertenecía}\label{subsec:critPer}
 
-En \emph{brushfire dinamico} original la pertenecia de las celdas al GVD se
-determina en los choques de ondas consistentes. Dada la funcion $\mli{gen} :
+En \emph{brushfire dinámico} original la pertenecía de las celdas al GVD se
+determina en los choques de ondas consistentes. Dada la función $\mli{gen} :
 \mli{CG} \rightarrow \mli{CGen}$ que dada una celda $c$ de la grilla devuelve
-una de las celdas a minima distancia de $c$ que pertecen a un generador, el
+una de las celdas a minima distancia de $c$ que pertenecen a un generador, el
 criterio esencialmente consiste en que, sean $c_1$ y $c_2$ las celdas
 involucradas en un choque de ondas consistentes, estas pertenecen al GVD si
 $\mli{gen}(c_1) \neq \mli{gen}(c_2)$ y $\mli{gen}(c_1) \notin
 ady(\mli{gen}(c_2))$, es decir si $\mli{gen}(c_1)$ y $\mli{gen}(c_2)$ no son
 iguales ni adyacentes entre sí. 
 
-La defincion de GVD para el espacio continuo donde un punto $p$ pertenece al
+La definición de GVD para el espacio continuo donde un punto $p$ pertenece al
 GVD si tiene dos generadores distintos a minima distancia, lo cual sucede si y solo si
 $p$ tiene al menos un punto a una misma minima distancia en cada uno de esos generadores,
-dichos puntos son parte de los puntos base de $p$ (seccion
+dichos puntos son parte de los puntos base de $p$ (sección
 \ref{subsec:mapaTopGVDGrid}). Dado esto que se puede decir que un punto pertenece
-al GVD si tiene al menos dos puntos bases que pertenecen a generdores
+al GVD si tiene al menos dos puntos bases que pertenecen a generadores
 distintos, lo cual en un espacio discretizado en celdas se traduce a que
 existan dos celdas base que pertenecen a generadores distintos.
 
-Dado este analisis y la necesidad de determinar las celdas base planteada en la
-seccion \ref{subsec:mapaTopGVDGrid}, se determinó diferir en el criterio
-pertenencia con respecto al \emph{brushfire dinamico} original, siendo el nuevo
+Dado este análisis y la necesidad de determinar las celdas base planteada en la
+sección \ref{subsec:mapaTopGVDGrid}, se determinó diferir en el criterio
+pertenencia con respecto al \emph{brushfire dinámico} original, siendo el nuevo
 criterio de pertenencia de una celda $c$ al GVD la existencia de dos celdas
 base de $c$ pertenecientes a generadores distintos.
 
 La forma de obtener las celdas base de un punto se basa en el concepto de
 choque de olas, de forma similar al criterio de pertenencia de celdas al GVD en
-el \emph{brushfire dinamico} original. Durante el calculo del mapa de distancia
+el \emph{brushfire dinámico} original. Durante el calculo del mapa de distancia
 correspondiente a incremento se registran todas las celdas en involucradas en
-choques de olas consistentes. Luego de finalizar la actualizacion del mapa de
-distnacia, se obtienen las celdas base $\mli{CB}_c$ de cada celda $c$
-registrada previamente segun el algorimo \ref{alg:celdasBase}, notar que la
-funcion de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ se
+choques de olas consistentes. Luego de finalizar la actualización del mapa de
+distancia, se obtienen las celdas base $\mli{CB}_c$ de cada celda $c$
+registrada previamente según el algoritmo \ref{alg:celdasBase}, notar que la
+función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ se
 corresponde los valores del mapa de distancia calculado.
 
 \begin{algorithm}[H]
@@ -1442,7 +1343,7 @@ corresponde los valores del mapa de distancia calculado.
     $\mli{tolerado} := d_c(b) - \mli{DD}(c) \leq L$\\
     $\mli{noIgNiAdy} := b \neq gen(c) \land b \notin ady(gen(c))$\\
     $\mli{masCercano} := d_c(b) < minD$\\
-    \If{tolerado $\land$ noIgNiAdy $\land$ masCercano}{
+    \If{$\mli{tolerado} \land \mli{noIgNiAdy} \land \mli{masCercano}$}{
       $\mli{minD}  := d_c(b)$\\
       $\mli{minDB} := b$\\
     }
@@ -1453,21 +1354,21 @@ corresponde los valores del mapa de distancia calculado.
   }
   \Return $\mli{CB}_c$ 
 
-  \caption{Obtencion de las celdas base $\mli{CB}_c$ de la celda $c$ (simplificada)}
+  \caption{Obtención de las celdas base $\mli{CB}_c$ de la celda $c$ (simplificada)}
   \label{alg:celdasBase}
 \end{algorithm}
 
 El algoritmo procesa cada celda $cA$ adyacente a $c$ (línea 2) obteniendo el
 candidato a ser una celda base de $c$ (línea 3) y comprobando una serie de
 condiciones para que este candidato pueda ser una celda base de $c$ (líneas
-4-6). La condicion que se comprueba en la línea 4 es que el punto base
+4-6). La condición que se comprueba en la línea 4 es que el punto base
 candidato este dentro del intervalo definido por la tolerancia como fue
-definido en la seccion \ref{subsec:mapaTopGVDGrid}. En la línea 5 la condicion
+definido en la sección \ref{subsec:mapaTopGVDGrid}. En la línea 5 la condición
 verifica que el candidato no puede ser la celda perteneciente a un generador
-más cercana a $c$ ni adyacente a esta. Finalmente la condicion presente en la
-línea 6 establece que el candidato actual debe tener una distanica a $c$ menor
+más cercana a $c$ ni adyacente a esta. Finalmente la condición presente en la
+línea 6 establece que el candidato actual debe tener una distancia a $c$ menor
 que la de los candidatos procesados anteriormente que cumplen el resto de las
-condiciones. Al finalizar la ejecucion se devuelve como celdas bases a la celda
+condiciones. Al finalizar la ejecución se devuelve como celdas bases a la celda
 perteneciente a un generador que es cercana a $c$ y en el caso de que exista al
 ultimo candidato en cumplir todas las condiciones (líneas 12-16).
 
@@ -1477,110 +1378,70 @@ ultimo candidato en cumplir todas las condiciones (líneas 12-16).
 
 Habiendo obtenido las celdas base de un celda $c$ para determinar la
 pertenencia de $c$ al GVD resta verificar si existen al menos dos celdas base
-que pertenecen distintos generadores. Para esto se aplica una tecnica derivada
-del criterio de pertenencia de celdas al GVD presente en el \emph{brushfire dinamico}
+que pertenecen distintos generadores. Para esto se aplica una técnica derivada
+del criterio de pertenencia de celdas al GVD presente en el \emph{brushfire dinámico}
 original, que consiste en que dos celdas distintas y no adyacentes entre
 sí pertenecen a distintos generadores, y de lo contrario pertenecen al mismo
 generador. De esta forma se logra aproximar el GVD resultante de considerar
-generadores conexos y convexos \ref{subsec:GVD} sin definir explicitamente los
+generadores conexos y convexos \ref{subsec:GVD} sin definir explícitamente los
 generadores. Y adicionalmente se obtienen las celdas base a partir necesarias
 para segmentar.
 
-Es pertienente aclarar que el algorimo \ref{alg:celdasBase} es una version
-simplificada del que esta presente en la implementacion del proyecto. Las
+Es pertinente aclarar que el algoritmo \ref{alg:celdasBase} es una version
+simplificada del que esta presente en la implementación del proyecto. Las
 simplificaciones son dos, la primera es que se considera solo una de las celdas
-a minima distancia que pertenecen a un generador (la devuelta por la funcion
-$gen$), similar a como se trabaja en el \emph{brushfire dinamico} original. La
-segunda es que solo se permiten dos celdas base. En la seccion
-\ref{algComp:celdasbase} se presenta el algormitmo completo para obtener las
+a minima distancia que pertenecen a un generador (la devuelta por la función
+$gen$), similar a como se trabaja en el \emph{brushfire dinámico} original. La
+segunda es que solo se permiten dos celdas base. En la sección
+\ref{algComp:celdasbase} se presenta el algoritmo completo para obtener las
 celdas base sin las simplificaciones mencionadas, es decir que maneja todas las
-celdas pertenecientes a generadores que estan a minima distnacia y permite más
+celdas pertenecientes a generadores que están a minima distancia y permite más
 de dos celdas base.
-
-% \todo[inline]{Es queda bien este parrafo? Si es
-%   asi tambien me gustaria aclarar un poco que el motivo por el cual se presenta
-%   la simplificación: permite transmitir las ideas principales del algorimo que
-% esta en la implementacion evitando las complicaciones de genralizar, y
-% explerimentalmente se obtienen resultados similares. No se si tiene sentido
-% agregar esto, ni como escribirlo bien}
-
 
 \subsection{Consideraciones sobre el espacio desconocido}\label{subsec:espDesc}
 
-% Durante la exploracion la grilla de ocupacion (seccion \ref{subsec:Grilla}) que
-% representa el entorno explorado celdas  estado se puede determinar como
-% ocupadas, libres y desconocidas
-
-% , son sucesos equiprobables
-
-% Para una celda $c$ con estado desconocido, es equiprobable que $c$ este ocupada o 
-% libre, siendo necesaria evidencia de
-% que la celda esta ocupada ni de que esta libre, para que la celda cambie su
-% estado ya sea a libre o a ocupado. En un escenario donde se comienza sin conocimiento sobre
-% el entorno explorado y que el objetivo de la exploracion es obtener
-% informacion de dicho entorno, es posible decir que todas las celdas comienzan con estado desconocio 
-% y el numero de celdas en dicho estado decrece a lo largo que transcurre la
-% exploracion, a medida que se obtiene informacion (evidencia) sobre el entrono.
-
- % por las ondas consistentes e inconsistentes.
-
- %(principales bases para la construccion del GVD presnte en la implementación)
-
-% (no se explicita pero en Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien)
-% se encuentran en los limites de la grilla se consideran como celdas
-% pertenecientes a generadores.
-
-Durante la exploracion existe un conjunto de celdas de estado desconocido en la
-grilla de ocupacion (seccion \ref{subsec:Grilla}) usada para representar el
-entrono explorado, dichas celdas repesentan la existencia de porciones del
-entrono sin explorar. Dado que la definicion del GVD no contempla el espacio
-desconocido, para poder construir un GVD sobre grillas de ocupacion durante la
-exploracion es necesario tomar una decicion acerca de como considerar el 
+Durante la exploración existe un conjunto de celdas de estado desconocido en la
+grilla de ocupación (sección \ref{subsec:Grilla}) usada para representar el
+entrono explorado, dichas celdas representan la existencia de porciones del
+entrono sin explorar. Dado que la definición del GVD no contempla el espacio
+desconocido, para poder construir un GVD sobre grillas de ocupación durante la
+exploración es necesario tomar una decision acerca de como considerar el 
 espacio desconocido. Sin embargo, este no es un tema que se trate de forma
-explicita en los trabajos estudiados sobre la contruccion incremental de GVD. 
+explicita en los trabajos estudiados sobre la construcción incremental de GVD. 
 
-A partir del codigo e imagenes disponibles es posible deducir que en
+A partir del código e imágenes disponibles es posible deducir que en
 \cite{kalra2009incremental} y \cite{Lau2013} al construir el GVD las celdas de
 estado desconocido se consideran iguales que las de estado libre. De esta
 forma se obtienen resultados similares a los que se presentan en la figura
-\ref{fig:kalraOG}. Notar que otra caracteristica particular presente en estas
+\ref{fig:kalraOG}. Notar que otra característica particular presente en estas
 implementaciones es que las celdas ubicadas en los bordes del entrono se
-consideran como pertenecientes a generdores.
-
-% Y tambien se detecto otra caracteristica que no
-% se relacionada al espacio desconocido pero 
-
-% Cons que las celdas que
+consideran como pertenecientes a generadores.
 
 \begin{figure}[H]
   \centerfloat
 
   \includegraphics[clip=true, width=0.75\textwidth]{imagenes/desconocidoCons/kalraOG.png}
 
-  \caption[Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}.]{Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}. En la parte superior se muestra la grilla de ocupacion actual. En la inferior su GVD correspondiente, indicandose con rojo los obstaculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
+  \caption[Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}.]{Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}. En la parte superior se muestra la grilla de ocupación actual. En la inferior su GVD correspondiente, indicándose con rojo los obstáculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
 \end{figure}
-
-
-% que  costo asociado a las celdas
-% libres es alto al comienzo de la ejecucion cuando, . 
 
 Que las las celdas desconocidas se traten igual que las celdas libres implica
 que las olas utilizadas para construir el GVD pueden propagarse por el espacio
-desconocido y generar la pertenecia de la celdas desconocidas al GVD, lo cual
+desconocido y generar la pertenecía de la celdas desconocidas al GVD, lo cual
 tiene asociado un costo computacional.
 En la figura \ref{fig:desconocidoKalra} se puede observar como la tratar las
 celdas desconocidas como conocidas lleva a un GVD que abarca todo el entrono
-sin importar que solo una pequeña porcion del espacio sea conocida. 
+sin importar que solo una pequeña porción del espacio sea conocida. 
 
 %mantener un GVD conexo,
 % (por motivos que se seran comentados a continuacion)
 
 Dado que en el contexto del proyecto no es necesario construir GVD fuera del
-area conocida se desarrollo una tecnica que solo construye GVD en las celdas
+area conocida se desarrollo una técnica que solo construye GVD en las celdas
 conocidas evitando trabajar sobre espacio desconocido. Esta consiste en no
 permitir que las olas se propaguen por el espacio desconocido, y
 adicionalmente considerar al conjunto $\mli{UF}$ de celdas desconocidas que tienen un
-vecino conocido como celdas pertenecientes a generdores
+vecino conocido como celdas pertenecientes a generadores
 ($\mli{UF}\subseteq \mli{CGen}$) junto a las celdas ocupadas.
 De esta forma para el caso presentado en la figura \ref{fig:desconocidoKalra}
 se obtiene un GVD que se reduce al espacio conocido como se muestra en la
@@ -1601,14 +1462,14 @@ figura \ref{fig:desconocidoMio}.
 El solo considerar que las celdas desconocidas no propagan ondas tiene el
 problema de resultar en GVD disconexos en casos donde esto se puede evitar. El
 problema con los GVD disconexos es que estos no cumplen con la propiedad de
-\emph{conectividad} necesaria para ser un \emph{roadmap} (seccion
+\emph{conectividad} necesaria para ser un \emph{roadmap} (sección
 \ref{subsec:mapacarr}), lo cual genera errores de usarse el GVD como
 \emph{roadmap} para la planificación. En la figura \ref{fig:desconocidoEj2} se
-muestra el GVD generado en una misma grilla de ocupacion con cada una de las
+muestra el GVD generado en una misma grilla de ocupación con cada una de las
 tres formas de considerar el espacio desconocido mencionadas, es posible
 observar que el GVD resultante de solo considerar que las celdas desconocidas
-no propagan ondas no preseva la conectividad, mientras que los otros dos
-metodos otros si lo hacen.
+no propagan ondas no preserva la conectividad, mientras que los otros dos
+métodos otros si lo hacen.
 
 % El problema presentado por esta forma de considerar el espacio desconocido es
 % que las ondas se propagan por el espacio desconocido, generado GVD fuera del
@@ -1659,13 +1520,13 @@ metodos otros si lo hacen.
 % camino se denominan subobjetivos con exepcion del ultimo punto que se denomina
 % como objetivo.
 
-Una vez que el robot recibe un objetivo de exploracion, desde la central
-(seccion \ref{sec:asigTar}), el robot debe moverse fisicamente hasta el lugar
-indicado para completar dicho objetivo y progresar en la exploracion del entorno.
+Una vez que el robot recibe un objetivo de exploración, desde la central
+(sección \ref{sec:asigTar}), el robot debe moverse físicamente hasta el lugar
+indicado para completar dicho objetivo y progresar en la exploración del entorno.
 
 El modulo encargado de recibir el objetivo es el \emph{controlador del robot},
 este tiene la tarea de recuperar de la memoria del robot el camino que fue
-determinado durante la valuacion de dicho objetivo (seccion
+determinado durante la valuación de dicho objetivo (sección
 \ref{subsec:MiValSub}) y transmitir dicho camino al modulo \emph{controlador de
 movimiento}. 
 
@@ -1700,7 +1561,7 @@ el robot avance hacia dicho punto. Estos puntos deben enviarse en una secuencia
 que permita que el robot puede seguir el camino hasta el objetivo. Para lograr
 esto asumiendo que se tiene un criterio que permite considerar cuando un punto del camino se
 considera completado, el funcionamiento del \emph{controlador de
-movimiento} consiste en determinar el primer punto no completado del camnino
+movimiento} consiste en determinar el primer punto no completado del camino
 asignado, enviar dicho punto a \emph{move base} y esperar a que el robot avance
 lo suficiente para completarlo. Una vez completado se repite el
 proceso con el siguiente punto sin completar, esto sucede hasta que se completa
@@ -1715,23 +1576,23 @@ El \emph{controlador de movimiento} tiene dos formas de considerar completo un
 punto del camino, la normal y la forzosa.
 
 La compleción forzosa ocurre cuando el robot esta a una distancia menor que
-$\mli{DistF}$ del punto en cuestion. Este criterio de compleción tiene como
-proposito determinar cuando un robot esta lo suficientemente cerca de un
-punto del camnino como para considerarlo completo a pesar de que no se dio
-aun la complecion normal. Siendo el valor de $\mli{DistF}$ establecido para
-cumplir con el proposito de la complecion forzosa, para esto debe considerarse
-las principalmente las dimenciones del robot.
+$\mli{DistF}$ del punto en cuestión. Este criterio de compleción tiene como
+propósito determinar cuando un robot esta lo suficientemente cerca de un
+punto del camino como para considerarlo completo a pesar de que no se dio
+aun la compleción normal. Siendo el valor de $\mli{DistF}$ establecido para
+cumplir con el propósito de la compleción forzosa, para esto debe considerarse
+las principalmente las dimensiones del robot.
 
 Por otro lado para la compleción normal existen dos condiciones, la primera es
 que exista una línea de ancho $Seg$ entre el robot y el punto del camino que al
 discretizarse en celdas no contiene ninguna ocupada. La segunda, en el caso del
 ultimo punto del camino (el objetivo) la distancia en entre este y el robot
-debe ser menor a $\mli{DistNo}$, en el resto de los puntos (subobjetivos) la distnacia debe
+debe ser menor a $\mli{DistNo}$, en el resto de los puntos (subobjetivos) la distancia debe
 ser menor a $\mli{DistNs}$.
 
 El valor $\mli{DistNo}$ debe cumplir con
 $\mli{DistF}<\mli{DistNo}<\mli{rango}$, siendo $\mli{rango}$ el alcance de los
-sensores del robot. Esto se debe a que la idea detras de criterio de complecion
+sensores del robot. Esto se debe a que la idea detrás de criterio de compleción
 normal aplicado al objetivo es considerarlo completo cuando es seguro que dicho objetivo
 esta en el rango de sensado del robot. Esto implica que el robot esta en
 condiciones de recopilar nueva información del entorno, siendo este el motivo
@@ -1739,65 +1600,65 @@ por el cual el objetivo fue asignado en un primer lugar.
 
 El valor $\mli{DistNs}$ solo debe ser mayor que $\mli{DistF}$, y establece que
 tan estrictamente se sigue el camino original en espacios despejados de
-obstaculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot siga el
-camnino original de forma estricta aunque este en espacios despejados ya que se 
+obstáculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot siga el
+camino original de forma estricta aunque este en espacios despejados ya que se 
 fuerza que el robot este cerca de los subobjetivos para completarlos. Al
 aumentar el valor de $\mli{DistNs}$ se permite mayor libertad en como seguir el
 camino original cuando el espacio esta despejado, esto sucede porque en los
-espacios despejados todos los subobjetivos del camino que esten a una
+espacios despejados todos los subobjetivos del camino que estén a una
 distancia menor a $\mli{DistNs}$ se consideran completados, siendo move base el
 encargado de la trayectoria hasta el primer punto no completado del camino,
 sin ser necesario pasar cerca por los subobjetivos previamente completados.
 
-\subsection{Planificación jerarquica}
+\subsection{Planificación jerárquica}
 % es que los caminos originales
 % calculados sobre el GVD (seccion \ref{subsec:MiValSub})
-Los GVD son estructras que se representan con un cantidad considerablemente
-menor de celdas que las presentes la grilla de ocupación a partir de la cual se
-lo genera. A pesar de esto, los GVD son \emph{roadmaps} (seccion
+Los GVD son estructuras que se representan con un cantidad considerablemente
+menor de celdas que las presentes la grilla de ocupación a partir de la cual son
+generados. A pesar de esto, los GVD son \emph{roadmaps} (sección
 \ref{subsec:mapacarr}) por lo que permiten planificar caminos entre cualquier par de
 puntos del espacio, al igual que las grillas de ocupación. 
 
 La diferencia de tamaños implica que los caminos generados sobre el GVD tienen
 una menor en costo computacional que los calculados sobre la grillas de
 ocupación. Pero a su vez, los caminos generados sobre el GVD se encuentran lo
-más alejado posible de los obtaculos (seccion \ref{subsec:GVD}), lo que lleva a
+más alejado posible de los obstáculos (sección \ref{subsec:GVD}), lo que lleva a
 caminos que aunque son seguros, pueden resultar innecesariamente largos.
 
-La motivacion de la planificación jerarquica es aprovechar la eficiencia de los
-caminos generados sobre el GVD, evitando los desvios innecesarios que estos
+La motivación de la planificación jerárquica es aprovechar la eficiencia de los
+caminos generados sobre el GVD, evitando los desvíos innecesarios que estos
 contienen.
 
-La planificación jerarquica consiste en utilizar la informacion
-topologica del camino generado del GVD, especificamente se utlizan los
-puntos del camino que se encuentran en las transicisiones entre los
+La planificación jerárquica consiste en utilizar la información
+topológica del camino generado del GVD, específicamente se utilizan los
+puntos del camino que se encuentran en las transiciones entre los
 segmentos (habitaciones y corredores) para establecer un camino de alto
 nivel compuesto por la secuencia de estos puntos y el objetivo final.
 Luego caminos de bajo nivel se establecen entre el robot y el siguiente
 punto del camino de alto nivel, la idea de estos caminos es que el robot
 pueda navegar libremente (sin considerar el GVD) dentro de los
-segmentos, moviendose de transicion en transicision. La planificación de
-los camninos de bajo nivel se delega a \emph{move base}, el cual genera
-caminos sin desvios innecesarios.
+segmentos, moviéndose de transición en transición. La planificación de
+los caminos de bajo nivel se delega a \emph{move base}, el cual genera
+caminos sin desvíos innecesarios.
 
 Es pertinente notar que en la implementación realizada \emph{move base} se
 configuro con un planificador global que calcula caminos sobre la grilla de
-ocupacion (seccion \ref{subsec:move_base}), de igual manera aplicar esta
-tecnica simplifica los calculos de caminos sobre la grilla siendo dichos
-calculos locales a cada segmento que se debe transitar.
+ocupación (sección \ref{subsec:move_base}), de igual manera aplicar esta
+técnica simplifica los cálculos de caminos sobre la grilla siendo dichos
+cálculos locales a cada segmento que se debe transitar.
 
-Esta planificación jerarquica se lleva a cabo estableciendo un valor de
-$\mli{DistNs}$ mayor a las dimenciones de los segmentos y un valor de
-$\mli{Seg}$ mayor al tamaño de los portales de transicion entre
+Esta planificación jerárquica se lleva a cabo estableciendo un valor de
+$\mli{DistNs}$ mayor a las dimensiones de los segmentos y un valor de
+$\mli{Seg}$ mayor al tamaño de los portales de transición entre
 segmentos (puertas, pasajes abiertos). De esta forma asumiendo segmentos
 despejados, todos los subobjetivos asociados a un segmento en el que se
 encuentra un robot son completados de forma normal. Por lo tanto en en
 caminos largos que abarcan varios segmentos, los únicos subobjetivos
 enviados a \emph{move base} son los que se ubican en las portales entre
 un segmento y el siguiente en el camino, los cuales no son completados
-de forma normal ya que dicha transicion consiste en un portal de ancho
+de forma normal ya que dicha transición consiste en un portal de ancho
 menor a $\mli{Seg}$ que no permite la existencia de una línea
-discretizada de ancho $\mli{Seg}$ que no contenga obstaculos.
+discretizada de ancho $\mli{Seg}$ que no contenga obstáculos.
 
 En la figura \ref{fig:navjer} se muestra un ejemplo en el cual se puede
 apreciar la diferencia de largos entre el camino original ubicado sobre
@@ -1818,7 +1679,7 @@ portal en la transición al siguiente segmento del camino.
 
 
 \section{Construcción cooperativa del mapa}
-% Durante la exploracion la grilla de ocupacion (seccion \ref{subsec:Grilla}) que
+% Durante la exploración la grilla de ocupación (seccion \ref{subsec:Grilla}) que
 % representa el entorno explorado celdas  estado se puede determinar como
 % ocupadas, libres y desconocidas
 
@@ -1826,49 +1687,49 @@ portal en la transición al siguiente segmento del camino.
 % libre, siendo necesaria evidencia de
 % que la celda esta ocupada ni de que esta libre, para que la celda cambie su
 % estado ya sea a libre o a ocupado. En un escenario donde se comienza sin conocimiento sobre
-% el entorno explorado y que el objetivo de la exploracion es obtener
+% el entorno explorado y que el objetivo de la exploración es obtener
 % informacion de dicho entorno, es posible decir que todas las celdas comienzan con estado desconocio 
 % y el numero de celdas en dicho estado decrece a lo largo que transcurre la
-% exploracion, a medida que se obtiene informacion (evidencia) sobre el entrono.
+% exploración, a medida que se obtiene informacion (evidencia) sobre el entrono.
 
 
-A lo largo de la exploracion los robots de la flota son asignados a objetivos
-de exploracion, cuando un robot completa un objetivo este sensa porciones del
+A lo largo de la exploración los robots de la flota son asignados a objetivos
+de exploración, cuando un robot completa un objetivo este sensa porciones del
 entorno antes desconocido. Esta nueva información debe ser manejada para
-aportar a la construccion de la grilla de ocupacion (mapa) con la cual se
-representa el entorno explorado. A continuacion se describe el proceso completo
-desde los sensores hasta la construccion de un mapa que contenga toda la
-informacion obtenida del entrono.
+aportar a la construcción de la grilla de ocupación (mapa) con la cual se
+representa el entorno explorado. A continuación se describe el proceso completo
+desde los sensores hasta la construcción de un mapa que contenga toda la
+información obtenida del entrono.
 
-Cada robot esta constantemente recopilando informacion del entrono a traves de
-sus sensores y enviando dicha informacion al nodo de ROS \emph{global\_costmap}
-ubicado en su modulo \emph{move base} (seccion \ref{subsec:move_base}). Al
+Cada robot esta constantemente recopilando información del entrono a través de
+sus sensores y enviando dicha información al nodo de ROS \emph{global\_costmap}
+ubicado en su modulo \emph{move base} (sección \ref{subsec:move_base}). Al
 recibir datos sensoriales \emph{global\_costmap} actualiza la grilla de
-ocupacion que construye. \emph{Global\_costmap} fue configurado para que los
-valores de probablidad de ocupacion asociados a las celdas de su grilla de
-(seccion \ref{subsec:Grilla}) solo dependan de la ultima evidencia sensorial
+ocupación que construye. \emph{Global\_costmap} fue configurado para que los
+valores de probabilidad de ocupación asociados a las celdas de su grilla de
+(sección \ref{subsec:Grilla}) solo dependan de la ultima evidencia sensorial
 obtenida para cada celdas. Adicionalmente las celdas tienen asociado uno de
-tres valores de probabilidad de ocupacion posibles: $0.5$ indicando que la
+tres valores de probabilidad de ocupación posibles: $0.5$ indicando que la
 celda es desconocida, $0.55$ indicando que la celda esta ocupada y $0.45$
 indicando que la celda esta libre. Estos valores indican la probabilidad
-$P(c|x_t,z_t)$ de que una celda $c$ este ocupada dada una unica medida $z_t$
-desde una cierta posicion $x_t$.
+$P(c|x_t,z_t)$ de que una celda $c$ este ocupada dada una única medida $z_t$
+desde una cierta posición $x_t$.
 
-Dado que cada \emph{global\_costmap} contruye una grilla de ocupacion solo
+Dado que cada \emph{global\_costmap} construye una grilla de ocupación solo
 considerando los datos sensoriales del robot en el cual ejecuta, estas se deben
 combinar en una que centralice toda la información recopilada del entorno. Esto
 se logra configurando los \emph{global\_costmap} para que cuando se den
-modificaciones en estas grillas se envien las porciones modificadas al modulo
+modificaciones en estas grillas se envíen las porciones modificadas al modulo
 \emph{combinador de mapas}. Dichas porciones consisten en el conjunto de celdas
-de la grilla que fueron modificadas y sus nuevo valores de ocupacion.
+de la grilla que fueron modificadas y sus nuevo valores de ocupación.
 
-Al recibir una actualizacion el modulo \emph{combinador de mapas} aplica la
-regla de actualizacion presentada en \cite{stachniss2009robotic}, celda a
+Al recibir una actualización el modulo \emph{combinador de mapas} aplica la
+regla de actualización presentada en \cite{stachniss2009robotic}, celda a
 celda, para integrar la nueva información a la grilla central que concentra
 toda la información proporcionada por los robots. La regla de actualización
 para una celda $c$ esta dada
-por (\ref{eq:updateRule}) donde $P(c|x_{1:t-1},z_{1:t-1})$ es la probabildad
-anterior a la actualización, $P(c | x_t,z_t)$ es el valor de probabildad
+por (\ref{eq:updateRule}) donde $P(c|x_{1:t-1},z_{1:t-1})$ es la probabilidad
+anterior a la actualización, $P(c | x_t,z_t)$ es el valor de probabilidad
 asociado a $c$ en la actualización recibida y  $P(c|x_{1:t},z_{1:t})$ es el
 valor de probabilidad actualizado. 
 
@@ -1877,21 +1738,21 @@ valor de probabilidad actualizado.
 \label{eq:updateRule}
 \end{equation}
 
-En la figura \ref{fig:mappingUpRule} se muestra un ejemplo de la aplicacion de
+En la figura \ref{fig:mappingUpRule} se muestra un ejemplo de la aplicación de
 esta regla de actualización. Notar el ejemplo de la figura es en otro contexto
-por lo que los mapas intermedios son distintos a los descritos en esta seccion.
+por lo que los mapas intermedios son distintos a los descritos en esta sección.
 
-Luego de que el modulo \emph{combinador de mapas} integra toda la informacion
-de la actualizacion obtenida al mapa central, envia la porcion actualizada del
-mapa central a los diversos modulos (seccion \ref{sec:arqui}) que requieren
+Luego de que el modulo \emph{combinador de mapas} integra toda la información
+de la actualización obtenida al mapa central, envía la porción actualizada del
+mapa central a los diversos módulos (sección \ref{sec:arqui}) que requieren
 mantener actualizado un mapa completo del entorno explorado.
 
 \begin{figure}[H]
   \center
   \includegraphics[width=0.95\linewidth]{imagenes/occgridUpdate.png}
-  \caption[Aplicacion de la regla de acutalización propuesta en
-  \cite{stachniss2009robotic} en un corredor.]{Aplicacion de la
-    regla de acutalización propuesta en \cite{stachniss2009robotic} en un
+  \caption[Aplicación de la regla de actualización propuesta en
+  \cite{stachniss2009robotic} en un corredor.]{Aplicación de la
+    regla de actualización propuesta en \cite{stachniss2009robotic} en un
     corredor. La imagen superior izquierda muestra el mapa inicial y
     la inferior derecha contiene el mapa resultante. Los mapas intermedios son los
     mapas locales construidos a partir de los sensores del robot. Extraída de
@@ -1901,7 +1762,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 
 
-% Y por otro lado como estas actualizaciones se integra (el metodo que se describe en \cite{stachniss2009robotic}).
+% Y por otro lado como estas actualizaciones se integra (el método que se describe en \cite{stachniss2009robotic}).
 % notando que solo se considera los datos sensoriales
 % aportados  el robot
 
@@ -1945,7 +1806,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % caminos sobre el GVD, pero los caminos resultantes pueden ser innecesariamente
 % largos, mientras que \emph{move base} con la configuracion correcta, permite
-% ejecutar de forma eficiente caminos cercanos a los líneales. De esta manera se
+% ejecutar de forma eficiente caminos cercanos a los lineales. De esta manera se
 % aporvecha la eficiencia del calaculo de caminos sobre el GVD, y se evitan los
 % desvios que dichos camnios tienen, solo utlizando de estos los subobjetivos que
 % se ubican en portales, 
@@ -2014,7 +1875,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % Referenciar los tipos de caminos a la parte de la valuacion que habla de esto.
 
 % Describier el proceso a detalle desde que llega un camino, y como este se va
-% completando poco a poco hasta llegar al objetivo de exploracion al final del
+% completando poco a poco hasta llegar al objetivo de exploración al final del
 % camino.
 
 % Tocar por arriba los mecanismos de recuperacion si queda facil.
@@ -2184,7 +2045,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % Establecido esto, es pertinente notar que la implementacion de \emph{brushfire
 % dinamico} hecha en este proyecto difiere en la original en que esta almacena
 % las celdas ocupadas que generan la pertenecia de un punto al GVD para ser
-% utlizados posteriormente como puntos base.
+% utilizados posteriormente como puntos base.
 
 
 % A lo largo de esta seccion se explicaran las conicidencia y cambios entre
@@ -2242,7 +2103,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % Capaz que explicar que el evitar generar si no hay dos basis no vecions es el evitar generar incorrectamente gvd en corredores diagonales. (aunque puede dar lugar a la discucion de que pasa si no es completamente diagonal, cosa que sospecho que puede dar problemas similares)
 
 % Oportunidad de comentar que mejora sobre lau porque perminte generar gvd en
-% lugares a dist 1 (ver bien que), cosa que lau no permite por resistencia al ruido pero que con el metodo actual no llevo mayores inconvenientes permitiendo generar gvd en grillas con el maximo tamaño de celda posible en el cual las puertas más chicas consisten de una unica celda ejemplo de algo asi: (esta en comentarios de latex)
+% lugares a dist 1 (ver bien que), cosa que lau no permite por resistencia al ruido pero que con el método actual no llevo mayores inconvenientes permitiendo generar gvd en grillas con el maximo tamaño de celda posible en el cual las puertas más chicas consisten de una unica celda ejemplo de algo asi: (esta en comentarios de latex)
 
 %   mio            lau
 % - - | - -      - - - - -
@@ -2310,7 +2171,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % Creo que aca en realidad no habria que comentar mucho si es que hay que comentar, son las mismasideas que las comentadas en \ref{subsec:mapaTopGVD}.
 
-% Quizas mencionar que se usa la descomposicion en componentes conexas y como. 
+% Quizas mencionar que se usa la descomposición en componentes conexas y como. 
 
 % Mencionar el uso de sources y pseudosources para hacer líneas criticas. Discretizacion de líneas?
 
@@ -2348,7 +2209,7 @@ mantener actualizado un mapa completo del entorno explorado.
 %%acatoy
 % Se asume que las fornteras más centradas se encuentran a una
 % distancia $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{UF} \}/2$ de
-% $\mli{fp}$. 
+% $\mli{pf}$. 
 
 % Combiando ambos factores se determina que el conjunto de fronteras
 % significativas candidatas 
@@ -2356,7 +2217,7 @@ mantener actualizado un mapa completo del entorno explorado.
  % puede resumir como elegir una frontera $\mli{fs}$ que
 % cubra 
 
-% comienza desencolando una frontera $\mli{fp}$ de $\mli{FP}$
+% comienza desencolando una frontera $\mli{pf}$ de $\mli{PF}$
 % que debe no estar cubierta todavia, por lo cual de estar cubierta se descarta y
 % se vuelve a desencolar. 
 

@@ -127,6 +127,18 @@
 \hyphenation{op-tical net-works semi-conduc-tor}
 \renewcommand\_{\textunderscore\allowbreak}
 
+\newenvironment{tolerant}{
+\hbadness=10000
+\sloppy
+\par
+}
+
+\newenvironment{permissive}{
+\hbadness=10000 
+\hfuzz=10pt
+\par
+}
+
 \definecolor{mBlack}{rgb}{0,0,0}
 \definecolor{mGreen}{rgb}{0,0.6,0}
 \definecolor{mGray}{rgb}{0.5,0.5,0.5}

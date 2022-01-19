@@ -68,8 +68,8 @@ un entorno como para estimar el resto de forma precisa.
 % robot para explorar, a continuación se comentaran las similitudes, ventajas y
 % problemas asociados a utilizar multiples robots.
 
-\subsection{Exploración multirobot}\label{subsec:expmutirob}
-La exploración multirobot consiste en utilizar una flota robótica para resolver
+\subsection{Exploración multi-robot}\label{subsec:expmutirob}
+La exploración multi-robot consiste en utilizar una flota robótica para resolver
 el problema de exploración.
 
 Una de las ventajas del uso de varios robots es la introducción redundancia y
@@ -98,7 +98,7 @@ de la exploración coordinada es la de resolver el problema de la asignación de
 objetivos maximizando la relación costo-beneficio, no de cada robot por separado,
 sino de la flota entera.
 
-% En \cite{Lopez-Perez2018} se propone una solución completamente distribuida al problema de exploración multirobot. Este tipo de resolución implica descentralización, lo que aumenta tanto la robustez del sistema como su autonomía en tanto solo se requiere del equipo robótico para explorar el entorno, sin depender de una entidad central para coordinar ningún aspecto de la solución. %, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
+% En \cite{Lopez-Perez2018} se propone una solución completamente distribuida al problema de exploración multi-robot. Este tipo de resolución implica descentralización, lo que aumenta tanto la robustez del sistema como su autonomía en tanto solo se requiere del equipo robótico para explorar el entorno, sin depender de una entidad central para coordinar ningún aspecto de la solución. %, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
 
 
 
@@ -311,7 +311,7 @@ En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD que es posible
 
 
 % vértices son los puntos pertenecientes al GVD, y las aristas están entre los vértices adyacentes en el espacio. Por otro lado otra forma más compacta es que los 
-% Para referirse a la segunda forma, más compacta, de representar el GVD con un grafo se utilizara el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
+% Para referirse a la segunda forma, más compacta, de representar el GVD con un grafo se utilizará el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
 % Los GVD suelen ser representados con un grafo en el cual los vértices son los puntos $p$ pertenecientes al GVD que son adyacentes a obstáculos o que cumplen con $|\mli{GBP}_p|\geq 3$, mientras que las aristas\todo{muy entreverado. en un grafo las aristas conectan vértices. de hecho, ahora que lo observo, lo de la fig.1.5b no es un grafo. las aristas no son curvas ya que no modelan dicha información.} se encuentran entre los vértices que se encuentran conectados por caminos disjuntos formados por puntos pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo asociado al GVD de la figura \ref{fig:ejemploGVD}, donde los círculos rojos son los vértices del grafo y las líneas negras las aristas. %(aunque no son visibles existen aristas entre los vértices correspondientes a puntos que son tan cercanos que se solapan)\todo{no creo que este paréntesis aporte}.
 
 En \cite{choset2005principles} se demuestra que los GVD que utilizan los
@@ -777,11 +777,11 @@ obtiene mejores resultados en general.
 % % \subsubsection{Evaluación humana}
 % % Otra criterio de evaluación es el utilizado en \cite{Fermin-Leon2017} el cual compara la segmentación a evaluar $R_{seg}$ contra segmentaciones realizadas por humanos $R_{human}$. La comparación consiste en para cada pixel comprobar si este esta asignado a una misma region en ambas segmentaciones, lo cual se considera como un verdadero positivo $vp$, los falsos positivos $fp$ son los pixeles que están en la segmentación a evaluar pero no en la humana, o no, que se considera  
 
-\section{Coordinación en la exploración multirobot}
+\section{Coordinación en la exploración multi-robot}
 Como fue mencionado en la sección \ref{subsec:expmutirob}, la coordinación es
-un aspecto crítico en problema de exploración multirobot, por lo tanto a lo
+un aspecto crítico en problema de exploración multi-robot, por lo tanto a lo
 largo del tiempo fuero desarrolladas varias propuestas para una exploración
-multirobot coordinada. A continuación se describen técnicas de coordinación que
+multi-robot coordinada. A continuación se describen técnicas de coordinación que
 consisten en segmentar el espacio, asignar segmentos a los robots, para
 finalmente distribuir los objetivos de exploración de cada segmento entre los
 robots asignados a él. Las propuestas se dividen en las que segmentan el
@@ -1097,7 +1097,7 @@ control de movimiento de robots diferenciales, mientras que Gazebo sí.
 Otro aspecto que complejizó la integración de ROS en Webots es que su sistema
 de coordenadas por defecto (NUE) difiere del utilizado por ROS y Gazebo (ENU).
 Fue posible configurar Webots para utilizar ENU pero se requirió hacer algunos
-cambios como rotar los elementos  del entorno manualmente.
+cambios como rotar los elementos del entorno manualmente.
 % - Diferentes estandares en los sistemas coordenadas entre ROS("ENU") y
 %   Webots("NUE") que aunque Webots permite cambiarlo esto solo altera las
 %   traslaciones pero no las rotaciones, por lo tanto, ademas de tener que
