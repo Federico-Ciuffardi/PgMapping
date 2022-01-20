@@ -18,3 +18,8 @@
 *.lof
 *.lot
 *.M*
+*.acn
+*.glg
+*.glo
+*.gls
+*.ist

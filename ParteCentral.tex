@@ -1,41 +1,61 @@
-Durante el proyecto se implemento una solución al problema de exploración
-multi-robot\footnote{Disponible en línea:\\
-\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}}. Esto
-requiere soluciones para varios problemas relacionados a diversos aspectos de
-la exploración multi-robot, este proyecto se concentrara en algunos de ellos.
+En este capitulo se describen los principales aspectos de la solución al problema
+de la exploración multi-robot desarrollada en este proyecto\footnote{Disponible
+en línea:\\
+\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}},
+incluyendo las potenciales mejoras que constituyen las contribuciones del
+proyecto de grado (sección \ref{sec:cont}).
 
-Para el problema de asignación de objetivos (sección \ref{sec:exploracion}) se
-presentan soluciones para cada una de sus partes. Para la identificación de
-objetivos se propone una técnica novedosa basada en el rango de sensado de los
-robots que determina como objetivos a un subconjunto de los puntos fronterizos.
-La distribución de objetivos a robots, se resuelve de forma coordinada
-aplicando una variante de lo presentado en la sección \ref{subsec:wurmCoord}.
+El capitulo comienza con la sección \ref{sec:hip} donde se enumeran las
+hipótesis de trabajo. Luego en la sección \ref{sec:arqui} se describe la
+arquitectura de la solución. Seguido de esto, en la sección \ref{sec:def} se
+detallan y formalizan conceptos que son fundamentales en la solución propuesta.
 
-La asignación requiere de la construcción de un mapa topológico, para esto se
-implementa la técnica descrita en la sección \ref{subsec:mapaTopGVD} que
-requiere de un GVD, el cual se construye de forma incremental con una variante
-del algoritmo \emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}).
+Lo que resta del capitulo se dedica a profundizar en diversos aspectos de la
+solución. A continuación se destacan las secciones donde se tratan las
+contribuciones del proyecto. En la sección \ref{subsec:MiSimp} se describe el
+método de simplificación de fronteras propuesto. En la sección
+\ref{subsec:MiResSub} se introduce el algoritmo de asignación de objetivos. La sección
+\ref{subsec:mapaTopGVDGrid} se comenta como el algoritmo de
+construcción incremental del GVD y la forma novedosa de tratar
+las porciones desconocidas del espacio durante la construcción del GVD.
+Finalmente la sección \ref{sec:miNav} se describe la planificación jerárquica
+propuesta.
 
-Luego de asignado a un objetivo el robot deberá llegar hasta el, para esto es
-necesario solucionar el problema de planificación. La solución desarrollada
-aplica la idea de planificación jerárquica mencionada en la sección
-\ref{subsec:mapas}, con el motivo de permitir una planificación
-computacionalmente eficiente sin resultar en caminos innecesariamente largos.
+% En la sección \ref{sec:hip} se establecen las hipótesis asumidas para el
+% desarrollo de la solución. En la sección \ref{sec:arqui} se describe al
+% arquitectura de la solución. En la 
+% Para el problema de asignación de objetivos (sección \ref{sec:exploracion}) se
+% presentan soluciones para cada una de sus partes. Para la identificación de
+% objetivos se propone una técnica novedosa basada en el rango de sensado de los
+% robots que determina como objetivos a un subconjunto de los puntos fronterizos.
+% La distribución de objetivos a robots, se resuelve de forma coordinada
+% aplicando una variante de lo presentado en la sección \ref{subsec:wurmCoord}.
 
-El problema construir el mapa de un entrono inicialmente desconocido a partir
-de los datos sensoriales de varios robots se soluciona, construyendo en cada
-robot, según la información sensorial que estos recolectan, una grilla de
-ocupación con el nodo de ROS \emph{costmap\_2d} \cite{ROS-costmap_2d} y luego
-combinando dichas grillas con las ideas presentadas en
-\cite{stachniss2009robotic}.
+% La asignación requiere de la construcción de un mapa topológico, para esto se
+% implementa la técnica descrita en la sección \ref{subsec:mapaTopGVD} que
+% requiere de un GVD, el cual se construye de forma incremental con una variante
+% del algoritmo \emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}).
+
+% Luego de asignado a un objetivo el robot deberá llegar hasta el, para esto es
+% necesario solucionar el problema de planificación. La solución desarrollada
+% aplica la idea de planificación jerárquica mencionada en la sección
+% \ref{subsec:mapas}, con el motivo de permitir una planificación
+% computacionalmente eficiente sin resultar en caminos innecesariamente largos.
+
+% El problema construir el mapa de un entorno inicialmente desconocido a partir
+% de los datos sensoriales de varios robots se soluciona, construyendo en cada
+% robot, según la información sensorial que estos recolectan, una grilla de
+% ocupación con el nodo de ROS \emph{costmap\_2d} \cite{ROS-costmap_2d} y luego
+% combinando dichas grillas con las ideas presentadas en
+% \cite{stachniss2009robotic}.
 
 \section{Hipótesis de trabajo}\label{sec:hip}
 La solución se desarrolla con las siguientes hipótesis de trabajo.
 \begin{enumerate}[label=(\roman*)]
   \item Cada robot puede obtener en todo momento su ubicación (posición y
     orientación) sin errores.
-  \item Las comunicaciones son ideales: sin perdida, de ancho de banda y rango infinito.
-  \item Los robots son circulares e iguales entre sí.
+  \item Las comunicaciones son ideales: sin perdida, con un ancho de banda y rango infinito.
+  \item Los robots son iguales entre sí.
   \item Los robots tienen la capacidad de detectar las superficies más cercanas
     que se encuentran dentro de un circulo de radio $rango$ centrado en el
     robot.
@@ -48,35 +68,34 @@ problema de exploración permitiendo que el trabajo se pueda enfocar en otros.
 
 La hipótesis (I) resuelve trivialmente el problema de localización \cite{slam}. 
 
-Las hipótesis (II) y (III) simplifican la coordinación. La (II) al no tener que hacer
-consideraciones especiales dependiendo de las dimensiones del robot. La (III) por
-no tener que considerarse los posibles problemas de comunicación que pueden
-haber de asignar robots a objetivos muy distantes o con obstrucciones entre si. 
+Las hipótesis (II) y (III) simplifican la coordinación. La (II) por no tener
+que hacer consideraciones especiales para cada robot. La (III) por no tener que
+considerarse los posibles problemas de comunicación que pueden haber de asignar
+robots a objetivos muy distantes o con obstrucciones entre sí. 
 
-Las hipótesis (IV) establece la capacidad sensorial del robot, que se pueda
-sensar un circulo centrado en el robot, evita considerar la orientación de este
-para extraer información.
+La hipótesis (IV) establece la capacidad sensorial del robot. Que sea posible 
+sensar un circulo centrado en el robot, evita considerar su orientación.
 
 La hipótesis (V) es útil para poder aplicar el criterio de parada que consiste
 en detener la exploración al no tener más objetivos restantes (sección
 \ref{sec:exploracion}). 
 
 Finalmente la hipótesis (VI) permite establecer una grilla de ocupación con las
-dimensiones suficientes para representar todo el entrono a explorar. 
+dimensiones suficientes para representar todo el entorno a explorar. 
 
 \section{Arquitectura}\label{sec:arqui}
 La arquitectura se divide en dos tipos de componentes robots y unidad central.
 Existe una única unidad central que se encarga de centralizar la información
-del entrono explorado y de coordinar a los varios robots que pueden existir.
+del entorno explorado y de coordinar a los varios robots que pueden existir.
 Cada componente esta asociado a un hardware específico, siendo los robots móviles
 y la estación central estática. 
 %Los robots pueden ser uno o más mientras que la estación central es única. 
-Cada componente esta a su vez compuesto de módulos los cuales cuales se
-encargan de tareas específicas. 
+Los componentes a su vez se componen de módulos los cuales cuales se encargan
+de tareas específicas. 
 
 En la figura \ref{fig:arquitectura} se resume la arquitectura en un diagrama en
-el cual es posible ver los componentes, sus módulos y como estos distribuyen
-entre los componentes. También es posible apreciar una simplificación de las
+el cual es posible ver los componentes, sus módulos y como estos se distribuyen
+sobre los componentes. Adicionalmente es posible apreciar una simplificación de las
 comunicaciones que ocurren entre dichos módulos.
 
 
@@ -87,7 +106,8 @@ comunicaciones que ocurren entre dichos módulos.
   \label{fig:arquitectura}
 \end{figure} 
 
-En lo que resta de esta sección se comentará cada modulo, tanto sus tareas y como sus interacciones con el resto de los módulos.
+En lo que resta de esta sección se comentará de cada modulo tanto sus tareas,
+como sus interacciones con el resto de los módulos.
 
 \subsection{Move Base}\label{subsec:move_base}
 El modulo \emph{Move Base} consiste en una instancia del nodo ROS
@@ -187,7 +207,7 @@ También es responsable por solicitar el inicio de una subasta al
 \emph{Controlado central} cuando el \emph{Controlador de movimiento} indica el
 éxito o el fracaso en seguir el camino asignado.
 
-\section{Definiciones}
+\section{Definiciones} \label{sec:def}
 Esta sección esta dedicada a formalizar conceptos que serán utilizados en lo que resta
 del capitulo.
 
@@ -1402,8 +1422,8 @@ de dos celdas base.
 
 Durante la exploración existe un conjunto de celdas de estado desconocido en la
 grilla de ocupación (sección \ref{subsec:Grilla}) usada para representar el
-entrono explorado, dichas celdas representan la existencia de porciones del
-entrono sin explorar. Dado que la definición del GVD no contempla el espacio
+entorno explorado, dichas celdas representan la existencia de porciones del
+entorno sin explorar. Dado que la definición del GVD no contempla el espacio
 desconocido, para poder construir un GVD sobre grillas de ocupación durante la
 exploración es necesario tomar una decision acerca de como considerar el 
 espacio desconocido. Sin embargo, este no es un tema que se trate de forma
@@ -1414,7 +1434,7 @@ A partir del código e imágenes disponibles es posible deducir que en
 estado desconocido se consideran iguales que las de estado libre. De esta
 forma se obtienen resultados similares a los que se presentan en la figura
 \ref{fig:kalraOG}. Notar que otra característica particular presente en estas
-implementaciones es que las celdas ubicadas en los bordes del entrono se
+implementaciones es que las celdas ubicadas en los bordes del entorno se
 consideran como pertenecientes a generadores.
 
 \begin{figure}[H]
@@ -1430,7 +1450,7 @@ que las olas utilizadas para construir el GVD pueden propagarse por el espacio
 desconocido y generar la pertenecía de la celdas desconocidas al GVD, lo cual
 tiene asociado un costo computacional.
 En la figura \ref{fig:desconocidoKalra} se puede observar como la tratar las
-celdas desconocidas como conocidas lleva a un GVD que abarca todo el entrono
+celdas desconocidas como conocidas lleva a un GVD que abarca todo el entorno
 sin importar que solo una pequeña porción del espacio sea conocida. 
 
 %mantener un GVD conexo,
@@ -1511,7 +1531,7 @@ métodos otros si lo hacen.
 
 % Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el area desconocida debe ser procesado por el original mientras que el mio se reduce al area exploradoa, sientod la parte importante (la del area explorada) casi igual que la otra.
 
-\section{Planificación}
+\section{Planificación}\label{sec:miNav}
 % Recordando que el camino consiste en una secuencia puntos en el espacio, en el
 % contexto de la planificación estos se denominan como subobjetivos con exepcion
 % del ultimo punto llamado como objetivo.
@@ -1690,7 +1710,7 @@ portal en la transición al siguiente segmento del camino.
 % el entorno explorado y que el objetivo de la exploración es obtener
 % informacion de dicho entorno, es posible decir que todas las celdas comienzan con estado desconocio 
 % y el numero de celdas en dicho estado decrece a lo largo que transcurre la
-% exploración, a medida que se obtiene informacion (evidencia) sobre el entrono.
+% exploración, a medida que se obtiene informacion (evidencia) sobre el entorno.
 
 
 A lo largo de la exploración los robots de la flota son asignados a objetivos
@@ -1699,9 +1719,9 @@ entorno antes desconocido. Esta nueva información debe ser manejada para
 aportar a la construcción de la grilla de ocupación (mapa) con la cual se
 representa el entorno explorado. A continuación se describe el proceso completo
 desde los sensores hasta la construcción de un mapa que contenga toda la
-información obtenida del entrono.
+información obtenida del entorno.
 
-Cada robot esta constantemente recopilando información del entrono a través de
+Cada robot esta constantemente recopilando información del entorno a través de
 sus sensores y enviando dicha información al nodo de ROS \emph{global\_costmap}
 ubicado en su modulo \emph{move base} (sección \ref{subsec:move_base}). Al
 recibir datos sensoriales \emph{global\_costmap} actualiza la grilla de
@@ -1771,7 +1791,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % \emph{combinador de mapas}. 
 
 % robot completa un objetivo de exploración este recopila nueva
-% informacion del entrono a partir de sus sensores
+% informacion del entorno a partir de sus sensores
 
 % Comentar como funcina el map merger:
 
