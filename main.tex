@@ -189,6 +189,7 @@
     resetmargins=true
 }
 
+
 \usepackage[sort=use]{glossaries}
 
 \newglossaryentry{ROS}
@@ -260,14 +261,24 @@ Tutor: Facundo Benavides%
 
 % == TOC ==
 \hfuzz=10pt 
-\glstoctrue
 \tableofcontents
 \hfuzz=0pt 
 
-\addcontentsline{toc}{chapter}{Índice de figuras}\listoffigures  % facundo
-\addcontentsline{toc}{chapter}{Índice de cuadros}\listoftables   % facundo
-\addcontentsline{toc}{chapter}{Índice de algoritmos}\listofalgorithms % facundo
+% \addstarredchapter{List of Tables}
+% \addcontentsline{toc}{chapter}{Índice de figuras}
+\listoffigures  % facundo
+\mtcaddchapter[Índice de figuras]
+
+% \addcontentsline{toc}{chapter}{Índice de cuadros}
+\listoftables   % facundo
+\mtcaddchapter[Índice de cuadros]
+
+% \addcontentsline{toc}{chapter}{Índice de algoritmos}
+\listofalgorithms % facundo
+\mtcaddchapter[Índice de algoritmos]
+
 \printnoidxglossary[nonumberlist]
+\mtcaddchapter[Glosario]
 
 % == CONTENTS == 
 \chapter{Introducción}\label{cha:Intro}

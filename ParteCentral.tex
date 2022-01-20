@@ -1,6 +1,6 @@
-En este capitulo se describen los principales aspectos de la solución al problema
-de la exploración multi-robot desarrollada en este proyecto\footnote{Disponible
-en línea:\\
+En este capitulo se describen los principales aspectos de la solución al
+problema de exploración multi-robot desarrollada\footnote{Disponible en
+línea:\\
 \url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}},
 incluyendo las potenciales mejoras que constituyen las contribuciones del
 proyecto de grado (sección \ref{sec:cont}).
@@ -15,7 +15,7 @@ solución. A continuación se destacan las secciones donde se tratan las
 contribuciones del proyecto. En la sección \ref{subsec:MiSimp} se describe el
 método de simplificación de fronteras propuesto. En la sección
 \ref{subsec:MiResSub} se introduce el algoritmo de asignación de objetivos. La sección
-\ref{subsec:mapaTopGVDGrid} se comenta como el algoritmo de
+\ref{subsec:mapaTopGVDGrid} se comenta el algoritmo de
 construcción incremental del GVD y la forma novedosa de tratar
 las porciones desconocidas del espacio durante la construcción del GVD.
 Finalmente la sección \ref{sec:miNav} se describe la planificación jerárquica
@@ -86,11 +86,11 @@ dimensiones suficientes para representar todo el entorno a explorar.
 \section{Arquitectura}\label{sec:arqui}
 La arquitectura se divide en dos tipos de componentes robots y unidad central.
 Existe una única unidad central que se encarga de centralizar la información
-del entorno explorado y de coordinar a los varios robots que pueden existir.
+del entorno explorado y de coordinar a los multiples robots que pueden existir.
 Cada componente esta asociado a un hardware específico, siendo los robots móviles
 y la estación central estática. 
 %Los robots pueden ser uno o más mientras que la estación central es única. 
-Los componentes a su vez se componen de módulos los cuales cuales se encargan
+Los componentes a su vez están compuestos por módulos los cuales cuales se encargan
 de tareas específicas. 
 
 En la figura \ref{fig:arquitectura} se resume la arquitectura en un diagrama en
@@ -106,14 +106,20 @@ comunicaciones que ocurren entre dichos módulos.
   \label{fig:arquitectura}
 \end{figure} 
 
-En lo que resta de esta sección se comentará de cada modulo tanto sus tareas,
+En lo que resta de esta sección se comentará de cada módulo tanto sus tareas,
 como sus interacciones con el resto de los módulos.
 
 \subsection{Move Base}\label{subsec:move_base}
-El modulo \emph{Move Base} consiste en una instancia del nodo \gls{ROS}
-\emph{move\_base} \cite{ROS-move_base} que provee una interfaz para configurar,
-ejecutar y interactuar con el \emph{stack de navegación} de \gls{ROS}
-\cite{ROS-navigation}. 
+% El módulo \emph{Move Base} consiste en una instancia del nodo \gls{ROS}
+% \emph{move\_base} \cite{ROS-move_base} que provee una interfaz para configurar,
+% ejecutar y interactuar con el \emph{stack de navegación} de \gls{ROS}
+% \cite{ROS-navigation}. 
+El módulo \emph{Move Base} provee una interfaz para configurar, ejecutar e
+interactuar con el \emph{stack de navegación} de \gls{ROS}
+\cite{ROS-navigation}. Específicamente el módulo corresponde a un
+nodo\footnote{En \gls{ROS} el concepto de nodo refiere básicamente a un proceso
+  que fue implementado utilizando ROS.} conocido como \emph{move\_base}
+  \cite{ROS-move_base}. 
 
 El stack de navegación de \gls{ROS} es un conjunto de nodos que tienen como propósito
 que un robot pueda navegar el entorno hacia objetivos dentro del mismo. En la
@@ -128,105 +134,113 @@ componen al stack de navegación de \gls{ROS} y sus interacciones.
 \end{figure} 
 
 Cuando se establece un objetivo de navegación este se trasmite al nodo
-\emph{global\_planner} este se encarga de generar un plan de alto nivel
-consistente de un numero de subobjetivos, que de seguirse en secuencia llevan
-al robot al objetivo sin colisiones.
+\emph{global\_planner} que se encarga de generar un plan de alto nivel
+conocido como plan global, que consiste en un numero de subobjetivos que de
+seguirse en secuencia llevan al objetivo .
 
-El camino generado por el \emph{global\_planner} es enviado al nodo
-\emph{local\_planner} que se encarga de tomar el plan en alto nivel y
-traducirlo a la secuencia las velocidades lineales y angulares que un robot
-debe tener a lo largo del tiempo para seguir el global. A dicha secuencia de
-velocidades se le conoce como plan local.
+Los subobjetivos generados por el \emph{global\_planner} son enviados al nodo
+\emph{local\_planner} que se encarga de generar secuencias de velocidades
+lineales y angulares que un robot debe tener a lo largo del tiempo para llegar
+sin colisiones a los subobjetivos recibidos. A dicha secuencia de velocidades
+se la conoce como plan local.
 
 El stack de navegación permite utilizar distintas implementaciones de
 \emph{global\_planner} y \emph{local\_planner}. En el trabajo desarrollado se
-hace uso del \emph{global\_planner}\cite{ROS-global_planner} valga la
-redundancia llamado \emph{global\_planner} y el \emph{local\_planner} llamado
-\emph{teb\_local\_planner}\cite{ROS-teb_local_planner}.
+hace uso del \emph{global\_planner} que valga la redundancia es llamado
+\emph{global\_planner} \cite{ROS-global_planner}  y el \emph{local\_planner}
+llamado \emph{teb\_local\_planner} \cite{ROS-teb_local_planner}.
 
 Para generar sus planes tanto \emph{local\_planner} como \emph{global\_planner}
 requieren de un mapa, de esto se encargan los nodos \emph{local\_costmap} (mapa
-local) y \emph{global\_costmap} (mapa global) respectivamente. Ambos dos son
-una instancia de una misma clase de nodo llamada \emph{costmap\_2d}
-\cite{ROS-costmap_2d}, que dentro de sus funcionalidades esta la de de
+local) y \emph{global\_costmap} (mapa global) respectivamente. Ambos son
+nodos de una misma clase llamada \emph{costmap\_2d}
+\cite{ROS-costmap_2d}, que dentro de sus funcionalidades esta la de
 construir una grilla de ocupación a partir de los datos sensoriales provistos
 por los robots. Las principales diferencias entre el mapa global y el local son su
 tamaño de celda (pequeño en el local y grande en el global), sus dimensiones
 del mapa (el mapa global es el mapa completo mientras que el local es solo una
-porción) y sus marcos de referencia (el mapa global suele estar fijo, el local se
+porción), y sus marcos de referencia (el mapa global suele estar fijo, el local se
 centra en el robot).
 
 El nodo \emph{recovery\_behaviors} permite ejecutar comportamientos de
 recuperación de detectarse que el robot no esta avanzando de forma correcta al
-objetivo. Para la solución desarrollada solo se hace uso del comportamientos de
-recuperación que consiste en que el robot rote en el lugar.
+objetivo. Para la solución desarrollada solo se hace uso de un comportamiento
+de recuperación que consiste en que el robot rote en el lugar.
 
 \subsection{Combinador de mapas}
-El modulo \emph{Combinador de mapas} es el encargado de mantener el mapa del entorno
-explorado. Este recibe las actualizaciones de los mapas globales que son
-generados por el nodo \emph{global\_costmap} del stack de navegación de cada
-robot y las combina en un único mapa que contenga toda la información
-recopilada del entorno. Cuando el mapa combinado global se actualiza este
-retransmite lo actualizado a diversos componentes del sistema (ver figura
-\ref{fig:arquitectura}) que utilizan el mapa del entorno explorado para llevar a
-cabo alguna de sus tareas. 
+El módulo \emph{Combinador de mapas} es el encargado de construir el mapa
+completo del entorno explorado. Este recibe actualizaciones de los mapas
+globales generadas por el nodo \emph{global\_costmap} del stack de navegación
+de cada robot, y las combina en un único mapa. Luego de combinar una
+actualización, de existir cambios en el mapa completo estos se distribuyen a
+los diversos componentes del sistema que requieren del mapa completo del
+entorno explorado para llevar a cabo alguna de sus tareas (ver figura
+\ref{fig:arquitectura}). 
 
 \subsection{Controlador central}
 
-El modulo \emph{Controlador central} es el responsable de orquestar la
+El módulo \emph{Controlador central} es el responsable de orquestar la
 asignación de objetivos. Específicamente la asignación de objetivos consiste en
-una subasta en la cual este modulo actúa como subastador. La subasta se puede
-resumir de la siguiente manera, los objetivos de exploración identificados son
-transmitidos desde el \emph{controlador central} a los robots los cuales valúan
-a dichos objetivos según que tan conveniente les es llegar a ellos. Los robots
-envían sus valuaciones a la central la cual aplica una algoritmo para determinar
-que objetivo le corresponde a cada robot y posteriormente le informa a cada
-robot que objetivo le corresponde.
+una subasta y este módulo actúa como el subastador. 
 
-\subsection{Controlador de movimiento}
-El modulo \emph{Controlador de movimiento} es como su nombre lo indica el modulo
-que se encarga de controlar el movimiento del robot. Específicamente recibe
-caminos compuesto por celdas de la grilla de ocupación que en secuencia llevan
-a un objetivo de exploración, y se encarga de ir enviando objetivos de
-navegación al modulo \emph{Move Base} para que el camino sea ejecutado de forma
-rápida evitando maniobras innecesarias.
-
-También lleva a cabo una capa superior de comportamientos de recuperación
-extendiendo los provistos por el modulo \emph{Move Base}.
-
-Indica al \emph{Controlador del robot} si se completo el camino con éxito, o
-existe algún problema.
+La subasta se puede resumir de la siguiente manera, los objetivos de
+exploración identificados son transmitidos desde la central hacia los robots
+los cuales valúan a dichos objetivos según que tan conveniente les es llegar a
+ellos. Luego los robots envían sus valuaciones a la central y esta aplica un
+algoritmo para determinar que objetivo le corresponde a cada robot. Finalmente
+la central le informa a cada robot el objetivo que le corresponde.
+% algoritmo para determinar que objetivo asignar a cada robot. Finalmente
+% la central le informa a cada robot su objetivo asignado.
 
 \subsection{Controlador del robot}
-El \emph{Controlador del robot} es el modulo que se encarga de valuar los
-objetivos cuando ocurre una subasta. A su vez se encarga de procesar los
-objetivos asignados determinando el camino que lleva al objetivo y
-enviándolo al modulo \emph{Controlador de movimiento}. 
+El \emph{Controlador del robot} es el módulo que se encarga de valuar los
+objetivos cuando ocurre una subasta. También se encarga de procesar los
+objetivos asignados, determinando un camino (secuencia de subobjetivos) que
+lleva al objetivo y enviándolo al módulo \emph{Controlador de movimiento}.
+Adicionalmente es el responsable de solicitar el inicio de una subasta al
+\emph{Controlador central} cuando el \emph{Controlador de movimiento} indica el
+éxito o el fracaso en completar un camino asignado.
 
-También es responsable por solicitar el inicio de una subasta al
-\emph{Controlado central} cuando el \emph{Controlador de movimiento} indica el
-éxito o el fracaso en seguir el camino asignado.
+\subsection{Controlador de movimiento}
+El módulo \emph{Controlador de movimiento} recibe caminos desde el módulo
+\emph{Controlador del robot} y se encarga de determinar cuales subobjetivos
+debe enviar al módulo \emph{Move Base} para seguir el camino de forma rápida,
+evitando maniobras innecesarias. También lleva a cabo una capa superior de
+comportamientos de recuperación extendiendo los provistos por el módulo
+\emph{Move Base}. Y finalmente se encarga de indicar al \emph{Controlador del
+robot} si se completo el camino con éxito, o si existe algún problema.
+% El módulo \emph{Controlador de movimiento} es como su nombre lo indica el
+% módulo que se encarga de controlar el movimiento del robot. Este recibe caminos
+% desde el módulo \emph{Controlador del robot} y se encarga de determinar cuales
+% de los subobjetivos del camino enviar al módulo \emph{Move Base} para llegar al
+% objetivo de de forma rápida, evitando maniobras innecesarias. También lleva a
+% cabo una capa superior de comportamientos de recuperación extendiendo los
+% provistos por el módulo \emph{Move Base}. Y finalmente se encarga de indicar al
+% \emph{Controlador del robot} si se completo el camino con éxito, o existe algún
+% problema.
 
 \section{Definiciones} \label{sec:def}
-Esta sección esta dedicada a formalizar conceptos que serán utilizados en lo que resta
-del capitulo.
+Esta sección esta dedicada a formalizar conceptos que serán utilizados en lo
+que resta del capitulo.
 
 \subsection{Grillas de ocupación}\label{subsec:Grilla}
-En el contexto de este trabajo se utilizará las siguientes definiciones referentes a
-grillas de ocupación, introducidas en la sección \ref{subsec:mapas}.
+La grillas de ocupación fueron introducidas en la sección \ref{subsec:mapas}.
+En esta sección se profundizan conceptos a dichas estructuras que son útiles en
+el contexto del la solución desarrollada.
 
-El conjunto $\mli{CG}\subseteq R^2$ esta conformado de los centros de cada celda de la
-grilla de ocupación. Las celdas se representan según sus centros y viceversa
-sin ambigüedad, por lo tanto en lo que resta de este informe se usaran ambos
+El conjunto $\mli{CG}\subseteq R^2$ esta compuesto por los centros de cada
+celda de la grilla de ocupación. Una celda se asocia a un único centro y
+viceversa, por lo tanto en lo que resta de este informe se usaran ambos
 términos de forma indistinta.
 
 Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|x_{1:t},z_{1:t})$
 de estar ocupada, donde $z_{1:t}$ es la secuencia de medidas obtenidas de los
 sensores desde las posiciones $x_{1:t}$.
 
-La función $e : \mli{CG} \rightarrow E$ dado un centro de celda, devuelve uno de los
-tres estados posibles $E=\{libre, ocupado, desconocido\}$ según la probabilidad
-asociada a $c$. En el contexto de este proyecto la función $e$ se define según
+La función $e : \mli{CG} \rightarrow E$ dado un centro de celda, devuelve uno
+de los tres estados posibles $E=\{libre, ocupado, desconocido\}$ según la
+probabilidad de que $c$ este ocupada. En el contexto de este proyecto la
+función $e$ se define según
 (\ref{eq:estado}).
 \begin{equation} 
   e(c)= 
@@ -278,9 +292,11 @@ celdas $C \subseteq \mli{CG}$ es un conjunto $CC\in P(C)$ compuesto por $N$ conj
 $i\in[1,N]$ tales que:
 \begin{itemize}
   \item $\bigcup_{i=1}^{N}C_i = C$ 
-  \item Para todo $i,j \in [1,N]$ $C_i\cap C_j = \emptyset$
-  \item Para todo $i \in [1,N]$, para todo par $c_1,c_2 \in C_i$ se cumple que existe un camino de celdas adyacentes en $C_i$ que llevan desde $c_1$ a $c_2$.
-  \item No existen $i,j \in [1,N]$ tales que existan $c_1 \in C_i$ y $c_2 \in C_j$ que cumplan con $c_1 \in ady(c_2)$ 
+  \item Para todo $i,j \in [1,N]$ con $i\neq j$ se cumple que  $C_i\cap C_j = \emptyset$
+  \item Para todo $i \in [1,N]$, para todo $c_1,c_2 \in C_i$ con $c_1 \neq c_2$
+    se cumple que existe un camino compuesto de celdas en $C_i$ que llevan
+    desde $c_1$ a $c_2$.
+  \item No existen $i,j \in [1,N]$ con $i\neq j$ tales que existan $c_1 \in C_i$ y $c_2 \in C_j$ que cumplan con $c_1 \in ady(c_2)$ 
 \end{itemize}
 
 Un ejemplo de una descomposición en componentes conexas se muestra en la figura \ref{fig:fronterasCompCon}.
@@ -305,22 +321,23 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
   $CC := \emptyset$ \\
   $pila :=$ Pila vacía \\
   $i := 1$ \\
-  \While{ $\neg restantes.vacia()$ } {
-    $C_i := \emptyset $ \\
+  \While{ $restantes \neq \emptyset$ } {
+    % $C_i := \emptyset $ \\
     $c :=$ elemento arbitrario de $Restantes$ \\
 
     % \tcp{DFS desde $c$ agregando las celdas visitadas a la componente conexa $C_i$}
 
-    $C_i :=  C_i \cup \{c\}$ \\
+    % $C_i :=  C_i \cup \{c\}$ \\
+    $C_i :=  \{c\}$ \\
     $restantes := restantes - \{c\}$ \\
     $pila.apilar(c)$ \\
     \While { $\neg pila.vacia()$ } {
       $c := pila.desapilar()$ \\
       \ForEach{ $cA \in ady(c)$ } {
         \If{ $cA \in restantes$ } {
-          $C_i :=  C_i \cup \{c\}$ \\
-          $restantes := restantes - \{c\}$ \\
-          $pila.apilar(c)$ \\
+          $C_i :=  C_i \cup \{cA\}$ \\
+          $restantes := restantes - \{cA\}$ \\
+          $pila.apilar(cA)$ \\
         }
       }
     }
@@ -333,23 +350,23 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
   \label{alg:compcon}
 \end{algorithm}
 
-Este algoritmo se resume en elegir una celda $c\in C$ que no este aun en una
-componente conexa (línea 6), aplicar un \emph{depth-first search} (DFS)
-partiendo $c$ agregado todas las celdas recorridas a una misma componente
-conexa (líneas 7-19). Repetir dicho procedimiento hasta que todas las celdas
-pertenezcan a alguna componente conexa (línea 4). Este algoritmo es análogo al
-que esta presente en \cite{hopcroft1973algorithm}.
+El algoritmo se resume en elegir una celda $c\in C$ que no este aún en una
+componente conexa (línea 6) y aplicar un \emph{depth-first search} (DFS) desde
+$c$, agregado todas las celdas recorridas a una misma componente conexa (líneas
+7-19). Esto se repite hasta que todas las celdas pertenezcan a alguna
+componente conexa (línea 5). Este algoritmo es análogo al que esta presente en
+\cite{hopcroft1973algorithm}.
 
 \section{Identificación de objetivos}\label{sec:pc:idobj}
-El problema de identificación de objetivos consiste en determinar los puntos
+El problema de identificación de objetivos consiste en determinar puntos
 del espacio a los cuales es conveniente enviar robots para recolectar nueva
 información sobre el entorno explorado. Estos puntos son los llamados objetivos
 de exploración (sección \ref{sec:exploracion}). 
 
 \subsection{Fronteras}
 En \cite{yamauchi1998frontier} se propone que los lugares que permiten
-recolectar la mayor cantidad de nueva información sobre el entorno son las
-fronteras entre el espacio conocido y desconocido. Y que por lo tanto dichas
+recolectar mayor cantidad de nueva información sobre el entorno son las
+fronteras entre el espacio conocido y desconocido. Por lo tanto se establece que dichas
 fronteras deben ser los objetivos de exploración.
 Al utilizar una grilla de ocupación como mapa, las fronteras se definen como las
 celdas cuyo estado asociado es $libre$ y son adyacentes a una celda cuyo estado
@@ -361,12 +378,12 @@ fronteras $F$ según se definen en (\ref{eq:fronteras}).
   \label{eq:fronteras}
 \end{equation}
 
-\subsection{simplificación de Fronteras basada en K-Means}
-En \cite{Amorin2019} se argumenta que tratar todas las celdas fronteras
-como objetivos de exploración diferentes podría ser computacionalmente
-prohibitivo. Por lo tanto, para reducir el costo computacional, se intenta
-reducir los objetivos de exploración a las celdas frontera más representativas,
-a las cuales se denominaran como fronteras significativas.
+\subsection{Simplificación de Fronteras basada en K-Means}
+En \cite{Amorin2019} se argumenta que tratar todas las celdas fronteras como
+objetivos de exploración diferentes podría ser computacionalmente prohibitivo.
+Por lo tanto, para reducir el costo computacional, se reducen los objetivos de
+exploración a las celdas frontera más representativas, las cuales se
+denominan como fronteras significativas.
 
 Para determinar las fronteras significativas, primero, las celdas fronteras $F$
 se descomponen en sus componentes conexas $\mli{FC}=\{F_1,F_2,...F_N\}$
@@ -375,39 +392,40 @@ puede ver en la figura \ref{fig:fronterasCompCon}.
 
 Luego se determinan las fronteras significativas $\mli{FS}_i$ de cada
 componente conexa $F_i\in \mli{FC}$. Esto se hace agrupando las fronteras de
-$F_i$ con el algoritmo K-Means \cite{macqueen1967some}, y determinando una
-frontera significativa por cada una de las $k$ agrupaciones, la
-frontera más cercana de $F_i$ al centroide de la agrupación (una arbitraria de
-las más cercanas en el caso de que exista más de una). Un ejemplo de las
-fronteras significativas  $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ obtenidas con
-este método se muestra en la figura \ref{fig:fronterasSig}.
+$F_i$ con el algoritmo K-Means \cite{macqueen1967some}, y determinando por cada
+agrupación resultante, a una de las fronteras más cercanas de $F_i$ al
+centroide de la agrupación como una frontera significativa. Un ejemplo de
+las fronteras significativas $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ obtenidas
+con este método se muestra en la figura \ref{fig:fronterasSig}.
 
 El $k$ utilizado para ejecutar K-Means es el mínimo que logra que para toda
-frontera $f\in F_i$ existe $\mli{fs} \in FS_i$ tal que $d_{\mli{fs}}(f) \leq
-rango$ siendo $rango$ el alcance de los sensores del robot. Es decir, el
-conjunto de fronteras significativas $\mli{FS}_i \subset F_i$ cumple con que
+frontera $f\in F_i$ existe $\mli{fs} \in \mli{FS}_i$ tal que $d_{\mli{fs}}(f) \leq
+rango$ siendo $rango$ el alcance de sensado de los robots. Es decir que %el conjunto de fronteras significativas $\mli{FS}_i \subseteq F_i$ cumple con que
 cada frontera esta dentro del rango del sensado de alguna frontera
 significativa, cuando esto se cumple se dice que $\mli{FS}_i$ cubre a $F_i$, o
-que $FS_i$ logra el cubrimiento. En la figura \ref{fig:fronterasSigCub} se
-puede ver como las fronteras significativas obtenidas $FS$ logran el
-cubrimiento, ya que todas los centros de las fronteras $F$ están contenidos en
-las circunferencias de radio $rango$ centradas en las fronteras significativas
-$FS$.
+que $\mli{FS}_i$ logra el cubrimiento. En la figura \ref{fig:fronterasSigCub} se
+puede ver como las fronteras significativas obtenidas logran el cubrimiento.
+
+% , ya que todos los centros de las fronteras de cada $F_i$ están
+% contenidos en las circunferencias de radio $rango$ centradas en las fronteras
+% significativas $\mli{FS}$.
 
 Para encontrar el mínimo $k$ con las que se logra un $\mli{FS}_i$ que cubra a
-$F_i$, se parte con $k=1$, si el resultado no logra cubrir incrementa $k$ y se
-repite el proceso.
+$F_i$, se parte con $k=1$, y si el resultado no cubre a $F_i$ entonces se
+incrementa $k$ en uno. Esto se repite hasta que el $\mli{FS}_i$ resultante
+logre el cubrimiento.
 
 
 \begin{figure}[H]
   \centering
-  \subfloat[Se identifican las frotneras,  marcadas con amarillo.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/a.png}\label{fig:fronteras}}
+  \subfloat[Se identifican las fronteras, indicadas con amarillo.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/a.png}\label{fig:fronteras}}
   \qquad
-  \subfloat[Descompocicion de las fronteras en componentes conexas, cada componente conexa se indica con un color distinto.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/b.png}\label{fig:fronterasCompCon}}
+  \subfloat[Descomposición de las fronteras en componentes conexas, cada componente conexa se indica con un color distinto.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/b.png}\label{fig:fronterasCompCon}}
   \qquad
   \subfloat[Fronteras significativas (indicadas con verde) de cada componente conexa.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/c.png}\label{fig:fronterasSig}}
   \qquad
   \subfloat[Se logra el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/d.png}\label{fig:fronterasSigCub}}
+  
 
   \caption[Proceso de simplificación de fronteras según K-Means.]{Proceso de
     simplificación de fronteras según K-Means. Las circunferencias rojas
@@ -422,13 +440,13 @@ repite el proceso.
 % $\mli{FS} = \bigcup_{i=1}^N \mli{FS_i}$ que cumple con la restriccion de que
 % para todo $i \in [1,N]$ $\mli{FS}_i$ cubre a $F_i$.
 
-El problema descrito hasta el momento se puede resumir en el de  dado un
-conjunto de fronteras $F$, obtener un conjunto de fronteras significativas
-$\mli{FS}$ que cumplen con la restricción de que $\mli{FS}$ cubre a $F$.
-Recordando que el propósito de usar $\mli{FS}$ como objetivos de exploración en
-lugar de usar $F$ es reducir los objetivos de exploración entonces es natural
-pensar que la soluciones optimas reducen al mínimo el $\mli{FS}$ resultante,
-mientras mantienen la restricción de cubrimiento.
+El problema descrito hasta el momento se resume en, dado un conjunto de
+fronteras $F$, obtener un conjunto de fronteras significativas $\mli{FS}$ que
+cumplen con la restricción de que $\mli{FS}$ cubre a $F$. Recordando que el
+propósito de usar $\mli{FS}$ como objetivos de exploración en lugar de usar $F$
+es reducir los objetivos de exploración, entonces es natural pensar que la
+soluciones optimas reducen al mínimo el $\mli{FS}$ resultante, mientras
+mantienen la restricción de cubrimiento.
 
 % Analizando la restriccion de cubrimiento, se puede ver que un indicador de que
 % una solucion es subóptima es que varias celdas $\mli{FS}$ se concentren,
@@ -442,20 +460,20 @@ el cubrimiento.
 
 \begin{figure}[H]
   \centering
-  \subfloat[Fronteras significativas obtenidas segun el método basado en K-Means.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/a_sin_circ.png}}
+  \subfloat[Fronteras significativas obtenidas según el método basado en K-Means.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/a_sin_circ.png}}
   \qquad
   \subfloat[Dos de las fronteras significativas de la parte inferior derecha de (a) no son necesarias para lograr el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/b.png}}
 
   \caption[simplificación de fronteras subóptima resultante del método basado en K-Means.]{simplificación de fronteras subóptima resultante del método basado en K-Means. Las fronteras de $F_i$ se indican con azul, las fronteras significativas con verde y las
     circunferencias rojas centradas en estas tienen radio $rango=5.6$ (largos de celda) indicando su
-    cubrimiento. Extraída de implementación desarrollada\footnotemark.}\label{fig:ejemploFSKMMal}
+    cubrimiento.}\label{fig:ejemploFSKMMal}
 \end{figure}
 % \footnotetext{Podria indicar el bag y el seg}
 %al aplicarse la simplificación 
 Resultados subóptimos similares se experimentan de forma consistente sobre
-componentes conexas con forma serpenteante asimétricas y lo suficientemente
+componentes conexas con forma serpenteante, asimétricas y lo suficientemente
 extensas como para requerir más de 4 fronteras significativas para su
-cubrimiento, 
+cubrimiento. 
 %con un largo mayor a $rango*8$ 
 % \todo[inline]{se entiende la idea del largo aplicada a esto? Creo que puede
 % quedar claro mirando la foto pero tengo mis dudas. La idea en realidad sería
@@ -464,9 +482,9 @@ cubrimiento,
 % que tan serpenteante o asimetrica sea. Se me ocurre que puedo tratar la simpleza hablando por el largo puede
 % quedar más claro o más oscuro, es decir por que 8? fue para poner un valor
 % similar al de la foto que necesita 5 fronteras para cubrir }
-empeorando (mayor cantidad de fronteras significativas
+Los resultados empeoran (mayor cantidad de fronteras significativas
 innecesarias para el cubrimiento) a medida que las componentes conexas de
-fronteras son más extensas y las curvas son más intrincadas.
+fronteras son más extensas y sus curvas son más pronunciadas.
 
 % (comentarlos, distribuciones desparejas, acumulacion, no
 % equidistantes) 
@@ -478,11 +496,21 @@ fronteras son más extensas y las curvas son más intrincadas.
 % (casi a $rango$ de distancia una de la otra, el maximo). Esto lleva a pensar que K-Means se tiende a ubicar concentrar los centroides en una zona,
 
 Esto se presume que se debe principalmente a dos factores relacionados a
-K-Means. (i) K-Means no considera la restricción de cubrimiento para generar sus
-resultados. La restricción se fuerza ejecutando K-Means con el mínimo $k$
-(obtenido con prueba y error) según el cual las fronteras significativas
-resultantes logran el cubrimiento. (ii) Los centroides resultantes de K-Means
-no son fronteras. Estos se deben traducir a fronteras posteriormente.
+K-Means. (i) K-Means no considera la restricción de cubrimiento para generar
+sus resultados, sino que la restricción se fuerza obteniendo a través de prueba
+y error, el mínimo $k$ con el que las fronteras significativas resultantes
+logran el cubrimiento. (ii) Los centroides resultantes de K-Means no son
+necesariamente fronteras y deben ser traducidos a fronteras posteriormente.
+
+% Esto se presume que se debe principalmente a dos factores relacionados a
+% K-Means. (i) K-Means no considera la restricción de cubrimiento para generar
+% sus resultados, sino que la restricción se fuerza ejecutando K-Means con el
+% mínimo $k$ (obtenido con prueba y error) según el cual las fronteras
+% significativas resultantes logran el cubrimiento. (ii) Los centroides
+% resultantes de K-Means no son necesariamente fronteras y deben ser traducidos a
+% fronteras posteriormente.
+
+
 
 % \todo{Hay una arbitrariedad asociada a k-means tambien lo cual puede ser criticado tambien, aunque deberia estudiar mejor el tema, quizas no criticarlo aca pero destacar que el otro método es menos opaco en como elige las front sig}
 % Esto es la clase de pe la idea de obtener fornteras significativas es reducir el numero
@@ -496,34 +524,38 @@ no son fronteras. Estos se deben traducir a fronteras posteriormente.
 % fronteras significativas es mala, se concentran mucho en ciertas porciones y se alejan 
 
 \subsection{Simplificación de fronteras basada en cubrimiento}\label{subsec:MiSimp}
-Con esto en mente se desarrolla un método novedoso que considera los dos puntos
-destacados anteriormente. (i) Tomando en cuenta el cubrimiento y su
-optimización como parte fundamental del algoritmo. (ii) Dando directamente
-fronteras como resultado.
+En esta sección se detalla un método de simplificación de fronteras novedoso,
+que fue diseñado considerando los dos factores problemáticos relacionados al
+método de simplificación de fronteras basado en K-Means, comentados
+al final de la sección anterior. El factor (i) se toma en cuenta basando el
+nuevo método en el concepto del cubrimiento, y el factor (ii) directamente
+generado fronteras como resultado.
 
-El algoritmo al igual que el descrito en la sección anterior comienza
-descomponiendo a las fronteras $F$ en sus componentes conexas
-$\mli{FC}=\{F_1,F_2,...F_N\}$ para luego obtener las fronteras significativas
-$\mli{FS}_i$ para cada componente $F_i$, siendo el conjunto total de fronteras
-significativas $FS = \bigcup^N_{i=0} \mli{FS}_i$
-
-El proceso completo que permite obtener las frontera significativas
-$\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
-\ref{alg:IdObjGeo}.
+ % y su optimización
+El método de simplificación que se describe en esta sección, al igual que el
+descrito en la sección anterior, comienza descomponiendo las fronteras $F$ en
+sus componentes conexas $\mli{FC}=\{F_1,F_2,...F_N\}$, para luego obtener las
+fronteras significativas $\mli{FS}_i$ de cada componente $F_i$. Siendo
+$\mli{FS} = \bigcup^N_{i=1} \mli{FS}_i$ el conjunto total de fronteras
+significativas. La principal diferencia radica en el proceso a través del cual
+se obtienen las fronteras significativas $\mli{FS}_i$ de un componente $F_i$, que
+se indica en el algoritmo \ref{alg:IdObjGeo}.
 
 \begin{algorithm}[H]
 \SetAlgoLined
   \SetKwInOut{Input}{Entrada}
   \Input{$F_i$}
 
-  $\mli{UF} := F_i$ \\
   $\mli{FS}_i := \emptyset$\\
+  $\mli{UF} := F_i$ \\
 
   $\mli{PF} :=$ Cola vacía \\
   \ForEach { $f\in F_i$ } {
+    $encolada$ $:=$ $falso$ \\
     \ForEach{ $\mli{fa} \in ady(f)$ } {
-      \If { $e(\mli{fa}) = ocupado$ } {
-        $\mli{PF}.encolar(f)$
+      \If { $\lnot encolada$ $\land $ $e(\mli{fa}) = ocupado$ } {
+        $\mli{PF}.encolar(f)$\\
+        $encolada$ $:=$ $verdadero$
       }
     }
   }
@@ -554,55 +586,69 @@ $\mli{FS}_i$ para un componente $F_i$ se muestra en el algoritmo
   \label{alg:IdObjGeo}
 \end{algorithm}
 
-Para obtener las fronteras significativas de $F_i$ el algoritmo parte mantiene
-las fronteras significativas determinadas $\mli{FS}_i$, el conjunto
-todas las fronteras que resta cubrir $\mli{UF}$ (siglas del ingles
-\emph{uncovered frontiers}), y  una cola FIFO $\mli{PF}$ en donde se almacenan 
-los próximas fronteras a cubrir.
+%Para obtener las fronteras significativas de $F_i$ las fronteras significativas determinadas $\mli{FS}_i$
+% (siglas del ingles \emph{uncovered frontiers})
 
-$\mli{FS}_i$ se inicializa vacía y $\mli{UF}$ como $F$ (líneas 1 y 2). Por otro
-lado $\mli{PF}$ se inicializa encolando en cualquier orden a las celdas
-fronteras adyacentes a celdas cuyo estado es ocupado, de no existir ninguna se
-encola una única frontera arbitraria de $F_i$ (líneas 3-13). 
+El algoritmo mantiene en el conjunto $\mli{UF}$ a las fronteras de $F_i$ que
+resta cubrir, y en una cola FIFO llamada $\mli{PF}$ a las próximas fronteras a
+cubrir. Se comienza estableciendo que no se tienen todavía fronteras
+significativas (línea 1) y  que resta cubrir a todas las fronteras (línea 2).
+Luego se inicializa $\mli{PF}$ encolando en cualquier orden a las celdas
+frontera de $F_i$ que son adyacentes a celdas de estado ocupado, y de no
+existir ninguna, se encola una única frontera arbitraria de $F_i$ (líneas
+3-15). 
 
 Luego el algoritmo se basa en elegir una frontera de $\mli{UF}$ como frontera
-significativa $\mli{fs}$ (líneas 15-20). Posteriormente se actualizan las
-estructuras mantenidas en función de la nueva $\mli{fs}$ (líneas 21-27), notar
+significativa $\mli{fs}$ (líneas 17-22), y posteriormente actualizar las
+estructuras mantenidas en función de la nueva $\mli{fs}$ (líneas 23-28). Notar
 que esto implica reducir el numero de celdas en $\mli{UF}$ ya que como mínimo
 $\mli{fs}$ se cubre a si misma. Este proceso de elección y actualización se
-repite hasta que $\mli{UF}$ queda vacía (línea 14). Luego de lo cual se
-devuelven las fronteras significativas $\mli{FS_i}$ resultantes (línea 29).
+repite hasta que no quedan más fronteras de $F_i$ por cubrir (línea 16),
+y finalmente se devuelven las fronteras significativas $\mli{FS_i}$ resultantes
+(línea 31).
  
-Ahora se profundizara sobre los procesos de elección (líneas 15-20) y
-actualización (líneas 21-27).
+Ahora se profundizará sobre los procesos de elección (líneas 17-22) y
+actualización de estructuras (líneas 23-28).
 
-El proceso de elección de $\mli{fs}$ utilizado tiene como objetivo el asegurar
-que se cubra una frontera previamente no cubierta $\mli{pf}$ (obtenida de
-desencolar a $\mli{PF}$), esto se traduce en la restricción
-$d_{\mli{pf}}(\mli{fs}) \leq rango$. Adicionalmente se tiene una heurística que
-establece que dado $dCen = max\{ d_{\mli{PF}}(\mli{f}) : f\in\mli{UF} \}/2$ las
-fronteras que estén a $min \{dCen, rango\}$ de distancia de $\mli{pf}$ serán las
-mejores candidatas a ser fronteras significativas. La heurística busca elegir a
-las fronteras significativas que queden en el centro del conjunto de celdas
-nuevas que van a cubrir de $\mli{UF}$. Con esto en cuenta se determina un
-conjunto de de fronteras significativas candidatas $\mli{FSC}$ como el conjunto
-de celdas que pertenecen a $\mli{UF}$ y a la circunferencia discretizada
-de $radio = min \{dCen, rango\}$ centrada en $\mli{PF}$ denotada como
-$\mathscr{C}(\mli{pf},rango)$ (\ref{eq:cir}).
+% El proceso de elección de $\mli{fs}$ tiene como objetivo el asegurar que se
+% cubra una frontera $\mli{pf}$ desencolada de $\mli{PF}$ que todavía
+% no este cubierta. Esto se traduce a la restricción $d_{\mli{pf}}(\mli{fs})
+% \leq rango$. Adicionalmente se tiene una heurística que establece que dado
+% $dCen = max\{ d_{\mli{pf}}(\mli{f}) : f\in\mli{UF} \}/2$, las fronteras que
+% estén a $min \{dCen, rango\}$ de distancia de $\mli{pf}$ serán las mejores
+% candidatas a ser fronteras significativas. La heurística busca elegir a las
+% fronteras significativas que queden en el centro del conjunto de celdas nuevas
+% que van a cubrir de $\mli{UF}$. Con esto en cuenta se determina un conjunto de
+% fronteras significativas candidatas $\mli{FSC}$ como el conjunto de celdas que
+% pertenecen a $\mli{UF}$ y a la circunferencia discretizada de $radio = min
+% \{dCen, rango\}$ centrada en $\mli{PF}$ denotada como
+% $\mathscr{C}(\mli{pf},rango)$ (\ref{eq:cir}).
+
+El proceso de elección de $\mli{fs}$ tiene como objetivo el asegurar que se
+cubra una frontera $\mli{pf}$ desencolada de $\mli{PF}$ que todavía no este
+cubierta. Esto se traduce a la restricción $d_{\mli{pf}}(\mli{fs}) \leq rango$.
+Adicionalmente como heurística, dado $dCen = max\{ d_{\mli{pf}}(\mli{f}) :
+f\in\mli{UF} \}/2$ se agrega la restricción $d_{\mli{pf}}(\mli{fs}) \leq dCen$.
+Dicha heurística busca que las fronteras significativas $\mli{fs}$ elegidas queden
+centradas en conjunto de las celdas de $\mli{UF}$ que van a cubrir. Con ambas
+restricciones en cuenta se determina el conjunto de fronteras significativas
+candidatas $\mli{FSC}$ como el conjunto de celdas que pertenecen tanto a $\mli{UF}$, como 
+a la circunferencia discretizada centrada en $\mli{pf}$ y de $radio = min
+\{dCen, rango\}$, que se denota como $\mathscr{C}(\mli{pf},radio)$
+(\ref{eq:cir}).
 % \todo[inline]{este concepto capaz no queda claro. Es muy específico y
 % explicarlo me paree que corta un poco la narrativa. Dado el conjunto
 % $Cir=\{f\in F_i : d_{\mli{pf}}(f) \leq radio\}$ son los puntos de $Cir$ que
 % tienen un adyacente fuera de $Cir$ }
 \begin{equation} \label{eq:cir}
 \begin{aligned}
-&\mathscr{D}(\mli{pf},rango) = \{c\in\mli{CG} : d_{\mli{pf}}(c) \leq radio\}\\ 
-&\mathscr{C}(\mli{pf},rango) = \{c\in\mathscr{D}(\mli{pf},rango) : \exists cA \in ady_8(c), cA \notin \mathscr{D}(\mli{pf},rango) \}
+&\mathscr{D}(\mli{pf},radio) = \{c\in\mli{CG} : d_{\mli{pf}}(c) \leq radio\}\\ 
+&\mathscr{C}(\mli{pf},radio) = \{c\in\mathscr{D}(\mli{pf},radio) : \exists cA \in ady(c), cA \notin \mathscr{D}(\mli{pf},radio) \}
 \end{aligned}
 \end{equation}
 
-Finalmente para elegir una nueva frontera
-significativa $\mli{fs}$ se debe elegir una frontera de $\mli{FSC}$, en esta
-propuesta la elección se hace de forma arbitraria.
+Finalmente para elegir una nueva frontera significativa $\mli{fs}$ se elige una
+frontera de $\mli{FSC}$, en esta propuesta de forma arbitraria.
 
 El proceso de actualización consiste en agregar $\mli{fs}$ a $\mli{FS}_i$, obtener el
 conjunto de fronteras cubiertas por $\mli{fs}$ las que se denominan como
@@ -670,7 +716,7 @@ del objetivo que le fue asignado a cada robot.
 Con respecto a la separación del problema de asignación de objetivos mencionada
 en la sección \ref{sec:exploracion}, la parte de identificación de objetivos
 esta incluida en la \emph{obtención de información}, y la parte de
-distribución de objetivos se corresponde con el el resto de lo que se describe
+distribución de objetivos se corresponde con el resto de lo que se describe
 en esta sección.
 
 \subsection{Obtención de información}\label{subsec:obtInfo}
@@ -774,7 +820,7 @@ junto a la ubicación actual del robot, siendo toda esta información en su
 conjunto considerada una valuación. %\todo{o mensaje de valuación, como quede mejor}
 
 % De esta
-% forma los objetivos triviales se valuan distinto segun que tanto tiene que
+% forma los objetivos triviales se valuan distinto según que tanto tiene que
 % rotar el robot para llegar a ellos y los objetivos no triviales tendran un
 % costo no mayor al del peor objetivo no trivial.
 
@@ -1025,7 +1071,7 @@ quedando a la espera de nuevos pedidos por parte de los robots para comenzar
 una nueva subasta. 
 
 \section{Segmentación}\label{subsec:mapaTopGVDGrid}
-% segun si las celdas ocupadas más cercanas $oc_1$ y $oc_2$ de
+% según si las celdas ocupadas más cercanas $oc_1$ y $oc_2$ de
 
 La segmentación del entorno se basa en el método que comentado en la sección
 \ref{subsec:mapaTopGVD}. Dado que el entorno se representa con grillas
@@ -1168,10 +1214,10 @@ distancias de puntos bases es $L$.
 % $c_1$ y $c_2$ en el centro del corredor, $c_1$ tiene una celda $b_1 \in CGen$ a
 % minima distancia $d_c(b_1) = DD(c) = d-\frac{L}{2}$, mientras que la celda $b_2
 % \in CGen$ está en el otro lado del corrdor a distancia $d_c(b_2) =
-% d+\frac{L}{2}$, segun lo que ocurre en el espacio continuo esta
+% d+\frac{L}{2}$, según lo que ocurre en el espacio continuo esta
 % deberia ser tambien una celda base aunque no este a minima distancia de $c$. La
 % tolerancia introducida en la definicion presentada en (\ref{eq:bpDisc}) asegura
-% la pertenencia de $b_2$ a $CGen$, recordadndo que $b_2\in CGen$ entoces segun
+% la pertenencia de $b_2$ a $CGen$, recordadndo que $b_2\in CGen$ entoces según
 % dicha definicion se tiene que:
 
 
@@ -1281,7 +1327,7 @@ otro lado de la línea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 
 % Se mantienen todos los obts a minima distancia, y los que \say{casi} estan a
 % minima distancia, siendo estos los puntos bases (puntos más cercanos a
-% generadosres base) tomados en cuenta, segun estos se define si un punto pertenece o no al GVD.
+% generadosres base) tomados en cuenta, según estos se define si un punto pertenece o no al GVD.
 
 
 
@@ -1544,21 +1590,21 @@ Una vez que el robot recibe un objetivo de exploración, desde la central
 (sección \ref{sec:asigTar}), el robot debe moverse físicamente hasta el lugar
 indicado para completar dicho objetivo y progresar en la exploración del entorno.
 
-El modulo encargado de recibir el objetivo es el \emph{controlador del robot},
+El módulo encargado de recibir el objetivo es el \emph{controlador del robot},
 este tiene la tarea de recuperar de la memoria del robot el camino que fue
 determinado durante la valuación de dicho objetivo (sección
-\ref{subsec:MiValSub}) y transmitir dicho camino al modulo \emph{controlador de
+\ref{subsec:MiValSub}) y transmitir dicho camino al módulo \emph{controlador de
 movimiento}. 
 
-% Una que el caminno llega al modulo \emph{controlador de movimiento}
+% Una que el caminno llega al módulo \emph{controlador de movimiento}
 % trabaja
-% junto al modulo \emph{move base} para lograr su comentido.
+% junto al módulo \emph{move base} para lograr su comentido.
 
  % puntos
 % del camino, son relevantes para poder llegar al objetivo.
 
 % que se
-% considera no completado al modulo \emph{move base} el cual se encarga de
+% considera no completado al módulo \emph{move base} el cual se encarga de
 % generar las directivas a los motores del robot para que pueda llegar de forma
 % segura a dicho objetivo/subobjetivo.
 
@@ -1575,8 +1621,8 @@ movimiento}.
 % a \emph{move base}. El proceso se repite hasta completar el objetivo,
 % completando asi el camnino completo.
 
-El modulo \emph{controlador de movimiento} se encarga de enviar puntos del
-camino al modulo \emph{move base} que genera las directivas necesarias para que
+El módulo \emph{controlador de movimiento} se encarga de enviar puntos del
+camino al módulo \emph{move base} que genera las directivas necesarias para que
 el robot avance hacia dicho punto. Estos puntos deben enviarse en una secuencia
 que permita que el robot puede seguir el camino hasta el objetivo. Para lograr
 esto asumiendo que se tiene un criterio que permite considerar cuando un punto del camino se
@@ -1599,7 +1645,7 @@ La compleción forzosa ocurre cuando el robot esta a una distancia menor que
 $\mli{DistF}$ del punto en cuestión. Este criterio de compleción tiene como
 propósito determinar cuando un robot esta lo suficientemente cerca de un
 punto del camino como para considerarlo completo a pesar de que no se dio
-aun la compleción normal. Siendo el valor de $\mli{DistF}$ establecido para
+aún la compleción normal. Siendo el valor de $\mli{DistF}$ establecido para
 cumplir con el propósito de la compleción forzosa, para esto debe considerarse
 las principalmente las dimensiones del robot.
 
@@ -1723,7 +1769,7 @@ información obtenida del entorno.
 
 Cada robot esta constantemente recopilando información del entorno a través de
 sus sensores y enviando dicha información al nodo de \gls{ROS} \emph{global\_costmap}
-ubicado en su modulo \emph{move base} (sección \ref{subsec:move_base}). Al
+ubicado en su módulo \emph{move base} (sección \ref{subsec:move_base}). Al
 recibir datos sensoriales \emph{global\_costmap} actualiza la grilla de
 ocupación que construye. \emph{Global\_costmap} fue configurado para que los
 valores de probabilidad de ocupación asociados a las celdas de su grilla de
@@ -1739,11 +1785,11 @@ Dado que cada \emph{global\_costmap} construye una grilla de ocupación solo
 considerando los datos sensoriales del robot en el cual ejecuta, estas se deben
 combinar en una que centralice toda la información recopilada del entorno. Esto
 se logra configurando los \emph{global\_costmap} para que cuando se den
-modificaciones en estas grillas se envíen las porciones modificadas al modulo
+modificaciones en estas grillas se envíen las porciones modificadas al módulo
 \emph{combinador de mapas}. Dichas porciones consisten en el conjunto de celdas
 de la grilla que fueron modificadas y sus nuevo valores de ocupación.
 
-Al recibir una actualización el modulo \emph{combinador de mapas} aplica la
+Al recibir una actualización el módulo \emph{combinador de mapas} aplica la
 regla de actualización presentada en \cite{stachniss2009robotic}, celda a
 celda, para integrar la nueva información a la grilla central que concentra
 toda la información proporcionada por los robots. La regla de actualización
@@ -1762,7 +1808,7 @@ En la figura \ref{fig:mappingUpRule} se muestra un ejemplo de la aplicación de
 esta regla de actualización. Notar el ejemplo de la figura es en otro contexto
 por lo que los mapas intermedios son distintos a los descritos en esta sección.
 
-Luego de que el modulo \emph{combinador de mapas} integra toda la información
+Luego de que el módulo \emph{combinador de mapas} integra toda la información
 de la actualización obtenida al mapa central, envía la porción actualizada del
 mapa central a los diversos módulos (sección \ref{sec:arqui}) que requieren
 mantener actualizado un mapa completo del entorno explorado.
@@ -1787,7 +1833,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % aportados  el robot
 
 % si
-% esto genera un cambio en la grilla, este cambio se informa al modulo
+% esto genera un cambio en la grilla, este cambio se informa al módulo
 % \emph{combinador de mapas}. 
 
 % robot completa un objetivo de exploración este recopila nueva
@@ -1987,7 +2033,7 @@ mantener actualizado un mapa completo del entorno explorado.
 %     \end{itemize}
 %   \end{itemize}
 
-% \item Segundo: "Si segun yo lo complete pero la central me dice que no esta completado seguramente no lo estoy viendo correctamente, intento recuperarme"
+% \item Segundo: "Si según yo lo complete pero la central me dice que no esta completado seguramente no lo estoy viendo correctamente, intento recuperarme"
 %   \begin{itemize}
 %   \item Si se reasigna al objetivo => Hacer recovery
 %   \end{itemize}
@@ -2016,7 +2062,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % Mencionar la solucion a la que se llego, y cual es la definicion de celda base.
 % Dos caminos (I) mi definicion que separa los basis en sources y pseudosources. O (II)
 % definir los basis como las celdas ocupadas que hacen que una celda pertenezca
-% al GVD segun lau (solo se neceita para puntos criticos incluidos en el GVD). 
+% al GVD según lau (solo se neceita para puntos criticos incluidos en el GVD). 
 
 % (II) tiene la ventaja que es facil de explicar y permite basarse en lo que ya
 % esta bien fundamnetado (Lau), por otro lado (I) es lo que se implemento, pero
@@ -2135,7 +2181,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % Explicar que quizas se relacione al tema corredor de largo 2 que se va a explicar en \ref{subsec:filt}.
 
 % \subsection{Filtrado}\label{subsec:filt}
-% Los vetices que en una iteracion se determina que deben pertenecer al GVD segun
+% Los vetices que en una iteracion se determina que deben pertenecer al GVD según
 % el criterio de pertenecia aplicado en las celdas en las cuales se detiene una
 % ola consistente, pasan por un filtrado extra. Este filtrado busca evitar líneas
 % discretizadas de dos celdas de grosor que violan la propiedad \say{sparceness}
@@ -2269,7 +2315,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % elige la frontera significativa. La eleccion en un principio podria ser
 % aleatoria y el algoritmo daria resultados validos, pero esto dejaria a la
 % suerte la calidad de la solucion. La idea sería elegir de forma determinista a
-% una frontera significativa buscando que cubra la mayor cantidad de frotneras
+% una frontera significativa buscando que cubra la mayor cantidad de fronteras
 % mientras se evita cubrir nuevamente fronteras que ya sean cubiertas por otra
 % frotntera significativa. 
 
