@@ -45,7 +45,7 @@ propuesta.
 % El problema construir el mapa de un entorno inicialmente desconocido a partir
 % de los datos sensoriales de varios robots se soluciona, construyendo en cada
 % robot, según la información sensorial que estos recolectan, una grilla de
-% ocupación con el nodo de ROS \emph{costmap\_2d} \cite{ROS-costmap_2d} y luego
+% ocupación con el nodo de \gls{ROS} \emph{costmap\_2d} \cite{ROS-costmap_2d} y luego
 % combinando dichas grillas con las ideas presentadas en
 % \cite{stachniss2009robotic}.
 
@@ -110,20 +110,20 @@ En lo que resta de esta sección se comentará de cada modulo tanto sus tareas,
 como sus interacciones con el resto de los módulos.
 
 \subsection{Move Base}\label{subsec:move_base}
-El modulo \emph{Move Base} consiste en una instancia del nodo ROS
+El modulo \emph{Move Base} consiste en una instancia del nodo \gls{ROS}
 \emph{move\_base} \cite{ROS-move_base} que provee una interfaz para configurar,
-ejecutar y interactuar con el \emph{stack de navegación} de ROS
+ejecutar y interactuar con el \emph{stack de navegación} de \gls{ROS}
 \cite{ROS-navigation}. 
 
-El stack de navegación de ROS es un conjunto de nodos que tienen como propósito
+El stack de navegación de \gls{ROS} es un conjunto de nodos que tienen como propósito
 que un robot pueda navegar el entorno hacia objetivos dentro del mismo. En la
 figura \ref{fig:move_base} se muestra un diagrama que representa a los nodos que
-componen al stack de navegación de ROS y sus interacciones.
+componen al stack de navegación de \gls{ROS} y sus interacciones.
 
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/move_base.png}
-  \caption[Arquitectura del stack de navegación de ROS.]{Arquitectura del stack de navegación de ROS. Extraída de \cite{ROS-move_base}.}
+  \caption[Arquitectura del stack de navegación de ROS.]{Arquitectura del stack de navegación de \gls{ROS}. Extraída de \cite{ROS-move_base}.}
   \label{fig:move_base}
 \end{figure} 
 
@@ -1722,7 +1722,7 @@ desde los sensores hasta la construcción de un mapa que contenga toda la
 información obtenida del entorno.
 
 Cada robot esta constantemente recopilando información del entorno a través de
-sus sensores y enviando dicha información al nodo de ROS \emph{global\_costmap}
+sus sensores y enviando dicha información al nodo de \gls{ROS} \emph{global\_costmap}
 ubicado en su modulo \emph{move base} (sección \ref{subsec:move_base}). Al
 recibir datos sensoriales \emph{global\_costmap} actualiza la grilla de
 ocupación que construye. \emph{Global\_costmap} fue configurado para que los

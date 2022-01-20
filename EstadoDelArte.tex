@@ -956,7 +956,7 @@ Simuladores físicos disponibles &
   \cellcolor{green!25}ODE                           &
   %argos                                            
   \cellcolor{yellow!25} Propios                     \\ \hline
-Integración con ROS   & \cellcolor{green!25}Si          & \cellcolor{green!25}Si           & \cellcolor{green!25}Si          & \cellcolor{red!25}Inactiva \\ \hline 
+Integración con \gls{ROS}   & \cellcolor{green!25}Si          & \cellcolor{green!25}Si           & \cellcolor{green!25}Si          & \cellcolor{red!25}Inactiva \\ \hline 
 Aceleración de tiempo & \cellcolor{green!25}Si          & \cellcolor{green!25}Si           & \cellcolor{green!25}Si          & \cellcolor{green!25}Si     \\ \hline
 Modo headless         & \cellcolor{green!25}Si          & \cellcolor{green!25}Si           & \cellcolor{red!25}No            & \cellcolor{green!25}Si     \\ \hline
 Licencia              & \cellcolor{green!25}Apache 2.0  & \cellcolor{yellow!25}Propietaria & \cellcolor{green!25}Apache 2.0  & \cellcolor{green!25}MIT    \\ \hline
@@ -984,17 +984,17 @@ limitadas, pero también es posible que sea un factor que influye positivamente
 en la eficiencia.
 
 
-ROS \cite{ros} es un framework que facilita el desarrollo de aplicaciones
+\gls{ROS} \cite{ros} es un framework que facilita el desarrollo de aplicaciones
 robóticas, utilizarlo evita \say{reinventar la rueda} y permite dedicarse
 a los aspectos principales de un proyecto. 
-%Otro aspecto importante es que implementar con ROS
+%Otro aspecto importante es que implementar con \gls{ROS}
 %puede facilitar la migración de la implementación desarrollado en el
 %simulador para en la realidad.
 De los simuladores candidatos
-todos menos ARGoS proveen de soporte oficial para ROS. Para ARGoS existe una
-extension \cite{argos_bridge} que permite conectar a ROS con ARGoS que se
+todos menos ARGoS proveen de soporte oficial para \gls{ROS}. Para ARGoS existe una
+extension \cite{argos_bridge} que permite conectar a \gls{ROS} con ARGoS que se
 encuentra inactiva. %hace cinco años.
-% \todoremark{La introducción a ros, no se si deberia estar aca. La parte de migrar se entiende? deberia fundamentar más? sacarla?}
+% \todoremark{La introducción a \gls{ROS}, no se si deberia estar aca. La parte de migrar se entiende? deberia fundamentar más? sacarla?}
 
 %utilizando las
 %facilidades estándar (por ejemplo el stack de navegación) es que el código
@@ -1029,7 +1029,7 @@ casos complejos (muchos robots y entorno complejo).
 
 Dada la información presentada hasta el momento es posible descartar a ARGoS como
 opción dado que su simulación se considera poco realista y por su falta de
-integración con ROS. Por su licenciamiento propietario, bajo rendimiento y alta
+integración con \gls{ROS}. Por su licenciamiento propietario, bajo rendimiento y alta
 utilización de recursos, se descarta a CoppeliaSim como posibilidad. Entre los
 restantes Gazebo y Webots la información disponible dificulta tomar una
 decisión. Se busco sin éxito estudios de rendimiento y/o uso de recursos sobre
@@ -1058,10 +1058,10 @@ muestra el escenario de simulación implementado en los simuladores a evaluar.
 \end{figure}
 
 Al ejecutarse la simulación los robots deben avanzar hasta una de las paredes
-cuando se encuentran a un metro de esta (información obtenida usando un LiDAR) %\footnote{Dispositivo que permite determinar la distancia desde un emisor láser a una superficie.}
+cuando se encuentran a un metro de esta (información obtenida usando un \gls{LiDAR}) %\footnote{Dispositivo que permite determinar la distancia desde un emisor láser a una superficie.}
 estos cambian de dirección repitiendo el comportamiento por cinco minutos.
 
-El proceso de replicar el escenario en cada simulador utilizando ROS será el
+El proceso de replicar el escenario en cada simulador utilizando \gls{ROS} será el
 insumo para evaluar su usabilidad, mientras que para evaluar el rendimiento y
 comportamiento se ejecutará una vez ambas simulaciones acelerando el tiempo
 tanto como sea posible, siendo $R_{sim}$ (\ref{ec:R}) el indicador de
@@ -1069,7 +1069,7 @@ rendimiento resultado de dividir el tiempo dentro de simulación $ts$ entre el
 tiempo real que tome ejecutarla $tr$. A mayor $R_{sim}$ mayor rendimiento.
 \begin{equation}\label{ec:R} R_{sim} = \frac{ts}{tr} \end{equation}
 
-El software utilizado fue Ubuntu \emph{20.04}, ROS \emph{Noetic}, Gazebo \emph{11.4.0} y Webots \emph{R2021a}. 
+El software utilizado fue Ubuntu \emph{20.04}, \gls{ROS} \emph{Noetic}, Gazebo \emph{11.4.0} y Webots \emph{R2021a}. 
 
 El hardware utilizado consiste de un procesador Intel Core i3-9100F, un procesador
 gráfico GeForce GTX 660 y 16GB de memoria RAM.
@@ -1085,30 +1085,30 @@ más cómoda en Webots ya que este dispone por defecto del modelo de robot a
 utilizar, por otro lado en Gazebo fue necesario usar un modelo creado por un
 tercero.
 
-En términos de integración con ROS, en Gazebo se logró sin inconvenientes,
+En términos de integración con \gls{ROS}, en Gazebo se logró sin inconvenientes,
 Webots requirió más trabajo en tanto no integra facilidades para el control de
-robots. Por ejemplo, Webots no soporta el uso del paquete de ROS
+robots. Por ejemplo, Webots no soporta el uso del paquete de \gls{ROS}
 \emph{diff\_drive\_controller} \cite{diff_drive_controller} que simplifica el
 control de movimiento de robots diferenciales, mientras que Gazebo sí.
 % \todowarn{Hay otros aspectos que Detecte como malos de Webots, como necesidad
 %   de usar servicios para activar los tópicos, en vez de que estén activos por
 % defecto pero me parece que es complicado de explicar en alto nivel}
 
-Otro aspecto que complejizó la integración de ROS en Webots es que su sistema
-de coordenadas por defecto (NUE) difiere del utilizado por ROS y Gazebo (ENU).
-Fue posible configurar Webots para utilizar ENU pero se requirió hacer algunos
+Otro aspecto que complejizó la integración de \gls{ROS} en Webots es que su sistema
+de coordenadas por defecto (\gls{NUE}) difiere del utilizado por \gls{ROS} y Gazebo (\gls{ENU}).
+Fue posible configurar Webots para utilizar \gls{ENU} pero se requirió hacer algunos
 cambios como rotar los elementos del entorno manualmente.
-% - Diferentes estandares en los sistemas coordenadas entre ROS("ENU") y
-%   Webots("NUE") que aunque Webots permite cambiarlo esto solo altera las
+% - Diferentes estandares en los sistemas coordenadas entre \gls{ROS}("\gls{ENU}") y
+%   Webots("\gls{NUE}") que aunque Webots permite cambiarlo esto solo altera las
 %   traslaciones pero no las rotaciones, por lo tanto, ademas de tener que
 %   rotar todos los objetos en el mapa, otras consideraciones pueden ser
 %   necesarias. El ejemplo que se presenteo durante el desarrollo del bechmark
-%   fue la necesidad rotar los frames de referencia de los datos un lidar para
+%   fue la necesidad rotar los frames de referencia de los datos un \gls{LiDAR} para
 %   visulaizarlos correctamente en rviz.
 
 Al ejecutar las simulaciones en Gazebo el comportamiento fue el esperado, en
 Webots los robots se balanceaban notoriamente de adelante hacia atrás al
-moverse, mientras que las medidas provistas por el LiDAR no se corresponden con
+moverse, mientras que las medidas provistas por el \gls{LiDAR} no se corresponden con
 las ubicaciones de la pared.
 
 Los resultados de rendimiento fueron para Webots $R_{sim}=2.20$, para Gazebo $R_{sim}=3.58$
@@ -1118,7 +1118,7 @@ en su modo normal y $R_{sim}=4.70$ haciendo uso del modo \emph{headless} que Web
 
 Con respecto a la usabilidad, Webots presenta la ventaja de tener
 disponible el modelo deseado, pero esto queda opacado por los inconvenientes
-experimentados al integrar con ROS\footnote{La version R2021b de
+experimentados al integrar con \gls{ROS}\footnote{La version R2021b de
 Webots agrega soporte para \emph{diff\_drive\_controller}}. Gazebo resulto tener una mejor usabilidad al no presentar dichos
 inconvenientes.
 
