@@ -693,44 +693,49 @@ verde, siendo las circunferencias rojas de radio $rango=5.6$ (largos de celda) c
 \section{Asignación de objetivos}\label{sec:asigTar}
 
 Cuando un robot se encuentra ocioso este le solicita a la central que le asigne
-un nuevo objetivo, esto desencadena el proceso de asignación de
+un nuevo objetivo de exploración, esto desencadena el proceso de asignación de
 objetivos que se describe a lo largo de esta sección.
 
 La asignación de objetivos se basa en la estrategia de coordinación presentada
 en \ref{subsec:wurmCoord}, que sostiene que es conveniente que los robots se
-asignen a los objetivos de forma que estos se distribuyan uniformemente sobre
-las habitaciones y corredores (segmentos) de un entorno estructurado, que se
-corresponden las regiones de un mapa topológico (sección \ref{subsec:mapas}).
+asignen a los objetivos maximizando la distribución de los robots
+sobre los segmentos (habitaciones y corredores) que componen a un entorno
+estructurado.
+% , que
+% se corresponden las regiones de un mapa topológico (sección
+% \ref{subsec:mapas}).
 
-La asignación de objetivos consiste una subasta donde los objetivos de
-exploración son subastados entre los robots. La subasta se puede separar en
-tres partes, \emph{obtención de información}, \emph{valuación} y
-\emph{resolución}. La \emph{obtención de información}, es la etapa en la cual
-todos los datos necesarios para llevar adelante la subasta (por ejemplo los objetivos de
-exploración) son determinados. La \emph{valuación} abarca la distribución de
-la información obtenida desde la central hacia los robots, el juicio de valor
-de cada robot a cada objetivo recibido y el posterior envió de estas
-valoraciones desde los robots hacia la central. La \emph{resolución} contempla
-la recepción de las valoraciones por la central, un postprocesamiento sobre
-estos, la asignación de objetivos a robots según la valoraciones y los
-segmentos a los cuales pertenece cada objetivo, finalizando con la notificación
-del objetivo que le fue asignado a cada robot.
+La asignación de objetivos consiste una subasta donde lo subastado son los
+objetivos de exploración, el subastador es la estación central y los postores
+son los robots. La subasta se puede separar en tres partes, \emph{obtención de
+  información}, \emph{valuación} y \emph{resolución}. La \emph{obtención de
+información} es la etapa inicial donde central obtiene información necesaria
+para llevar adelante la subasta, por ejemplo los objetivos de exploración. La
+\emph{valuación} abarca la distribución de la información obtenida desde la
+central hacia los robots, la valuación que cada robot hace para cada objetivo
+recibido y el posterior envió de las valuaciones desde los robots hacia la
+central. La \emph{resolución} se lleva a cabo en la central y comprende la
+recepción de las valuaciones, la asignación de objetivos a robots, finalizando
+con la notificación del objetivo que le fue asignado a cada robot.
 
-Con respecto a la separación del problema de asignación de objetivos mencionada
-en la sección \ref{sec:exploracion}, la parte de identificación de objetivos
-esta incluida en la \emph{obtención de información}, y la parte de
-distribución de objetivos se corresponde con el resto de lo que se describe
-en esta sección.
+% según la valuaciones y
+% los segmentos a los cuales pertenece cada objetivo
+
+% Con respecto a la separación del problema de asignación de objetivos mencionada
+% en la sección \ref{sec:exploracion}, la parte de identificación de objetivos
+% esta incluida en la \emph{obtención de información}, y la parte de
+% distribución de objetivos se corresponde con el resto de lo que se describe
+% en esta sección.
 
 \subsection{Obtención de información}\label{subsec:obtInfo}
 %, esto desencadena una nueva subasta de no encontrarse una en curso.
 % Notar que si existe una subasta en curso el robot va recibir un objetivo cuando
 % esta termine, por lo que puede no ser necesario iniciar otra.
 Como se menciono anteriormente cuando un robot ocioso solicita un objetivo a la
-central se da comienzo a una nueva subasta.
-La etapa de \emph{obtención información} es la primera etapa de la subasta. La
-información que se obtiene en esta etapa son los objetivos de exploración, un
-GVD y los segmentos del entorno explorado.
+central se da comienzo a una nueva subasta. La etapa de \emph{obtención
+información} es la primera etapa de la subasta. La información que se obtiene
+en esta etapa son los objetivos de exploración, los segmentos del entorno
+explorado y un GVD.
 % que con el motivo
 % de identificar en que segmento se encuentra cada objetivo de exploración, para
 % posteriormente poder distribuir a los robots sobre estos. 
@@ -738,12 +743,12 @@ GVD y los segmentos del entorno explorado.
 La identificación de objetivos se lleva a cabo con el método descrito en la
 sección \ref{subsec:MiSimp}.
 
-La identificación de los segmentos se logra aplicando una técnica que se basa
-en la propuesta de \cite{Thrun1998} explicada en la sección
-\ref{subsec:mapaTopGVD}. Detalles de como esta técnica fue implementada se
-presentan en la sección \ref{subsec:mapaTopGVDGrid}. 
+Los segmentos se obtienen aplicando una técnica que se basa en la propuesta de
+\cite{Thrun1998} explicada en la sección \ref{subsec:mapaTopGVD}. Detalles de
+como esta técnica fue implementada se presentan en la sección
+\ref{subsec:mapaTopGVDGrid}. 
 
-El GVD requerido para identificar los segmentos se construye de forma
+El GVD requerido para determinar los segmentos se construye de forma
 incremental con una variante del \emph{brushfire dinámico} que se comenta en la
 sección \ref{sec:MiConstGVD}.
 % de no de los cambios principales con
@@ -755,45 +760,46 @@ sección \ref{sec:MiConstGVD}.
 
 \subsection{Valuación} \label{subsec:MiValSub}
 
-Luego de obtenida la información comienza la etapa de \emph{valuación}
-con la central distribuyendo los objetivos y el GVD hacia los robots. Cuando un
-robot recibe la información este asigna dos valores a cada objetivo, el largo
-del camino hacia a el y un costo asociado a la complejidad del camino.
+Terminada la etapa obtención de información comienza la etapa de \emph{valuación} con la
+central distribuyendo los objetivos y el GVD hacia los robots. 
 
-Calcular el largo de un camino implica determinar el camino en sí. En este
-proyecto los caminos se componen de una secuencia de puntos en el espacio que
-comienza en la posición del robot y termina en el objetivo. Los caminos se
-calculan de forma distinta dependiendo de la clase de objetivo al que llevan,
-existiendo dos clases, trivial y no trivial.
+Cuando un robot recibe dicha información este calcula dos valores para cada
+objetivo, el largo de un camino hacia él y un costo asociado a la complejidad
+de ese camino. Esto implica determinar un camino. En este proyecto los caminos
+se componen de una secuencia de puntos en el espacio que comienza en la
+posición del robot y termina en el objetivo. Los caminos se calculan de forma
+distinta dependiendo de la clase de objetivo al que llevan, existiendo dos
+clases, trivial y no trivial.
 
 Los objetivos triviales se definen como los objetivos para los cuales el
 segmento de recta que existe entre el robot y el objetivo no contiene
 obstáculos, de lo contrario el objetivo es no trivial. Para determinar esto, se
 discretiza el segmento de recta en celdas \cite{foleyphillips} y se comprueba
-en el mapa global (grilla de ocupación) almacenado en el robot, alguna de las
-celdas tiene un estado ocupado. 
+en la grilla de ocupación almacenada en el robot (que constituye el mapa
+completo del entorno) si alguna de esas celdas tiene estado ocupado. 
 
-El camino hacia objetivos triviales se determina como los puntos ubicados en
-los extremos del segmento de recta que existe entre el robot y el objetivo, que
-se encuentra libre de obstáculos. Un ejemplo de un camino trivial se muestra
-en la figura \ref{fig:caminoT}.
+Los caminos hacia los objetivos triviales se determinan como los puntos
+ubicados en los extremos del segmento de recta que se encuentra libre de
+obstáculos que existe entre el robot y el objetivo. Un ejemplo de un camino
+trivial se muestra en la figura \ref{fig:caminoT}.
 
 En el caso de los objetivos no triviales se hace uso del GVD recibido como
 parte de la información de la subasta, aprovechando que este constituye un
-\emph{roadmap} (sección \ref{subsec:mapacarr}). El proceso para construir el
-camino puede dividir en tres partes cada una asociada a una de las propiedades
-que caracterizan a un \emph{roadmap}: accesibilidad, conectividad y capacidad
-de salida. La parte asociada accesibilidad consiste en encontrar un camino
-desde el robot al GVD, lo cual se hace a través de un \emph{breadth-first
-search} (BFS), comenzando en la celda asociada a la posición del robot y
-deteniéndose apenas se visita una celda $c_1$ perteneciente al GVD. La que se
-relaciona con la capacidad de salida es análoga a la accesibilidad pero el
-desde el objetivo a alguna celda $c_2$ perteneciente al GVD. Por ultimo la parte
-vinculada con la conectividad se basa en establecer un camino sobre las celdas
-pertenecientes al GVD desde $c_1$ a $c_2$, lo cual se hace aplicando algoritmo
-$A^*$. Conectando los centros de celdas de estos tres caminos se obtiene el
-camino completo. En la figura \ref{fig:caminoNT} se presenta un ejemplo de un
-camino no trivial.
+\emph{roadmap} (sección \ref{subsec:mapacarr}). En este caso el proceso para
+construir el camino se puede dividir en tres partes, cada una asociada a una de
+las propiedades que caracterizan a un \emph{roadmap}: accesibilidad,
+conectividad y capacidad de salida. La parte asociada a la accesibilidad
+consiste en encontrar un camino desde el robot al GVD, lo cual se hace a través
+de un \emph{breadth-first search} (BFS), comenzando en la celda asociada a la
+posición del robot y deteniéndose apenas se visita una celda $c_1$
+perteneciente al GVD. La parte que se relaciona a la capacidad de salida es
+análoga a la parte asociada a la accesibilidad pero partiendo desde el objetivo
+y llegando a una celda $c_2$ perteneciente al GVD. Por ultimo en la parte
+vinculada con la conectividad se determina un camino sobre las celdas
+pertenecientes al GVD desde $c_1$ a $c_2$, y para esto se utiliza el algoritmo
+$A^*$. Finalmente conectando los tres caminos se obtiene el camino completo. En
+la figura \ref{fig:caminoNT} se presenta un ejemplo de un camino para un
+objetivo no trivial.
 
 \begin{figure}[H]
   \centerfloat
@@ -809,18 +815,30 @@ entre si con líneas magenta.}\label{fig:camino}
 \end{figure}
 
 
-El costo asociado a la complejidad en el caso de objetivos triviales se
-corresponde a una estimación del tiempo que demora el robot en rotar de forma
-que su parte delantera apunte hacia el objetivo. Y en el caso de objetivos no
-triviales se utiliza la maxima penalización usada para objetivos no triviales.
-El propósito de esto es diferenciar los objetivos triviales sin beneficiar a
-los objetivos no triviales. Este costo se aplica para incentivar a que el robot
-continue siendo asignado a los objetivos triviales que tiene por adelante al
-explorar.
+Respecto al costo asociado a la complejidad, en el caso de objetivos triviales
+este es proporcional al mínimo angulo que el robot debe rotar para que su parte
+delantera apunte hacia el objetivo. Y en el caso de objetivos no triviales es
+igual al máximo costo asociado a la complejidad que fue asignado a un objetivo
+trivial, esto se hace para diferenciar los objetivos triviales sin dejar
+beneficiados a los objetivos no triviales. Este costo tiene el propósito de
+incentivar que los robots continúen siendo asignados a los objetivos triviales que
+tienen por delante, evitando rotaciones, a no ser que la diferencia en los largos de
+los caminos lo amerite.
 
-Obtenidos ambos valores para cada objetivo estos se envían hacia la central
+Una vez calculados los valores para cada objetivo estos se envían hacia la central
 junto a la ubicación actual del robot, siendo toda esta información en su
 conjunto considerada una valuación. %\todo{o mensaje de valuación, como quede mejor}
+
+% Respecto al costo asociado a la complejidad, en el caso de objetivos triviales
+% este corresponde a una estimación del tiempo que demora el robot en rotar de
+% forma que su parte delantera apunte hacia el objetivo. Y en el caso de
+% objetivos no triviales se utiliza el máximo costo asociado a la complejidad que
+% fue asignado a un objetivo no trivial, esto se hace para diferenciar los
+% objetivos triviales sin beneficiar a los objetivos no triviales. Este costo
+% tiene el propósito de incentivar que los robots continúen siendo asignados a
+% objetivos triviales que tienen por delante, evitando que roten a no ser que la
+% diferencia de largos de los caminos lo amerite.
+
 
 % De esta
 % forma los objetivos triviales se valuan distinto según que tanto tiene que
