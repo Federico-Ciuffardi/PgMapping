@@ -228,7 +228,7 @@ La grillas de ocupación fueron introducidas en la sección \ref{subsec:mapas}.
 En esta sección se profundizan conceptos a dichas estructuras que son útiles en
 el contexto del la solución desarrollada.
 
-El conjunto $\mli{CG}\subseteq R^2$ esta compuesto por los centros de cada
+El conjunto $\mli{CG}\subseteq \mathds{R}^2$ esta compuesto por los centros de cada
 celda de la grilla de ocupación. Una celda se asocia a un único centro y
 viceversa, por lo tanto en lo que resta de este informe se usaran ambos
 términos de forma indistinta.
@@ -957,7 +957,7 @@ rápidamente la estructura del entorno.
 Una vez determinados los costos $c_{i,j}$ se ejecuta un algoritmo que resulta
 en la asignación de objetivos a robots considerando tanto los costos, como la
 restricción de que los objetivos asignados deben estar distribuidos sobre los
-segmentos. Este algoritmo de asignación tiene dos ventajas respecto al
+segmentos del entorno. Este algoritmo de asignación tiene dos ventajas respecto al
 algoritmo utilizado en \cite{wurm2008coordinated} comentado en la sección
 \ref{subsec:wurmCoord}. La primera es que resuelve la asignación de objetivos
 directamente, en lugar de asignar primero robots a segmentos, para luego
@@ -977,18 +977,18 @@ alternativo en el que $s_1$ y $s_2$ tienen $5$ (o más) objetivos cada uno,
 resulta en una distribución uniforme.
 
 El algoritmo de asignación se corresponde al algoritmo
-\ref{alg:resolucionsubastasegmentos} donde $R$ es el conjunto de los
+\ref{alg:resolucionsubastasegmentos} donde $R$ es el conjunto de
 identificadores de los robots de los cuales se recibieron valuaciones, $O$ es
-el conjunto de los identificadores de los objetivos valuados, y $S$ el conjunto
-de los identificadores de los segmentos. El conjunto $Costos$ contiene una tupla
-$(c_{i,j},r_i,o_j)$ por cada costo $c_{i,j}$ computado para el objetivo $o_j$
-según el robot $r_i$. La función $segmento : O \rightarrow S$ dado un
-objetivo devuelve el segmento al que pertenece, y la función $\#objetivos : S
-\rightarrow N$ devuelve el número de objetivos en un segmento.
+el conjunto de identificadores de los objetivos valuados, y $S$ el conjunto de
+identificadores de los segmentos. El conjunto $Costos$ contiene una tupla
+$(c_{i,j},r_i,o_j)$ por cada costo $c_{i,j}\in \mathds{R}$ de cada robot $r_i\in R$ para cada objetivo
+$o_j\in O$. La función $segmento : O \rightarrow S$ dado un objetivo devuelve el
+segmento al que pertenece, y la función $\#objetivos : S \rightarrow \mathds{N}$
+devuelve el número de objetivos que existen en un segmento.
 % Los conjuntos $O_1$,$O_2$,...,$O_k$,...,$O_{|S|}$ contienen los
 % objetivos que están dentro de un segmento $s_k\in S$.
 
-\vspace{1cm}
+\vspace{0.2cm}
   
 \begin{algorithm}[H]
 \SetAlgoLined
@@ -1048,6 +1048,8 @@ objetivo devuelve el segmento al que pertenece, y la función $\#objetivos : S
  \label{alg:resolucionsubastasegmentos}
 \end{algorithm}
 
+\newpage
+
 \begin{permissive}
 El algoritmo se puede dividir en dos partes, el \emph{calculo de valores}
 $cocienteDist$, $restoDist$ (líneas 1-18) y la \emph{asignación distribuida} (líneas
@@ -1057,27 +1059,32 @@ $cocienteDist$, $restoDist$ (líneas 1-18) y la \emph{asignación distribuida} (
 Los valores $cocienteDist$ y $restoDist$ se utilizan para lograr una asignación
 distribuida sobre los segmentos considerando los objetivos contenidos en cada
 uno. La distribución deseada se corresponde con la distribución que se logra al
-hacer $N$ rondas en las que se asigna un solo robot por segmento con tenga
-objetivos sin asignar. La ronda $N$ termina cuando no quedan robots o objetivos
-por asignar. Si existen menos objetivos que robots se tiene que la ronda $N$
-culmina con todos los objetivos asignados y algunos robots ociosos. De existir
-más objetivos que robots luego de la ronda $N$ se pueden tener segmentos cuyos
-objetivos están todos asignados y se tienen segmentos dentro de los que 
-existen objetivos sin asignar, la distribución sera uniforme sobre estos últimos
-segmentos. Es decir los $K$ segmentos que tienen objetivos sin asignar
-cumplirán con (\ref{ec:uniform}), existiendo $restoDist$ segmentos con
-$N=cocienteDist+1$ robots asignados y $K-restoDist$ segmentos con
-$cocienteDist$ robots asignados. El \emph{calculo de valores} se lleva a cabo
-inicializando $cocienteDist$ y $restoDist$ asumiendo una distribución
-completamente uniforme (líneas 5-6 y 9-10 primera iteración), sin considerar si
-es posible dado el número de objetivos en cada segmento. Luego de forma
-iterativa, segmento a segmento y comenzando por los que tienen menos objetivos
-(líneas 11-12), comprobar si son de los segmentos cuyos objetivos serán todos
-asignados (línea 13) y de serlo ajustar los valores para que la distribución
-sea uniforme en el resto de conjuntos (líneas 14-17 y 9-10). Las iteraciones
-continúan hasta que solo quedan los segmentos en los que quedaran objetivos sin
-asignar (línea 8), cuando esto sucede se dice que $cocienteDist$ y $restoDist$
-convergen.
+hacer $N$ rondas en las que se asigna un solo robot a cada segmento que contenga
+objetivos sin asignar. La ronda $N$ termina cuando no quedan robots u objetivos
+por asignar. 
+% Si existen menos objetivos que robots se tiene que la ronda $N$
+% culmina con todos los objetivos asignados y algunos robots ociosos. De existir
+% más objetivos que robots finalizada la ronda $N$ se pueden tener segmentos cuyos
+% objetivos están todos asignados y segmentos dentro de los que 
+% existen objetivos sin asignar, la distribución sera uniforme sobre estos últimos
+% segmentos.
+La idea detrás de los valores $cocienteDist$ y $restoDist$ es que en la
+distribución deseada existen $U$ segmentos que cumplen con la restricción de
+distribución uniforme (\ref{ec:uniform}), existiendo $restoDist$ segmentos con
+$cocienteDist+1=N$ robots asignados y $U-restoDist$ segmentos con
+$cocienteDist$ robots asignados. El resto de segmentos tiene una cantidad de
+objetivos menor a $cocienteDist$ y todos sus objetivos son asignados.
+
+El \emph{calculo de valores} se lleva a cabo inicializando $cocienteDist$ y
+$restoDist$ asumiendo una distribución completamente uniforme (líneas 5-6 y
+9-10 primera iteración), sin considerar si es posible dado el número de
+objetivos en cada segmento. Luego de forma iterativa, segmento a segmento y
+comenzando por los que tienen menos objetivos (líneas 11-12), se comprueba si son
+de los segmentos cuyos objetivos serán todos asignados (línea 13) y de serlo se
+ajusta los valores para que la distribución sea uniforme en el resto de
+conjuntos (líneas 14-17 y 9-10). Las iteraciones continúan hasta que solo
+quedan los segmentos en los que van a quedar objetivos sin asignar (línea 8),
+cuando esto sucede se dice que $cocienteDist$ y $restoDist$ convergen.
 % a los valores consistentes con la distribución deseada.
 
 Con los valores $cocienteDist$ y $restoDist$ calculados la \emph{asignación
@@ -1116,7 +1123,7 @@ simplemente como GVD.
 
 % considerando el mapa de distancia
 % subproducto de \emph{brushfire dinamico}
-Dada función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ que se
+Dada función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow \mathds{R}$ que se
 corresponde con un mapa de distancia (sección \ref{subsec:constGVD}) a las
 celdas pertenecientes a generadores, se define el conjunto de las \emph{celdas
 criticas} (puntos críticos discretizados) $\mli{CCr}$ según
@@ -1371,7 +1378,7 @@ original} desde este punto.
 
 % (que se
 % corresponde con la función de despeje discretizado $\mli{DD} : \mli{CG}
-% \rightarrow R$)
+% \rightarrow \mathds{R}$)
 
 La implementación realizada en proyecto mantiene las olas consistentes e
 inconsistentes para el calculo incremental de un mapa de distancia.
@@ -1418,7 +1425,7 @@ correspondiente a incremento se registran todas las celdas en involucradas en
 choques de olas consistentes. Luego de finalizar la actualización del mapa de
 distancia, se obtienen las celdas base $\mli{CB}_c$ de cada celda $c$
 registrada previamente según el algoritmo \ref{alg:celdasBase}, notar que la
-función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow R$ se
+función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow \mathds{R}$ se
 corresponde los valores del mapa de distancia calculado.
 
 \begin{algorithm}[H]

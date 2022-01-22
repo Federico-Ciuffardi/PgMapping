@@ -186,7 +186,7 @@ Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inici
 
 % \cite{choset2005principles}, \cite{Thrun1998}, \cite{Liu2015}.
 \subsection{Diagrama de Voronoi}\label{sec:VD}
-Dado un espacio euclídeo $W \subseteq R^2$, y $G \subseteq W$ un conjunto de puntos llamados \emph{generadores}. Sea $p\in W$, la función $d_p : W \rightarrow R$ qué computa la distancia desde $p$ a otro punto en $W$. 
+Dado un espacio euclídeo $W \subseteq \mathds{R}^2$, y $G \subseteq W$ un conjunto de puntos llamados \emph{generadores}. Sea $p\in W$, la función $d_p : W \rightarrow \mathds{R}$ qué computa la distancia desde $p$ a otro punto en $W$. 
 
 % Una \emph{region de Voronoi} $R_i\subseteq W$ es el conjunto de puntos más cercanos a un generador $s_i\in G$ particular: 
 % \begin{equation}
@@ -221,13 +221,13 @@ Esta propiedad es útil en el contexto de la robótica porque dado un diagrama d
 \subsection{Diagrama generalizado de Voronoi}\label{subsec:GVD}
 Recordando que los generadores en un diagrama de Voronoi son puntos, se tiene un problema al querer utilizar obstáculos como generadores. El problema radica en que normalmente los obstáculos ocupan un área y por lo tanto no pueden representarse como puntos en el espacio, para solucionar esto se generaliza la definición de diagrama de Voronoi para poder definirlo a partir de generadores de mayor orden, como lo son líneas o polígonos. A esta generalización se la denomina como \emph{diagrama generalizado de Voronoi} $\mli{GVD}\subseteq W$ , y los generadores de mayor orden o generadores generalizados son representados como conjuntos de puntos del espacio de trabajo, siendo $\mli{GG}\subseteq P(W)$ el conjunto de todos los generadores generalizados.
 
-% Las nuevas definiciones generalizadas son en su mayoría análogas a las originales, siendo el principal cambio la substitución de la función de distancia $d_p$ por una función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow R$ que considera las formas de los generadores generalizados. La función $\mli{gd}_p$ se define a partir de $d_p$ como se muestra en la ecuación \ref{eq:dg}.
+% Las nuevas definiciones generalizadas son en su mayoría análogas a las originales, siendo el principal cambio la substitución de la función de distancia $d_p$ por una función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow \mathds{R}$ que considera las formas de los generadores generalizados. La función $\mli{gd}_p$ se define a partir de $d_p$ como se muestra en la ecuación \ref{eq:dg}.
 
 Las definiciones relacionadas a los GVD consisten en generalizaciones de
 las planteadas para los VD en la sección \ref{sec:VD} pensadas para considerar
 generadores generalizados en lugar de generadores puntuales. 
 En primer lugar se define la llamada función de distancia generalizada
-$\mli{gd}_p : P(W) \rightarrow R$ que permite obtener la distancia entre
+$\mli{gd}_p : P(W) \rightarrow \mathds{R}$ que permite obtener la distancia entre
 $p$ y un generador generalizado $s_i$, definida a partir de la distancia
 euclídea $d_p$ como se muestra en \eqref{eq:dg}.
 \begin{equation}
@@ -544,7 +544,7 @@ algoritmo de segmentación es que las entradas y salidas entre los segmentos son
 pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite
 delimitar segmentos.
 
-Para describir el método de segmentación es necesario introducir tres nuevos conceptos asociados al $\mli{GVD}$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow R$ de un punto $p \in W$, que corresponde a la distancia del punto $p$ al punto ocupado más cercano. De ser $p \in \mli{GVD}$ el despeje equivale a la distancia entre $p$ y alguno de sus generadores base generalizados $\mli{GBG}_p$ (recordar que todos están a una misma mínima distancia de $p$ \eqref{eq:GBG}). El segundo es el concepto de \emph{puntos críticos} $Cr \subseteq \mli{GVD}$, que son los puntos pertenecientes al GVD que minimizan el despeje localmente en el GVD, esta definición se formaliza en \eqref{eq:crit}, donde $d_p(p')$ es la distancia entre $p$ y $p'$. 
+Para describir el método de segmentación es necesario introducir tres nuevos conceptos asociados al $\mli{GVD}$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow \mathds{R}$ de un punto $p \in W$, que corresponde a la distancia del punto $p$ al punto ocupado más cercano. De ser $p \in \mli{GVD}$ el despeje equivale a la distancia entre $p$ y alguno de sus generadores base generalizados $\mli{GBG}_p$ (recordar que todos están a una misma mínima distancia de $p$ \eqref{eq:GBG}). El segundo es el concepto de \emph{puntos críticos} $Cr \subseteq \mli{GVD}$, que son los puntos pertenecientes al GVD que minimizan el despeje localmente en el GVD, esta definición se formaliza en \eqref{eq:crit}, donde $d_p(p')$ es la distancia entre $p$ y $p'$. 
 \begin{equation}
   % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
   Cr = \{p\ \in \mli{GVD} : \exists \upvarepsilon > 0, \forall p' \in \mli{GVD}, d_p(p') \leq \upvarepsilon, D(p) < D(p') \} \label{eq:crit}
