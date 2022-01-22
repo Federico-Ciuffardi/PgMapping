@@ -135,7 +135,7 @@ componen al stack de navegación de \gls{ROS} y sus interacciones.
 
 Cuando se establece un objetivo de navegación este se trasmite al nodo
 \emph{global\_planner} que se encarga de generar un plan de alto nivel
-conocido como plan global, que consiste en un numero de subobjetivos que de
+conocido como plan global, que consiste en un número de subobjetivos que de
 seguirse en secuencia llevan al objetivo .
 
 Los subobjetivos generados por el \emph{global\_planner} son enviados al nodo
@@ -513,7 +513,7 @@ necesariamente fronteras y deben ser traducidos a fronteras posteriormente.
 
 
 % \todo{Hay una arbitrariedad asociada a k-means tambien lo cual puede ser criticado tambien, aunque deberia estudiar mejor el tema, quizas no criticarlo aca pero destacar que el otro método es menos opaco en como elige las front sig}
-% Esto es la clase de pe la idea de obtener fornteras significativas es reducir el numero
+% Esto es la clase de pe la idea de obtener fornteras significativas es reducir el número
 % de objetivos de exploración,
 
 % El método basado en K-Means aunque funciona bien al aplicase en componentes conexas pequeñas, 
@@ -595,7 +595,7 @@ arbitraria de $F_i$ (líneas 3-9).
 Luego el algoritmo se basa en elegir una frontera de $\mli{UF}$ como frontera
 significativa $\mli{fs}$ (líneas 11-16), y posteriormente actualizar las
 estructuras mantenidas en función de la nueva $\mli{fs}$ (líneas 17-23). Notar
-que esto implica reducir el numero de celdas en $\mli{UF}$ ya que como mínimo
+que esto implica reducir el número de celdas en $\mli{UF}$ ya que como mínimo
 $\mli{fs}$ se cubre a si misma. Este proceso de elección y actualización se
 repite hasta que no quedan más fronteras de $F_i$ por cubrir (línea 10),
 y finalmente se devuelven las fronteras significativas $\mli{FS_i}$ resultantes
@@ -947,43 +947,44 @@ contrario. El costo $c_{i,j}$ se calcula según la ecuación
   \label{eq:costoTot}
 \end{equation}
 
-Los costos $\mli{cl}_{i,j}$ y $\mli{cc}_{i,j}$ tienen el propósito penalizar a
-los objetivos $o_j$ que se estima que llevaría más tiempo para que $r_i$ los 
-complete. Por otro lado el descuento $\mli{ds}_{i,j}$ incentiva que los
-robots se mantengan explorando un mismo segmento, lo cual desencadena
-comportamientos deseables como que un robot continue explorando un mismo
-corredor, revelando rápidamente la estructura de un entorno.
+Los costos $\mli{cl}_{i,j}$ y $\mli{cc}_{i,j}$ tienen el propósito de penalizar
+a los objetivos $o_j$ según se estime que toman más tiempo en ser completados
+por $r_i$. Por otro lado el descuento $\mli{ds}_{i,j}$ incentiva que los robots
+se mantengan explorando un mismo segmento, lo que lleva a comportamientos
+deseables como que un robot continue explorando un mismo corredor, revelando
+rápidamente la estructura del entorno.
 
-Con estos costos como insumos se ejecuta un algoritmo de asignación de objetivos
-a robots, que busca asignar a cada robot a su objetivo mejor valuado con la
+Una vez determinados los costos $c_{i,j}$ se ejecuta un algoritmo que resulta
+en la asignación de objetivos a robots considerando tanto los costos, como la
 restricción de que los objetivos asignados deben estar distribuidos sobre los
-segmentos. Este algoritmo de asignación tiene principalmente dos ventajas con
-respecto al presentado en la sección \ref{subsec:wurmCoord}. La primera es que
-resuelve la asignación de robots a objetivos directamente, en lugar de asignar
-primero robots a segmentos, y luego resolver asignaciones de los robots a
-objetivos localmente a cada segmento. La segunda es distribuye los robots en
-los segmentos considerando el numero de objetivos disponibles en cada segmento,
-en lugar de simplemente hacer una asignación uniforme. Una situación que
-ejemplifica el problema de una asignación uniforme es una en la cual se tienen
-$10$ robots y $2$ segmentos, $s_1$ un solo objetivo y $s_2$ con $9$. Una
-asignación uniforme resulta en asignar $5$ robots a cada segmento aunque esto
-implique que en $s_1$ quede $4$ robots ociosos (sin objetivo asignado). El
-algoritmo presentado a continuación resuelve este tipo de problemas a la vez
-que permite distribuciones uniformes de haber suficientes objetivos disponibles
-en cada segmento. Por ejemplo para el caso planteado anteriormente su ejecución
-resulta en un solo robot asignado en $s_1$ y los restantes $9$ asignados en
-$s_2$, mientras que para un caso alternativo en el que $s_1$ y $s_2$ tienen $5$
-objetivos cada uno, resulta en una asignación uniforme.
+segmentos. Este algoritmo de asignación tiene dos ventajas respecto al
+algoritmo utilizado en \cite{wurm2008coordinated} comentado en la sección
+\ref{subsec:wurmCoord}. La primera es que resuelve la asignación de objetivos
+directamente, en lugar de asignar primero robots a segmentos, para luego
+resolver las asignaciones de objetivos localmente en cada segmento. La segunda
+es que resulta en una distribución de los robots en los segmentos que considera
+el número de objetivos que existe en cada segmento, en lugar de simplemente
+realizar una distribución uniforme. Una situación que ejemplifica el problema
+de las distribuciones uniformes es una en la que se tienen $10$ robots y $2$
+segmentos, $s_1$ con 2 objetivos y $s_2$ con $10$. Una distribución uniforme
+resulta de asignar $5$ robots a cada segmento aunque esto implique que en $s_1$
+queden $3$ robots ociosos (sin objetivo asignado). El algoritmo presentado a
+continuación resuelve este tipo de problemas, y resulta en distribuciones
+uniformes de haber suficientes objetivos en cada segmento. Por ejemplo para el
+caso planteado anteriormente su ejecución resulta en $2$ robots asignados en
+$s_1$ y los restantes $8$ asignados en $s_2$, mientras que para un caso
+alternativo en el que $s_1$ y $s_2$ tienen $5$ (o más) objetivos cada uno,
+resulta en una distribución uniforme.
 
-El algoritmo de asignación, se corresponde al algoritmo
-\ref{alg:resolucionsubastasegmentos}, donde $R$ es el conjunto de los
-identificadores de los robots de los cuales se recibieron valuaciones, $O$ el
-conjunto de los identificadores de los objetivos valuados, $Costos$ un conjunto
-de tuplas $(c_{i,j},r_i,o_j)$ los $c_{i,j}$ computados a partir de las
-valuación recibida de $r_i$ para $o_j$ y $S$ el conjunto de
-segmentos. La función $segmento : O \rightarrow S$ dado un objetivo devuelve el
-segmento al que pertenece y la función $\#objetivos : S \rightarrow N$ devuelve
-el numero de objetivos en un segmento.
+El algoritmo de asignación se corresponde al algoritmo
+\ref{alg:resolucionsubastasegmentos} donde $R$ es el conjunto de los
+identificadores de los robots de los cuales se recibieron valuaciones, $O$ es
+el conjunto de los identificadores de los objetivos valuados, y $S$ el conjunto
+de los identificadores de los segmentos. El conjunto $Costos$ contiene una tupla
+$(c_{i,j},r_i,o_j)$ por cada costo $c_{i,j}$ computado para el objetivo $o_j$
+según el robot $r_i$. Y la función $segmento : O \rightarrow S$ dado un
+objetivo devuelve el segmento al que pertenece y la función $\#objetivos : S
+\rightarrow N$ devuelve el número de objetivos en un segmento.
 % Los conjuntos $O_1$,$O_2$,...,$O_k$,...,$O_{|S|}$ contienen los
 % objetivos que están dentro de un segmento $s_k\in S$.
 
@@ -1069,7 +1070,7 @@ $N=cocienteDist+1$ robots asignados y $K-restoDist$ segmentos con
 $cocienteDist$ robots asignados. El \emph{calculo de valores} se lleva a cabo
 inicializando $cocienteDist$ y $restoDist$ asumiendo una distribución
 completamente uniforme (líneas 5-6 y 9-10 primera iteración), sin considerar si
-es posible dado el numero de objetivos en cada segmento. Luego de forma
+es posible dado el número de objetivos en cada segmento. Luego de forma
 iterativa, segmento a segmento y comenzando por los que tienen menos objetivos
 (líneas 11-12), comprobar si son de los segmentos cuyos objetivos serán todos
 asignados (línea 13) y de serlo ajustar los valores para que la distribución
@@ -1088,7 +1089,7 @@ mantiene la distribución deseada (líneas 25-26). Esto se repite hasta que
 todos los robots están asignados o que no quedan más objetivos por asignar
 (línea 21).
 
-% , estos se calculan de forma que todos los segmentos tengan todos sus objetivos asignados a robots, un numero de robots asignadosk
+% , estos se calculan de forma que todos los segmentos tengan todos sus objetivos asignados a robots, un número de robots asignadosk
 
 En resumen, la central asigna a los robots a objetivos considerando los costos
 y la restricción de distribuir los robots sobre los segmentos considerando la
@@ -1186,7 +1187,7 @@ la pertenencia de los puntos del centro del corredor al GVD, donde cada punto
 $p$ que pertenece al GVD tiene dos puntos base, uno a cada lado del corredor a
 distancia $d$ de $p$. 
 El problema ocurre cuando la discretizados de dicho corredor resulta en un
-numero par de celdas libres entre cada celda ocupada correspondiente a una
+número par de celdas libres entre cada celda ocupada correspondiente a una
 pared del corredor, en esta situación se tienen dos celdas $c_1$ y $c_2$ en el
 centro del corredor, con al menos una de estas perteneciendo al GVD en
 representación de los puntos el centro del corredor que pertenecen al GVD continuo.
@@ -1236,7 +1237,7 @@ distancias de puntos bases es $L$.
 % pertenecia de los puntos del centro del corredor al GVD, donde cada punto $p$
 % que pertenece al GVD tiene dos puntos base, uno a cada lado del corredor a
 % distancia $d$ de $p$. El problema ocurre cuando la discretizacion de dicho
-% corredor resulta en un numero par de celdas libres entre cada celda ocupada
+% corredor resulta en un número par de celdas libres entre cada celda ocupada
 % correspondiente a una pared del corredor, en este caso se tendran dos celdas
 % $c_1$ y $c_2$ en el centro del corredor, $c_1$ tiene una celda $b_1 \in CGen$ a
 % minima distancia $d_c(b_1) = DD(c) = d-\frac{L}{2}$, mientras que la celda $b_2
@@ -1782,7 +1783,7 @@ portal en la transición al siguiente segmento del camino.
 % estado ya sea a libre o a ocupado. En un escenario donde se comienza sin conocimiento sobre
 % el entorno explorado y que el objetivo de la exploración es obtener
 % informacion de dicho entorno, es posible decir que todas las celdas comienzan con estado desconocio 
-% y el numero de celdas en dicho estado decrece a lo largo que transcurre la
+% y el número de celdas en dicho estado decrece a lo largo que transcurre la
 % exploración, a medida que se obtiene informacion (evidencia) sobre el entorno.
 
 

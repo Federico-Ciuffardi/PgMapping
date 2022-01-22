@@ -81,13 +81,13 @@ se experimente una reducción los tiempos de exploración
 \cite{cao1997cooperative,dudek1996taxonomy,guzzoni1997many}. 
 
 Sin embargo la reducción del tiempo de exploración no es proporcional al
-aumento de robots en la flota. En primer lugar siempre que el numero de robots
-sea mayor que el numero de objetivos de exploración, se tendrán recursos
+aumento de robots en la flota. En primer lugar siempre que el número de robots
+sea mayor que el número de objetivos de exploración, se tendrán recursos
 desaprovechados. De forma similar si varios robots son enviados a objetivos de
 exploración cercanos entre si existe la posibilidad de que los sensores que
 estos utilizan para explorar recolecten información sobre una misma porción del
 entorno y por lo tanto realicen trabajo redundante. Adicionalmente al existir
-un mayor numero de robots aumenta el riesgo de que estos se interfieran entre
+un mayor número de robots aumenta el riesgo de que estos se interfieran entre
 si, causando perdidas de tiempo en desvíos para evitar colisiones
 \cite{guzzoni1997many,goldberg1997interference}. 
 
@@ -524,7 +524,7 @@ hojas) y que su remoción no desconecta al GVD. A la derecha de la figura
 % \end{figure} 
 
 % La esqueletización es usada en lugar de s
-% Este método evita problemas que se pueden dar al generar un GVD discretizado a partir de la definición de pertenencia al GVD directamente adaptada a un espacio discretizado en celdas, donde una celda pertenece al GVD si tiene dos o más celdas ocupadas a una misma distancia. Un ejemplo de este tipo de problemas es el que se genera en los corredores cuya discretización tiene una cantidad par de celdas entre sus paredes, en este caso si se aplica la definición de GVD a las celdas ninguna debería pertenecer al GVD dado que ninguna celda tendría una misma distancia a dos celdas ocupadas (paredes del corredor). Este comportamiento no es deseable ya que se debe a una discretización particular del espacio, si el tamaño de las celdas fuera otro y en lugar de ser un numero par fuera uno impar se tendría un GVD a lo largo del centro del corredor, y más importante aún, un GVD sobre un corredor en un espacio continuo siempre genera una línea sobre el centro del corredor. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
+% Este método evita problemas que se pueden dar al generar un GVD discretizado a partir de la definición de pertenencia al GVD directamente adaptada a un espacio discretizado en celdas, donde una celda pertenece al GVD si tiene dos o más celdas ocupadas a una misma distancia. Un ejemplo de este tipo de problemas es el que se genera en los corredores cuya discretización tiene una cantidad par de celdas entre sus paredes, en este caso si se aplica la definición de GVD a las celdas ninguna debería pertenecer al GVD dado que ninguna celda tendría una misma distancia a dos celdas ocupadas (paredes del corredor). Este comportamiento no es deseable ya que se debe a una discretización particular del espacio, si el tamaño de las celdas fuera otro y en lugar de ser un número par fuera uno impar se tendría un GVD a lo largo del centro del corredor, y más importante aún, un GVD sobre un corredor en un espacio continuo siempre genera una línea sobre el centro del corredor. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
 
 % \begin{figure}
 %   \centering
@@ -747,10 +747,10 @@ obtiene mejores resultados en general.
 % \begin{equation}
 % C=\frac{\sum^N_{i=1} A_i}{A_m}
 % \end{equation}
-% Donde $A_m$ es el área total del mapa y $N$ es el numero de regiones.
+% Donde $A_m$ es el área total del mapa y $N$ es el número de regiones.
 
 % \paragraph{Validez}
-% La validez $V$ de una segmentación se define como el cociente entre el numero de regiones validas y el numero total de todas las regiones:
+% La validez $V$ de una segmentación se define como el cociente entre el número de regiones validas y el número total de todas las regiones:
 % \begin{equation}
 %   V=\frac{\#regiones\ validas}{\#total\ de\ regiones}
 % \end{equation}
@@ -759,7 +759,7 @@ obtiene mejores resultados en general.
 % \paragraph{Simplicidad}
 % Una de las ventajas principales de los mapas topológicos es su simplicidad, que permite ayudar a una navegación y planificación eficiente. Los autores\todo{cuáles?} consideran que es de utilidad penalizar a los mapas topológicos que tengan una cantidad elevada de regiones, considerando dicha cantidad como un indicador de complejidad. 
 
-% La simplicidad $S$ de una segmentación se define en \eqref{ec:simp} donde $\hat{N}$ es el numero esperado de regiones y $\phi$ refleja el impacto que tiene la diferencia entre el numero de regiones esperado y el obtenido. $\hat{N}$ y $\phi$ son parámetros a definir dependiendo de la aplicación.
+% La simplicidad $S$ de una segmentación se define en \eqref{ec:simp} donde $\hat{N}$ es el número esperado de regiones y $\phi$ refleja el impacto que tiene la diferencia entre el número de regiones esperado y el obtenido. $\hat{N}$ y $\phi$ son parámetros a definir dependiendo de la aplicación.
 
 % \begin{equation}
 %   S=e^{-\frac{|N-\hat{N}|}{\phi}} \label{ec:simp}
@@ -812,7 +812,7 @@ Implementar esta técnica de coordinación requiere la construcción de un mapa 
 La idea es que al asignar un robot a un segmento este deberá completar los objetivos de exploración que estén dentro de dicho segmento, siendo los objetivos, como es usual, las fronteras (sección \ref{sec:exploracion}) entre las partes desconocidas y conocidas del mapa. 
 
 % Los entornos interiores son en general estructurados, por ejemplo, los edificios generalmente se dividen en habitaciones a las que se puede llegar por pasillos.
-Para asignar los objetivos a los robots primero estos son asignados a los segmentos a explorar, de forma de maximizar la distribución de los robots sobre los segmentos, por ejemplo evitando asignar más de un robot por segmento si la cantidad de segmentos a explorar es mayor que la cantidad de robots. Dicha maximización se obtiene cuando los robots están distribuidos de forma uniforme en los segmentos, cosa que se obtiene si se cumple lo planteado en \eqref{ec:uniform} donde $S$ es el conjunto de todos los segmentos del mapa topológico, y $\#Robots : S \rightarrow N$ es una función que dado un segmento devuelve el numero de robots asignados al mismo. 
+Para asignar los objetivos a los robots primero estos son asignados a los segmentos a explorar, de forma de maximizar la distribución de los robots sobre los segmentos, por ejemplo evitando asignar más de un robot por segmento si la cantidad de segmentos a explorar es mayor que la cantidad de robots. Dicha maximización se obtiene cuando los robots están distribuidos de forma uniforme en los segmentos, cosa que se obtiene si se cumple lo planteado en \eqref{ec:uniform} donde $S$ es el conjunto de todos los segmentos del mapa topológico, y $\#Robots : S \rightarrow N$ es una función que dado un segmento devuelve el número de robots asignados al mismo. 
 
 \begin{equation}\label{ec:uniform}
   \forall s,s' \in S, |\#Robots(s) - \#Robots(s')| <= 1
