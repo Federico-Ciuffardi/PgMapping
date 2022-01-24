@@ -954,15 +954,16 @@ se mantengan explorando un mismo segmento, lo que lleva a comportamientos
 deseables como que un robot continue explorando un mismo corredor, revelando
 rápidamente la estructura del entorno.
 
-Una vez determinados los costos $c_{i,j}$ se ejecuta un algoritmo que resulta
+Con los costos $c_{i,j}$ determinados se ejecuta un algoritmo que resulta
 en la asignación de objetivos a robots considerando tanto los costos, como la
-restricción de que los objetivos asignados deben estar distribuidos sobre los
-segmentos del entorno. Este algoritmo de asignación tiene dos ventajas respecto al
+estrategia de coordinación aplicada, maximizando la
+distribución de los objetivos asignados sobre los segmentos del entorno. Este
+algoritmo de asignación tiene dos ventajas respecto al
 algoritmo utilizado en \cite{wurm2008coordinated} comentado en la sección
 \ref{subsec:wurmCoord}. La primera es que resuelve la asignación de objetivos
 directamente, en lugar de asignar primero robots a segmentos, para luego
 resolver las asignaciones de objetivos localmente en cada segmento. La segunda
-es que resulta en una distribución de los robots en los segmentos que considera
+es que maximiza la distribución de los robots en los segmentos teniendo en cuenta 
 el número de objetivos que existe en cada segmento, en lugar de simplemente
 realizar una distribución uniforme. Una situación que ejemplifica el problema
 de las distribuciones uniformes es una en la que se tienen $10$ robots y $2$
@@ -999,24 +1000,24 @@ devuelve el número de objetivos que existen en un segmento.
 
   
 %   /// recorrida de todos los elementos del diccionario, con el propósito de construir segFrontColaPrio
-    \ForEach{$s_k \in S $}{ 
+    \ForEach{$s \in S $}{ 
      %ALT1 segObjs.encolar($|O_k|$)\\
      %ALT2 $segObj = segObj \cup \{|O_k|\}$\\
-     $segObj = segObj \cup \{\#objetivos(s_k)\}$\\
+     $segObjs = segObj \cup \{\#objetivos(s)\}$\\
     }
     
     $numSegs := |S|$\\
     $numRobs := |R|$\\
-    $converge := false$\\
+    $converge := falso$\\
 
-    \While{$\lnot (segObjs = \emptyset \lor converge$)}{
+    \While{$segObjs \neq \emptyset\ \land\ \lnot converge$}{
       $cocienteDist := numRobs\ \ div\ \ numSegs$\\
       $restoDist    := numRobs\ \ mod\ \ numSegs$\\
     
       $segObj := min\ segObjs$\\
       $segObjs := segObjs - \{segObj\}$\\
     
-      $converge := (segObj > cocienteDist) \lor (restoDist = 0 \land segObj = cocienteDist)$\\
+      $converge := (segObj > cocienteDist) \lor \hspace{5cm} (restoDist = 0 \land segObj = cocienteDist)$\\
       \If{$\lnot converge$}{
         $numRobots := numRobots - segObj$\\
         $numSeg := numSeg - 1$\\
@@ -1025,19 +1026,19 @@ devuelve el número de objetivos que existen en un segmento.
 %   // PARTE 2
     $asignaciones := \emptyset$\\
 
-    $segRobNums :=$ diccionario de $S$ a enteros, siendo 0 el entero asignado por defecto\\   
+    $segRobNums :=$ diccionario de $S$ a $\mathds{N}$, siendo 0 el valor por defecto\\   
 
     \While{$R \neq \emptyset \land O \neq \emptyset$}{
       $(c_{i,j}, r_i, o_j) := min\ Costos$ \tcp{Tupla de $Costos$ con mínimo $c_{i,j}$}
       $Costos := Costos - \{(c_{i,j}, r_i, o_j)\}$\\
-      $s_k := segmento(o_j)$\\
-      $distribuido := segRobNums[s_k] < cocienteDist \lor (restoDist > 0 \land segRobNums[s_k] < cocienteDist + 1)$\\
+      $s := segmento(o_j)$\\
+      $distribuido := segRobNums[s] < cocienteDist \lor \hspace{5cm} (restoDist > 0 \land segRobNums[s] = cocienteDist)$\\
       \If{ $r_i \in R \land o_j \in O \land distribuido$ }{
-        $asignaciones := asignaciones \cup \{(r_i,o_j)\}$\\
-        $segRobNums[s_k] := segRobNums[s_k] + 1$\\
+        $asignaciones := asignaciones \cup \{(o_j,r_i)\}$\\
+        $segRobNums[s] := segRobNums[s] + 1$\\
         $R := R - \{r_i\}$\\
         $O := O - \{o_j\}$\\
-        \If{$segRobNums = cocienteDist + 1$}{
+        \If{$segRobNums[s] = cocienteDist + 1$}{
            $restoDist := restoDist - 1$\\
         }
       }
@@ -1050,18 +1051,20 @@ devuelve el número de objetivos que existen en un segmento.
 
 \newpage
 
-\begin{permissive}
 El algoritmo se puede dividir en dos partes, el \emph{calculo de valores}
-$cocienteDist$, $restoDist$ (líneas 1-18) y la \emph{asignación distribuida} (líneas
-19-36). 
-\end{permissive}
+(líneas 1-18) y la \emph{asignación distribuida} (líneas 19-36). En el
+\emph{calculo de valores} se calculan los valores $cocienteDist$ y $restoDist$,
+que son fundamentales para llevar a cabo la \emph{asignación distribuida}, en
+la que se determina la asignación de objetivos a robots.
 
-Los valores $cocienteDist$ y $restoDist$ se utilizan para lograr una asignación
-distribuida sobre los segmentos considerando los objetivos contenidos en cada
-uno. La distribución deseada se corresponde con la distribución que se logra al
-hacer $N$ rondas en las que se asigna un solo robot a cada segmento que contenga
-objetivos sin asignar. La ronda $N$ termina cuando no quedan robots u objetivos
-por asignar. 
+La distribución deseada se corresponde con la que se logra al asignar haciendo
+$N$ rondas, en las cuales se asigna un solo robot a cada segmento que al
+comenzar la ronda contenga objetivos sin asignar. La ronda $N$ termina cuando
+no quedan robots por asignar, u objetivos a los cuales asignarlos. La distribución 
+resultante de esta asignación se considera la deseada porque en cada ronda se maximiza la
+distribución de los robots sobre los segmentos que tienen objetivos suficientes.
+
+
 % Si existen menos objetivos que robots se tiene que la ronda $N$
 % culmina con todos los objetivos asignados y algunos robots ociosos. De existir
 % más objetivos que robots finalizada la ronda $N$ se pueden tener segmentos cuyos
@@ -1069,41 +1072,56 @@ por asignar.
 % existen objetivos sin asignar, la distribución sera uniforme sobre estos últimos
 % segmentos.
 La idea detrás de los valores $cocienteDist$ y $restoDist$ es que en la
-distribución deseada existen $U$ segmentos que cumplen con la restricción de
+distribución deseada existen $K$ segmentos que cumplen con la restricción de
 distribución uniforme (\ref{ec:uniform}), existiendo $restoDist$ segmentos con
-$cocienteDist+1=N$ robots asignados y $U-restoDist$ segmentos con
-$cocienteDist$ robots asignados. El resto de segmentos tiene una cantidad de
+$cocienteDist+1$ robots asignados, y $K-restoDist$ segmentos con
+$cocienteDist$ robots asignados.  Mientras que los segmentos restantes contienen una cantidad de
 objetivos menor a $cocienteDist$ y todos sus objetivos son asignados.
 
-El \emph{calculo de valores} se lleva a cabo inicializando $cocienteDist$ y
-$restoDist$ asumiendo una distribución completamente uniforme (líneas 5-6 y
-9-10 primera iteración), sin considerar si es posible dado el número de
-objetivos en cada segmento. Luego de forma iterativa, segmento a segmento y
-comenzando por los que tienen menos objetivos (líneas 11-12), se comprueba si son
-de los segmentos cuyos objetivos serán todos asignados (línea 13) y de serlo se
-ajusta los valores para que la distribución sea uniforme en el resto de
-conjuntos (líneas 14-17 y 9-10). Las iteraciones continúan hasta que solo
-quedan los segmentos en los que van a quedar objetivos sin asignar (línea 8),
-cuando esto sucede se dice que $cocienteDist$ y $restoDist$ convergen.
-% a los valores consistentes con la distribución deseada.
+% Si $restoDist>0$ Ultima ronda asinga $restoDist$  y penultima $concienteDist$ 
+% Si $restoDist=0$ ultima $cocienteDist$
+% Si no hay segmentos con cociente-1 objetivos mientras $resto=0$ porque de lo contrario
+%   en realidad $cociente-1$ es cociente y $resto=$de cosas con el cociente original$
+
+\begin{permissive}
+El \emph{calculo de valores} se hace inicializando los valores $cocienteDist$ y
+$restoDist$ asumiendo que la distribución deseada coincide con una
+completamente uniforme, sin considerar si esto es consistente con el número de
+objetivos contenidos en cada segmento (líneas 5-6 y 9-10 primera iteración).
+Luego de forma iterativa, segmento a segmento, y comenzando por los que tienen
+menos objetivos, se comprueba si el número de objetivos del segmento cumple con
+ser lo suficientemente grande para que los valores actuales lleven a la
+distribución deseada (líneas 11-13). De no cumplirse esto se ajusta los valores
+para que la distribución sea uniforme en los segmentos que restan iterar,
+considerando que los objetivos del segmento actual son todos asignados (líneas
+14-17 y 9-10), y después se continúa iterando. Por otro lado, de
+cumplirse se sabe que el resto de segmentos a iterar también cumplen ya que
+contienen una cantidad mayor o igual de objetivos, y por lo tanto se puede
+decir que los valores $cocienteDist$ y $restoDist$ convergen a los valores que
+llevan a la distribución deseada.
+\end{permissive}
+
+% quedan los $K$ segmentos que cumplen con la restricción de distribución uniforme (línea 8),
+%kkk cuando esto sucede se dice que $cocienteDist$ y $restoDist$ convergen.
+% a los valores consistentes con la distribución deseada
 
 Con los valores $cocienteDist$ y $restoDist$ calculados la \emph{asignación
 distribuida} consiste en retirar las tuplas $(c_{i,j},r_i,o_j)$ de $Costos$
-comenzando por las de menor costo $c_{i,j}$ (líneas 22-23) y para cada una de
-estas asignar $r_i$ a $o_j$ (líneas 27-33), si $r_i$ y $o_j$ no forman parte de
-ninguna de las asignaciones realizadas hasta el momento, y si la asignación
-mantiene la distribución deseada (líneas 25-26). Esto se repite hasta que
-todos los robots están asignados o que no quedan más objetivos por asignar
+comenzando por las de menor costo $c_{i,j}$ (líneas 22-23). Para cada tupla retirada
+se asigna el objetivo $o_j$ al robot $r_i$ (líneas 27-33), si tanto $r_i$ como $o_j$ no forman parte de
+ninguna de las asignaciones realizadas hasta el momento, y si la asignación es consistente
+con la distribución deseada (líneas 25-26). Esto se repite hasta que
+todos los objetivos estén asignados, o que no queden más robots por asignar
 (línea 21).
 
 % , estos se calculan de forma que todos los segmentos tengan todos sus objetivos asignados a robots, un número de robots asignadosk
 
-En resumen, la central asigna a los robots a objetivos considerando los costos
-y la restricción de distribuir los robots sobre los segmentos considerando la
-cantidad de objetivos que contienen. Luego de ejecutar el algoritmo de
-asignación la central informa a cada robot el objetivo que le fue asignado,
-quedando a la espera de nuevos pedidos por parte de los robots para comenzar
-una nueva subasta. 
+% En resumen, la central asigna a los robots a objetivos considerando los costos
+% y el maximizar la distribución de los robots sobre los segmentos teniendo en cuenta la
+% cantidad de objetivos que contienen. 
+Luego de ejecutar el algoritmo de asignación la central informa a cada robot el
+objetivo que le fue asignado, quedando a la espera de nuevos pedidos de
+comenzar una nueva subasta por parte de los robots. 
 
 \section{Segmentación}\label{subsec:mapaTopGVDGrid}
 % según si las celdas ocupadas más cercanas $oc_1$ y $oc_2$ de

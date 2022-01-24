@@ -415,7 +415,7 @@ generadores cóncavos comentados en la sección \ref{subsec:GVD}, en la sección
 
 A lo largo de la exploración el mapa construido recibe actualizaciones de forma frecuente que solo modifican una pequeña porción del mismo. Esto causa que los datos que tienen que ser consistentes con el mapa también deban actualizarse de forma frecuente. Dado esto, por motivos de eficiencia, se busca que los algoritmos que deben ejecutarse para mantener la consistencia de los datos con el mapa, eviten descartar el resultado anterior y recomputarse completamente en cada actualización, sino que en su lugar modifiquen el último resultado para que este sea consistente con la última version del mapa. 
 
-La idea se basa en que, como se mencionó anteriormente, las actualizaciones son frecuentes pero también pequeñas y por lo tanto luego de una actualización gran parte del mapa se mantiene igual. Esto usualmente implica que gran parte del resultado anterior continua siendo valido luego de la actualización, solo siendo necesario modificar una pequeña porción del mismo para que este vuelva a ser consistente, lo cual suele ser órdenes de magnitud menos costoso que la alternativa de calcular todo desde cero. 
+La idea se basa en que, como se mencionó anteriormente, las actualizaciones son frecuentes pero también pequeñas y por lo tanto luego de una actualización gran parte del mapa se mantiene igual. Esto usualmente implica que gran parte del resultado anterior continúa siendo valido luego de la actualización, solo siendo necesario modificar una pequeña porción del mismo para que este vuelva a ser consistente, lo cual suele ser órdenes de magnitud menos costoso que la alternativa de calcular todo desde cero. 
  % hecho de que las actualizaciones solo modificaron una  que e 
 
 % Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la última entrada son llamados \emph{algoritmos incrementales}.
@@ -812,7 +812,16 @@ Implementar esta técnica de coordinación requiere la construcción de un mapa 
 La idea es que al asignar un robot a un segmento este deberá completar los objetivos de exploración que estén dentro de dicho segmento, siendo los objetivos, como es usual, las fronteras (sección \ref{sec:exploracion}) entre las partes desconocidas y conocidas del mapa. 
 
 % Los entornos interiores son en general estructurados, por ejemplo, los edificios generalmente se dividen en habitaciones a las que se puede llegar por pasillos.
-Para asignar los objetivos a los robots primero estos son asignados a los segmentos a explorar, de forma de maximizar la distribución de los robots sobre los segmentos, por ejemplo evitando asignar más de un robot por segmento si la cantidad de segmentos a explorar es mayor que la cantidad de robots. Dicha maximización se obtiene cuando los robots están distribuidos de forma uniforme en los segmentos, cosa que se obtiene si se cumple lo planteado en \eqref{ec:uniform} donde $S$ es el conjunto de todos los segmentos del mapa topológico, y $\#Robots : S \rightarrow N$ es una función que dado un segmento devuelve el número de robots asignados al mismo. 
+Para asignar los objetivos a los robots primero estos son asignados a los
+segmentos a explorar, de forma de maximizar la distribución de los robots sobre
+los segmentos, por ejemplo evitando asignar más de un robot por segmento si la
+cantidad de segmentos a explorar es mayor que la cantidad de robots. Dicha
+maximización se obtiene cuando los robots están distribuidos de forma uniforme
+en los segmentos, cosa que se obtiene si se cumple lo planteado en
+\eqref{ec:uniform} donde $S$ es el conjunto de todos los segmentos del mapa
+topológico que contienen objetivos, y $\#Robots : S \rightarrow \mathds{N}$ es
+una función que dado un segmento devuelve el número de robots asignados al
+mismo. 
 
 \begin{equation}\label{ec:uniform}
   \forall s,s' \in S, |\#Robots(s) - \#Robots(s')| <= 1
