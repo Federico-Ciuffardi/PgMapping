@@ -23,7 +23,7 @@
 
 % generales de las pruebas realizadas. Estas 
 
-Este capitulo esta dedicado a describir las pruebas realizadas y analizar los
+Este capitulo está dedicado a describir las pruebas realizadas y analizar los
 resultados obtenidos. Las pruebas se ejecutaron de forma simuladas y consisten
 en resolver una instancia del problema de la exploración multi-robot coordinada
 con distintas soluciones.
@@ -171,7 +171,7 @@ $5*4*20=400$ el total de pruebas ejecutadas.
 % Para cumplir con la hipotesis (IV) planteada en \ref{sec:hip}
 \subsection{Entorno}
 Las pruebas se realizan en un entorno cerrado que tiene un area explorable de
-aproximadamente $10000m^2$. El entorno esta estructurado en habitaciones,
+aproximadamente $10000m^2$. El entorno está estructurado en habitaciones,
 puertas y corredores de varios tamaños. Los únicos obstáculos presentes en él
 son paredes y los mismos robots que pueden obstaculizarse entre
 sí. Un mapa de este entorno se muestra en la figura
@@ -192,7 +192,7 @@ reducir el area a explorar y que sea cerrado (sin salidas al exterior).
 Los robots simulados\footnote{Especificación disponible en línea:\\
 \url{https://gitlab.fing.edu.uy/federico.ciuffardi/pioneer_p3dx_model}} en las
 pruebas modelan al robot diferencial Pioneer 3-DX \cite{p3dx} (figura
-\ref{fig:p3dx}). Cada robot esta equipado con un sensor \gls{LiDAR} basado en el
+\ref{fig:p3dx}). Cada robot está equipado con un sensor \gls{LiDAR} basado en el
 modelo URG-04LX-UG01 \cite{hokuyo}, que permite tomar medidas de distancia de
 hasta $5.6m$, utilizando una frecuencia de $10hz$ de un máximo de $36hz$.
 Adicionalmente el sensor fue alterado para tomar medidas en los $360$\textdegree
@@ -427,7 +427,7 @@ no paralelizada de la etapa de obtención de información (sección
 \ref{subsec:obtInfo}) de cada asignación de tareas (sección \ref{sec:asigTar}).
 Y los tiempos de asignación de tareas impactan a los tiempos de exploración,
 pero en este caso el impacto no es directo. Esto se debe a que una asignación
-de tareas en curso solo asegura que un único robot esta ocioso, porque
+de tareas en curso solo asegura que un único robot está ocioso, porque
 mientras que un robot pide una tarea y una le es asignada el resto puede estar
 completando tareas asignadas previamente. Cuanto más corta es la demora en la
 asignación de tareas más probable es que un único robot quede ocioso, mientras

@@ -15,7 +15,7 @@ solución. A continuación se destacan las secciones donde se tratan las
 contribuciones del proyecto. En la sección \ref{subsec:MiSimp} se describe el
 método de simplificación de fronteras propuesto. En la sección
 \ref{subsec:MiResSub} se introduce el algoritmo de asignación de objetivos. La sección
-\ref{subsec:mapaTopGVDGrid} se comenta el algoritmo de
+\ref{sec:MiConstGVD} se comenta el algoritmo de
 construcción incremental del GVD y la forma novedosa de tratar
 las porciones desconocidas del espacio durante la construcción del GVD.
 Finalmente la sección \ref{sec:miNav} se describe la planificación jerárquica
@@ -87,7 +87,7 @@ dimensiones suficientes para representar todo el entorno a explorar.
 La arquitectura se divide en dos tipos de componentes robots y unidad central.
 Existe una única unidad central que se encarga de centralizar la información
 del entorno explorado y de coordinar a los multiples robots que pueden existir.
-Cada componente esta asociado a un hardware específico, siendo los robots móviles
+Cada componente está asociado a un hardware específico, siendo los robots móviles
 y la estación central estática. 
 %Los robots pueden ser uno o más mientras que la estación central es única. 
 Los componentes a su vez están compuestos por módulos los cuales cuales se encargan
@@ -154,7 +154,7 @@ Para generar sus planes tanto \emph{local\_planner} como \emph{global\_planner}
 requieren de un mapa, de esto se encargan los nodos \emph{local\_costmap} (mapa
 local) y \emph{global\_costmap} (mapa global) respectivamente. Ambos son
 nodos de una misma clase llamada \emph{costmap\_2d}
-\cite{ROS-costmap_2d}, que dentro de sus funcionalidades esta la de
+\cite{ROS-costmap_2d}, que dentro de sus funcionalidades está la de
 construir una grilla de ocupación a partir de los datos sensoriales provistos
 por los robots. Las principales diferencias entre el mapa global y el local son su
 tamaño de celda (pequeño en el local y grande en el global), sus dimensiones
@@ -163,7 +163,7 @@ porción), y sus marcos de referencia (el mapa global suele estar fijo, el local
 centra en el robot).
 
 El nodo \emph{recovery\_behaviors} permite ejecutar comportamientos de
-recuperación de detectarse que el robot no esta avanzando de forma correcta al
+recuperación de detectarse que el robot no está avanzando de forma correcta al
 objetivo. Para la solución desarrollada solo se hace uso de un comportamiento
 de recuperación que consiste en que el robot rote en el lugar.
 
@@ -220,7 +220,7 @@ robot} si se completo el camino con éxito, o si existe algún problema.
 % problema.
 
 \section{Definiciones} \label{sec:def}
-Esta sección esta dedicada a formalizar conceptos que serán utilizados en lo
+Esta sección está dedicada a formalizar conceptos que serán utilizados en lo
 que resta del capitulo.
 
 \subsection{Grillas de ocupación}\label{subsec:Grilla}
@@ -228,7 +228,7 @@ La grillas de ocupación fueron introducidas en la sección \ref{subsec:mapas}.
 En esta sección se profundizan conceptos a dichas estructuras que son útiles en
 el contexto del la solución desarrollada.
 
-El conjunto $\mli{CG}\subseteq \mathds{R}^2$ esta compuesto por los centros de cada
+El conjunto $\mli{CG}\subseteq \mathds{R}^2$ está compuesto por los centros de cada
 celda de la grilla de ocupación. Una celda se asocia a un único centro y
 viceversa, por lo tanto en lo que resta de este informe se usaran ambos
 términos de forma indistinta.
@@ -354,7 +354,7 @@ El algoritmo se resume en elegir una celda $c\in C$ que no este aún en una
 componente conexa (línea 6) y aplicar un \emph{depth-first search} (DFS) desde
 $c$, agregado todas las celdas recorridas a una misma componente conexa (líneas
 7-19). Esto se repite hasta que todas las celdas pertenezcan a alguna
-componente conexa (línea 5). Este algoritmo es análogo al que esta presente en
+componente conexa (línea 5). Este algoritmo es análogo al que está presente en
 \cite{hopcroft1973algorithm}.
 
 \section{Identificación de objetivos}\label{sec:pc:idobj}
@@ -401,7 +401,7 @@ con este método se muestra en la figura \ref{fig:fronterasSig}.
 El $k$ utilizado para ejecutar K-Means es el mínimo que logra que para toda
 frontera $f\in F_i$ existe $\mli{fs} \in \mli{FS}_i$ tal que $d_{\mli{fs}}(f) \leq
 rango$ siendo $rango$ el alcance de sensado de los robots. Es decir que %el conjunto de fronteras significativas $\mli{FS}_i \subseteq F_i$ cumple con que
-cada frontera esta dentro del rango del sensado desde alguna frontera
+cada frontera está dentro del rango del sensado desde alguna frontera
 significativa, cuando esto se cumple se dice que $\mli{FS}_i$ cubre a $F_i$, o
 que $\mli{FS}_i$ logra el cubrimiento. En la figura \ref{fig:fronterasSigCub} se
 puede ver como las fronteras significativas obtenidas logran el cubrimiento.
@@ -453,7 +453,7 @@ mantienen la restricción de cubrimiento.
 % solapandose las circunferencias de radio $rango$ centradas en ellas. Por
 % ejemplo 
 
-Dado esto es posible ver que en el ejemplo presentado en
+Dado esto es posible ver que en el ejemplo presentado en la figura
 \ref{fig:ejemploFSKMMal} el resultado obtenido por el método presentado en esta
 sección no es optimo ya que existen fronteras significativas innecesarias para
 el cubrimiento. 
@@ -596,7 +596,7 @@ Luego el algoritmo se basa en elegir una frontera de $\mli{UF}$ como frontera
 significativa $\mli{fs}$ (líneas 11-16), y posteriormente actualizar las
 estructuras mantenidas en función de la nueva $\mli{fs}$ (líneas 17-23). Notar
 que esto implica reducir el número de celdas en $\mli{UF}$ ya que como mínimo
-$\mli{fs}$ se cubre a si misma. Este proceso de elección y actualización se
+$\mli{fs}$ se cubre a sí misma. Este proceso de elección y actualización se
 repite hasta que no quedan más fronteras de $F_i$ por cubrir (línea 10),
 y finalmente se devuelven las fronteras significativas $\mli{FS_i}$ resultantes
 (línea 25).
@@ -810,7 +810,7 @@ objetivo no trivial.
 
   \caption[Camino.]{Caminos calculados desde la posición del robot indicada en
   rojo, hasta el objetivo indicado en verde. Los puntos del camino se conectan
-entre si con líneas magenta.}\label{fig:camino}
+entre sí con líneas magenta.}\label{fig:camino}
 
 \end{figure}
 
@@ -1045,7 +1045,7 @@ devuelve el número de objetivos que existen en un segmento.
     }
   \Return asignaciones 
     
- \caption{Asignación de robots a objetivos}
+ \caption{Asignación de objetivos a robots}
  \label{alg:resolucionsubastasegmentos}
 \end{algorithm}
 
@@ -1101,6 +1101,14 @@ decir que los valores $cocienteDist$ y $restoDist$ convergen a los valores que
 llevan a la distribución deseada.
 \end{permissive}
 
+% lo de cumplir con que lleven a la distribucion deseada tiene sentido porque
+% si el numero es menor a cierto valor (segObj<cocienteDist) entoces se sabe
+% que la distribucion no va a ser posible (ese segmento no llega al numero de
+% objtivos que hay que asiganr para permitir una dist uniforme sobre los
+% segmentos no descartados. Y si (segObj = cocienteDist) entoces si hay resto
+% quizas no existen los suficientes segmentos con (segObj >= cocienteDist  +1)
+% en los restantes segmentos para lograr la dist uniforme.
+
 % quedan los $K$ segmentos que cumplen con la restricción de distribución uniforme (línea 8),
 %kkk cuando esto sucede se dice que $cocienteDist$ y $restoDist$ convergen.
 % a los valores consistentes con la distribución deseada
@@ -1126,114 +1134,137 @@ comenzar una nueva subasta por parte de los robots.
 \section{Segmentación}\label{subsec:mapaTopGVDGrid}
 % según si las celdas ocupadas más cercanas $oc_1$ y $oc_2$ de
 
-La segmentación del entorno se basa en el método que comentado en la sección
-\ref{subsec:mapaTopGVD}. Dado que el entorno se representa con grillas
-discretas en lugar de ser un espacio continuo, es necesario definir los
-equivalentes discretizados de GVD, como también de los puntos críticos y líneas
-criticas asociadas según los cuales se dividen los segmentos.
+El método de segmentación utilizado para identificar los segmentos del entorno
+se basa en el que fue comentado en la sección \ref{subsec:mapaTopGVD}. Dado que
+el entorno se representa con grillas discretas en lugar de ser un espacio
+continuo, es necesario definir los equivalentes discretizados de GVD, como
+también de sus puntos críticos y líneas críticas asociadas, a partir de las cuales se
+dividen los segmentos.
 
-Un \emph{GVD discretizado} consiste en el conjunto $\mli{GVDD}$ de celdas que
+Un \emph{GVD discretizado} se define como el conjunto $\mli{GVDD}$ de celdas que
 pertenecen al GVD discretizado, la construcción de este se trata en la sección
-\ref{sec:MiConstGVD}. Desde este punto se referirá al GVD discretizado
-simplemente como GVD.
-%y que los conceptos de puntos y líneas criticas
+\ref{sec:MiConstGVD}. Desde este punto se refiere al GVD discretizado ($\mli{GVDD}$)
+simplemente como $\mli{GVD}$.
+%y que los conceptos de puntos y líneas críticas
 % se definen en espacios continuos es necesario adaptarlos. 
 
 % considerando el mapa de distancia
 % subproducto de \emph{brushfire dinamico}
-Dada función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow \mathds{R}$ que se
-corresponde con un mapa de distancia (sección \ref{subsec:constGVD}) a las
-celdas pertenecientes a generadores, se define el conjunto de las \emph{celdas
-criticas} (puntos críticos discretizados) $\mli{CCr}$ según
+
+% corresponde con un mapa de distancia (sección \ref{subsec:constGVD}) a las
+% celdas pertenecientes a generadores, 
+Dada la función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow
+\mathds{R}$ que para cada celda de $\mli{CG}$ devuelve la distancia a su
+celda más cercana que pertenece a un generador, se define el conjunto de las
+\emph{celdas críticas} (puntos críticos discretizados) $\mli{CCr}$ según
 (\ref{eq:critDisc}). 
 
 % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
 \begin{equation}
 \begin{split}
-  \mli{CCr} = \{c\ \in \mli{GGVD} : & \forall c_l \in ady(c) \cap \mli{GVD}, \mli{DD}(c) \leq \mli{DD}(c_l),\\
-                                    & \exists c_g \in ady(c) \cap \mli{GVD}, \mli{DD}(c_g) > \mli{DD}(c) \} %, \\
+  \mli{CCr} = \{c\ \in \mli{GVD} : & \forall c_1 \in ady(c) \cap \mli{GVD}, \mli{DD}(c) \leq \mli{DD}(c_1),\\
+                                    & \exists c_2 \in ady(c) \cap \mli{GVD}, \mli{DD}(c) < \mli{DD}(c_2) \} %, \\
                                        % & |ady(c)\cup \mli{GVD}| = 2\}
 \end{split}
 \label{eq:critDisc}
 \end{equation}
 
-Esta definición traduce el concepto de entorno en el espacio continuo
-en el concepto de adyacencia del espacio discreto, aunque no solo se remite a
-traducir sino que se altera ligeramente la definición ya que es conveniente no
-solo considerar las celdas del GVD que minimizan el despeje localmente, es
-decir las tienen un despeje menor que el de sus celdas adyacentes en el GVD, si
-no ademas incluir las celdas que tienen un despeje menor o igual que el de sus
-celdas adyacentes en el GVD y adicionalmente al menos una de sus celdas
-adyacentes en el GVD tiene un despeje mayor.
-% donde de ser solo minimo local no hay criticos pero al decir que no hay menors
+ % es decir las tienen un despeje menor que el de
+% sus celdas adyacentes en el GVD,
+
+Esta definición traduce el concepto de punto crítico, del espacio continuo al
+espacio discreto, aunque no solo se remite a traducir sino que se altera
+ligeramente la definición original. Específicamente las celdas críticas además de ser las
+celdas del GVD que son mínimos locales estrictos de $\mli{DD}$ en el GVD, son
+también las que no tienen celdas adyacentes en el GVD con menor $\mli{DD}$ y al
+menos una de ellas tiene un $\mli{DD}$ mayor.
+% donde de ser solo minimo local no hay críticos pero al decir que no hay menors
 % y hay al menos uno mayor si, 
-El motivo de esto es permitir puntos críticos en situaciones como la
-presentadas en la figura \ref{fig:ejSegGVDGrid:CRI}, donde se puede observar un
-portar horizontal que lleva de un corredor (arriba) a una habitación (abajo).
-El punto critico que se ubica dicho portal no es un mínimo local (la celda del
-GVD ubicada arriba tiene igual despeje), por lo que si estas fueran las
-condiciones este no sería un critico y tanto el corredor como la habitación
-serían único segmento, lo cual no es deseable. El resultado se mejora al
-considerar las condiciones planteadas en \ref{eq:critDisc} ya que como se
-menciono, la celda de arriba tiene igual despeje y la de abajo tiene un despeje
-mayor. 
+El motivo de esto es permitir celdas críticas en situaciones como la
+presentada en la figura \ref{fig:ejSegGVDGrid:CRI}, donde se puede observar un
+portal horizontal que lleva de un corredor (arriba) a una habitación (abajo).
+La celda crítica que se ubica en dicho portal no es un mínimo local estricto ya que la
+celda de arriba adyacente en el GVD tiene igual $\mli{DD}$, por lo tanto si esta fuera la
+única condición de ser una celda crítica dicha celda no lo sería. Esto resultaría en
+que el corredor y la habitación sean identificados como un único segmento, lo cual no es deseable.
+En cambio la celda en cuestión sí cumple con las condiciones planteadas en
+(\ref{eq:critDisc}) ya que la celda de arriba tiene igual $\mli{DD}$, la de
+abajo tiene un $\mli{DD}$ mayor y esas son las únicas dos celdas adyacentes en
+el GVD. 
 % Por otro lado la condición $|ady(c)\cup \mli{GVD}| = 2$ es parte de las condiciones de
-% filtrado de puntos criticos que no se ubican en portales que separan segmentos
+% filtrado de puntos críticos que no se ubican en portales que separan segmentos
 % se propuestas en \cite{wurm2008coordinated}.
 
 
 % Explicar (implica redefinir $\mli{CCr}$ , creo que lo mejor es plantear
 % condiciones a cumplir siendo la de \ref{eq:critDisc} una) los criterios filtros
-% utilizados para los puntos criticos.
+% utilizados para los puntos críticos.
 
-Para adaptar el concepto de las líneas criticas a un espacio discreto, primero
-es necesario adaptar el concepto de puntos base de un punto $p$, que refieren
-al conjunto de puntos pertenecientes a generadores que son más cercanos a $p$.
-Sea $\mli{CGen}$ el conjunto formado por todas las celdas pertenecientes a
-algún generador, las \emph{celdas base} (puntos base discretizados) $\mli{CB}_c$ de
-un a celda $c$ se definen como el conjunto de las celdas pertenecientes a
-generadores que están a una distancia menor o igual a $\mli{DD}(c)+L$, como se
-expresa en (\ref{eq:bpDisc}), siendo $L$ el largo de las celdas.
+Para adaptar el concepto de línea crítica del espacio continuo al espacio
+discreto, primero es necesario adaptar el concepto de punto base. Los puntos
+base de $p$ se corresponden con el conjunto de puntos pertenecientes a generadores,
+que están a mínima distancia a $p$. Sea $\mli{CGen}$ el conjunto formado por
+todas las celdas pertenecientes a algún generador, las \emph{celdas base}
+(puntos base discretizados) $\mli{CB}_c$ de una celda $c$ se definen como el
+conjunto de las celdas pertenecientes a $\mli{CGen}$ que están a una distancia de $c$
+menor o igual a $\mli{DD}(c)+L$, como se expresa en (\ref{eq:bpDisc}), siendo
+$L$ el largo de las celdas.
 \begin{equation}
-\mli{CB}_c = \{ b \in \mli{CGen} : d_c(b) - \mli{DD}(c) \leq L\}
+\mli{CB}_c = \{ b \in \mli{CGen} : d_c(b) \leq \mli{DD}(c) + L\}
 \label{eq:bpDisc}
 \end{equation}
 
-Adaptar directamente la definición de punto base en espacio continuo a celda
-base en el espacio discreto resulta en que solo las celdas pertenecientes a
-generadores que están a minima distancia de $c$ que a una minima distancia
-$\mli{DD}(c)$ de $c$ son las celdas base. Sin embargo la definición dada en
-(\ref{eq:bpDisc}) no se corresponde con esta debido a que al adaptar de forma
-directa existen casos donde los resultados difieren de los que se obtienen en
-el espacio continuo. 
-Uno de estos casos es el que se presenta en la figura \ref{fig:bptol} donde se
-tiene una sección horizontal de un corredor. En el espacio continuo esto genera
-la pertenencia de los puntos del centro del corredor al GVD, donde cada punto
-$p$ que pertenece al GVD tiene dos puntos base, uno a cada lado del corredor a
-distancia $d$ de $p$. 
-El problema ocurre cuando la discretizados de dicho corredor resulta en un
-número par de celdas libres entre cada celda ocupada correspondiente a una
-pared del corredor, en esta situación se tienen dos celdas $c_1$ y $c_2$ en el
-centro del corredor, con al menos una de estas perteneciendo al GVD en
-representación de los puntos el centro del corredor que pertenecen al GVD continuo.
-Suponiendo sin perdida de generalidad que $c_1$ pertenece al GVD, entonces $c_1$
-tiene una celda $b_1 \in \mli{CGen}$ a minima distancia $d_{c_1}(b_1) = \mli{DD}(c_1) =
-d-\frac{L}{2}$, mientras que la celda $b_2 \in \mli{CGen}$ está en el otro lado del
-corredor a distancia $d_{c_1}(b_2) = d+\frac{L}{2}$, dado lo que ocurre en el
-espacio continuo esta también debería ser una celda base aunque no este a
-minima distancia de $c_1$. Para considerar estos casos la definición presentada
-en (\ref{eq:bpDisc}) incluye en $\mli{CB}_{c_1}$ a las celdas en $\mli{CGen}$ que
-tienen una distancia a $c_1$ que esta entre la minima posible de $\mli{DD}(c_1)$ y
-una maxima tolerada de $\mli{DD}(c_1)+L$, siendo $L$ la diferencia entre ambos
-extremos, conocida como tolerancia. De esta forma se obtiene que $b_2 \in
-\mli{CB}_{c_1}$ como es deseado, ya que recordando que $b_2\in \mli{CGen}$ entonces:
+% (igual a $\mli{DD}(c)$)
+%que pertenecen al GVD tienen dos o más puntos base, los 
+% , a distancia $d$ de $p$. 
+
+Adaptar directamente la definición de punto base en el espacio continuo, a
+celda base en el espacio discreto, resulta en que solo las celdas de
+$\mli{CGen}$ que están a mínima distancia de $c$  son celdas base de $c$. Sin
+embargo la definición dada en (\ref{eq:bpDisc}) no se corresponde con esta, ya
+que al adaptarse de forma directa existen casos donde los resultados difieren
+de los que se obtienen en el espacio continuo, lo que puede llevar a errores de
+segmentación. 
+Uno de estos casos es el presentado en la figura \ref{fig:bptol} donde se
+muestra una sección horizontal de un corredor. En el espacio continuo los 
+puntos ubicados en el centro del corredor tienen dos puntos base,
+uno en cada pared a los lados del corredor.
+El problema ocurre cuando la discretización de dicho corredor resulta en un
+número par de celdas libres entre las celdas ocupadas $b_1$ y $b_2$ correspondientes a las
+paredes del corredor. En esta situación se tienen dos celdas $c_1$ y $c_2$ en
+el centro del corredor, lo deseable es que al menos una de estas se corresponda
+con los puntos $p$ del centro del corredor que se ubican en el borde entre $c_1$ y $c_2$. Sin
+perdida de generalidad se asume que $c_1$ es la celda que se corresponde con
+dichos $p$, y por lo tanto análogamente a lo que sucede con los
+puntos base de estos $p$, $c_1$ debería tener dos celdas base una en cada pared a los lados del
+corredor (celdas $b_1$ y $b_2$).
+%Las celdas correspondientes a los lados del corredor son las celdas $b_1$ y $b_2$.
+La celda $b_1 \in \mli{CGen}$ está a distancia $d_{c_1}(b_1) =
+\mli{DD}(c_1) = d-\frac{L}{2}$ de $c_1$, y al ser la mínima es seguro que $b_1$ es una celda base de
+$c_1$. Por otro lado la celda $b_2 \in \mli{CGen}$ está a distancia
+$d_{c_1}(b_2) = d+\frac{L}{2}$ de $c_1$, y aunque no sea la mínima, dado lo
+que ocurre en el espacio continuo $b_2$ también debería ser una celda base de $c_1$. Para
+considerar estos casos la definición presentada en (\ref{eq:bpDisc}) incluye en
+$\mli{CB}_{c}$ a todas las celdas de $\mli{CGen}$ que tienen una distancia a $c$
+que está entre la mínima posible de $\mli{DD}(c)$ y una maxima tolerada de
+$\mli{DD}(c)+L$, donde la diferencia entre ambos
+extremos se conoce como tolerancia. Con esta definición se obtiene que $b_2 \in
+\mli{CB}_{c_1}$ como es deseado, ya que recordando que $b_2\in \mli{CGen}$
+entonces:
 
 \begin{align*}
 \begin{split}
-  b_2 \in \mli{CB}_{c_1} & \iff  d_{c_1}(b_2) - \mli{DD}(c_1) \leq L \iff d+\frac{L}{2} - (d-\frac{L}{2}) \leq L\\
-                          & \iff   d+\frac{L}{2} -d +\frac{L}{2} \leq L \iff L \leq L_{\ \blacksquare}
+  b_2 \in \mli{CB}_{c_1} & \iff  d_{c_1}(b_2) \leq \mli{DD}(c_1) + L \iff d+\frac{L}{2} \leq (d-\frac{L}{2}) + L \\
+                          & \iff   d+\frac{L}{2}  \leq d + \frac{L}{2} \iff 0  \leq 0_{\ \blacksquare}
 \end{split}
 \end{align*}
+% \end{align*}
+% \begin{align*}
+% \begin{split}
+%   b_2 \in \mli{CB}_{c_1} & \iff  d_{c_1}(b_2) - \mli{DD}(c_1) \leq L \iff d+\frac{L}{2} - (d-\frac{L}{2}) \leq L\\
+%                           & \iff   d+\frac{L}{2} -d +\frac{L}{2} \leq L \iff L \leq L_{\ \blacksquare}
+% \end{split}
+% \end{align*}
 
 \begin{figure}[H]
   \centerfloat
@@ -1244,16 +1275,15 @@ extremos, conocida como tolerancia. De esta forma se obtiene que $b_2 \in
 
 \end{figure}
 
-La definición presentada en (\ref{eq:bpDisc}) se basa en el análisis realizado
-en \cite{Liu2015} donde se resuelve que la tolerancia adecuada entre las
-distancias de puntos bases es $L$.
+La definición (\ref{eq:bpDisc}) se basa en el análisis realizado en
+\cite{Liu2015} donde se resuelve que la la tolerancia debe ser $L$.
 
 % Con el motivo de incluir celdas como $b_2$ que por
-% causa de la discretizacion no estan a una minima distancia $DD(c)$ de $c$ en
+% causa de la discretizacion no estan a una mínima distancia $DD(c)$ de $c$ en
 % $DBP_c$ . 
 % Adaptar directamente la definicion de punto base en espacio continuo a celda base en el espacio discreto resulta en que solo
 % las celdas que estan a una distanicia $\mli{DD}(c)$ de $c$, son las que estan a
-% minima distancia de $c$, estas serían las unicas celdas base de $c$ si se adaptara de
+% mínima distancia de $c$, estas serían las unicas celdas base de $c$ si se adaptara de
 % forma directa la definicion de punto base en espacio continuo. Sin embargo al adaptar
 % de forma directa la definicion existen casos donde los resultados difieren de
 % los que se obtienen en el espacio continuo. 
@@ -1265,10 +1295,10 @@ distancias de puntos bases es $L$.
 % corredor resulta en un número par de celdas libres entre cada celda ocupada
 % correspondiente a una pared del corredor, en este caso se tendran dos celdas
 % $c_1$ y $c_2$ en el centro del corredor, $c_1$ tiene una celda $b_1 \in CGen$ a
-% minima distancia $d_c(b_1) = DD(c) = d-\frac{L}{2}$, mientras que la celda $b_2
+% mínima distancia $d_c(b_1) = DD(c) = d-\frac{L}{2}$, mientras que la celda $b_2
 % \in CGen$ está en el otro lado del corrdor a distancia $d_c(b_2) =
 % d+\frac{L}{2}$, según lo que ocurre en el espacio continuo esta
-% deberia ser tambien una celda base aunque no este a minima distancia de $c$. La
+% deberia ser tambien una celda base aunque no este a mínima distancia de $c$. La
 % tolerancia introducida en la definicion presentada en (\ref{eq:bpDisc}) asegura
 % la pertenencia de $b_2$ a $CGen$, recordadndo que $b_2\in CGen$ entoces según
 % dicha definicion se tiene que:
@@ -1295,27 +1325,28 @@ distancias de puntos bases es $L$.
 % \todo{explicar
 % problemas de dicretizacion (ming-siegwart)}.
 
-Finalmente las \emph{líneas criticas discretizadas} se definen como las líneas
+Finalmente las \emph{líneas críticas discretizadas} se definen como las líneas
 discretizadas \cite{foleyphillips} definidas entre los centros de las celdas
-criticas y cada una de sus celdas base discretizados. El conjunto de todas las
-celdas pertenecientes a líneas criticas discretizadas se conoce como
+críticas y los centros de cada una de sus celdas base. El conjunto de todas las
+celdas pertenecientes a alguna línea crítica discretizada se conoce como
 $\mli{LCrD}$.
 
-Una vez determinadas las celdas criticas y las líneas criticas discretizadas es
-posible obtener la segmentación en regiones topológicas con la aplicación de un
+Una vez determinadas las celdas críticas y las líneas críticas discretizadas es
+posible obtener la segmentación del entorno. Esto se hace aplicando un
 algoritmo de descomposición en componentes conexas (sección
-\ref{subsec:CompComp}) donde el conjunto que se descompone (la entrada del
-algoritmo) es el que esta compuesto por las celdas libres de $\mli{CG}$ que no son
-celdas criticas ni forman parte de una línea critica discretizada, es decir: 
+\ref{subsec:CompComp}) donde cada componente conexa resultante es un segmento, y
+el conjunto que se descompone es el que está compuesto
+por las celdas libres de $\mli{CG}$ que no son celdas críticas ni forman parte
+de una línea crítica discretizada, es decir:
 \begin{align*}
-C := \{ c \in \mli{CG} : estado(c) = libre, c \notin \mli{CCr}, c \notin{LCrD}\}
+\{ c \in \mli{CG} : estado(c) = libre, c \notin \mli{CCr}, c \notin{LCrD}\}
 \end{align*}
 
 En la figura \ref{fig:ejSegGVDGrid} se muestra el proceso de segmentación
 completo, desde la grilla de ocupación usada como entrada
 \ref{fig:ejSegGVDGrid:GRID}, pasando por el GVD generado
-\ref{fig:ejSegGVDGrid:GVD}, la detección de celdas criticas y líneas criticas discretizadas
-\ref{fig:ejSegGVDGrid:CRI}, terminando con la segmentación del entorno
+\ref{fig:ejSegGVDGrid:GVD}, la detección de celdas críticas y líneas críticas discretizadas
+\ref{fig:ejSegGVDGrid:CRI}, y terminando con la segmentación del entorno
 \ref{fig:ejSegGVDGrid:SEG}.
 
 \begin{figure}[H]
@@ -1327,7 +1358,7 @@ completo, desde la grilla de ocupación usada como entrada
   \subfloat[GVD]{\includegraphics[clip=true,
   width=0.40\textwidth]{imagenes/GVDDisc/b.png}\label{fig:ejSegGVDGrid:GVD}}
 
-  \subfloat[Celdas criticas contienen cuadrados amarillos y las pertinentes a líneas criticas discretizadas contienen cuadrados grises]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/c.png}\label{fig:ejSegGVDGrid:CRI}}
+  \subfloat[Celdas críticas, contienen cuadrados amarillos. Y celdas pertenecientes a líneas críticas discretizadas, contienen cuadrados grises]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/GVDDisc/c.png}\label{fig:ejSegGVDGrid:CRI}}
   \qquad
   \subfloat[Segmentación del entorno, cada segmento se indica con un
   color distinto]{\includegraphics[clip=true,
@@ -1338,15 +1369,14 @@ completo, desde la grilla de ocupación usada como entrada
 \end{figure}
 
 
-Una consideración a tener en cuenta es que el algoritmo \ref{alg:compcon} debe
-ejecutarse con $ady_4$ como función de adyacencia (sección
-\ref{subsec:Grilla}), ya que si se usa $ady_8$ las líneas criticas
-discretizadas diagonales no separan segmentos. Esto se debe a que las celdas a ambos lados de una línea
-discretizada diagonal son adyacentes diagonalmente como se muestra en la figura
-\ref{fig:probDiagSeg}, por lo tanto al usar $ady_4$ la línea critica separa dos
-componentes conexas al no permitir la adyacencia entre las celdas a sus lados
-mientras que usando $ady_8$ si se permite dicha adyacencia con lo cual resulta
-en una única componente.
+Una consideración a tener en cuenta es que para obtener una segmentación
+correcta el algoritmo \ref{alg:compcon} debe ejecutarse con $ady_4$ como
+función de adyacencia (sección \ref{subsec:Grilla}), ya que si se usa $ady_8$
+las líneas críticas discretizadas diagonales no separan segmentos. Esto se debe
+a que siempre existen celdas a ambos lados de una línea discretizada diagonal que son
+adyacentes diagonalmente como se muestra en la figura \ref{fig:probDiagSeg}. De
+usarse $ady_4$ las líneas críticas diagonales sí separan segmentos al no estarse
+permitiendo la adyacencia diagonal.
 
 \begin{figure}[H]
   \centerfloat
@@ -1357,15 +1387,18 @@ en una única componente.
   \qquad
   \subfloat[Usando $ady_4$]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/probDiagSeg/0_33_4con.png}}
 
-  \caption[línea critica discretizada diagonal, y sus efectos en la
-  segmentacion al usar $ady_4$ o $ady_8$.]{línea critica discretizada diagonal, y sus efectos en la
-  segmentación al usar $ady_4$ o $ady_8$. La celda $c$ se da como ejemplo de
-una celda de un lado de la línea que es adyacente según $ady_8$ a la celda $n3$ al 
+  \caption[Línea crítica discretizada diagonal, y sus efectos en la
+  segmentacion al usar $ady_4$ o $ady_8$.]{Línea crítica discretizada diagonal, y sus efectos en la
+  segmentación al usar $ady_4$ o $ady_8$. La celda $c$ es un ejemplo de
+una celda a un lado de la línea que es adyacente según $ady_8$ a la celda $n3$ al 
 otro lado de la línea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 
 \end{figure}
 
-% Tambien se filtran las líneas criticas, como las ideas es que estas se ubiquen en umbrales 
+% Antes de terminar esta sección una aclaración que es pertinente es que en este
+% capitulo el termino GVD refiere a GVDD. 
+
+% Tambien se filtran las líneas críticas, como las ideas es que estas se ubiquen en umbrales 
 
 % Desribir problemas de desconexion presentados en las diversas implementaciones? 
 % \begin{itemize}
@@ -1378,8 +1411,8 @@ otro lado de la línea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 % sparceness. Comentar que se basa en el A de zhang, que en principio es más
 % eficiente que chequear patrones
 
-% Se mantienen todos los obts a minima distancia, y los que \say{casi} estan a
-% minima distancia, siendo estos los puntos bases (puntos más cercanos a
+% Se mantienen todos los obts a mínima distancia, y los que \say{casi} estan a
+% mínima distancia, siendo estos los puntos bases (puntos más cercanos a
 % generadosres base) tomados en cuenta, según estos se define si un punto pertenece o no al GVD.
 
 
@@ -1414,7 +1447,7 @@ siguientes secciones.
 En \emph{brushfire dinámico} original la pertenecía de las celdas al GVD se
 determina en los choques de ondas consistentes. Dada la función $\mli{gen} :
 \mli{CG} \rightarrow \mli{CGen}$ que dada una celda $c$ de la grilla devuelve
-una de las celdas a minima distancia de $c$ que pertenecen a un generador, el
+una de las celdas a mínima distancia de $c$ que pertenecen a un generador, el
 criterio esencialmente consiste en que, sean $c_1$ y $c_2$ las celdas
 involucradas en un choque de ondas consistentes, estas pertenecen al GVD si
 $\mli{gen}(c_1) \neq \mli{gen}(c_2)$ y $\mli{gen}(c_1) \notin
@@ -1422,8 +1455,8 @@ ady(\mli{gen}(c_2))$, es decir si $\mli{gen}(c_1)$ y $\mli{gen}(c_2)$ no son
 iguales ni adyacentes entre sí. 
 
 La definición de GVD para el espacio continuo donde un punto $p$ pertenece al
-GVD si tiene dos generadores distintos a minima distancia, lo cual sucede si y solo si
-$p$ tiene al menos un punto a una misma minima distancia en cada uno de esos generadores,
+GVD si tiene dos generadores distintos a mínima distancia, lo cual sucede si y solo si
+$p$ tiene al menos un punto a una misma mínima distancia en cada uno de esos generadores,
 dichos puntos son parte de los puntos base de $p$ (sección
 \ref{subsec:mapaTopGVDGrid}). Dado esto que se puede decir que un punto pertenece
 al GVD si tiene al menos dos puntos bases que pertenecen a generadores
@@ -1439,7 +1472,7 @@ base de $c$ pertenecientes a generadores distintos.
 La forma de obtener las celdas base de un punto se basa en el concepto de
 choque de olas, de forma similar al criterio de pertenencia de celdas al GVD en
 el \emph{brushfire dinámico} original. Durante el calculo del mapa de distancia
-correspondiente a incremento se registran todas las celdas en involucradas en
+correspondiente al incremento se registran todas las celdas en involucradas en
 choques de olas consistentes. Luego de finalizar la actualización del mapa de
 distancia, se obtienen las celdas base $\mli{CB}_c$ de cada celda $c$
 registrada previamente según el algoritmo \ref{alg:celdasBase}, notar que la
@@ -1507,14 +1540,14 @@ generadores. Y adicionalmente se obtienen las celdas base a partir necesarias
 para segmentar.
 
 Es pertinente aclarar que el algoritmo \ref{alg:celdasBase} es una version
-simplificada del que esta presente en la implementación del proyecto. Las
+simplificada del que está presente en la implementación del proyecto. Las
 simplificaciones son dos, la primera es que se considera solo una de las celdas
-a minima distancia que pertenecen a un generador (la devuelta por la función
+a mínima distancia que pertenecen a un generador (la devuelta por la función
 $gen$), similar a como se trabaja en el \emph{brushfire dinámico} original. La
 segunda es que solo se permiten dos celdas base. En la sección
 \ref{algComp:celdasbase} se presenta el algoritmo completo para obtener las
 celdas base sin las simplificaciones mencionadas, es decir que maneja todas las
-celdas pertenecientes a generadores que están a minima distancia y permite más
+celdas pertenecientes a generadores que están a mínima distancia y permite más
 de dos celdas base.
 
 \subsection{Consideraciones sobre el espacio desconocido}\label{subsec:espDesc}
@@ -1588,7 +1621,7 @@ muestra el GVD generado en una misma grilla de ocupación con cada una de las
 tres formas de considerar el espacio desconocido mencionadas, es posible
 observar que el GVD resultante de solo considerar que las celdas desconocidas
 no propagan ondas no preserva la conectividad, mientras que los otros dos
-métodos otros si lo hacen.
+métodos otros sí lo hacen.
 
 % El problema presentado por esta forma de considerar el espacio desconocido es
 % que las ondas se propagan por el espacio desconocido, generado GVD fuera del
@@ -1624,7 +1657,7 @@ métodos otros si lo hacen.
 % celdas desconocidas.
 
 % Comentar que las celdas con lo desconocido como punto base no genera líneas ni
-% puntos criticos.
+% puntos críticos.
 
 % \todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}
 
@@ -1694,9 +1727,9 @@ el último punto del camino, el objetivo.
 El \emph{controlador de movimiento} tiene dos formas de considerar completo un
 punto del camino, la normal y la forzosa.
 
-La compleción forzosa ocurre cuando el robot esta a una distancia menor que
+La compleción forzosa ocurre cuando el robot está a una distancia menor que
 $\mli{DistF}$ del punto en cuestión. Este criterio de compleción tiene como
-propósito determinar cuando un robot esta lo suficientemente cerca de un
+propósito determinar cuando un robot está lo suficientemente cerca de un
 punto del camino como para considerarlo completo a pesar de que no se dio
 aún la compleción normal. Siendo el valor de $\mli{DistF}$ establecido para
 cumplir con el propósito de la compleción forzosa, para esto debe considerarse
@@ -1713,7 +1746,7 @@ El valor $\mli{DistNo}$ debe cumplir con
 $\mli{DistF}<\mli{DistNo}<\mli{rango}$, siendo $\mli{rango}$ el alcance de los
 sensores del robot. Esto se debe a que la idea detrás de criterio de compleción
 normal aplicado al objetivo es considerarlo completo cuando es seguro que dicho objetivo
-esta en el rango de sensado del robot. Esto implica que el robot esta en
+está en el rango de sensado del robot. Esto implica que el robot está en
 condiciones de recopilar nueva información del entorno, siendo este el motivo
 por el cual el objetivo fue asignado en un primer lugar.
 
@@ -1723,7 +1756,7 @@ obstáculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot siga el
 camino original de forma estricta aunque este en espacios despejados ya que se 
 fuerza que el robot este cerca de los subobjetivos para completarlos. Al
 aumentar el valor de $\mli{DistNs}$ se permite mayor libertad en como seguir el
-camino original cuando el espacio esta despejado, esto sucede porque en los
+camino original cuando el espacio está despejado, esto sucede porque en los
 espacios despejados todos los subobjetivos del camino que estén a una
 distancia menor a $\mli{DistNs}$ se consideran completados, siendo move base el
 encargado de la trayectoria hasta el primer punto no completado del camino,
@@ -1820,7 +1853,7 @@ representa el entorno explorado. A continuación se describe el proceso completo
 desde los sensores hasta la construcción de un mapa que contenga toda la
 información obtenida del entorno.
 
-Cada robot esta constantemente recopilando información del entorno a través de
+Cada robot está constantemente recopilando información del entorno a través de
 sus sensores y enviando dicha información al nodo de \gls{ROS} \emph{global\_costmap}
 ubicado en su módulo \emph{move base} (sección \ref{subsec:move_base}). Al
 recibir datos sensoriales \emph{global\_costmap} actualiza la grilla de
@@ -1829,8 +1862,8 @@ valores de probabilidad de ocupación asociados a las celdas de su grilla de
 (sección \ref{subsec:Grilla}) solo dependan de la ultima evidencia sensorial
 obtenida para cada celdas. Adicionalmente las celdas tienen asociado uno de
 tres valores de probabilidad de ocupación posibles: $0.5$ indicando que la
-celda es desconocida, $0.55$ indicando que la celda esta ocupada y $0.45$
-indicando que la celda esta libre. Estos valores indican la probabilidad
+celda es desconocida, $0.55$ indicando que la celda está ocupada y $0.45$
+indicando que la celda está libre. Estos valores indican la probabilidad
 $P(c|x_t,z_t)$ de que una celda $c$ este ocupada dada una única medida $z_t$
 desde una cierta posición $x_t$.
 
@@ -1846,7 +1879,7 @@ Al recibir una actualización el módulo \emph{combinador de mapas} aplica la
 regla de actualización presentada en \cite{stachniss2009robotic}, celda a
 celda, para integrar la nueva información a la grilla central que concentra
 toda la información proporcionada por los robots. La regla de actualización
-para una celda $c$ esta dada
+para una celda $c$ está dada
 por (\ref{eq:updateRule}) donde $P(c|x_{1:t-1},z_{1:t-1})$ es la probabilidad
 anterior a la actualización, $P(c | x_t,z_t)$ es el valor de probabilidad
 asociado a $c$ en la actualización recibida y  $P(c|x_{1:t},z_{1:t})$ es el
@@ -1868,7 +1901,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 \begin{figure}[H]
   \center
-  \includegraphics[width=0.95\linewidth]{imagenes/occgridUpdate.png}
+  \includegraphics[width=0.80\linewidth]{imagenes/occgridUpdate.png}
   \caption[Aplicación de la regla de actualización propuesta en
   \cite{stachniss2009robotic} en un corredor.]{Aplicación de la
     regla de actualización propuesta en \cite{stachniss2009robotic} en un
@@ -2110,12 +2143,12 @@ mantener actualizado un mapa completo del entorno explorado.
 % $oc_1\neq oc_2$ y no son adyacentes, 
 
 % Hablar de la necesidad de encontrar las celdas base para lograr definir la
-% líneas criticas y posteriormente lograr segmentar (seccion \ref{subsec:mapaTopGVDGrid}).
+% líneas críticas y posteriormente lograr segmentar (seccion \ref{subsec:mapaTopGVDGrid}).
 
 % Mencionar la solucion a la que se llego, y cual es la definicion de celda base.
 % Dos caminos (I) mi definicion que separa los basis en sources y pseudosources. O (II)
 % definir los basis como las celdas ocupadas que hacen que una celda pertenezca
-% al GVD según lau (solo se neceita para puntos criticos incluidos en el GVD). 
+% al GVD según lau (solo se neceita para puntos críticos incluidos en el GVD). 
 
 % (II) tiene la ventaja que es facil de explicar y permite basarse en lo que ya
 % esta bien fundamnetado (Lau), por otro lado (I) es lo que se implemento, pero
@@ -2292,7 +2325,7 @@ mantener actualizado un mapa completo del entorno explorado.
 
 % Quizas mencionar que se usa la descomposición en componentes conexas y como. 
 
-% Mencionar el uso de sources y pseudosources para hacer líneas criticas. Discretizacion de líneas?
+% Mencionar el uso de sources y pseudosources para hacer líneas críticas. Discretizacion de líneas?
 
 % Algunos resultados?
 

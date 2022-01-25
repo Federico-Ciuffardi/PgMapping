@@ -50,7 +50,7 @@ construido alcanza cierto porcentaje de cubrimiento del entorno
 rendimiento no es útil en la práctica cuando se desconocen las dimensiones del
 entorno a explorar, ya que esta información es necesaria para el cálculo del
 porcentaje de cubrimiento.
-Otro posible criterio que si es aplicable en la práctica, cuando el entorno es
+Otro posible criterio que sí es aplicable en la práctica, cuando el entorno es
 cerrado, es el de explorar el entorno hasta que no quede ninguna posibilidad de
 obtener nueva información de él, osea que no exista ningún espacio desconocido
 que sea accesible. La desventaja de este criterio es que se fuerza a una
@@ -84,11 +84,11 @@ Sin embargo la reducción del tiempo de exploración no es proporcional al
 aumento de robots en la flota. En primer lugar siempre que el número de robots
 sea mayor que el número de objetivos de exploración, se tendrán recursos
 desaprovechados. De forma similar si varios robots son enviados a objetivos de
-exploración cercanos entre si existe la posibilidad de que los sensores que
+exploración cercanos entre sí existe la posibilidad de que los sensores que
 estos utilizan para explorar recolecten información sobre una misma porción del
 entorno y por lo tanto realicen trabajo redundante. Adicionalmente al existir
 un mayor número de robots aumenta el riesgo de que estos se interfieran entre
-si, causando perdidas de tiempo en desvíos para evitar colisiones
+sí, causando perdidas de tiempo en desvíos para evitar colisiones
 \cite{guzzoni1997many,goldberg1997interference}. 
 
 Las problemáticas mencionadas pueden ser mitigadas asignando objetivos de forma
@@ -154,11 +154,11 @@ topológico sobre todo el entorno y varios planes métricos sobre porciones
 reducidas del entorno, lo cual resulta en una reducción del costo computacional
 en comparación a hacer un único plan métrico sobre el entorno entero.
 
-Los tres trabajos antes mencionados utilizan una misma estrategia para lograr construir un mapa topológico y uno métrico, asegurando que estos son congruentes entre si. La estrategia consiste en construir una grilla de ocupación a partir de los datos obtenidos por los sensores de los robots. Dicha grilla de ocupación es utilizada tanto como mapa métrico, como para generar una estructura intermedia llamada \emph{grafo generalizado de Voronoi}, con el cual es posible detectar los segmentos que constituyen un mapa topológico basado en regiones. Este proceso es una parte fundamental del trabajo desarrollado en este proyecto y se detallará a lo largo de las siguientes secciones.%\todo{durante este proyecto?} 
+Los tres trabajos antes mencionados utilizan una misma estrategia para lograr construir un mapa topológico y uno métrico, asegurando que estos son congruentes entre sí. La estrategia consiste en construir una grilla de ocupación a partir de los datos obtenidos por los sensores de los robots. Dicha grilla de ocupación es utilizada tanto como mapa métrico, como para generar una estructura intermedia llamada \emph{grafo generalizado de Voronoi}, con el cual es posible detectar los segmentos que constituyen un mapa topológico basado en regiones. Este proceso es una parte fundamental del trabajo desarrollado en este proyecto y se detallará a lo largo de las siguientes secciones.%\todo{durante este proyecto?} 
 
 \subsection{Mapa de carreteras}\label{subsec:mapacarr}
 % Un \emph{mapa de carreteras} (del ingles road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos ubicaciónes distantes, por ejemplo dos depatamentos distintos, en lugar de considerar cada camino posible, normalemte planificamos primero un camino hacia una red de carreteras, luego a lo largo de la red de carreteras y, finalmente, desde la red de carreteras hacia el destino. %(ver figura \ref{fig:ejemplovial}). 
-Un \emph{mapa de carreteras} (del ingles \emph{roadmap}) \cite{choset2005principles} es una clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un \emph{roadmap} asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente planificar un camino desde la red de carreteras (Ruta 3) hacia el destino (ver figura \ref{fig:ejemplovial}). 
+Un \emph{mapa de carreteras} (del ingles \emph{roadmap}) \cite{choset2005principles} es una clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un \emph{roadmap} asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría está inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente planificar un camino desde la red de carreteras (Ruta 3) hacia el destino (ver figura \ref{fig:ejemplovial}). 
 
 \begin{figure}[H]
   \center
@@ -278,7 +278,7 @@ El resultado se repite para cualquier generador cóncavo que no contenga otros
 generadores en su interior, como es el caso de las habitaciones de una sola
 entrada, y de los corredores sin salida. De esta última observación se deriva
 el criterio presentado en \cite{choset2005principles} que consiste en utilizar
-como generadores a conjuntos que ademas de ser conexos sean convexos, evitando
+como generadores a conjuntos que además de ser conexos sean convexos, evitando
 así generadores cóncavos. En la figura \ref{fig:distGenConvex} se muestra un
 ejemplo de distribución de puntos obstaculizados en generadores conexos y
 convexos junto al GVD generado en el interior de la habitación. 
@@ -345,7 +345,7 @@ de puntos obstaculizados como generadores.
 
 Una idea intuitiva para construir un GVD en un espacio representado con una grilla es la de definir un criterio que determine la pertenencia de una celda al GVD y luego aplicarlo celda a celda. Un criterio posible consiste en que una celda debe pertenecer al GVD si tiene dos o más celdas ocupadas a una misma distancia, siendo la distancia entre celdas la distancia entre sus centros. Sin embargo, esta técnica genera resultados erróneos al no considerar los efectos causados por la discretización. Por ejemplo, en corredores cuya discretización resulta en una cantidad par de celdas entre sus paredes, según este método ninguna celda debería pertenecer al GVD dado que ninguna  tendría una misma distancia a dos celdas ocupadas (paredes del corredor). Esto se considera incorrecto porque el GVD construido en un espacio discretizado debe corresponder al GVD que se construiría en el mismo espacio si fuera continuo y  en el caso continuo los puntos del centro de un corredor siempre pertenecen al GVD. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
 
-En \cite{wurm2008coordinated} se propone un método que logra construir un GVD evitando los problemas de discretización mencionados. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda esta ocupada o libre, resultando en un mapa que contiene para cada celda la distancia al obstáculo más cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. Finalmente GVD se obtiene aplicando un algoritmo de esqueletización \cite{zhang1984fast} al mapa de distancia construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}. En esta propuesta es clave el uso del algoritmo de esqueletización, que retrae el mapa de distancias a un esqueleto discreto que se aproxima al GVD que se generaría en el espacio continuo.   
+En \cite{wurm2008coordinated} se propone un método que logra construir un GVD evitando los problemas de discretización mencionados. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda está ocupada o libre, resultando en un mapa que contiene para cada celda la distancia al obstáculo más cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. Finalmente GVD se obtiene aplicando un algoritmo de esqueletización \cite{zhang1984fast} al mapa de distancia construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}. En esta propuesta es clave el uso del algoritmo de esqueletización, que retrae el mapa de distancias a un esqueleto discreto que se aproxima al GVD que se generaría en el espacio continuo.   
 
 % que consiste en erosionar las celdas más cercanas a los obstáculos hasta llegar a las celdas más distantes a estos siendo estas últimas las celdas que se asignan al GVD construido. Un ejemplo de este proceso se puede ver en la figur
 \begin{figure}[H]
@@ -544,7 +544,7 @@ algoritmo de segmentación es que las entradas y salidas entre los segmentos son
 pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite
 delimitar segmentos.
 
-Para describir el método de segmentación es necesario introducir tres nuevos conceptos asociados al $\mli{GVD}$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow \mathds{R}$ de un punto $p \in W$, que corresponde a la distancia del punto $p$ al punto ocupado más cercano. De ser $p \in \mli{GVD}$ el despeje equivale a la distancia entre $p$ y alguno de sus generadores base generalizados $\mli{GBG}_p$ (recordar que todos están a una misma mínima distancia de $p$ \eqref{eq:GBG}). El segundo es el concepto de \emph{puntos críticos} $Cr \subseteq \mli{GVD}$, que son los puntos pertenecientes al GVD que minimizan el despeje localmente en el GVD, esta definición se formaliza en \eqref{eq:crit}, donde $d_p(p')$ es la distancia entre $p$ y $p'$. 
+Para describir el método de segmentación es necesario introducir tres nuevos conceptos asociados al $\mli{GVD}$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow \mathds{R}$ de un punto $p \in W$, que corresponde a la distancia del punto $p$ al punto ocupado más cercano. De ser $p \in \mli{GVD}$ el despeje equivale a la distancia entre $p$ y alguno de sus generadores base generalizados $\mli{GBG}_p$ (recordar que todos están a una misma mínima distancia de $p$ \eqref{eq:GBG}). El segundo es el concepto de \emph{puntos críticos} $Cr \subseteq \mli{GVD}$, que son los puntos pertenecientes al GVD que son mínimos locales estrictos según el despeje en el GVD, esta definición se formaliza en \eqref{eq:crit}, donde $d_p(p')$ es la distancia entre $p$ y $p'$. 
 \begin{equation}
   % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
   Cr = \{p\ \in \mli{GVD} : \exists \upvarepsilon > 0, \forall p' \in \mli{GVD}, d_p(p') \leq \upvarepsilon, D(p) < D(p') \} \label{eq:crit}
@@ -556,8 +556,18 @@ ilustra estos conceptos.
 
 \begin{figure}[H]
   \center
-  \includegraphics[width=0.75\linewidth]{imagenes/CritsSharpMono.png}
-  \caption[Puntos críticos y líneas críticas.]{Puntos críticos y líneas críticas. Los puntos críticos se indican con círculos y las líneas críticas con líneas punteadas. Notar que el despeje en puntos críticos se corresponde con el largo sus líneas críticas asociadas. Extraído de \cite{Thrun1998}.}\label{fig:crits}
+  \centering
+  \subfloat[Entorno]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/crits/a.png}\label{fig:crits:a}}
+  \qquad
+  \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/crits/b.png}\label{fig:crits:b}}
+  \qquad
+  \subfloat[Puntos críticos]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/crits/c.png}\label{fig:crits:c}}
+  \qquad
+  \subfloat[Líneas críticas]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/crits/d.png}\label{fig:crits:d}}
+  % \includegraphics[width=0.75\linewidth]{imagenes/CritsSharpMono.png}
+  % \includegraphics[width=0.75\linewidth]{imagenes/crits/unica.png}
+  \caption[Puntos críticos y líneas críticas.]{Puntos críticos y líneas críticas. Notar que el despeje en puntos críticos se corresponde con el largo sus líneas críticas asociadas. Extraído de \cite{Thrun1998}.}\label{fig:crits}
+  % Los puntos críticos se indican con círculos y las líneas críticas con líneas grises. 
 \end{figure} 
 
 
@@ -568,7 +578,7 @@ El algoritmo comienza determinando el estado (ocupado o libre) para cada celda d
   \centering
   \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/a.png}\label{fig:ejThrunTopA}}
   \qquad
-  \subfloat[líneas criticas]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/b.png}\label{fig:ejThrunTopB}}
+  \subfloat[líneas críticas]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/b.png}\label{fig:ejThrunTopB}}
   \qquad
   \subfloat[Regiones]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/c.png}\label{fig:ejThrunTopC}}
   \qquad
@@ -740,7 +750,7 @@ obtiene mejores resultados en general.
 % Notar que cuanto más compacta sea una region menor sera su valor $s_i$ (si se entiende por region compacta una region en la cual sus puntos interiores son cercanos al centro de masa).
 
 % \subsubsection{Calidad de segmentación}
-% Para determinar la calidad general de la segmentación, sera necesaria, ademas de la calidad de cada region, la calidad de las características globales de la segmentación. Para lograr determinar dichas características se definen varios indicadores que se mencionarán a continuación.
+% Para determinar la calidad general de la segmentación, sera necesaria, además de la calidad de cada region, la calidad de las características globales de la segmentación. Para lograr determinar dichas características se definen varios indicadores que se mencionarán a continuación.
 
 % \paragraph{Cobertura}
 % En el caso ideal cada punto del entorno esta asociado a una region en el mapa topológico, pero por diversas razones este puede no ser el caso. Dado esto se define la cobertura $C$ de una segmentación como el cociente del área representada por el mapa topológico y el área del mapa:
@@ -802,7 +812,7 @@ segundo robot acelere su exploración aunque exista más de un objetivo de
 exploración en el mismo, e incluso al terminar la exploración de un segmento
 los robots pueden bloquearse entre sí mientras intentan abandonarlo. Por otro
 lado los objetivos de exploración de segmentos diferentes suelen ser
-independientes entre si. Considerando esto, distribuir los robots sobre los
+independientes entre sí. Considerando esto, distribuir los robots sobre los
 segmentos a explorar debería lograr una reducción del trabajo redundante y de
 las interferencias entre los mismos, llevando a una reducción del tiempo de
 exploración.
@@ -865,8 +875,8 @@ Existen métodos de coordinación que se basan en segmentar el espacio sin consi
   \caption[Segmentación propuesta en \cite{Solanas2004}.]{Segmentación propuesta en \cite{Solanas2004}. En blanco se indica el espacio libre, con negro el espacio ocupado, y con colores se indica el espacio desconocido, donde cada color indica un segmento diferente dentro de los cuales se indica con tonalidades más oscuras los obstáculos todavía no explorados y con amarillo su centro de masa. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
 \end{figure} 
 
-Cada robot esta asignado al segmento cuyo centro de masa sea más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$.
-Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no ocupado más corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ esta en el rango de sensado de algún robot.
+Cada robot está asignado al segmento cuyo centro de masa sea más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$.
+Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no ocupado más corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ está en el rango de sensado de algún robot.
 
 \begin{equation}\label{ec:costsolanas}
 costo_{ij} = 
@@ -989,7 +999,7 @@ motores de físicas cuyas capacidades han sido estudiadas en diversos artículos
 \cite{bzhikhatlov2017research,erez2015simulation,ronnau2013evaluation}.
 ARGoS por su parte dispone de un simuladores 2D y 3D personalizados que según
 \cite{Pitonakova2018} son mucho más simples que los utilizados por Gazebo y
-CoppeliaSim. Esta simplicidad se comenta que esta asociada con capacidades
+CoppeliaSim. Esta simplicidad se comenta que está asociada con capacidades
 limitadas, pero también es posible que sea un factor que influye positivamente
 en la eficiencia.
 
@@ -1110,7 +1120,7 @@ Fue posible configurar Webots para utilizar \gls{ENU} pero se requirió hacer al
 cambios como rotar los elementos del entorno manualmente.
 % - Diferentes estandares en los sistemas coordenadas entre \gls{ROS}("\gls{ENU}") y
 %   Webots("\gls{NUE}") que aunque Webots permite cambiarlo esto solo altera las
-%   traslaciones pero no las rotaciones, por lo tanto, ademas de tener que
+%   traslaciones pero no las rotaciones, por lo tanto, además de tener que
 %   rotar todos los objetos en el mapa, otras consideraciones pueden ser
 %   necesarias. El ejemplo que se presenteo durante el desarrollo del bechmark
 %   fue la necesidad rotar los frames de referencia de los datos un \gls{LiDAR} para
