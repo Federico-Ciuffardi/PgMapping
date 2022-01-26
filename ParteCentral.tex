@@ -1419,65 +1419,83 @@ otro lado de la línea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 
 \section{Grafo generalizado de Voronoi}\label{sec:MiConstGVD}
 
-Considerando los problemas de eficiencia del algoritmo no incremental \emph{brushfire} (sección
-\ref{subsec:constGVD}) y los problemas de su variante incremental
-\emph{brushfire dinámico} (sección \ref{subsec:constGVDInc}) como fue propuesta
-originalmente en \cite{kalra2009incremental}, se decidió basar la construcción
-del GVD en la version de \emph{brushfire dinámico} propuesta en \cite{Lau2013},
-a la que se estará haciendo referencia cuando se mencione \say{\emph{brushfire dinámico}
+Considerando los problemas de eficiencia del algoritmo no incremental de
+construcción del GVD llamado \emph{brushfire} (sección \ref{subsec:constGVD}), y los
+problemas de su variante incremental denominada \emph{brushfire dinámico} (sección
+\ref{subsec:constGVDInc}) como se propone originalmente en
+\cite{kalra2009incremental}. Se decidió basar la construcción del GVD en la
+versión de \emph{brushfire dinámico} propuesta en \cite{Lau2013}, a la que se
+estará haciendo referencia cuando se mencione \say{\emph{brushfire dinámico}
 original} desde este punto.
 
 % (que se
 % corresponde con la función de despeje discretizado $\mli{DD} : \mli{CG}
 % \rightarrow \mathds{R}$)
 
-La implementación realizada en proyecto mantiene las olas consistentes e
-inconsistentes para el calculo incremental de un mapa de distancia.
-Adicionalmente mantiene que las olas inconsistentes y consistentes remueven las
-celdas que atraviesan del GVD, y que las celdas candidatas a pertenecer al GVD
-son las celdas en las que ocurren choques de ondas.
+La implementación realizada en este proyecto mantiene el concepto de ondas
+consistentes e inconsistentes del \emph{brushfire dinámico} original para el
+calculo incremental de un mapa de distancia. Adicionalmente mantiene que dichas
+ondas consistentes e inconsistentes remueven del GVD a las celdas que
+atraviesan, y que las celdas candidatas a pertenecer al GVD son las celdas en
+las que ocurren choques de ondas consistentes.
 
-Los cambios principales se dan en el criterio con el cual se determina la
-pertenencia de las celdas candidatas al GVD y en como se considera el espacio
-desconocido al construir el GVD durante la exploración. Estos se tratan en las
-siguientes secciones.
+Los cambios principales respecto al \emph{brushfire dinámico} original se dan
+en el criterio con el cual se determina la pertenencia de las celdas candidatas
+al GVD y en como se considera el espacio desconocido al construir el GVD
+durante la exploración. Estos se tratan en las siguientes secciones.
 
 \subsection{Criterio de pertenecía}\label{subsec:critPer}
 
-En \emph{brushfire dinámico} original la pertenecía de las celdas al GVD se
+En el \emph{brushfire dinámico} original la pertenecía de las celdas al GVD se
 determina en los choques de ondas consistentes. Dada la función $\mli{gen} :
-\mli{CG} \rightarrow \mli{CGen}$ que dada una celda $c$ de la grilla devuelve
-una de las celdas a mínima distancia de $c$ que pertenecen a un generador, el
-criterio esencialmente consiste en que, sean $c_1$ y $c_2$ las celdas
+\mli{CG} \rightarrow \mli{CGen}$ que para cada celda $c$ de la grilla devuelve
+una de las celdas que pertenecen a un generador que están a mínima distancia de $c$, el
+criterio de pertenecía original esencialmente consiste en que, sean $c_1$ y $c_2$ las celdas
 involucradas en un choque de ondas consistentes, estas pertenecen al GVD si
 $\mli{gen}(c_1) \neq \mli{gen}(c_2)$ y $\mli{gen}(c_1) \notin
 ady(\mli{gen}(c_2))$, es decir si $\mli{gen}(c_1)$ y $\mli{gen}(c_2)$ no son
 iguales ni adyacentes entre sí. 
 
-La definición de GVD para el espacio continuo donde un punto $p$ pertenece al
-GVD si tiene dos generadores distintos a mínima distancia, lo cual sucede si y solo si
-$p$ tiene al menos un punto a una misma mínima distancia en cada uno de esos generadores,
-dichos puntos son parte de los puntos base de $p$ (sección
-\ref{subsec:mapaTopGVDGrid}). Dado esto que se puede decir que un punto pertenece
-al GVD si tiene al menos dos puntos bases que pertenecen a generadores
-distintos, lo cual en un espacio discretizado en celdas se traduce a que
-existan dos celdas base que pertenecen a generadores distintos.
+% Recordando que los  
+% puntos base son los puntos pertenencientes parte de los puntos base de $p$ (sección
+% \ref{subsec:mapaTopGVDGrid}).
 
-Dado este análisis y la necesidad de determinar las celdas base planteada en la
-sección \ref{subsec:mapaTopGVDGrid}, se determinó diferir en el criterio
-pertenencia con respecto al \emph{brushfire dinámico} original, siendo el nuevo
-criterio de pertenencia de una celda $c$ al GVD la existencia de dos celdas
-base de $c$ pertenecientes a generadores distintos.
+% La definición de GVD para el espacio continuo establece que un punto $p$
+% pertenece al GVD si tiene al menos dos generadores distintos a mínima
+% distancia, lo cual sucede si y solo si $p$ tiene al menos dos puntos a mínima distancia
+% pertenecientes a generadores distintos. Dado esto se puede decir
+% que un punto pertenece al GVD si tiene al menos dos puntos base (sección
+% \ref{subsec:mapaTopGVDGrid}) que pertenecen a generadores distintos, lo cual en
+% un espacio discretizado en celdas se traduce a que existan dos celdas base que
+% pertenecen a generadores
+% distintos.
 
-La forma de obtener las celdas base de un punto se basa en el concepto de
-choque de olas, de forma similar al criterio de pertenencia de celdas al GVD en
-el \emph{brushfire dinámico} original. Durante el calculo del mapa de distancia
-correspondiente al incremento se registran todas las celdas en involucradas en
-choques de olas consistentes. Luego de finalizar la actualización del mapa de
-distancia, se obtienen las celdas base $\mli{CB}_c$ de cada celda $c$
-registrada previamente según el algoritmo \ref{alg:celdasBase}, notar que la
-función de despeje discretizada $\mli{DD} : \mli{CG} \rightarrow \mathds{R}$ se
-corresponde los valores del mapa de distancia calculado.
+La definición de GVD para el espacio continuo establece que un punto $p$
+pertenece al GVD si tiene al menos dos generadores distintos a mínima
+distancia, lo cual sucede si y solo si al menos dos de los puntos pertenecientes a
+generadores, que están a mínima distancia de $p$ pertenecen a generadores
+distintos. Dado esto se puede decir que un punto pertenece al GVD si tiene al
+menos dos puntos base (sección \ref{subsec:mapaTopGVDGrid}) que pertenecen a
+generadores distintos, que en un espacio discretizado en celdas se traduce
+a que una celda tenga dos celdas base que pertenecen a generadores distintos.
+
+ % del \emph{brushfire dinámico} original
+Dado este análisis y la necesidad de determinar las celdas base que fue
+planteada en la sección \ref{subsec:mapaTopGVDGrid}, se decidió cambiar el
+criterio de pertenencia al GVD, siendo el nuevo criterio de pertenencia de una
+celda al GVD que al menos dos de sus celdas base pertenezcan a generadores
+distintos.
+
+% choque de ondas, de forma similar al criterio de pertenencia de celdas al GVD en
+% el \emph{brushfire dinámico} original.
+Las celdas base se obtienen en los choques de ondas consistentes. En cada
+actualización del mapa de distancia correspondiente a un incremento, se
+registran todas las celdas involucradas en choques de ondas consistentes.
+Luego de finalizar la actualización del mapa de distancia, con el algoritmo
+\ref{alg:celdasBase} se obtienen las celdas base $\mli{CB}_c$ de cada celda $c$
+registrada previamente. Notar que la función de despeje discretizada $\mli{DD}
+: \mli{CG} \rightarrow \mathds{R}$ se corresponde los valores del mapa de
+distancia calculado.
 
 \begin{algorithm}[H]
 \SetAlgoLined
@@ -1492,64 +1510,69 @@ corresponde los valores del mapa de distancia calculado.
   % \tcp{DFS desde $c$ agregando las celdas visitadas a la componente conexa $C_i$}
   \ForEach{ $cA \in ady(c)$} {
     $b := \mli{gen}(cA)$\\
-    $\mli{tolerado} := d_c(b) - \mli{DD}(c) \leq L$\\
+    $\mli{tolerado} := d_c(b) \leq \mli{DD}(c) + L$\\
     $\mli{noIgNiAdy} := b \neq gen(c) \land b \notin ady(gen(c))$\\
     $\mli{masCercano} := d_c(b) < minD$\\
     \If{$\mli{tolerado} \land \mli{noIgNiAdy} \land \mli{masCercano}$}{
       $\mli{minD}  := d_c(b)$\\
-      $\mli{minDB} := b$\\
+      $\mli{ultimo} := b$\\
     }
   }
-  $\mli{CB}_c := \{\mli{gen}(A)\}$\\
+  $\mli{CB}_c := \{\mli{gen}(c)\}$\\
   \If{$\mli{minD} < \infty$}{
-    $\mli{CB}_c := \mli{CB}_c \cup \{\mli{minB}\}$\\
+    $\mli{CB}_c := \mli{CB}_c \cup \{\mli{ultimo}\}$\\
   }
   \Return $\mli{CB}_c$ 
 
-  \caption{Obtención de las celdas base $\mli{CB}_c$ de la celda $c$ (simplificada)}
+  \caption{Obtención de las celdas base $\mli{CB}_c$ de una celda $c$ (simplificada)}
   \label{alg:celdasBase}
 \end{algorithm}
 
-El algoritmo procesa cada celda $cA$ adyacente a $c$ (línea 2) obteniendo el
-candidato a ser una celda base de $c$ (línea 3) y comprobando una serie de
-condiciones para que este candidato pueda ser una celda base de $c$ (líneas
-4-6). La condición que se comprueba en la línea 4 es que el punto base
-candidato este dentro del intervalo definido por la tolerancia como fue
-definido en la sección \ref{subsec:mapaTopGVDGrid}. En la línea 5 la condición
-verifica que el candidato no puede ser la celda perteneciente a un generador
-más cercana a $c$ ni adyacente a esta. Finalmente la condición presente en la
-línea 6 establece que el candidato actual debe tener una distancia a $c$ menor
-que la de los candidatos procesados anteriormente que cumplen el resto de las
-condiciones. Al finalizar la ejecución se devuelve como celdas bases a la celda
-perteneciente a un generador que es cercana a $c$ y en el caso de que exista al
-último candidato en cumplir todas las condiciones (líneas 12-16).
+El algoritmo para cada celda $cA$ adyacente a $c$ (línea 2) obtiene un
+candidato a ser una celda base de $c$ (línea 3) y comprueba una serie de
+condiciones utilizadas para determinar las celdas base de $c$ (líneas 4-6). La
+condición que se comprueba en la línea 4 es que la celda base candidata esté
+dentro del intervalo definido por la tolerancia (sección
+\ref{subsec:mapaTopGVDGrid}). La condición que se verifica en la línea 5 es que
+el candidato no sea $gen(c)$ ni adyacente a él. Finalmente la condición
+presente en la línea 6 establece que el candidato actual debe tener una
+distancia a $c$ menor a la de los candidatos procesados anteriormente que
+cumplieron con todas las condiciones. Al finalizar la ejecución se devuelve como
+celdas bases a $gen(c)$ y en el caso de que exista al último candidato en
+cumplir todas las condiciones (líneas 12-16).
 
 %(sacr de la implementacion) (notar que gens a igual distancia tambien se encuentran, igual no comentar por las dudas)
 
 % Notar el uso de la tolerancia de un largo de celda determinada en \cite{Liu2015}
 
-Habiendo obtenido las celdas base de un celda $c$ para determinar la
-pertenencia de $c$ al GVD resta verificar si existen al menos dos celdas base
-que pertenecen distintos generadores. Para esto se aplica una técnica derivada
-del criterio de pertenencia de celdas al GVD presente en el \emph{brushfire dinámico}
-original, que consiste en que dos celdas distintas y no adyacentes entre
-sí pertenecen a distintos generadores, y de lo contrario pertenecen al mismo
-generador. De esta forma se logra aproximar el GVD resultante de considerar
-generadores conexos y convexos \ref{subsec:GVD} sin definir explícitamente los
-generadores. Y adicionalmente se obtienen las celdas base a partir necesarias
-para segmentar.
+Una vez obtenidas las celdas base de un celda $c$, para determinar la
+pertenencia de $c$ al GVD resta verificar si existen dos celdas base de $c$ que
+pertenecen a generadores distintos. Para esto se aplica una técnica derivada del
+criterio de pertenencia de celdas al GVD presente en el \emph{brushfire
+dinámico} original, que consiste en que dos celdas pertenecen a distintos
+generadores si son distintas y no adyacentes entre sí, y de lo contrario
+pertenecen al mismo generador. 
+De esta forma se logra obtener incrementalmente tanto el GVD, como las celdas
+base necesarias para segmentar.
+% De esta forma se logra aproximar el GVD resultante de considerar generadores
+% conexos y convexos (sección \ref{subsec:GVD}) sin definir explícitamente los
+% generadores, y adicionalmente se obtienen las celdas base que son necesarias
+% para segmentar.
 
-Es pertinente aclarar que el algoritmo \ref{alg:celdasBase} es una version
+% , de forma similar al criterio de pertenecía del \emph{brushfire dinámico} original
+% para obtener las celdas base
+Es pertinente aclarar que el algoritmo \ref{alg:celdasBase} es una versión
 simplificada del que está presente en la implementación del proyecto. Las
-simplificaciones son dos, la primera es que se considera solo una de las celdas
-a mínima distancia que pertenecen a un generador (la devuelta por la función
-$gen$), similar a como se trabaja en el \emph{brushfire dinámico} original. La
-segunda es que solo se permiten dos celdas base. En la sección
-\ref{algComp:celdasbase} se presenta el algoritmo completo para obtener las
-celdas base sin las simplificaciones mencionadas, es decir que maneja todas las
-celdas pertenecientes a generadores que están a mínima distancia y permite más
-de dos celdas base.
+simplificaciones son dos, la primera es que para cada celda $cA$ adyacente a
+$c$ solo se considera como candidata a una de las celdas pertenecientes a un
+generador que están a mínima distancia de $cA$ (la resultante de $gen(cA)$). Y
+la segunda es que solo se permiten hasta dos celdas base. En la sección
+\ref{algComp:celdasbase} se presenta el algoritmo completo sin las
+simplificaciones mencionadas, es decir que considera como candidatas a todas
+las celdas que pertenecen a un generador que están a mínima distancia,
+y permite más de dos celdas base.
 
+%T
 \subsection{Consideraciones sobre el espacio desconocido}\label{subsec:espDesc}
 
 Durante la exploración existe un conjunto de celdas de estado desconocido en la
@@ -1578,7 +1601,7 @@ consideran como pertenecientes a generadores.
 \end{figure}
 
 Que las las celdas desconocidas se traten igual que las celdas libres implica
-que las olas utilizadas para construir el GVD pueden propagarse por el espacio
+que las ondas utilizadas para construir el GVD pueden propagarse por el espacio
 desconocido y generar la pertenecía de la celdas desconocidas al GVD, lo cual
 tiene asociado un costo computacional.
 En la figura \ref{fig:desconocidoKalra} se puede observar como la tratar las
@@ -1591,14 +1614,14 @@ sin importar que solo una pequeña porción del espacio sea conocida.
 Dado que en el contexto del proyecto no es necesario construir GVD fuera del
 area conocida se desarrollo una técnica que solo construye GVD en las celdas
 conocidas evitando trabajar sobre espacio desconocido. Esta consiste en no
-permitir que las olas se propaguen por el espacio desconocido, y
+permitir que las ondas se propaguen por el espacio desconocido, y
 adicionalmente considerar al conjunto $\mli{UF}$ de celdas desconocidas que tienen un
 vecino conocido como celdas pertenecientes a generadores
 ($\mli{UF}\subseteq \mli{CGen}$) junto a las celdas ocupadas.
 De esta forma para el caso presentado en la figura \ref{fig:desconocidoKalra}
 se obtiene un GVD que se reduce al espacio conocido como se muestra en la
 figura \ref{fig:desconocidoMio}.
-% evitando propagar las olas sobre el espacio desconocido, 
+% evitando propagar las ondas sobre el espacio desconocido, 
 
 \begin{figure}[H]
   \centerfloat
@@ -2231,22 +2254,22 @@ mantener actualizado un mapa completo del entorno explorado.
 % Si se sigue entendiendo lo de abajo sin esto me parece mejor evitarlo (muy similar a lau que ya se explico (sin pseudo pero la idea si) y la explicacion ocn pseudo puede llevar algunas carillas)
 
 % \subsection{Pertenecia}
-% La implemetacion realizada en proyecto mantiene las olas conistentes e
+% La implemetacion realizada en proyecto mantiene las ondas conistentes e
 % inconsistentes para el calulo incremental de mapas de distancia. Tambien
-% mantiene la idea que las olas inconsistentes remueven las celdas que atraviesan
+% mantiene la idea que las ondas inconsistentes remueven las celdas que atraviesan
 % del GVD y la idea de que las celdas en las cuales las ondas consistentes se
 % detienen y las celdas que causaron que se detengan son las celdas cuya
 % pertenencia al GVD se comprueba.
 
-% capaz prodria decir la def de pertenecia dado un choque de olas, explicar que
-% un choque de olas siempre se da entre dos celdas, explicar el de lau, y el mio,
+% capaz prodria decir la def de pertenecia dado un choque de ondas, explicar que
+% un choque de ondas siempre se da entre dos celdas, explicar el de lau, y el mio,
 % estableciendo bien como es el tema de los pseudosources y las diff, dada la
-% info que lleva la ola, etc. Aunque puede ser dificil dar ejemplos
+% info que lleva la onda, etc. Aunque puede ser dificil dar ejemplos
 
 % El cambio que se hace es en el criterio con el cual se comprueba la pertenencia
 % de una celda. En el \emph{brushfire dinamico} original se hace EXPLICAR
 % CON LO DE más ABAJO. En esta implementacion cambia, al existir un choque de
-% olas primero se establecen los pseudosources y luego de existir dos
+% ondas primero se establecen los pseudosources y luego de existir dos
 % pseudosources no adjacentes entre si la celda pertenece.
 
 % Explicar definicion de un pseudosource (SACAR DE LAS NOTAS), y porque esto termina siendo distinto
@@ -2269,7 +2292,7 @@ mantener actualizado un mapa completo del entorno explorado.
 % \subsection{Filtrado}\label{subsec:filt}
 % Los vetices que en una iteracion se determina que deben pertenecer al GVD según
 % el criterio de pertenecia aplicado en las celdas en las cuales se detiene una
-% ola consistente, pasan por un filtrado extra. Este filtrado busca evitar líneas
+% onda consistente, pasan por un filtrado extra. Este filtrado busca evitar líneas
 % discretizadas de dos celdas de grosor que violan la propiedad \say{sparceness}
 % GVD.
 

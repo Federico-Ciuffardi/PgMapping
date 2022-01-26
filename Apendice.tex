@@ -1,9 +1,8 @@
 \chapter{Algoritmos completos}
 
-\section{Obtención de las celdas base}\label{algComp:celdasbase}
-El algoritmo \ref{alg:celdasBaseCompleto} consiste en una version sin las
-simplificaciones comentadas en la sección \ref{subsec:critPer} del algoritmo
-\ref{alg:celdasBase}.
+\section{Obtención de celdas base}\label{algComp:celdasbase}
+El algoritmo \ref{alg:celdasBaseCompleto} es una versión del algoritmo \ref{alg:celdasBase} sin las
+simplificaciones comentadas en la sección \ref{subsec:critPer}.
 
 \begin{algorithm}[H]
 \SetAlgoLined
@@ -17,18 +16,19 @@ simplificaciones comentadas en la sección \ref{subsec:critPer} del algoritmo
 
   \ForEach{ $cA \in ady(c)$} {
     \ForEach{$b \in gens(cA)$} {
-      $\mli{tolerado}  := d_c(b) - \mli{DD}(c) \leq L$\\
+      $\mli{tolerado}  := d_c(b) \leq \mli{DD}(c) + L$\\
       % $\mli{noIgNiAdy} := b \notin gens(c) \land b \notin \bigcup_{b'} ady(gen(c))$\\
 
-      $\mli{masCercano} := Verdadero$\\
+      $\mli{masCercano} := verdadero$\\
       $\mli{aRemover} := \emptyset$\\
+      % \ForEach{$b' \in \mli{CB}_c$ \textbf{mientras} masCercano } {
       \ForEach{$b' \in \mli{CB}_c$} {
         \If{$b' = b \lor b' \in ady(b)$}{
           \uIf{$d_c(b) < d_c(b')$}{
             $\mli{aRemover} := \mli{aRemover} \cup \{b'\}$\\
           }\Else{
-            $\mli{masCercano} := \mli{masCercano} \land Falso$ \\
-            \tcp{Se puede terminar de iterar una vez ejecutada esta línea}
+            $\mli{masCercano} := \mli{masCercano} \land falso$ \\
+            \tcp{No es necesario continuar con la iteración de la línea 7 una vez ejecutada esta línea}
           }
         }
       }
@@ -41,29 +41,33 @@ simplificaciones comentadas en la sección \ref{subsec:critPer} del algoritmo
   }
   \Return $\mli{CB}_c$ 
 
-  \caption{Obtención de las celdas base $\mli{CB}_c$ de la celda $c$}
+  \caption{Obtención de las celdas base $\mli{CB}_c$ de una celda $c$}
   \label{alg:celdasBaseCompleto}
 \end{algorithm}
 
 \newpage
-Uno de los cambios principales es el remplazo de la función $gen$ por la
-función $gens : \mli{CG} \rightarrow P(\mli{CGen})$ que dada una celda $c$ de
-la grilla devuelve el conjunto de todas las celdas a mínima distancia de $c$ que pertenecen a
-un generador. Otro cambio a notar es que la condición que en algoritmo
-simplificado es controlada explícitamente con la variable $\mli{noIgNiAdy}$, en
-este algoritmo completo se maneja implícitamente en la condición controlada
-a través de la variable $\mli{masCercano}$. El último cambio a destacar es que la
-condición asociada a la variable $\mli{masCercano}$ (líneas 5-15) pasa a
-ser que la celda base candidato $b$ esté a menor distancia de $c$ que las
-celdas base actuales $b'$ de $c$ que son iguales o adyacentes a $b$, de cumplirse esta
-condición dichos $b'$ dejan de ser celdas base de $c$.
+Uno de los principales cambios respecto al algoritmo \ref{alg:celdasBase} es el
+remplazo de la función $gen$ por la función $gens : \mli{CG} \rightarrow
+P(\mli{CGen})$ que dada una celda $c$ de la grilla devuelve el conjunto de
+todas las celdas que pertenecen a un generador que están a mínima distancia de
+$c$. Otro cambio a notar es que la condición asociada a la variable
+$\mli{masCercano}$ (líneas 5-15) pasa a ser que la celda base candidata $b$
+esté a menor distancia de $c$ que las celdas base actuales $b'$ que son
+iguales o adyacentes a $b$. El último cambio a destacar es que la condición que
+en algoritmo \ref{alg:celdasBase} se controla con la variable
+$\mli{noIgNiAdy}$, en este algoritmo se controla a partir las variables
+$\mli{masCercano}$ y $\mli{aRemover}$.
+% en la condición
+% asociada a la variable $\mli{masCercano}$
+% y de cumplirse todas las
+% condiciones los $b'$ adyacentes a $b$ dejan de ser celdas base de $c$.
 \newpage
 
 \chapter{Ejemplos completos}
 \begingroup
 \small
 \section{Simplificación de fronteras basada en cubrimiento}\label{EXE:sfbc}
-La figura \ref{EXE:sfbc} presenta la version completa del ejemplo mostrado en la figura \ref{fig:ejemploFSCub}.
+La figura \ref{EXE:sfbc} presenta la versión completa del ejemplo mostrado en la figura \ref{fig:ejemploFSCub}.
 \endgroup
 \begin{figure}[H]
   \centerfloat

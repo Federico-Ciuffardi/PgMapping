@@ -130,7 +130,7 @@ incremental del GVD (sección \ref{sec:MiConstGVD}). La identificación de
 objetivos que simplifica las fronteras basándose en el cubrimiento (sección
 \ref{subsec:MiSimp}). Y la consideración del espacio desconocido al construir
 el GVD presentada en la sección \ref{subsec:espDesc}, donde las celdas
-desconocidas no propagan olas y el conjunto $\mli{UF}$ de celdas desconocidas
+desconocidas no propagan ondas y el conjunto $\mli{UF}$ de celdas desconocidas
 que son adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF}
 \subseteq \mli{CGen}$).
 
@@ -206,7 +206,7 @@ al rededor del robot y para proporcionar medidas perfectas (sin ruido).
   \subfloat[Simulado.]{\includegraphics[clip=true, width=0.33\textwidth]{imagenes/pion/sim.png}}
 
   \caption[Robot diferencial Pioneer 3-DX.]{Robot diferencial Pioneer 3-DX.}\label{fig:p3dx}
-   % A la izquierda se muestra el robot real, y a la derecha su version simulada.
+   % A la izquierda se muestra el robot real, y a la derecha su versión simulada.
 
 \end{figure}
 
@@ -266,7 +266,7 @@ apreciar en la figura \ref{fig:mref}.
   \subfloat[$16 \frac{celda}{m^2}$]{\includegraphics[clip=true, width=0.22\textwidth]{imagenes/willow_ref/0_250000m.png}}
 
   \caption[Mapas de referencia utilizados.]{Mapas de referencia utilizados. En negro se indican las paredes, en blanco el espacio libre y en gris el espacio desconocido por ser inaccesible.}\label{fig:mref}
-   % A la izquierda se muestra el robot real, y a la derecha su version simulada.
+   % A la izquierda se muestra el robot real, y a la derecha su versión simulada.
 
 \end{figure}
 
@@ -358,7 +358,7 @@ situaciones son despreciables.
   \caption{Esquina superior izquierda del mapa referencia y de uno de los mapas
   obtenidos en las pruebas que presenta una celda explorable que no se reconoce
 como tal. Ambos mapas corresponden a una granularidad de una celda por metro cuadrado.}\label{fig:faltaCub}
-   % A la izquierda se muestra el robot real, y a la derecha su version simulada.
+   % A la izquierda se muestra el robot real, y a la derecha su versión simulada.
 
 \end{figure}
 
@@ -603,14 +603,14 @@ Las pruebas analizadas en esta sección corresponden a las realizadas con
 soluciones que varían únicamente en la forma de considerar el espacio
 desconocido al construir el GVD. Dichas formas son dos: considerar las
 celdas desconocidas como libres y considerar que las celdas desconocidas no
-propagan olas y que el conjunto $\mli{UF}$ de celdas desconocidas que son
+propagan ondas y que el conjunto $\mli{UF}$ de celdas desconocidas que son
 adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF} \subseteq
 \mli{CGen}$). Ambas son descritas en la sección \ref{subsec:espDesc}. Los
 resultados obtenidos en estas pruebas exponen en la tabla \ref{tab:inc1} y sus
 gráficas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 \ref{fig:gra:inc:gvdt}.
 
-Considerar que las celdas desconocidas no propagan olas y que $\mli{UF}
+Considerar que las celdas desconocidas no propagan ondas y que $\mli{UF}
 \subseteq \mli{CGen}$ logra una reducción de ${\smallsim}61\%$ en el tiempo
 promedio de construcción del GVD en cada nivel de granularidad, respecto a
 considerar a las celdas desconocidas como libres. Estos resultados validan que
@@ -620,7 +620,7 @@ tiempos de construcción del GVD.
 
 Adicionalmente tanto el tiempo de exploración como las distancias totales
 recorridas por las flota son reducidas al considerar que las celdas
-desconocidas no propagan olas y que $\mli{UF} \subseteq \mli{CGen}$. La
+desconocidas no propagan ondas y que $\mli{UF} \subseteq \mli{CGen}$. La
 reducción del tiempo de exploración comienza siendo de ${\smallsim}3\%$ en el
 nivel de granularidad más bajo, llegando a una reducción de ${\smallsim}29\%$
 en el nivel más alto. Mientras que la reducción de la distancia total recorrida
@@ -777,7 +777,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 % la basada en K-Means pero logra obtener
 
 % Lo cual implica que el método que simplifica basadose en el cubrimiento tiene
-% una inversion mayor de tiempo, y a pesar.
+% una inversión mayor de tiempo, y a pesar.
 % En este caso ambos metodos invierten tiempo en disminuir los
 % objetivos identificados a partir de simplificar las fronteras.
 
@@ -843,7 +843,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 % A simple vista este factor parece contradecir los resultados obtenidos, ya
 % que el método que obtiene los peores resultados es el menos impactado por
 % este factor ya que no simplifica las fronteras. Lo que sucede es que el
-% tiempo de simplificación es en realidad una inversion de tiempo que se hace
+% tiempo de simplificación es en realidad una inversión de tiempo que se hace
 % para reducir la cantidad de objetivos
 
 % las simplificaciones que minimizan el número de fronteras significativas

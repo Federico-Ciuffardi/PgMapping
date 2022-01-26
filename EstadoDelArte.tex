@@ -407,13 +407,13 @@ generadores cóncavos comentados en la sección \ref{subsec:GVD}, en la sección
 \ref{subsec:constGVDInc} se describe una solución. 
 
 \subsection{Construcción incremental de un GVD}\label{subsec:constGVDInc}
-% A lo largo de la exploración el mapa construido recibirá, de forma frecuente, actualizaciones que solo modifican una pequeña porción del mismo. Dado esto, por motivos de eficiencia, se busca que los algoritmos que utilizan al mapa como una entrada eviten re computarse completamente en cada actualización y que en su lugar actualicen el último resultado obtenido para que sea consistente con la última version del mapa.
+% A lo largo de la exploración el mapa construido recibirá, de forma frecuente, actualizaciones que solo modifican una pequeña porción del mismo. Dado esto, por motivos de eficiencia, se busca que los algoritmos que utilizan al mapa como una entrada eviten re computarse completamente en cada actualización y que en su lugar actualicen el último resultado obtenido para que sea consistente con la última versión del mapa.
 
 % Los algoritmos que requieren re computarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la última entrada son llamados \emph{algoritmos incrementales}.
 
 % Los algoritmos de generación de GVD, y de segmentación a partir de un GVD descritos anteriormente son no incrementales, por lo tanto dado el problema de eficiencia que esto implica es de interés describir variantes incrementales para los mismos.
 
-A lo largo de la exploración el mapa construido recibe actualizaciones de forma frecuente que solo modifican una pequeña porción del mismo. Esto causa que los datos que tienen que ser consistentes con el mapa también deban actualizarse de forma frecuente. Dado esto, por motivos de eficiencia, se busca que los algoritmos que deben ejecutarse para mantener la consistencia de los datos con el mapa, eviten descartar el resultado anterior y recomputarse completamente en cada actualización, sino que en su lugar modifiquen el último resultado para que este sea consistente con la última version del mapa. 
+A lo largo de la exploración el mapa construido recibe actualizaciones de forma frecuente que solo modifican una pequeña porción del mismo. Esto causa que los datos que tienen que ser consistentes con el mapa también deban actualizarse de forma frecuente. Dado esto, por motivos de eficiencia, se busca que los algoritmos que deben ejecutarse para mantener la consistencia de los datos con el mapa, eviten descartar el resultado anterior y recomputarse completamente en cada actualización, sino que en su lugar modifiquen el último resultado para que este sea consistente con la última versión del mapa. 
 
 La idea se basa en que, como se mencionó anteriormente, las actualizaciones son frecuentes pero también pequeñas y por lo tanto luego de una actualización gran parte del mapa se mantiene igual. Esto usualmente implica que gran parte del resultado anterior continúa siendo valido luego de la actualización, solo siendo necesario modificar una pequeña porción del mismo para que este vuelva a ser consistente, lo cual suele ser órdenes de magnitud menos costoso que la alternativa de calcular todo desde cero. 
  % hecho de que las actualizaciones solo modificaron una  que e 
@@ -484,7 +484,7 @@ obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}.
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesKalra.png}
-  \caption[Olas de brushfire dinámico.]{Una secuencia que ejemplifica las olas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una ola consistente (en negro) que al chocar genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una ola inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre mientras que al al llegar a cedas con una distancia mínima generar olas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
+  \caption[Ondas de brushfire dinámico.]{Una secuencia que ejemplifica las ondas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una onda consistente (en negro) que al chocar genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una onda inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre mientras que al al llegar a cedas con una distancia mínima generar ondas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
 \end{figure} 
 
 
@@ -497,7 +497,7 @@ conjuntos conexos de obstáculos para determinar la pertenencia de celdas
 al GVD (sección \ref{subsec:GVD}). Dado esto la solución propuesta
 consiste en dejar de utilizar identificadores para los conjuntos conexos
 de obstáculos, en su lugar utilizar un identificador para cada celda
-ocupada. Y al chocar dos olas, las celdas en donde se da el choque
+ocupada. Y al chocar dos ondas, las celdas en donde se da el choque
 pertenecen al GVD si sus identificadores de obstáculo a mínima distancia
 son distintos y las celdas ocupadas correspondientes a dichos
 identificadores no son adyacentes en la grilla. Este cambio soluciona la
@@ -1138,7 +1138,7 @@ en su modo normal y $R_{sim}=4.70$ haciendo uso del modo \emph{headless} que Web
 
 Con respecto a la usabilidad, Webots presenta la ventaja de tener
 disponible el modelo deseado, pero esto queda opacado por los inconvenientes
-experimentados al integrar con \gls{ROS}\footnote{La version R2021b de
+experimentados al integrar con \gls{ROS}\footnote{La versión R2021b de
 Webots agrega soporte para \emph{diff\_drive\_controller}}. Gazebo resulto tener una mejor usabilidad al no presentar dichos
 inconvenientes.
 
