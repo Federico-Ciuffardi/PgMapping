@@ -368,7 +368,7 @@ obstáculos y la distancia calculada es la mínima distancia hacia un obstáculo
 Se comienza inicializando las distancias de las celdas libres con $\infty$ y
 las ocupadas con $0$.  Adicionalmente, las celdas ocupadas se insertan en una
 cola de prioridad que prioriza las celdas de menor distancia. Luego hasta que
-las cola de prioridad este vacía se remueve la celda más prioritaria $c$ y para
+las cola de prioridad esté vacía se remueve la celda más prioritaria $c$ y para
 cada celda $c'$ adyacente a $c$ se computa una distancia tentativa $\mli{dt}_{c'}$
 según \eqref{ec:dtBrushFire} que remplaza la distancia actual $d_{c'}$ de la
 celda $c'$ si $\mli{dt}_{c'}<d_{c'}$. De reemplazarse $d_{c'}$ se inserta a $c'$ en

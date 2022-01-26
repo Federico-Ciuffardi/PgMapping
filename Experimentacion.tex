@@ -131,7 +131,7 @@ objetivos que simplifica las fronteras basándose en el cubrimiento (sección
 \ref{subsec:MiSimp}). Y la consideración del espacio desconocido al construir
 el GVD presentada en la sección \ref{subsec:espDesc}, donde las celdas
 desconocidas no propagan ondas y el conjunto $\mli{UF}$ de celdas desconocidas
-que son adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF}
+que son adyacentes a celdas libres pertenecen a generadores ($\mli{UF}
 \subseteq \mli{CGen}$).
 
 % Para validar la construccion incremental del GVD esta se compara contra la
@@ -170,7 +170,7 @@ $5*4*20=400$ el total de pruebas ejecutadas.
 
 % Para cumplir con la hipotesis (IV) planteada en \ref{sec:hip}
 \subsection{Entorno}
-Las pruebas se realizan en un entorno cerrado que tiene un area explorable de
+Las pruebas se realizan en un entorno cerrado que tiene un área explorable de
 aproximadamente $10000m^2$. El entorno está estructurado en habitaciones,
 puertas y corredores de varios tamaños. Los únicos obstáculos presentes en él
 son paredes y los mismos robots que pueden obstaculizarse entre
@@ -186,7 +186,7 @@ sí. Un mapa de este entorno se muestra en la figura
 
 El entorno fue construido a partir de un modelo que se encuentra disponible por
 defecto en Gazebo, llamado \say{Willow Garage}, el cual se modifico para
-reducir el area a explorar y que sea cerrado (sin salidas al exterior).
+reducir el área a explorar y que sea cerrado (sin salidas al exterior).
 
 \subsection{Robots}
 Los robots simulados\footnote{Especificación disponible en línea:\\
@@ -284,8 +284,8 @@ los obtenidos en las pruebas.
 % diferencia de los mapas resultantes de las pruebas los cuales si pueden.
 
 La \emph{completitud del mapa} se define según (\ref{eq:metComp}) donde
-$M_{exp}$ es el area conocida del mapa obtenido en la exploración y $M_{ref}$
-es el area del mapa de referencia.
+$M_{exp}$ es el área conocida del mapa obtenido en la exploración y $M_{ref}$
+es el área del mapa de referencia.
 
 \begin{equation} \label{eq:metComp}
 completitud\ del\ mapa = \frac{M_{exp}}{M_{ref}}
@@ -604,7 +604,7 @@ soluciones que varían únicamente en la forma de considerar el espacio
 desconocido al construir el GVD. Dichas formas son dos: considerar las
 celdas desconocidas como libres y considerar que las celdas desconocidas no
 propagan ondas y que el conjunto $\mli{UF}$ de celdas desconocidas que son
-adyacentes a celdas conocidas pertenecen a generadores ($\mli{UF} \subseteq
+adyacentes a celdas libres pertenecen a generadores ($\mli{UF} \subseteq
 \mli{CGen}$). Ambas son descritas en la sección \ref{subsec:espDesc}. Los
 resultados obtenidos en estas pruebas exponen en la tabla \ref{tab:inc1} y sus
 gráficas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y

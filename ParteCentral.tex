@@ -239,7 +239,7 @@ sensores desde las posiciones $x_{1:t}$.
 
 La función $e : \mli{CG} \rightarrow E$ dado un centro de celda, devuelve uno
 de los tres estados posibles $E=\{libre, ocupado, desconocido\}$ según la
-probabilidad de que $c$ este ocupada. En el contexto de este proyecto la
+probabilidad de que $c$ esté ocupada. En el contexto de este proyecto la
 función $e$ se define según
 (\ref{eq:estado}).
 \begin{equation} 
@@ -350,7 +350,7 @@ celdas $C$ con el algoritmo \ref{alg:compcon}.
   \label{alg:compcon}
 \end{algorithm}
 
-El algoritmo se resume en elegir una celda $c\in C$ que no este aún en una
+El algoritmo se resume en elegir una celda $c\in C$ que no esté aún en una
 componente conexa (línea 6) y aplicar un \emph{depth-first search} (DFS) desde
 $c$, agregado todas las celdas recorridas a una misma componente conexa (líneas
 7-19). Esto se repite hasta que todas las celdas pertenezcan a alguna
@@ -619,7 +619,7 @@ actualización de estructuras (líneas 17-23).
 % $\mathscr{C}(\mli{fp},rango)$ (\ref{eq:cir}).
 
 El proceso de elección de $\mli{fs}$ tiene como objetivo el asegurar que se
-cubra una frontera $\mli{fp}$ desencolada de $\mli{FP}$ que todavía no este
+cubra una frontera $\mli{fp}$ desencolada de $\mli{FP}$ que todavía no esté
 cubierta. Esto se traduce a la restricción $d_{\mli{fp}}(\mli{fs}) \leq rango$.
 Adicionalmente como heurística, sea $dCen = max\{ d_{\mli{fp}}(\mli{\mli{uf}}) :
 \mli{uf}\in\mli{UF} \}/2$ se agrega la restricción $d_{\mli{fp}}(\mli{fs}) \leq dCen$.
@@ -1572,22 +1572,24 @@ simplificaciones mencionadas, es decir que considera como candidatas a todas
 las celdas que pertenecen a un generador que están a mínima distancia,
 y permite más de dos celdas base.
 
-%T
 \subsection{Consideraciones sobre el espacio desconocido}\label{subsec:espDesc}
+% , dichas celdas representan la existencia de porciones del mapa cuyo
+% contenido se desconoce.
 
-Durante la exploración existe un conjunto de celdas de estado desconocido en la
-grilla de ocupación (sección \ref{subsec:Grilla}) usada para representar el
-entorno explorado, dichas celdas representan la existencia de porciones del
-entorno sin explorar. Dado que la definición del GVD no contempla el espacio
-desconocido, para poder construir un GVD sobre grillas de ocupación durante la
-exploración es necesario tomar una decision acerca de como considerar el 
-espacio desconocido. Sin embargo, este no es un tema que se trate de forma
-explicita en los trabajos estudiados sobre la construcción incremental de GVD. 
+Mientras la exploración está en curso existe espacio desconocido del entorno
+que puede ser explorado, este se representa con celdas de estado desconocido en
+la grilla de ocupación (sección \ref{subsec:Grilla}) usada como mapa del
+entorno. Dado que la definición del GVD (sección \ref{subsec:GVD}) no contempla
+el espacio desconocido, para poder construir un GVD sobre una grilla de
+ocupación durante la exploración, es necesario decidir como considerar las
+celdas de estado desconocido.
+Sin embargo, este no es un tema que se trate de forma explicita en los trabajos
+estudiados sobre la construcción incremental del GVD (sección \ref{subsec:constGVDInc}). 
 
-A partir del código e imágenes disponibles es posible deducir que en
+A partir de código e imágenes disponibles es posible deducir que en
 \cite{kalra2009incremental} y \cite{Lau2013} al construir el GVD las celdas de
-estado desconocido se consideran iguales que las de estado libre. De esta
-forma se obtienen resultados similares a los que se presentan en la figura
+estado desconocido se consideran iguales a las de estado libre. De esta
+forma se obtienen resultados similares al que se presenta en la figura
 \ref{fig:kalraOG}. Notar que otra característica particular presente en estas
 implementaciones es que las celdas ubicadas en los bordes del entorno se
 consideran como pertenecientes a generadores.
@@ -1597,30 +1599,33 @@ consideran como pertenecientes a generadores.
 
   \includegraphics[clip=true, width=0.75\textwidth]{imagenes/desconocidoCons/kalraOG.png}
 
-  \caption[Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}.]{Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}. En la parte superior se muestra la grilla de ocupación actual. En la inferior su GVD correspondiente, indicándose con rojo los obstáculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
+  \caption[Resultado de considerar las celdas de estado desconocido iguales a las de estado libre.]{Resultado de considerar las celdas de estado desconocido iguales a las de estado libre. En la parte superior se muestra la grilla de ocupación actual. En la inferior su GVD correspondiente, indicándose con rojo los obstáculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
+
+  % \caption[Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}.]{Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}. En la parte superior se muestra la grilla de ocupación actual. En la inferior su GVD correspondiente, indicándose con rojo los obstáculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
 \end{figure}
 
-Que las las celdas desconocidas se traten igual que las celdas libres implica
-que las ondas utilizadas para construir el GVD pueden propagarse por el espacio
-desconocido y generar la pertenecía de la celdas desconocidas al GVD, lo cual
-tiene asociado un costo computacional.
-En la figura \ref{fig:desconocidoKalra} se puede observar como la tratar las
-celdas desconocidas como conocidas lleva a un GVD que abarca todo el entorno
-sin importar que solo una pequeña porción del espacio sea conocida. 
+Que las las celdas desconocidas se consideren iguales a las celdas libres
+implica que las ondas utilizadas para construir el GVD pueden propagarse por el
+espacio desconocido y generar la pertenecía de celdas desconocidas al GVD.
+% ambas cosas tienen asociado un costo computacional.
+En la figura \ref{fig:desconocidoKalra} se puede observar que considerar las
+celdas desconocidas como celdas libres lleva a un GVD que abarca
+todo el entorno sin importar que solo una pequeña porción de este sea
+conocida. 
 
 %mantener un GVD conexo,
 % (por motivos que se seran comentados a continuacion)
 
-Dado que en el contexto del proyecto no es necesario construir GVD fuera del
-area conocida se desarrollo una técnica que solo construye GVD en las celdas
-conocidas evitando trabajar sobre espacio desconocido. Esta consiste en no
-permitir que las ondas se propaguen por el espacio desconocido, y
-adicionalmente considerar al conjunto $\mli{UF}$ de celdas desconocidas que tienen un
-vecino conocido como celdas pertenecientes a generadores
-($\mli{UF}\subseteq \mli{CGen}$) junto a las celdas ocupadas.
-De esta forma para el caso presentado en la figura \ref{fig:desconocidoKalra}
-se obtiene un GVD que se reduce al espacio conocido como se muestra en la
-figura \ref{fig:desconocidoMio}.
+Dado que en el contexto del proyecto no es necesario construir el GVD fuera del
+área conocida, se desarrollo un método que solo construye el GVD en las celdas
+libres, evitando el costo computacional de construir el GVD en el espacio
+desconocido. Sea $\mli{UF}$ el conjunto de celdas desconocidas que tienen al menos una
+celda adyacente de estado libre, el método consiste en considerar que las
+celdas desconocidas no propagan ondas, y que las celdas de $\mli{UF}$
+pertenecen a generadores ($\mli{UF}\subseteq \mli{CGen}$) al igual que las
+celdas ocupadas. Con este método para el caso presentado en la figura
+\ref{fig:desconocidoKalra} se obtiene un GVD que se reduce al espacio conocido
+como se muestra en la figura \ref{fig:desconocidoMio}.
 % evitando propagar las ondas sobre el espacio desconocido, 
 
 \begin{figure}[H]
@@ -1633,18 +1638,21 @@ figura \ref{fig:desconocidoMio}.
   \caption[Formas de considerar el espacio desconocido.]{Formas de considerar el espacio desconocido. El GVD generado se indica en azul.}\label{fig:desconocidoEj1}
 \end{figure}
 
+% , en una misma
+% grilla de ocupación
 
-El solo considerar que las celdas desconocidas no propagan ondas tiene el
-problema de resultar en GVD disconexos en casos donde esto se puede evitar. El
-problema con los GVD disconexos es que estos no cumplen con la propiedad de
-\emph{conectividad} necesaria para ser un \emph{roadmap} (sección
-\ref{subsec:mapacarr}), lo cual genera errores de usarse el GVD como
-\emph{roadmap} para la planificación. En la figura \ref{fig:desconocidoEj2} se
-muestra el GVD generado en una misma grilla de ocupación con cada una de las
-tres formas de considerar el espacio desconocido mencionadas, es posible
-observar que el GVD resultante de solo considerar que las celdas desconocidas
-no propagan ondas no preserva la conectividad, mientras que los otros dos
-métodos otros sí lo hacen.
+Considerar únicamente que las celdas desconocidas no propagan ondas también
+restringe la construcción del GVD al espacio conocido, aunque esto puede ser
+más simple e intuitivo tiene el problema de generar GVD disconexos en casos
+donde esto se puede evitar. El problema con los GVD disconexos es que estos no
+cumplen con la propiedad de \emph{conectividad} necesaria para ser un
+\emph{roadmap} (sección \ref{subsec:mapacarr}), lo que genera errores al
+utilizar el GVD como \emph{roadmap} para la planificación. En la figura
+\ref{fig:desconocidoEj2} se muestra el GVD generado con cada una de las tres
+formas de considerar el espacio desconocido mencionadas hasta el momento. Es
+posible observar que el GVD resultante de solo considerar que las celdas
+desconocidas no propagan ondas es disconexo, mientras que el GVD generado por
+otros dos métodos es conexo.
 
 % El problema presentado por esta forma de considerar el espacio desconocido es
 % que las ondas se propagan por el espacio desconocido, generado GVD fuera del
@@ -1661,7 +1669,7 @@ métodos otros sí lo hacen.
   \quad
   \subfloat[Celdas desconocidas no propagan ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/noHacerNada.png} \label{fig:desconocidoEj2_naive}}
 
-  \caption[Conectividad en diferentes formas de considerar el espacio desconocido.]{Conectividad en diferentes formas de considerar el espacio desconocido. El GVD generado se indica en azul.}\label{fig:desconocidoEj2}
+  \caption[Conectividad del GVD en diferentes formas de considerar el espacio desconocido.]{Conectividad del GVD en diferentes formas de considerar el espacio desconocido. El GVD generado se indica en azul.}\label{fig:desconocidoEj2}
 \end{figure}
 
 % 1. desconexiones
@@ -1684,8 +1692,9 @@ métodos otros sí lo hacen.
 
 % \todo{FEDE: Kalra se ve que el mapa para entorno abierto es consistente con esta tecnica, en el codigo de lau tambien. Pero no se hace referancia a esto}
 
-% Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el area desconocida debe ser procesado por el original mientras que el mio se reduce al area exploradoa, sientod la parte importante (la del area explorada) casi igual que la otra.
+% Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el área desconocida debe ser procesado por el original mientras que el mio se reduce al área exploradoa, sientod la parte importante (la del área explorada) casi igual que la otra.
 
+%T
 \section{Planificación}\label{sec:miNav}
 % Recordando que el camino consiste en una secuencia puntos en el espacio, en el
 % contexto de la planificación estos se denominan como subobjetivos con exepcion
@@ -1776,8 +1785,8 @@ por el cual el objetivo fue asignado en un primer lugar.
 El valor $\mli{DistNs}$ solo debe ser mayor que $\mli{DistF}$, y establece que
 tan estrictamente se sigue el camino original en espacios despejados de
 obstáculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot siga el
-camino original de forma estricta aunque este en espacios despejados ya que se 
-fuerza que el robot este cerca de los subobjetivos para completarlos. Al
+camino original de forma estricta aunque esté en espacios despejados ya que se 
+fuerza que el robot esté cerca de los subobjetivos para completarlos. Al
 aumentar el valor de $\mli{DistNs}$ se permite mayor libertad en como seguir el
 camino original cuando el espacio está despejado, esto sucede porque en los
 espacios despejados todos los subobjetivos del camino que estén a una
@@ -1871,7 +1880,7 @@ portal en la transición al siguiente segmento del camino.
 A lo largo de la exploración los robots de la flota son asignados a objetivos
 de exploración, cuando un robot completa un objetivo este sensa porciones del
 entorno antes desconocido. Esta nueva información debe ser manejada para
-aportar a la construcción de la grilla de ocupación (mapa) con la cual se
+aportar a la construcción de la grilla de ocupación usada como mapa que 
 representa el entorno explorado. A continuación se describe el proceso completo
 desde los sensores hasta la construcción de un mapa que contenga toda la
 información obtenida del entorno.
@@ -1887,7 +1896,7 @@ obtenida para cada celdas. Adicionalmente las celdas tienen asociado uno de
 tres valores de probabilidad de ocupación posibles: $0.5$ indicando que la
 celda es desconocida, $0.55$ indicando que la celda está ocupada y $0.45$
 indicando que la celda está libre. Estos valores indican la probabilidad
-$P(c|x_t,z_t)$ de que una celda $c$ este ocupada dada una única medida $z_t$
+$P(c|x_t,z_t)$ de que una celda $c$ esté ocupada dada una única medida $z_t$
 desde una cierta posición $x_t$.
 
 Dado que cada \emph{global\_costmap} construye una grilla de ocupación solo
