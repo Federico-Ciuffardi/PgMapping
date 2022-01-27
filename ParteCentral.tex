@@ -117,8 +117,8 @@ como sus interacciones con el resto de los módulos.
 El módulo \emph{Move Base} provee una interfaz para configurar, ejecutar e
 interactuar con el \emph{stack de navegación} de \gls{ROS}
 \cite{ROS-navigation}. Específicamente el módulo corresponde a un
-nodo\footnote{En \gls{ROS} el concepto de nodo refiere básicamente a un proceso
-  que fue implementado utilizando ROS.} conocido como \emph{move\_base}
+nodo\footnote{En \gls{ROS} el concepto de nodo refiere básicamente a un proceso que
+  utiliza ROS.} conocido como \emph{move\_base}
   \cite{ROS-move_base}. 
 
 El stack de navegación de \gls{ROS} es un conjunto de nodos que tienen como propósito
@@ -170,8 +170,8 @@ de recuperación que consiste en que el robot rote en el lugar.
 \subsection{Combinador de mapas}
 El módulo \emph{Combinador de mapas} es el encargado de construir el mapa
 completo del entorno explorado. Este recibe actualizaciones de los mapas
-globales generadas por el nodo \emph{global\_costmap} del stack de navegación
-de cada robot, y las combina en un único mapa. Luego de combinar una
+globales, que son generadas por el nodo \emph{global\_costmap} del stack de navegación
+de cada robot y las combina en un único mapa. Luego de combinar una
 actualización, de existir cambios en el mapa completo estos se distribuyen a
 los diversos componentes del sistema que requieren del mapa completo del
 entorno explorado para llevar a cabo alguna de sus tareas (ver figura
@@ -468,7 +468,7 @@ el cubrimiento.
     circunferencias rojas centradas en estas tienen radio $rango=5.6$ (largos de celda) indicando su
     cubrimiento.}\label{fig:ejemploFSKMMal}
 \end{figure}
-% \footnotetext{Podria indicar el bag y el seg}
+% \footnotetext{Podria indicar el bag y el }
 %al aplicarse la simplificación 
 Resultados subóptimos similares se experimentan de forma consistente sobre
 componentes conexas con forma serpenteante, asimétricas y lo suficientemente
@@ -1694,7 +1694,6 @@ otros dos métodos es conexo.
 
 % Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el área desconocida debe ser procesado por el original mientras que el mio se reduce al área exploradoa, sientod la parte importante (la del área explorada) casi igual que la otra.
 
-%T
 \section{Planificación}\label{sec:miNav}
 % Recordando que el camino consiste en una secuencia puntos en el espacio, en el
 % contexto de la planificación estos se denominan como subobjetivos con exepcion
@@ -1704,15 +1703,16 @@ otros dos métodos es conexo.
 % camino se denominan subobjetivos con exepcion del último punto que se denomina
 % como objetivo.
 
-Una vez que el robot recibe un objetivo de exploración, desde la central
+Una vez que el robot recibe un objetivo de exploración desde la central
 (sección \ref{sec:asigTar}), el robot debe moverse físicamente hasta el lugar
 indicado para completar dicho objetivo y progresar en la exploración del entorno.
 
-El módulo encargado de recibir el objetivo es el \emph{controlador del robot},
-este tiene la tarea de recuperar de la memoria del robot el camino que fue
-determinado durante la valuación de dicho objetivo (sección
-\ref{subsec:MiValSub}) y transmitir dicho camino al módulo \emph{controlador de
-movimiento}. 
+% de la memoria del robot
+El módulo encargado de recibir objetivos de exploración es el \emph{controlador
+del robot}. Al recibir un objetivo de exploración este se encarga de recuperar
+el camino que fue determinado durante la valuación de dicho objetivo (sección
+\ref{subsec:MiValSub}) y de transmitir este camino al módulo \emph{controlador
+de movimiento}. 
 
 % Una que el caminno llega al módulo \emph{controlador de movimiento}
 % trabaja
@@ -1740,114 +1740,119 @@ movimiento}.
 % completando asi el camnino completo.
 
 El módulo \emph{controlador de movimiento} se encarga de enviar puntos del
-camino al módulo \emph{move base} que genera las directivas necesarias para que
-el robot avance hacia dicho punto. Estos puntos deben enviarse en una secuencia
-que permita que el robot puede seguir el camino hasta el objetivo. Para lograr
-esto asumiendo que se tiene un criterio que permite considerar cuando un punto del camino se
-considera completado, el funcionamiento del \emph{controlador de
-movimiento} consiste en determinar el primer punto no completado del camino
-asignado, enviar dicho punto a \emph{move base} y esperar a que el robot avance
-lo suficiente para completarlo. Una vez completado se repite el
-proceso con el siguiente punto sin completar, esto sucede hasta que se completa
-el último punto del camino, el objetivo.
+camino recibido al módulo \emph{move base} que genera las directivas necesarias
+para que el robot avance hacia dichos puntos. Estos puntos deben enviarse en
+una secuencia que permita que el robot pueda seguir el camino hasta el
+objetivo. Para lograr esto, asumiendo que se tiene un criterio que permite
+determinar cuando un punto del camino se considera completado, el
+funcionamiento del \emph{controlador de movimiento} consiste en determinar el
+primer punto no completado del camino, enviar dicho punto a \emph{move base} y
+esperar a que el robot avance lo suficiente para completarlo. Una vez
+completado se repite el proceso con el siguiente punto sin completar, esto
+sucede hasta que se completa el último punto del camino, el objetivo de
+exploración.
 
 % Para determinar cuando un punto del camino considera completado, estos se separan  el último punto  objetivo  subobjetivos con exepcion del último punto que se denomina
 % como objetivo.
 
 \subsection{Criterios de compleción}
 
-El \emph{controlador de movimiento} tiene dos formas de considerar completo un
-punto del camino, la normal y la forzosa.
+El \emph{controlador de movimiento} tiene dos criterios para determinar que un
+punto del camino fue completado, el criterio de compleción normal y criterio de
+compleción forzosa.
 
-La compleción forzosa ocurre cuando el robot está a una distancia menor que
+La compleción forzosa ocurre cuando el robot está a una distancia menor a
 $\mli{DistF}$ del punto en cuestión. Este criterio de compleción tiene como
-propósito determinar cuando un robot está lo suficientemente cerca de un
-punto del camino como para considerarlo completo a pesar de que no se dio
-aún la compleción normal. Siendo el valor de $\mli{DistF}$ establecido para
-cumplir con el propósito de la compleción forzosa, para esto debe considerarse
-las principalmente las dimensiones del robot.
+propósito determinar cuando un robot está lo suficientemente cerca de un punto
+del camino como para considerarlo completo, a pesar de que no se dio aún la
+compleción normal. Se recomienda que el valor $\mli{DistF}$ sea similar a las
+dimensiones del robot.
 
 Por otro lado para la compleción normal existen dos condiciones, la primera es
-que exista una línea de ancho $Seg$ entre el robot y el punto del camino que al
-discretizarse en celdas no contiene ninguna ocupada. La segunda, en el caso del
-último punto del camino (el objetivo) la distancia en entre este y el robot
-debe ser menor a $\mli{DistNo}$, en el resto de los puntos (subobjetivos) la distancia debe
-ser menor a $\mli{DistNs}$.
+que la línea de ancho $\mli{An}$ que existe entre el robot y el punto del camino,
+al discretizarse en celdas no contenga ninguna ocupada. La segunda, en el
+caso del último punto del camino (el objetivo) es que la distancia entre este y
+el robot sea menor a $\mli{DistNo}$, y en el resto de los puntos (subobjetivos)
+es que la distancia sea menor a $\mli{DistNs}$.
 
-El valor $\mli{DistNo}$ debe cumplir con
-$\mli{DistF}<\mli{DistNo}<\mli{rango}$, siendo $\mli{rango}$ el alcance de los
-sensores del robot. Esto se debe a que la idea detrás de criterio de compleción
-normal aplicado al objetivo es considerarlo completo cuando es seguro que dicho objetivo
-está en el rango de sensado del robot. Esto implica que el robot está en
-condiciones de recopilar nueva información del entorno, siendo este el motivo
-por el cual el objetivo fue asignado en un primer lugar.
+El valor $\mli{DistNo}$ debe cumplir con $\mli{DistF}\leq\mli{DistNo}<\mli{rango}$, siendo
+$\mli{rango}$ el alcance de los sensores del robot. Esto se debe a que la idea
+detrás del criterio de compleción normal aplicado al último punto del camino, es
+considerar que este es completado cuando es seguro que fue sensado por el robot.
+Esto implica que el robot está en condiciones de recopilar la nueva información
+del entorno asociada al objetivo, siendo este el motivo por el cual el objetivo
+fue asignado en un primer lugar.
 
-El valor $\mli{DistNs}$ solo debe ser mayor que $\mli{DistF}$, y establece que
-tan estrictamente se sigue el camino original en espacios despejados de
-obstáculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot siga el
-camino original de forma estricta aunque esté en espacios despejados ya que se 
-fuerza que el robot esté cerca de los subobjetivos para completarlos. Al
-aumentar el valor de $\mli{DistNs}$ se permite mayor libertad en como seguir el
-camino original cuando el espacio está despejado, esto sucede porque en los
-espacios despejados todos los subobjetivos del camino que estén a una
-distancia menor a $\mli{DistNs}$ se consideran completados, siendo move base el
-encargado de la trayectoria hasta el primer punto no completado del camino,
-sin ser necesario pasar cerca por los subobjetivos previamente completados.
+El valor $\mli{DistNs}$ debe cumplir con $\mli{DistF}\leq\mli{DistNs}$, y
+establece que tan estrictamente se sigue el camino original en espacios
+despejados de obstáculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot
+siga el camino original de forma estricta aunque esté en espacios despejados,
+ya que se fuerza que el robot se acerque a los subobjetivos para completarlos.
+Al aumentar el valor de $\mli{DistNs}$ se permite mayor libertad en como seguir
+el camino original cuando el espacio está despejado. Esto sucede porque en los
+espacios despejados la línea de ancho $\mli{An}$ no se solapa con obstáculos y
+por lo tanto todos los subobjetivos del camino que estén a una distancia menor
+a $\mli{DistNs}$ se consideran completados. Completar varios subobjetivos a la
+vez implica libertad de movimiento, al ser \emph{move base} el que se encarga
+de la trayectoria hasta el primer punto no completado del camino, sin ser
+necesario pasar por los subobjetivos previamente completados.
 
 \subsection{Planificación jerárquica}
 % es que los caminos originales
 % calculados sobre el GVD (seccion \ref{subsec:MiValSub})
 Los GVD son estructuras que se representan con un cantidad considerablemente
-menor de celdas que las presentes la grilla de ocupación a partir de la cual son
-generados. A pesar de esto, los GVD son \emph{roadmaps} (sección
-\ref{subsec:mapacarr}) por lo que permiten planificar caminos entre cualquier par de
-puntos del espacio, al igual que las grillas de ocupación. 
+menor de celdas que las presentes en las grillas de ocupación sobre las cuales son
+generados. A pesar de esto los GVD son \emph{roadmaps} (sección
+\ref{subsec:mapacarr}) por lo que permiten planificar caminos entre cualquier
+par de puntos del espacio, al igual que las grillas de ocupación. 
 
-La diferencia de tamaños implica que los caminos generados sobre el GVD tienen
-una menor en costo computacional que los calculados sobre la grillas de
-ocupación. Pero a su vez, los caminos generados sobre el GVD se encuentran lo
-más alejado posible de los obstáculos (sección \ref{subsec:GVD}), lo que lleva a
-caminos que aunque son seguros, pueden resultar innecesariamente largos.
+La diferencia de tamaños entre las estructuras implica que generar caminos
+sobre el GVD es más computacionalmente eficiente que generarlos sobre la grilla
+de ocupación. Pero a su vez, los caminos generados sobre el GVD se mantienen lo
+más alejado posible de los obstáculos (sección \ref{subsec:GVD}), lo que lleva
+a caminos que aunque son seguros, pueden resultar innecesariamente largos.
 
-La motivación de la planificación jerárquica es aprovechar la eficiencia de los
-caminos generados sobre el GVD, evitando los desvíos innecesarios que estos
-contienen.
+La motivación de la planificación jerárquica es aprovechar la eficiencia de
+generar caminos sobre el GVD, evitando los desvíos innecesarios que estos
+caminos contienen.
 
-La planificación jerárquica consiste en utilizar la información
-topológica del camino generado del GVD, específicamente se utilizan los
-puntos del camino que se encuentran en las transiciones entre los
-segmentos (habitaciones y corredores) para establecer un camino de alto
-nivel compuesto por la secuencia de estos puntos y el objetivo final.
-Luego caminos de bajo nivel se establecen entre el robot y el siguiente
-punto del camino de alto nivel, la idea de estos caminos es que el robot
-pueda navegar libremente (sin considerar el GVD) dentro de los
-segmentos, moviéndose de transición en transición. La planificación de
-los caminos de bajo nivel se delega a \emph{move base}, el cual genera
-caminos sin desvíos innecesarios.
+La planificación jerárquica está basada en un camino de alto nivel construido a
+partir de información topológica del camino generado sobre el GVD.
+El camino de alto nivel esta formado por la secuencia de los puntos del camino sobre
+el GVD que se encuentran en las transiciones entre segmentos (habitaciones
+y corredores), finalizando con el objetivo. Luego se establecen caminos de bajo
+nivel entre el robot y el siguiente punto del camino de alto nivel, la idea de
+estos caminos es que el robot pueda navegar libremente (sin considerar el GVD)
+dentro de los segmentos, moviéndose de transición en transición. La
+planificación de los caminos de bajo nivel se delega a \emph{move base} que
+genera caminos sin desvíos innecesarios.
 
 Es pertinente notar que en la implementación realizada \emph{move base} se
-configuro con un planificador global que calcula caminos sobre la grilla de
-ocupación (sección \ref{subsec:move_base}), de igual manera aplicar esta
-técnica simplifica los cálculos de caminos sobre la grilla siendo dichos
-cálculos locales a cada segmento que se debe transitar.
+configuró con un \emph{global\_planner} (sección \ref{subsec:move_base}) que
+calcula caminos sobre la grilla de ocupación, de igual manera utilizar la
+planificación jerárquica simplifica los cálculos de los caminos sobre la grilla,
+ya que hace que sean locales al segmento que se debe transitar. %(se usa $A^*$).
 
-Esta planificación jerárquica se lleva a cabo estableciendo un valor de
-$\mli{DistNs}$ mayor a las dimensiones de los segmentos y un valor de
-$\mli{Seg}$ mayor al tamaño de los portales de transición entre
-segmentos (puertas, pasajes abiertos). De esta forma asumiendo segmentos
-despejados, todos los subobjetivos asociados a un segmento en el que se
-encuentra un robot son completados de forma normal. Por lo tanto en en
-caminos largos que abarcan varios segmentos, los únicos subobjetivos
-enviados a \emph{move base} son los que se ubican en las portales entre
-un segmento y el siguiente en el camino, los cuales no son completados
-de forma normal ya que dicha transición consiste en un portal de ancho
-menor a $\mli{Seg}$ que no permite la existencia de una línea
-discretizada de ancho $\mli{Seg}$ que no contenga obstáculos.
+% (mayor a las dimensiones de los segmentos) 
+Recordando que los caminos que llevan a un objetivo, enviados desde el
+\emph{controlador del robot} al \emph{controlador de movimiento} son caminos
+generados sobre el GVD. Para llevar a cabo la planificación jerárquica se
+establece $\mli{DistNs}=\infty$ y $\mli{An}$ mayor al tamaño estimado de los
+portales de transición entre segmentos (puertas, pasajes abiertos). De esta
+forma asumiendo segmentos despejados, todos los subobjetivos asociados a un
+segmento en el que se encuentra un robot son completados de forma normal. Por
+lo tanto en caminos largos que abarcan varios segmentos, los únicos
+subobjetivos enviados a \emph{move base} son los que se ubican en las
+transiciones entre un segmento y el siguiente. Estos subobjetivos no son
+completados de forma normal ya que dichas transiciones consisten en portales de
+ancho menor a $\mli{An}$ que no permiten la existencia de una línea discretizada
+de ancho $\mli{An}$ que no contenga obstáculos.
 
-En la figura \ref{fig:navjer} se muestra un ejemplo en el cual se puede
-apreciar la diferencia de largos entre el camino original ubicado sobre
-el GVD y el de bajo nivel que lleva hacia la celda ubicada sobre el
-portal en la transición al siguiente segmento del camino.
+En la figura \ref{fig:navjer} se muestra un ejemplo en el que se puede apreciar
+la diferencia entre el largo del camino de bajo nivel que lleva a la celda
+ubicada sobre la transición al siguiente segmento, y el largo de la porción del
+camino original ubicado sobre el GVD que lleva a esa misma celda.
+
 
 \begin{figure}[H]
   \center
@@ -1877,69 +1882,89 @@ portal en la transición al siguiente segmento del camino.
 % exploración, a medida que se obtiene informacion (evidencia) sobre el entorno.
 
 
-A lo largo de la exploración los robots de la flota son asignados a objetivos
-de exploración, cuando un robot completa un objetivo este sensa porciones del
-entorno antes desconocido. Esta nueva información debe ser manejada para
-aportar a la construcción de la grilla de ocupación usada como mapa que 
-representa el entorno explorado. A continuación se describe el proceso completo
-desde los sensores hasta la construcción de un mapa que contenga toda la
-información obtenida del entorno.
+% A lo largo de la exploración se le asignan objetivos de exploración robots de
+% la flota, con el propósito que los robots se dirijan a dichos objetivos y
+% recopilen nueva información del entorno con sus sensores. Esta
+% usada como mapa que representa el entorno explorado
+ % que contiene toda la información obtenida del entorno
+% explorado.
+
+A lo largo de la exploración los robots utilizan sus sensores para recopilar
+información del entorno. Esta información sensorial debe ser manejada para
+aportar a la construcción del mapa, que es representado con una grilla de
+ocupación (sección \ref{subsec:Grilla}) que centraliza toda la información del
+entorno obtenida por los robots. A continuación se describe el proceso completo
+desde que el robot obtiene información sensorial, hasta que esta impacta en el
+mapa.
+
+% El nodo
+% \emph{Global\_costmap} fue configurado para que los valores de probabilidad de
+% ocupación asociados a las celdas de la grilla que construye solo dependan de la
+% ultima evidencia sensorial disponible para cada celda.
 
 Cada robot está constantemente recopilando información del entorno a través de
-sus sensores y enviando dicha información al nodo de \gls{ROS} \emph{global\_costmap}
-ubicado en su módulo \emph{move base} (sección \ref{subsec:move_base}). Al
-recibir datos sensoriales \emph{global\_costmap} actualiza la grilla de
-ocupación que construye. \emph{Global\_costmap} fue configurado para que los
-valores de probabilidad de ocupación asociados a las celdas de su grilla de
-(sección \ref{subsec:Grilla}) solo dependan de la ultima evidencia sensorial
-obtenida para cada celdas. Adicionalmente las celdas tienen asociado uno de
-tres valores de probabilidad de ocupación posibles: $0.5$ indicando que la
-celda es desconocida, $0.55$ indicando que la celda está ocupada y $0.45$
-indicando que la celda está libre. Estos valores indican la probabilidad
-$P(c|x_t,z_t)$ de que una celda $c$ esté ocupada dada una única medida $z_t$
-desde una cierta posición $x_t$.
+sus sensores y enviando dicha información al nodo \gls{ROS}
+\emph{global\_costmap} de su módulo \emph{move base} (sección
+\ref{subsec:move_base}). Al recibir información sensorial el nodo
+\emph{global\_costmap} envía una actualización al módulo \emph{combinador de
+mapas} que consiste en el conjunto de las celdas $c$ que están en el alcance de
+la información sensorial recibida y sus probabilidades $P(c | x_t,z_t)$ asociadas. El
+valor de $P(c|x_t,z_t)$ indica la probabilidad de que una celda
+$c$ esté ocupada dada la información sensorial $z_t$ obtenida desde la posición
+$x_t$. Dependiendo de la evidencia que aporte $(x_t,z_t)$ sobre el estado de
+$c$, la probabilidad $P(c|x_t,z_t)$ puede tomar uno de los siguientes
+valores: $0.5$ si no aporta evidencia, $0.55$ si la evidencia indica que la
+celda está ocupada y $0.45$ si la evidencia indica que la celda está libre.
+Estos valores de probabilidad son los que se encuentran presentes en la
+solución desarrollada, pero pueden variar dependiendo de los sensores que sean
+usados. 
 
-Dado que cada \emph{global\_costmap} construye una grilla de ocupación solo
-considerando los datos sensoriales del robot en el cual ejecuta, estas se deben
-combinar en una que centralice toda la información recopilada del entorno. Esto
-se logra configurando los \emph{global\_costmap} para que cuando se den
-modificaciones en estas grillas se envíen las porciones modificadas al módulo
-\emph{combinador de mapas}. Dichas porciones consisten en el conjunto de celdas
-de la grilla que fueron modificadas y sus nuevo valores de ocupación.
+% Cuando la grilla de ocupación del nodo \emph{global\_costmap} de un robot
 
-Al recibir una actualización el módulo \emph{combinador de mapas} aplica la
-regla de actualización presentada en \cite{stachniss2009robotic}, celda a
-celda, para integrar la nueva información a la grilla central que concentra
-toda la información proporcionada por los robots. La regla de actualización
-para una celda $c$ está dada
-por (\ref{eq:updateRule}) donde $P(c|x_{1:t-1},z_{1:t-1})$ es la probabilidad
-anterior a la actualización, $P(c | x_t,z_t)$ es el valor de probabilidad
-asociado a $c$ en la actualización recibida y  $P(c|x_{1:t},z_{1:t})$ es el
-valor de probabilidad actualizado. 
+% Dado que cada \emph{global\_costmap} construye una grilla de ocupación que solo
+% considera los datos sensoriales del robot en el que ejecuta, estas se deben
+% combinar en una única grilla de ocupación que centralice toda la información
+% recopilada del entorno. Esto se logra configurando
+
+% Cuando la grilla de ocupación del nodo \emph{global\_costmap} de un robot
+% experimenta cambios se envía las porciones que fueron actualizadas al módulo
+% \emph{combinador de mapas}. Dichas porciones consisten en el conjunto de celdas
+% de la grilla que fueron modificadas y sus nuevos valores de ocupación.
+
+% las porciones que fueron actualizadas . Dichas porciones consisten en .
+% , celda a celda
+Cuando el módulo \emph{combinador de mapas} recibe una actualización, este
+aplica la regla de actualización presentada en \cite{stachniss2009robotic} para
+integrar la información recibida al mapa que mantiene, representado por una
+grilla de ocupación que concentra toda la información proporcionada por los
+robots. La regla de actualización para una celda $c$ está dada por
+(\ref{eq:updateRule}) donde $P(c|x_{1:t-1},z_{1:t-1})$ es la probabilidad
+anterior a la actualización, $P(c | x_t,z_t)$ es la probabilidad en la
+actualización recibida y  $P(c|x_{1:t},z_{1:t})$ es la probabilidad luego de la
+actualización. En la figura \ref{fig:mappingUpRule} se muestra un ejemplo de la
+aplicación de esta regla de actualización. 
 
 \begin{equation}
   P(c|x_{1:t},z_{1:t}) =\left( 1 + \frac{1 - P(c | x_t,z_t)}{P(c|x_t,z_t)} \frac{1 - P(c|x_{1:t-1},z_{1:t-1})}{P(c|x_{1:t-1},z_{1:t-1})} \right)^{-1}
 \label{eq:updateRule}
 \end{equation}
 
-En la figura \ref{fig:mappingUpRule} se muestra un ejemplo de la aplicación de
-esta regla de actualización. Notar el ejemplo de la figura es en otro contexto
-por lo que los mapas intermedios son distintos a los descritos en esta sección.
+% Notar que en el ejemplo de la figura los mapas
+% intermedios son distintos a los descritos en esta sección.
 
 Luego de que el módulo \emph{combinador de mapas} integra toda la información
-de la actualización obtenida al mapa central, envía la porción actualizada del
-mapa central a los diversos módulos (sección \ref{sec:arqui}) que requieren
-mantener actualizado un mapa completo del entorno explorado.
+recibida en una actualización, este envía la porción actualizada del mapa a los
+diversos módulos (sección \ref{sec:arqui}) que requieren un mapa
+completo del entorno explorado.
 
 \begin{figure}[H]
   \center
-  \includegraphics[width=0.80\linewidth]{imagenes/occgridUpdate.png}
+  \includegraphics[width=1.00\linewidth]{imagenes/occgridUpdate.png}
   \caption[Aplicación de la regla de actualización propuesta en
   \cite{stachniss2009robotic} en un corredor.]{Aplicación de la
     regla de actualización propuesta en \cite{stachniss2009robotic} en un
-    corredor. La imagen superior izquierda muestra el mapa inicial y
-    la inferior derecha contiene el mapa resultante. Los mapas intermedios son los
-    mapas locales construidos a partir de los sensores del robot. Extraída de
+    corredor. En la esquina superior izquierda muestra el mapa inicial y
+    en la inferior derecha el mapa resultante. Los mapas intermedios corresponden a las actualizaciones integradas. Extraída de
   \cite{stachniss2009robotic}. }
   \label{fig:mappingUpRule}
 \end{figure} 
