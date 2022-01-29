@@ -106,7 +106,7 @@ A lo largo d esta se sección se especifican las pruebas realizadas en este proy
 % En esta sección se describe el tipo de prueba que se denominara como $base$. Este consiste
 % en una solucion del problema de exploración multi-robot que 
  % La solución base consiste en resolver la
-% asignación de tareas basada en cubrimiento (seccion \ref{subsec:MiSimp}). La as La construccion de GVD
+% asignación de objetivos basada en cubrimiento (seccion \ref{subsec:MiSimp}). La as La construccion de GVD
 % incremental como es comentada en \ref{sec:MiConstGVD} con
 
 \subsection{Simulador}
@@ -244,7 +244,7 @@ exploración}, \emph{distancia total recorrida por la flota}, \emph{completitud
 del mapa} y \emph{calidad del mapa}. 
 
 El \emph{tiempo de exploración} refiere al tiempo que ocurre desde que comienza la
-primera asignación de tareas (sección \ref{sec:asigTar}) hasta que no se
+primera asignación de objetivos (sección \ref{sec:asigTar}) hasta que no se
 detecta más espacio desconocido por explorar y se da por terminada la
 exploración.
 
@@ -315,24 +315,23 @@ El resto de las métricas fueron diseñadas específicamente para este proyecto,
 estas son: \emph{tiempo promedio en construcción de GVD} y \emph{tiempo
 promedio en simplificación de fronteras}.
 
-% T
 El \emph{tiempo promedio en construcción de GVD} es el tiempo promedio que toma
 construir el GVD en la etapa de obtención de información de cada asignación
-de tareas (sección \ref{sec:asigTar}).
+de objetivos (sección \ref{sec:asigTar}).
 
 El \emph{tiempo promedio en simplificación de fronteras} es el tiempo promedio
 que se demora en simplificar las fronteras para identificar los objetivos en
-la etapa de obtención de información de cada asignación de tareas.
+la etapa de obtención de información de cada asignación de objetivos.
 
 \section{Resultados}
 \newlength{\graphlen}
 \setlength{\graphlen}{0.75\textwidth}
 
 
-Los resultados experimentales obtenidos son presentados y analizados en esta
-sección. Las tablas que se presentan a lo largo de la sección indican para cada
-prueba los promedios y desviaciones estándar de las métricas, calculadas a partir de
-las 20 repeticiones que se hacen debido al no determinismo del simulador.
+Los resultados experimentales son presentados y analizados en esta
+sección. Las tablas que se encuentran a lo largo de la sección indican los
+promedios y desviaciones estándar de las métricas obtenidas en las 20
+repeticiones que se hacen debido al no determinismo del simulador.
 
 \subsection{Cubrimiento y calidad de los mapas} \label{sec:exp:cubcal}
 % Capaz aca puedo mencionar lo que pasa con los errores
@@ -354,7 +353,7 @@ mientras exista una un celda $c_1$ libre y otra $c_2$ desconocida tal que $c_1
 \in ady_4(c_2)$ (sección \ref{subsec:Grilla}), principalmente porque en estas
 condiciones se asume que los robots no pueden atravesar de $c_1$ a $c_2$. Dicho
 esto se presume que la completitud de los mapas no es perfecta debido a la
-presencia de celdas ubicadas en esquinas de paredes que que a pesar de no
+presencia de celdas ubicadas en esquinas de paredes que a pesar de no
 cumplir con las condiciones de ser detectadas como explorables, lo son. Un
 ejemplo de este tipo de celda se muestra en la figura \ref{fig:faltaCub}. Sin
 embargo los valores de completitud obtenidos indican que este tipo de
@@ -378,47 +377,47 @@ Los resultados de calidad de los mapas obtenidos son similares a los de
 completitud, los mapas construidos tienen una calidad alta, sin existir
 diferencias significativas entre las variantes. Esto es esperable ya que
 los sensores simulados fueron configurados para proporcionar medidas perfectas.
-Aunque a pesar de esto la calidad no perfecta, esto puede se explica en primer
+Aunque a pesar de esto la calidad de los mapas no perfecta, esto puede explicarse en primer
 lugar por el impacto de la completitud del mapa en su calidad. En segundo lugar
 por la existencia de varios robots que pueden detectase como obstáculos entre
 sí, generado celdas obstaculizadas que no se encuentran en el mapa de
-referencia. Y en tercer lugar porque a pesar de las configuración de los
-sensores, sus medidas tienen un ruido pequeño.
+referencia. Y en tercer lugar porque a pesar de la configuración de los
+sensores, estos proporcionan medidas con un ruido pequeño.
 
 Estos resultados de completitud y calidad del mapa permiten concluir que todas
-las variantes logran resolver de manera satisfactoria el problema de la
-exploración multi-robot, en términos de los mapas construidos. Las
-siguientes secciones se dedican a discutir los impactos que las diferentes
+las variantes logran resolver de manera satisfactoria el problema de
+exploración multi-robot en términos de los mapas construidos. Las
+siguientes secciones se dedican a discutir el impacto de las diferentes
 variantes en términos de tiempo y costo de exploración.
 
 
 \input{tablas/todo3}
 
 \subsection{Incrementalidad}\label{sec:exp:inc}
-En esta sección se comparan los resultados de las pruebas realizadas con
-solución propuesta que construye el GVD de forma incremental contra los de una
+En esta sección se comparan los resultados de las pruebas realizadas con la
+solución propuesta que construye el GVD de forma incremental, contra los de la 
 variante que solo difiere en que la construcción del GVD es no incremental. Las
-métricas a analizar para estas pruebas se encuentran en la tabla \ref{tab:inc1}
+métricas analizadas en esta sección se encuentran en la tabla \ref{tab:inc1}
 y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
 \ref{fig:gra:inc:gvdt}.
 
-En cada nivel de granularidad la variante incremental reduce un
+En cada nivel de granularidad la variante incremental reduce en un
 ${\smallsim}94\%$ el tiempo promedio construcción del GVD con respecto a la
 variante no incremental. Esto valida la idea de que la construcción incremental
 del GVD es más eficiente que su contraparte no incremental.
 
 % El tiempo de construcción de GVD impacta directamente al tiempo que ocurre
-% desde que un robot pide un tarea y una le es asignada, ya que es una parte
+% desde que un robot pide un objetivo y una le es asignada, ya que es una parte
 % necesaria y no paralelizada de la etapa de obtención de información (sección
-% \ref{subsec:obtInfo}) de cada asignación de tareas (sección \ref{sec:asigTar}).
+% \ref{subsec:obtInfo}) de cada asignación de objetivos (sección \ref{sec:asigTar}).
 % A pesar de esto el impacto sobre los tiempos de exploración no es directo. Esto
-% se debe al hecho de que una asignación de tareas este en curso solo asegura que un único
-% robot estara osicoso, ya que mientras que un robot pide una tarea y la obitene
-% el resto puede estar completando tareas asignadas previamente. Cuanto más corta 
-% es la demora en la asignación de tareas más probable es que un único robot quede
+% se debe al hecho de que una asignación de objetivos este en curso solo asegura que un único
+% robot estara osicoso, ya que mientras que un robot pide una objetivo y la obitene
+% el resto puede estar completando objetivos asignadas previamente. Cuanto más corta 
+% es la demora en la asignación de objetivos más probable es que un único robot quede
 % osicoso, mientras que si dicha demora aumenta, también lo hace la probabilidad
-% que en el transcurso de la asignacion más robots completen sus tareas y
-% requieran tareas, quedando ociosos. Esto logra explicar que en todos los
+% que en el transcurso de la asignacion más robots completen sus objetivos y
+% requieran objetivos, quedando ociosos. Esto logra explicar que en todos los
 % niveles de granularidad la reduccion del tiempo promedio logrado por la
 % variante incremental frente a la no incremental sea de un ${\smallsim}94\%$
 % constante mientras que la reduccion del tiempo de exploración comienza siendo
@@ -429,22 +428,23 @@ del GVD es más eficiente que su contraparte no incremental.
 % GVD más altos).
 
 Con respecto a los tiempos de exploración, estos también son reducidos al
-construir el GVD de forma incremental. La reducción comienza siendo de un
+construir el GVD de forma incremental. La reducción comienza siendo de
 ${\smallsim}8\%$ en el nivel de granularidad más bajo, y mediante se aumenta el
 nivel de granularidad las reducciones también aumentan hasta llegar a una
 reducción de ${\smallsim}63\%$ en el nivel más alto. Esto se explica porque el
 tiempo de construcción de GVD impacta directamente al tiempo que ocurre desde
-que un robot pide un tarea y una le es asignada, por ser una parte necesaria y
+que un robot pide un objetivo y uno le es asignado, por ser una parte necesaria y
 no paralelizada de la etapa de obtención de información (sección
-\ref{subsec:obtInfo}) de cada asignación de tareas (sección \ref{sec:asigTar}).
-Y los tiempos de asignación de tareas impactan a los tiempos de exploración,
-pero en este caso el impacto no es directo. Esto se debe a que una asignación
-de tareas en curso solo asegura que un único robot está ocioso, porque
-mientras que un robot pide una tarea y una le es asignada el resto puede estar
-completando tareas asignadas previamente. Cuanto más corta es la demora en la
-asignación de tareas más probable es que un único robot quede ocioso, mientras
-que si dicha demora aumenta, también lo hace la probabilidad que en el
-transcurso de la asignación más robots completen sus tareas y requieran tareas,
+\ref{subsec:obtInfo}) de cada asignación de objetivos (sección
+\ref{sec:asigTar}). Y a su vez los tiempos de asignación de objetivos impactan
+a los tiempos de exploración, pero en este caso el impacto no es directo. Esto
+se debe a que el hecho de que exista una asignación de objetivos en curso solo
+asegura que un único robot está ocioso, porque mientras que un robot pide un
+objetivo y uno le es asignado el resto puede estar completando objetivos que le
+fueron asignados previamente. Cuanto más corta sea la demora en la asignación
+de objetivos más probable es que un único robot quede ocioso, mientras que si
+dicha demora aumenta, también lo hace la probabilidad de que en el transcurso de
+la asignación más robots completen sus objetivos y requieran nuevos objetivos,
 quedando ociosos. 
 % no son
 % monótonamente crecientes ni decrecientes respecto a la granularidad
@@ -515,37 +515,37 @@ el método usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
 métodos son: la simplificación de fronteras basada en cubrimiento propuesta en
 este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
 \cite{Amorin2019} y la identificación de fronteras (sin simplificar)
-introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas a
-analizar se presentan en la tabla \ref{tab:inc1} y se encuentran graficadas en
-las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
-\ref{fig:gra:inc:gvdt}.
+introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas
+analizadas en esta sección se presentan en la tabla \ref{tab:ident_obj1} y se encuentran graficadas en
+las figuras \ref{fig:gra:idobj:et}, \ref{fig:gra:idobj:ec} y
+\ref{fig:gra:idobj:iobt}.
 
 Es posible apreciar que los métodos que identifican los objetivos simplificando
 las fronteras reducen los tiempos de exploración con respecto al método que
 identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
 de granularidad más bajo las reducciones son menores a ${\smallsim}5\%$, estas crecen junto
 a la granularidad hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
-nivel más alto. Esto puede deberse al tiempo de asignación de tareas como se
+nivel más alto. Esto puede deberse al tiempo de asignación de objetivos como se
 explica en la sección \ref{sec:exp:inc}. En este caso se considera que los
-factores con mayor impacto sobre los tiempos de asignación de tareas son dos:
+factores con mayor impacto sobre los tiempos de asignación de objetivos son dos:
 el tiempo de simplificación de fronteras y la cantidad de objetivos
 identificados. Mayores tiempos de simplificación fronteras retrasan la
 identificación de objetivos, parte necesaria y no paralelizada de la etapa de
 obtención de información (sección \ref{subsec:obtInfo}) en la asignación de
-tareas. Mientras que disminuir la cantidad de objetivos identificados implica
+objetivos. Mientras que disminuir la cantidad de objetivos identificados implica
 reducciones en la duración de las etapas de valuación (sección
 \ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
 menor la cantidad de objetivos a valuar y a considerar en la resolución. Entonces lo que se evidencia
 en los resultados obtenidos, es que invertir tiempo en disminuir los objetivos
 identificados simplificando las fronteras lleva a una reducción total de los
-tiempos de asignación de tareas, y en consecuencia de los tiempos de exploración
+tiempos de asignación de objetivos, y en consecuencia de los tiempos de exploración
 frente a no invertir dicho tiempo y utilizar todas las fronteras sin
 simplificar. Otra razón posible para las reducciones del tiempo de exploración
 es que simplificar las fronteras puede aportar a la coordinación de los robots.
 Por ejemplo de no simplificarse las fronteras se permite que un robot sea
 asignado a un objetivo adyacente a una pared o que dos robots sean asignados a
 objetivos adyacentes entre sí, situaciones en las cuales se desaprovecha
-capacidad de sensado, y se complejizó la navegación. Al simplificarse las
+capacidad de sensado, y se complejiza la navegación. Al simplificarse las
 fronteras, especialmente cuando se logra el cubrimiento minimizando los
 objetivos resultantes, se evitan situaciones como las descritas lo cual puede
 verse como una coordinación pasiva. \todo{o implicita?}
@@ -553,21 +553,21 @@ verse como una coordinación pasiva. \todo{o implicita?}
 De acuerdo con los resultados simplificar las fronteras en la identificación de
 objetivos también reduce las distancias totales recorridas por la flota frente
 a no simplificarlas. Estas reducciones son en general de ${\smallsim}10\%$, y
-pueden ser causadas por la disminución del tiempo de asignación de tareas,
+pueden ser causadas por la disminución del tiempo de asignación de objetivos,
 debido a las mismas razones que se explican en la sección \ref{sec:exp:inc}.
 Aunque la coordinación pasiva también puede estar jugando un rol al evitar que
-los robots se trasladen a objetivos que desaprovechan las capacidades
-sensoriales del robot o que puedan llevar a inconvenientes en la navegación.
+los robots se trasladen a objetivos que desaprovechan sus capacidades
+sensoriales o que puedan llevar a inconvenientes en la navegación.
 
 Con respecto a los dos métodos que simplifican las fronteras para 
 identificar objetivos, en el nivel de granularidad más bajo, la
-simplificación basada en cubrimiento logra una reducción con respecto a la
-basada en K-Means de ${\smallsim}3\%$ en la distancia total recorrida por la
-flota y de ${\smallsim}5\%$ en los tiempo de exploración. Esto se invierte a
+simplificación basada en cubrimiento logra reducciones con respecto a la
+basada en K-Means de ${\smallsim}3\%$ en las distancias totales recorridas por la
+flota y de ${\smallsim}5\%$ en los tiempos de exploración. Esto se invierte a
 medida que aumenta el nivel de granularidad, hasta que en el nivel más alto en
-lugar de reducirse, las métricas aumentan. La distancia total recorrida por la
-flota aumenta en un ${\smallsim}3\%$ y el tiempo de exploración en un
-${\smallsim}6\%$. Por otro lado según los resultados obtenidos del tiempo
+lugar de reducirse, las métricas aumentan. Las distancias totales recorridas por la
+flota aumentan en un ${\smallsim}3\%$ y los tiempos de exploración en un
+${\smallsim}6\%$. Por otro lado según los tiempos
 promedio en simplificación de fronteras, la simplificación basada en
 cubrimiento en todo nivel de granularidad es entre $2$ y
 $4$ veces más lenta que la basada en K-Means. Estos resultados
@@ -611,20 +611,22 @@ rendimiento superior.
 
 \subsection{Consideración del espacio desconocido}\label{sec:exp:desco}
 
+% T
+% t
 Las pruebas analizadas en esta sección corresponden a las realizadas con
 soluciones que varían únicamente en la forma de considerar el espacio
 desconocido al construir el GVD. Dichas formas son dos: considerar las
 celdas desconocidas como libres y considerar que las celdas desconocidas no
 propagan ondas y que el conjunto $\mli{UF}$ de celdas desconocidas que son
 adyacentes a celdas libres pertenecen a generadores ($\mli{UF} \subseteq
-\mli{CGen}$). Ambas son descritas en la sección \ref{subsec:espDesc}. Los
-resultados obtenidos en estas pruebas exponen en la tabla \ref{tab:inc1} y sus
-gráficas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
-\ref{fig:gra:inc:gvdt}.
+\mli{CGen}$). Ambas formas son descritas en la sección \ref{subsec:espDesc}. Los
+resultados obtenidos en estas pruebas se presentan en la tabla \ref{tab:desconocido1} y sus
+gráficas en las figuras \ref{fig:gra:des:et}, \ref{fig:gra:des:ec} y
+\ref{fig:gra:des:gvdt}.
 
 Considerar que las celdas desconocidas no propagan ondas y que $\mli{UF}
 \subseteq \mli{CGen}$ logra una reducción de ${\smallsim}61\%$ en el tiempo
-promedio de construcción del GVD en cada nivel de granularidad, respecto a
+promedio de construcción del GVD en cada nivel de granularidad respecto a
 considerar a las celdas desconocidas como libres. Estos resultados validan que
 restringir la construcción del GVD al espacio conocido lleva a mejoras en los
 tiempos de construcción del GVD. 
@@ -639,33 +641,33 @@ en el nivel más alto. Mientras que la reducción de la distancia total recorrid
 por la flota fluctúa entre ninguna reducción y una reducción de
 ${\smallsim}9\%$. Esto puede ser causado porque la reducción de los tiempos de
 construcción del GVD implica una reducción en los tiempos de asignación de
-tareas y esto último se asocia a reducciones en los tiempos de exploración y de
+objetivos que se asocia a reducciones en los tiempos de exploración y de
 las distancias totales recorridas por la flota, como se explica en la sección
-\ref{sec:exp:inc} donde se compara la construcción incremental y no incremental
-del GVD. Aunque en este caso las reducciones de los tiempos de construcción del
+\ref{sec:exp:inc}. Aunque en este caso las reducciones de los tiempos de construcción del
 GVD son menores y por lo tanto los efectos sobre las métricas son menos
 pronunciados. A su vez, considerar el espacio desconocido de distinta manera
 cambia significativamente la forma del GVD lo cual también puede afectar a los
-caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
+caminos que los robots generan a partir del GVD y por lo tanto a las métricas en cuestión.
 
 
+%% donde se compara la construcción incremental y no incremental del GVD
 % Con respecto a los tiempos de exploración, estos tambien son reducidos al
 % contruir el GVD de forma incremental. La reducción comienza siendo de un
 % ${\smallsim}8\%$ en el nivel de granularidad más bajo, y mediante se aumenta el
 % nivel de granularidad las reducciones tambien aumentan hasta llegar a una
 % reducción de ${\smallsim}63\%$ en el nivel más alto. Esto se explica porque el
 % tiempo de construcción de GVD impacta directamente al tiempo que ocurre desde
-% que un robot pide un tarea y una le es asignada, por ser una parte necesaria y
+% que un robot pide un objetivo y una le es asignada, por ser una parte necesaria y
 % no paralelizada de la etapa de obtención de información (sección
-% \ref{subsec:obtInfo}) de cada asignación de tareas (sección \ref{sec:asigTar}).
-% Y los tiempos de asignación de tareas impactan a los tiempos de exploración,
+% \ref{subsec:obtInfo}) de cada asignación de objetivos (sección \ref{sec:asigTar}).
+% Y los tiempos de asignación de objetivos impactan a los tiempos de exploración,
 % pero en este caso el impacto no es directo. Esto se debe a que una asignación
-% de tareas en curso solo asegura que un único robot esta osicoso, porque
-% mientras que un robot pide una tarea y una le es asignada el resto puede estar
-% completando tareas asignadas previamente. Cuanto más corta es la demora en la
-% asignación de tareas más probable es que un único robot quede osicoso, mientras
+% de objetivos en curso solo asegura que un único robot esta osicoso, porque
+% mientras que un robot pide una objetivo y una le es asignada el resto puede estar
+% completando objetivos asignadas previamente. Cuanto más corta es la demora en la
+% asignación de objetivos más probable es que un único robot quede osicoso, mientras
 % que si dicha demora aumenta, también lo hace la probabilidad que en el
-% transcurso de la asignacion más robots completen sus tareas y requieran tareas,
+% transcurso de la asignacion más robots completen sus objetivos y requieran objetivos,
 % quedando ociosos. 
 % no son
 % monótonamente crecientes ni decrecientes respecto a la granularidad
@@ -723,12 +725,12 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 % resultados en terminos de tiempos de exploración. Esto explica de forma analoga
 % a como se explico el comportamiento de esta misma metrica en la sección
 % \ref{sec:exp:inc}. En este caso lo que impacta en el tiempo de la asignación de
-% tareas es la la existencia de una cantidad mayor de objetivos que causa que las
+% objetivos es la la existencia de una cantidad mayor de objetivos que causa que las
 % etapas de valuación (sección \ref{subsec:MiValSub}) y de resolución (sección
 % \ref{subsec:MiResSub}) tomen más tiempo al ser mayor la cantidad de objtivos a
 % valuar y asignar. De los tiempos de exploración obtenidos al utlizar los otros
 % dos metodos se deduce que estos consiguen reducir las duraciones de las asignaciónes de
-% tareas, cosa que logran invertiendo tiempo en reducir los objetivos
+% objetivos, cosa que logran invertiendo tiempo en reducir los objetivos
 % indentificados al simplificar las fronteras a sus celdas más significativas.
 % Especificamente en las pruebas realizadas el simplificar las fronteras reduce
 % los tiempos de exploración con respecto a no simplificar, aunque comenzando por
@@ -745,12 +747,12 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 % reducción de ${\smallsim}29\%$ en el nivel de granularidad más alto. Esto en
 % parte se debe a lo explicado en la sección \ref{sec:exp:inc} con respecto a
 % esta metrica. En este caso lo que impacta en el tiempo de la asignación de
-% tareas es la cantidad de objetivos identificados, ya que aumentar dicha
+% objetivos es la cantidad de objetivos identificados, ya que aumentar dicha
 % cantidad implica aumentos en la duracion de las etapas de valuación (sección
 % \ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
 % mayor la cantidad de objtivos a valuar y asignar. De los tiempos de exploración
 % obtenidos al utlizar los otros dos metodos se deduce que estos consiguen
-% reducir las duraciones de las asignaciónes de tareas, cosa que logran
+% reducir las duraciones de las asignaciónes de objetivos, cosa que logran
 % invertiendo tiempo en reducir los objetivos indentificados al simplificar las
 % fronteras a sus celdas más significativas.
 %%% 3 %%%%
@@ -760,9 +762,9 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 % bajo de granularidad las reducciones son despreciables estas crecen junto a la
 % granularidad, hasta alcanzarse una reducción de ${\smallsim}29\%$ en el nivel
 % de granularidad más alto. Esto debe en parte a los tiempos de asignación de
-% tareas, por lo explicado en la sección \ref{sec:exp:inc} con respecto a esta
+% objetivos, por lo explicado en la sección \ref{sec:exp:inc} con respecto a esta
 % metrica. En este caso el principal impacto en
-% los tiempos de asignación de tareas es la cantidad de objetivos identificados.
+% los tiempos de asignación de objetivos es la cantidad de objetivos identificados.
  
 % implica reducciones en la duracion de las etapas de valuación (sección
 % \ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
@@ -806,7 +808,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 % que al ser el nivel con menos costo computacional y por lo tanto 
 
 % ste comportamiento en parte se explica por los tiempos de
-% asignación de tareas y su efecto en dichas metricas. En este caso aunque pueden
+% asignación de objetivos y su efecto en dichas metricas. En este caso aunque pueden
 % existir diferencias entre los números de objetivos identificados, estas son
 % menos significativas repecto a identificar todas las fronteras como objetivos.
 % Dado esto para los metodos que simplifican las fronteras se pasa a considerar
@@ -832,7 +834,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 
 
 
-% dado que los tiempos de demora de la asignación de tareas se determino como un
+% dado que los tiempos de demora de la asignación de objetivos se determino como un
 % factor, que aunque tenia un peso, no era significativos, y en este caso donde
 % las demoras según los timpos de exploraicon son menores, se obtienen
 % diferencias de distancia más significativas entoces, se puede deteminar que la
@@ -841,7 +843,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 % distancia total recorrida por la flota. Este resultado se atribuye en primer
 % lugar a que al ser todas las celdas fronteras objtivos posibles, esto permite asignaciones
 
-% Y en segundo lugar al amuento del tiempo de asignación de tareas como se
+% Y en segundo lugar al amuento del tiempo de asignación de objetivos como se
 % explica en la sección \ref{sec:exp:inc},  
 
 
@@ -863,7 +865,7 @@ caminos de los robots sobre este y por lo tanto a las métricas en cuestión.
 % los robots, aumentado la nueva información que se obiente dele entorno. es la
 % principal razon por la cual se introducen los metodos basados en
 % simplificación, ya que estos la cantidad de objetivos para disminuir el
-% tiempo total de la asignación de tareas.
+% tiempo total de la asignación de objetivos.
 
 % se mantienen entre un ${\smallsim}9\%$ y ${\smallsim}11\%$, exceptuando la
 % granularidad de una celda por metro cuadrado en la simplificación basada en
