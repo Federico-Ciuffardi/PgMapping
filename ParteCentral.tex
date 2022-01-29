@@ -363,7 +363,7 @@ del espacio a los cuales es conveniente enviar robots para recolectar nueva
 información sobre el entorno explorado. Estos puntos son los llamados objetivos
 de exploración (sección \ref{sec:exploracion}). 
 
-\subsection{Fronteras}
+\subsection{Fronteras}\label{subsec:todasFront}
 En \cite{yamauchi1998frontier} se propone que los lugares que permiten
 recolectar mayor cantidad de nueva información sobre el entorno son las
 fronteras entre el espacio conocido y desconocido. Por lo tanto se establece que dichas
@@ -378,7 +378,7 @@ fronteras $F$ según se definen en (\ref{eq:fronteras}).
   \label{eq:fronteras}
 \end{equation}
 
-\subsection{Simplificación de Fronteras basada en K-Means}
+\subsection{Simplificación de Fronteras basada en K-Means}\label{subsec:simpKM}
 En \cite{Amorin2019} se argumenta que tratar todas las celdas fronteras como
 objetivos de exploración diferentes podría ser computacionalmente prohibitivo.
 Por lo tanto, para reducir el costo computacional, se reducen los objetivos de
