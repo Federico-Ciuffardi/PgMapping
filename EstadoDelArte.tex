@@ -17,10 +17,10 @@ de búsqueda y rescate \cite{Liu2015}, misiones extra planetarias
 el entorno y sea ineficiente o directamente inviable teleoperar a un robot.
 
 La información del entorno es recopilada por los sensores del robot. Dado que
-dichos sensores tienen un rango máximo y también suelen existir obstáculos que
+dichos sensores tienen un rango máximo y adicionalmente suelen existir obstáculos que
 limitan aún más ese rango, lo normal es que sea necesario que el robot se mueva
-para que los sensores logren obtener información de cada parte del entorno y
-poder generar un mapa completo que lo represente.
+para que sus sensores puedan obtener información de las distintas partes del
+entorno a explorar. 
 
 Determinar el siguiente lugar al que es conveniente enviar a un robot para
 obtener información del entorno es uno de los principales problemas de la
@@ -35,8 +35,7 @@ desconocido. Por otro lado para establecer que objetivo distribuir al robot se
 suele decidir cual de estos es el más conveniente, donde la conveniencia de un
 objetivo puede calcularse como un balance entre el costo y el beneficio de
 completarlo. El costo normalmente involucra aspectos como la distancia del
-recorrido que el robot debe hacer para llegar al objetivo, el tiempo y la
-dificultad de recorrerlo, como también el costo energético que implica. Por
+recorrido que el robot debe hacer para llegar al objetivo, el tiempo que lleva recorrerlo y el costo energético que implica. Por
 otro lado el beneficio usualmente se asocia al tamaño de la porción explorada
 al completar el objetivo. 
 
@@ -46,21 +45,21 @@ Otro aspecto fundamental es el denominado criterio de parada según el cual se
 determina cuando la exploración se considera finalizada. Uno de los criterios
 de parada tomados usualmente es detener la exploración cuando el mapa
 construido alcanza cierto porcentaje de cubrimiento del entorno
-\cite{Yan2015}. Aunque este es usualmente utilizado para evaluaciones de
+\cite{Yan2015}. Aunque este es utilizado usualmente para evaluaciones de
 rendimiento no es útil en la práctica cuando se desconocen las dimensiones del
 entorno a explorar, ya que esta información es necesaria para el cálculo del
 porcentaje de cubrimiento.
-Otro posible criterio que sí es aplicable en la práctica, cuando el entorno es
+Otro criterio de parada que sí es aplicable en la práctica, cuando el entorno es
 cerrado, es el de explorar el entorno hasta que no quede ninguna posibilidad de
-obtener nueva información de él, osea que no exista ningún espacio desconocido
-que sea accesible. La desventaja de este criterio es que se fuerza a una
+obtener nueva información de él, es decir que no exista espacio desconocido
+que sea posible explorar. La desventaja de este criterio es que se fuerza a una
 exploración exhaustiva del entorno, lo cual puede ser indeseable por cuestiones
-de costos, tanto temporales, como de recursos como la energía de los robots, o
-su desgaste. En \cite{Amorin2019} se propone un criterio de parada cuyo
-uso es factible para la exploración de entornos cerrados y que a
-su vez evita una exploración exhaustiva. La idea subyacente de este criterio es
+de costos, tanto temporales como de recursos (por ejemplo energía de los robots o
+su desgaste). En \cite{Amorin2019} se propone un criterio de parada aplicable en la exploración de entornos cerrados, que logra 
+evitar una exploración exhaustiva. La idea de este criterio es
 que es posible determinar cuando los robots recopilan suficiente información de
-un entorno como para estimar el resto de forma precisa.
+un entorno como para estimar el resto de forma precisa, y es en ese momento cuando la
+exploración se puede detener.
 
 % Hasta ahora se ha discutido aspectos de la exploración que no estan asociados necesariam
 
@@ -77,7 +76,7 @@ aumento de tolerancia a fallos que esto implica. A su vez la exploración suele
 ser una tarea altamente paralelizable, al ser usual que en un mismo instante de
 tiempo existan varios lugares de los cuales un robot puede obtener información,
 por lo tanto que es esperable que al aumentar la cantidad de recursos robóticos
-se experimente una reducción los tiempos de exploración
+se experimente una reducción de los tiempos de exploración
 \cite{cao1997cooperative,dudek1996taxonomy,guzzoni1997many}. 
 
 Sin embargo la reducción del tiempo de exploración no es proporcional al
@@ -93,27 +92,30 @@ sí, causando perdidas de tiempo en desvíos para evitar colisiones
 
 Las problemáticas mencionadas pueden ser mitigadas asignando objetivos de forma
 coordinada buscando explotar el paralelismo en la exploración y reducir el
-tiempo perdido por interferencias \cite{nieto2014coordination}. La idea detrás
-de la exploración coordinada es la de resolver el problema de la asignación de
-objetivos maximizando la relación costo-beneficio, no de cada robot por separado,
-sino de la flota entera.
+tiempo perdido por interferencias \cite{nieto2014coordination}. Más adelante en
+la sección \ref{sec:coord} se describen algunas técnicas de coordinación para 
+la exploración multi-robot. 
+% La idea detrás
+% de la exploración coordinada es la de resolver el problema de la asignación de
+% objetivos maximizando la relación costo-beneficio, no de cada robot por separado,
+% sino de la flota entera.
 
 % En \cite{Lopez-Perez2018} se propone una solución completamente distribuida al problema de exploración multi-robot. Este tipo de resolución implica descentralización, lo que aumenta tanto la robustez del sistema como su autonomía en tanto solo se requiere del equipo robótico para explorar el entorno, sin depender de una entidad central para coordinar ningún aspecto de la solución. %, que al igual que otras ya comentadas partición el entorno aunque en este caso dicha 
 
 
 
 \section{Mapas}\label{subsec:mapas} %\todo{la pasaría a sec}
-Un mapa consiste en un modelo de un entorno. En el contexto de la robótica los mapas se pueden dividir en dos categorías, \emph{mapas métricos} y \emph{mapas topológicos} \cite{Thrun1998,choset2005principles}.
+Un mapa es un modelo de un entorno. En el contexto de la robótica los mapas se pueden dividir en dos categorías, \emph{mapas métricos} y \emph{mapas topológicos} \cite{Thrun1998,choset2005principles}.
 
-Los \emph{mapas métricos} son mapas principalmente caracterizados por representar la geometría de todo el entorno, incluyendo a su vez una escala que permite asociar las dimensiones representadas dentro del mapa las reales.
+Los \emph{mapas métricos} son mapas principalmente caracterizados por representar la geometría de todo el entorno, incluyendo a su vez una escala que permite asociar las dimensiones representadas dentro del mapa a las reales.
 
-Un tipo de mapa métrico es el denominado \emph{mapa geométrico}, los mapas de este tipo utilizan primitivas geométricas para representar al entorno, aunque es usual el uso de segmentos de recta como primitiva, es posible utilizar otras primitivas de ser conveniente. Un ejemplo de este tipo de mapa se puede ver en la figura \ref{fig:ejMapMetrico}, siendo las primitivas utilizadas rectángulos.
+Un tipo de mapa métrico es el denominado \emph{mapa geométrico}, los mapas de este tipo utilizan primitivas geométricas para representar al entorno. Aunque es usual el uso de segmentos de recta como primitiva, es posible utilizar otras primitivas de ser conveniente. Un ejemplo de este tipo de mapa se puede ver en la figura \ref{fig:ejMapMetrico}, siendo las primitivas utilizadas rectángulos.
 
-Una \emph{grilla de ocupación} es otro tipo de mapa métrico que consiste en representar el espacio mediante una grilla regular compuesta de celdas cuadradas que almacenan una estimación probabilística de su estado de ocupación (libre u ocupado). En la figura \ref{fig:ejGrillaOc} se muestra una grilla de ocupación en la que cada celda se encuentra coloreada según su probabilidad de encontrarse en un estado ocupado o libre, los colores oscuros indican una mayor probabilidad del estado ocupado y los más claros una mayor intensidad de estar libres.
+Una \emph{grilla de ocupación} es otro tipo de mapa métrico que consiste en representar el entorno mediante una grilla regular compuesta de celdas cuadradas que almacenan una estimación probabilística de su estado de ocupación que puede ser libre u ocupado. En la figura \ref{fig:ejGrillaOc} se muestra una grilla de ocupación en la que cada celda se encuentra coloreada según la estimación probabilística que almacena, los colores oscuros indican una mayor probabilidad del estado ocupado y los claros una mayor probabilidad del estado libre.
 
 Los \emph{mapas topológicos} por otro lado son mapas simplificados al punto de solo incluir lugares topológicamente distintivos y conexiones entre estos. Normalmente se representan mediante grafos donde los lugares se modelan como vértices y la adyacencia entre lugares como aristas. Dependiendo del contexto es posible que los mapas topológicos contengan información adicional en los vértices y aristas, por ejemplo información métrica como lo puede ser el tamaño de la región para un vértice o la distancia entre regiones para las aristas.
 
-Los tipos de mapas topológicos se determinan según lo representado por un vértice, en los \emph{mapas topológicos basados en regiones} los vértices corresponden a regiones de interés resultantes de una segmentación del espacio que corresponden a habitaciones y corredores en entornos estructurados como lo son las casas y oficinas. La figura \ref{fig:ejMapTop} es un ejemplo de un mapa topológico basado en regiones. Notar que en este ejemplo, para que fuera más ilustrativo, los vértices del grafo utilizado como representación fueron dispuestos para que coincidan con su correspondiente ubicación en el entorno, pero el grafo no tiene porque contener la información necesaria para esto.
+Los tipos de mapas topológicos se determinan según lo representado por un vértice. En los \emph{mapas topológicos basados en regiones} los vértices se corresponden a regiones de interés, como por ejemplo habitaciones y corredores. La figura \ref{fig:ejMapTop} es un ejemplo de un mapa topológico basado en regiones. Notar que en este ejemplo, para que sea más ilustrativo, los vértices del grafo utilizado como representación están dispuestos para que coincidan con su correspondiente ubicación en el entorno, pero el grafo no tiene porque contener la información necesaria para esto.
 
 \begin{figure}[H]
   \centering
@@ -141,13 +143,13 @@ mapas topológicos y métricos para \say{ganar lo mejor de los dos mundos} al
 tener disponible abstracción y detalle a la vez. Un ejemplo de cómo combinar
 las ventajas de ambos tipos de mapa es la planificación jerárquica descrita en
 \cite{Thrun1998} donde se utiliza un mapa topológico y uno métrico de un mismo
-entorno para generar planes para navegar en el entorno. El mapa topológico es
+entorno con el propósito de generar planes para navegar en el entorno. El mapa topológico es
 utilizado para generar un plan de navegación topológico que consiste en una
 secuencia de corredores y habitaciones que se deben atravesar para llegar a un
 objetivo, plan que aunque es fácil de generar no posee suficiente detalle como
 para traducirse directamente en acciones que el robot pueda realizar para
 llegar al objetivo. Por lo tanto se introduce una segunda etapa de
-planificación que consiste en utilizar la representación métrica del entono
+planificación que consiste en utilizar la representación métrica del entono (mapa métrico)
 para generar planes métricos que permitan al robot moverse entre los segmentos
 que componen al plan topológico. En este acercamiento se hace un único plan
 topológico sobre todo el entorno y varios planes métricos sobre porciones
@@ -484,7 +486,7 @@ obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}.
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesKalra.png}
-  \caption[Ondas de brushfire dinámico.]{Una secuencia que ejemplifica las ondas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una onda consistente (en negro) que al chocar genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una onda inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre mientras que al al llegar a cedas con una distancia mínima generar ondas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
+  \caption[Ondas de brushfire dinámico.]{Una secuencia que ejemplifica las ondas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una onda consistente (en negro) que al chocar genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una onda inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre mientras que al llegar a cedas con una distancia mínima generar ondas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
 \end{figure} 
 
 
@@ -787,7 +789,7 @@ obtiene mejores resultados en general.
 % % \subsubsection{Evaluación humana}
 % % Otra criterio de evaluación es el utilizado en \cite{Fermin-Leon2017} el cual compara la segmentación a evaluar $R_{seg}$ contra segmentaciones realizadas por humanos $R_{human}$. La comparación consiste en para cada pixel comprobar si este esta asignado a una misma region en ambas segmentaciones, lo cual se considera como un verdadero positivo $vp$, los falsos positivos $fp$ son los pixeles que están en la segmentación a evaluar pero no en la humana, o no, que se considera  
 
-\section{Coordinación en la exploración multi-robot}
+\section{Coordinación en la exploración multi-robot}\label{sec:coord}
 Como fue mencionado en la sección \ref{subsec:expmutirob}, la coordinación es
 un aspecto crítico en problema de exploración multi-robot, por lo tanto a lo
 largo del tiempo fuero desarrolladas varias propuestas para una exploración
