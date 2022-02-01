@@ -71,7 +71,7 @@ exploración se puede detener.
 La exploración multi-robot consiste en utilizar una flota robótica para resolver
 el problema de exploración.
 
-Una de las ventajas del uso de varios robots es la introducción redundancia y
+Una de las ventajas del uso de varios robots es la introducción de redundancia y
 aumento de tolerancia a fallos que esto implica. A su vez la exploración suele
 ser una tarea altamente paralelizable, al ser usual que en un mismo instante de
 tiempo existan varios lugares de los cuales un robot puede obtener información,
@@ -93,7 +93,7 @@ sí, causando perdidas de tiempo en desvíos para evitar colisiones
 Las problemáticas mencionadas pueden ser mitigadas asignando objetivos de forma
 coordinada buscando explotar el paralelismo en la exploración y reducir el
 tiempo perdido por interferencias \cite{nieto2014coordination}. Más adelante en
-la sección \ref{sec:coord} se describen algunas técnicas de coordinación para 
+la sección \ref{sec:coord} se describen algunas estrategias de coordinación para 
 la exploración multi-robot. 
 % La idea detrás
 % de la exploración coordinada es la de resolver el problema de la asignación de
@@ -135,7 +135,7 @@ La simplicidad de los mapas topológicos es útil para nosotros los humanos al f
   \caption[Mapa del sistema de transporte subterráneo de Buenos Aires, Argentina.]{Mapa del sistema de transporte subterráneo de Buenos Aires, Argentina. Extraído de \cite{metroBsAs}.}\label{fig:metroBsAs}
 \end{figure} 
 
-La simplicidad mencionada también tiene ventajas computacionales, ya que para un mismo entorno los mapas topológicos suelen ser ordenes de magnitud más pequeños que los mapas métricos y por lo tanto, más allá de la memoria ahorrada, también se tiene una planificación más eficiente. Sin embargo la falta de detalle en la representación es también una desventaja en tanto hace que los caminos planificados con un mapa topológico suelan ser más largos que los obtenidos en mapas métricos \cite{Thrun1998}.
+La simplicidad mencionada también tiene ventajas computacionales, ya que para un mismo entorno los mapas topológicos suelen ser ordenes de magnitud más pequeños que los mapas métricos y por lo tanto, más allá de la memoria ahorrada, también se tiene una planificación de caminos más eficiente (menor espacio de búsqueda). Sin embargo la falta de detalle en la representación es también una desventaja en tanto hace que los caminos planificados con un mapa topológico suelan ser más largos que los obtenidos en mapas métricos \cite{Thrun1998}.
 
 Dadas las ventajas y desventajas mencionadas existen trabajos
 \cite{Thrun1998,wurm2008coordinated,Liu2015} que proponen el uso simultáneo de
@@ -143,10 +143,10 @@ mapas topológicos y métricos para \say{ganar lo mejor de los dos mundos} al
 tener disponible abstracción y detalle a la vez. Un ejemplo de cómo combinar
 las ventajas de ambos tipos de mapa es la planificación jerárquica descrita en
 \cite{Thrun1998} donde se utiliza un mapa topológico y uno métrico de un mismo
-entorno con el propósito de generar planes para navegar en el entorno. El mapa topológico es
+entorno con el propósito de generar planes para navegar en él. El mapa topológico es
 utilizado para generar un plan de navegación topológico que consiste en una
 secuencia de corredores y habitaciones que se deben atravesar para llegar a un
-objetivo, plan que aunque es fácil de generar no posee suficiente detalle como
+objetivo, este plan no posee suficiente detalle como
 para traducirse directamente en acciones que el robot pueda realizar para
 llegar al objetivo. Por lo tanto se introduce una segunda etapa de
 planificación que consiste en utilizar la representación métrica del entono (mapa métrico)
@@ -159,8 +159,8 @@ en comparación a hacer un único plan métrico sobre el entorno entero.
 Los tres trabajos antes mencionados utilizan una misma estrategia para lograr construir un mapa topológico y uno métrico, asegurando que estos son congruentes entre sí. La estrategia consiste en construir una grilla de ocupación a partir de los datos obtenidos por los sensores de los robots. Dicha grilla de ocupación es utilizada tanto como mapa métrico, como para generar una estructura intermedia llamada \emph{grafo generalizado de Voronoi}, con el cual es posible detectar los segmentos que constituyen un mapa topológico basado en regiones. Este proceso es una parte fundamental del trabajo desarrollado en este proyecto y se detallará a lo largo de las siguientes secciones.%\todo{durante este proyecto?} 
 
 \subsection{Mapa de carreteras}\label{subsec:mapacarr}
-% Un \emph{mapa de carreteras} (del ingles road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos ubicaciónes distantes, por ejemplo dos depatamentos distintos, en lugar de considerar cada camino posible, normalemte planificamos primero un camino hacia una red de carreteras, luego a lo largo de la red de carreteras y, finalmente, desde la red de carreteras hacia el destino. %(ver figura \ref{fig:ejemplovial}). 
-Un \emph{mapa de carreteras} (del ingles \emph{roadmap}) \cite{choset2005principles} es una clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un \emph{roadmap} asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría está inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente planificar un camino desde la red de carreteras (Ruta 3) hacia el destino (ver figura \ref{fig:ejemplovial}). 
+% Un \emph{mapa de carreteras} (del inglés road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos ubicaciónes distantes, por ejemplo dos depatamentos distintos, en lugar de considerar cada camino posible, normalemte planificamos primero un camino hacia una red de carreteras, luego a lo largo de la red de carreteras y, finalmente, desde la red de carreteras hacia el destino. %(ver figura \ref{fig:ejemplovial}). 
+Un \emph{mapa de carreteras} (del inglés \emph{roadmap}) \cite{choset2005principles} es una clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un \emph{roadmap} asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea de \emph{roadmap} está inspirada en como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos distintos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente planificar un camino desde la red de carreteras (Ruta 3) hacia el destino (ver figura \ref{fig:ejemplovial}). 
 
 \begin{figure}[H]
   \center
@@ -168,38 +168,35 @@ Un \emph{mapa de carreteras} (del ingles \emph{roadmap}) \cite{choset2005princip
   \caption[Red de carreteras de Uruguay.]{Red de carreteras de Uruguay. Con amarillo se resalta un camino entre ubicaciones de Montevideo y Paysandú. Extraído de \cite{googlemaps}.}\label{fig:ejemplovial}
 \end{figure} 
 
-Para considerarse un \emph{roadmap}, un mapa topológico debe estar representado
-con un grafo $\mli{RM}=(V_{RM},E_{RM})$ en el cual sus vértices $V_{RM}$
-corresponden a puntos no ocupados del entorno y sus aristas $E_{RM}$
-implican la existencia de al menos un camino disjunto entre los
-vértices. Adicionalmente, dicho grafo $\mli{RM}$ debe cumplir con 3
-propiedades fundamentales, a partir de las cuales es posible asegurar
-que se puede planificar caminos a partir del \emph{roadmap}. Sea $W$ el entorno
-y $W_{libre} \subseteq W$ el espacio libre del entorno, las tres
-propiedades son:
+Para ser un \emph{roadmap}, un mapa topológico debe estar representado con un
+grafo $\mli{RM}=(V_{RM},E_{RM})$ en el cual sus vértices $V_{RM}$ corresponden
+a puntos libres del entorno y sus aristas $E_{RM}$ implican adyacencia entre
+los vértices. Adicionalmente, dicho grafo $\mli{RM}$ debe cumplir con 3
+propiedades fundamentales. Sea $W$ el entorno y $W_{libre} \subseteq W$ el
+espacio libre del entorno, las tres propiedades son:
 
 \begin{enumerate}
-  \item Accesibilidad: Para todo $p_{inicio} \in W_{libre}$ existe un camino a un $p'_{inicio}\in V_{RM}$. % vértice de\todo{sacaría vértice de y en su lugar utilizaría $\in V$, si lo definimos antes. ídem en lo sucesivo.} $\mli{RM}$.
-  \item Conectividad: Existe un camino entre cualquier par $p'_{inicio},\ p'_{fin} \in V_{RM}$.
-  \item Capacidad de salida: Para todo $p'_{fin} \in V_{RM}$ existe un camino a un $p_{fin} \in W_{libre}$.
+  \item Accesibilidad: Para todo $p_{inicio} \in W_{libre}$ existe un $p'_{inicio}\in V_{RM}$ tal que existe un camino de $p_{inicio}$ a $p'_{inicio}$. % vértice de\todo{sacaría vértice de y en su lugar utilizaría $\in V$, si lo definimos antes. ídem en lo sucesivo.} $\mli{RM}$.
+  \item Conectividad: Para todo par $p'_{inicio},\ p'_{fin} \in V_{RM}$ existe un camino en $RM$ entre  $p'_{inicio}$ y $p'_{fin}$.
+  \item Capacidad de salida: Para todo $p_{fin} \in W_{libre}$ existe un $p'_{fin} \in V_{RM}$ tal que existe un camino de $p'_{fin}$ a $p_{fin}$.
 \end{enumerate}
 
-Estas propiedades aseguran la navegación, porque que dados dos puntos $p_{inicio},\ p_{fin}\in W_{libre}$ es posible construir un camino entre ellos. Primero por \emph{accesibilidad} se tiene un camino entre $p_{inicio}$ y un $p'_{inicio}\in \mli{RM}$, luego por \emph{capacidad de salida} se asegura la existencia de un  $p'_{fin}\in \mli{RM}$ desde el cual hay un camino a $p_{fin}$ y finalmente por \emph{conectividad} se sabe que existe un camino entre $p'_{inicio}$ y $p'_{fin}$. Entonces uniendo los caminos $p_{inicio} - p'_{inicio}$ (por accesibilidad), $p'_{inicio} - p'_{fin}$ (por conectividad) y $p'_{fin} - p_{fin}$(por capacidad de salida) se tiene un camino que conecta dos puntos genéricos del espacio libre $p_{inicio}$ y $p_{fin}$.
+Estas propiedades aseguran que es posible planificar un camino entre dos puntos cualquiera $p_{inicio},\ p_{fin}\in W_{libre}$ a partir del \emph{roadmap}. Primero por \emph{accesibilidad} se tiene que existe un camino entre $p_{inicio}$ y un $p'_{inicio}\in V_{RM}$. Luego por \emph{capacidad de salida} se asegura la existencia de un  $p'_{fin}\in V_{RM}$ desde el cual hay un camino a $p_{fin}$. Finalmente por \emph{conectividad} se sabe que existe un camino entre $p'_{inicio}$ y $p'_{fin}$. Entonces uniendo los caminos $p_{inicio} \rightarrow p'_{inicio}$ (por accesibilidad), $p'_{inicio} \rightarrow p'_{fin}$ (por conectividad) y $p'_{fin} \rightarrow p_{fin}$(por capacidad de salida) se obtiene un camino completo entre $p_{inicio}$ y $p_{fin}$.
 
 % \cite{choset2005principles}, \cite{Thrun1998}, \cite{Liu2015}.
 \subsection{Diagrama de Voronoi}\label{sec:VD}
-Dado un espacio euclídeo $W \subseteq \mathds{R}^2$, y $G \subseteq W$ un conjunto de puntos llamados \emph{generadores}. Sea $p\in W$, la función $d_p : W \rightarrow \mathds{R}$ qué computa la distancia desde $p$ a otro punto en $W$. 
-
-% Una \emph{region de Voronoi} $R_i\subseteq W$ es el conjunto de puntos más cercanos a un generador $s_i\in G$ particular: 
+% Una \emph{region de Voronoi} $R_i\subseteq W$ es el conjunto de puntos más cercanos a un generador $g_i\in G$ particular: 
 % \begin{equation}
-%   R_i = \{p \in W : d_p(s_i) \leq d_p(s_j), s_i,s_j\in G,s_j \neq s_i\}\label{eq:regV}
+%   R_i = \{p \in W : d_p(g_i) \leq d_p(g_j), g_i,g_j\in G,g_j \neq g_i\}\label{eq:regV}
 % \end{equation}
-Los \emph{puntos bases} de $p$, $BP_p \subseteq G$ son el conjunto de generadores más cercanos a un punto $p \in W$ :
+Dado un espacio euclídeo $W \subseteq \mathds{R}^2$, un conjunto de puntos $G \subseteq W$ llamados \emph{generadores} y la función $d_p : W \rightarrow \mathds{R}$ qué computa la distancia desde $p\in W$ a otro punto en $W$. 
+
+Los \emph{puntos base} de $p$ son el conjunto $BP_p \subseteq G$ de los generadores más cercanos a un punto $p \in W$ :
 \begin{equation}
-  \mli{BP}_p =\{s_i \in G : d_p(s_i) \leq d_p(s_j), \forall s_j\in G,s_j \neq s_i\}\label{eq:bases}
+  \mli{BP}_p =\{g_i \in G : d_p(g_i) \leq d_p(g_j), \forall g_j\in G,g_j \neq g_i\}\label{eq:bases}
 \end{equation}
 
-Un \emph{diagrama de Voronoi} $\mli{VD}\subseteq W$ se define como todos los puntos con dos o más generadores a una misma mínima distancia, o lo que es equivalente, que tienen dos o más puntos base: 
+Un \emph{diagrama de Voronoi} se define como el conjunto $\mli{VD}\subseteq W$ de los puntos de $W$ que tienen dos o más generadores a una misma mínima distancia, o lo que es equivalente, que tienen dos o más puntos base: 
 \begin{equation}
   \mli{VD} = \{p \in W : |\mli{BP}_p| \geq 2\}\label{eq:VD}
 \end{equation}
@@ -214,7 +211,7 @@ En la figura \ref{fig:ejemploVoronoi} se muestra un ejemplo de un diagrama de Vo
   \caption[Diagrama de Voronoi.]{Diagrama de Voronoi. Con negro se indican los generadores, mientras que con violeta se indican los puntos pertenecientes al diagrama de Voronoi. Generado con \cite{voronoigeo}.}\label{fig:ejemploVoronoi}
 \end{figure} 
 
-Una propiedad de los diagramas de Voronoi es que los caminos sobre este tipo de diagramas mantienen a lo largo de ellos la mayor distancia posible al generador más cercano.
+Una propiedad de los diagramas de Voronoi es que a lo largo de los caminos generados sobre estos se mantiene la mayor distancia posible a los generadores más cercanos.
 Esta propiedad es útil en el contexto de la robótica porque dado un diagrama de Voronoi generado con el conjunto de obstáculos como generadores, los caminos sobre este se consideran caminos de máxima seguridad en tanto mantienen al robot lo más alejado posible de los obstáculos durante el recorrido.
 
 % Una propiedad de los diagramas de Voronoi  es que los caminos sobre este tipo de diagramas aseguran mantener la mayor distancia posible a los generadores. Esta propiedad es util en el contexto de la robotica porque permite asegurar por lo tanto en un diagrama de Voronoi generado con el conjunto de obstáculos como generadores se puede decir que los caminos sobre este serán seguros en tanto mantienen la mayor distancia posible a los obstáculos.
@@ -226,45 +223,49 @@ Recordando que los generadores en un diagrama de Voronoi son puntos, se tiene un
 % Las nuevas definiciones generalizadas son en su mayoría análogas a las originales, siendo el principal cambio la substitución de la función de distancia $d_p$ por una función de distancia generalizada $\mli{gd}_p : 2^{W} \rightarrow \mathds{R}$ que considera las formas de los generadores generalizados. La función $\mli{gd}_p$ se define a partir de $d_p$ como se muestra en la ecuación \ref{eq:dg}.
 
 Las definiciones relacionadas a los GVD consisten en generalizaciones de
-las planteadas para los VD en la sección \ref{sec:VD} pensadas para considerar
+las planteadas para los VD en la sección \ref{sec:VD} que consideran
 generadores generalizados en lugar de generadores puntuales. 
-En primer lugar se define la llamada función de distancia generalizada
-$\mli{gd}_p : P(W) \rightarrow \mathds{R}$ que permite obtener la distancia entre
-$p$ y un generador generalizado $s_i$, definida a partir de la distancia
-euclídea $d_p$ como se muestra en \eqref{eq:dg}.
+
+En primer lugar se define la función de distancia generalizada
+$\mli{gd}_p : P(W) \rightarrow \mathds{R}$ que basándose en distancia
+euclídea $d_p$ permite obtener la distancia entre un punto
+$p\in W$ y un generador generalizado $g_i$. La definición de $\mli{gd}_p$ se encuentra en \eqref{eq:dg}.
 \begin{equation}
-  \mli{gd}_p(s_i) = \min_{p'\in s_i}\{d_p(p')\} \label{eq:dg}
+  \mli{gd}_p(g_i) = \min_{p'\in g_i}\{d_p(p')\} \label{eq:dg}
 \end{equation}
-A partir de la distancia generalizada se definen los generadores base
-generalizados $\mli{GBG}_p\subseteq GG$ como los generadores más
-cercanos a un punto $p$ \eqref{eq:GBG}. Notar que estos son la
-generalización de los puntos base del VD.
+
+A partir de la distancia generalizada se define a los generadores base
+generalizados como el conjunto $\mli{GBG}_p\subseteq GG$ de los generadores generalizados más
+cercanos a un punto $p\in W$, como se muestra en \eqref{eq:GBG}. Notar que $\mli{GBG}_p$ es la
+generalización de los puntos base $\mli{BP}_p$ definidos para los $VD$.
 \begin{equation}
-  \mli{GBG}_p = \{s_i \in \mli{GG}: \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), \forall s_j\in \mli{GG}, s_j \neq s_i\}\label{eq:GBG}
+  \mli{GBG}_p = \{g_i \in \mli{GG}: \mli{dg}_p(g_i) \leq \mli{dg}_p(g_j), \forall g_j\in \mli{GG}, g_j \neq g_i\}\label{eq:GBG}
 \end{equation}
-Finalmente la definición $\mli{GVD}$ es análoga a su contra parte no
-generalizada y se define según se muestra en \eqref{eq:GVD}. 
+
+Finalmente la definición de $\mli{GVD}$ es análoga a la de su contra parte no
+generalizada y se encuentra en \eqref{eq:GVD}. 
 %, a partir de los cuales se puede definir los puntos base generalizados $\mli{GBP}_p$ de un punto $p$ como los puntos pertenecientes a los generadores de $\mli{GBG}_p$ que son más cercanos a $p$ \eqref{eq:GBP}. 
 
 %\todo{de acuerdo, GBG no aporta, alcanza con GG}
-% \todo[inline]{En la def de GBP si en la U se usa GG entonces por cada conjunto de puntos que compone obstaculo $s_i$ en $GG$ se tiene al menos un punto base (argmin se aplica a cada obstaculo individualmente) entoces si hay dos obstaculos ya se tiene que todo punto pertenece al GVD, restingir la U a solo los obstaculos a mínima distancia soluciona esto. Otra solucion es redefinir GBP para decir algo como: los puntos a mínima distancia de cualquier obstaculo, pero me parece más claro usar GBG y la U de argmin. Cambie el principio del parrafo para indicar que es util más que necesario, igual lo hablamos a ver que es mejor de las alternativas| para mi GBG no es necesario, con GG alcanza. sacaría}La definición $\mli{GVD}$ es análoga a su contra parte no generalizada y se define según se muestra en \eqref{eq:GVD}. 
+% \todo[inline]{En la def de GBP si en la U se usa GG entonces por cada conjunto de puntos que compone obstaculo $g_i$ en $GG$ se tiene al menos un punto base (argmin se aplica a cada obstaculo individualmente) entoces si hay dos obstaculos ya se tiene que todo punto pertenece al GVD, restingir la U a solo los obstaculos a mínima distancia soluciona esto. Otra solucion es redefinir GBP para decir algo como: los puntos a mínima distancia de cualquier obstaculo, pero me parece más claro usar GBG y la U de argmin. Cambie el principio del parrafo para indicar que es util más que necesario, igual lo hablamos a ver que es mejor de las alternativas| para mi GBG no es necesario, con GG alcanza. sacaría}La definición $\mli{GVD}$ es análoga a su contra parte no generalizada y se define según se muestra en \eqref{eq:GVD}. 
 % Las regiones generalizadas de Voronoi $\mli{GR}_i$ y el diagrama generalizado de Voronoi $\mli{GVD}$ son las definiciones más similares a sus contra partes no generalizadas y se definen según se muestra en \eqref{eq:GR} y \eqref{eq:GVD} respectivamente. 
 
 % Notar que la definición de puntos base generalizados tiene una modificación adicional al cambio en la función de distancia, esta es que en lugar de devolver los generadores generalizados más cercanos $\mli{GBG}_p$\ref{eq:GBS}, solo devuelve los puntos más cercanos de estos.
 
 
 % \begin{equation}
-%   \mli{GBP}_p =\{p' \in W : d_p(p') \leq d_p(p''), p' \in s_i, p'' \in s_j, s_i,s_j \in \mli{GG},p' \neq p''\}
+%   \mli{GBP}_p =\{p' \in W : d_p(p') \leq d_p(p''), p' \in g_i, p'' \in g_j, g_i,g_j \in \mli{GG},p' \neq p''\}
 % \end{equation}
 % \begin{equation}
-%   \mli{GBP}_p =\bigcup_{s_i \in \mli{GBG}_p} \argmin_{p'\in s_i}\{d_p(p')\}\label{eq:GBP}
+%   \mli{GBP}_p =\bigcup_{g_i \in \mli{GBG}_p} \argmin_{p'\in g_i}\{d_p(p')\}\label{eq:GBP}
 % \end{equation}
 \begin{equation}
   \mli{GVD}  = \{p \in W : |GBG_p| \geq 2\}\label{eq:GVD}
 \end{equation}
 % \begin{equation}
-%   \mli{GR}_i = \{p \in W : \mli{dg}_p(s_i) \leq \mli{dg}_p(s_j), s_i,s_j\in \mli{GG},s_j \neq s_i\}\label{eq:GR}
+%   \mli{GR}_i = \{p \in W : \mli{dg}_p(g_i) \leq \mli{dg}_p(g_j), g_i,g_j\in \mli{GG},g_j \neq g_i\}\label{eq:GR}
 % \end{equation}
+\vspace{0.1cm}
 
 Algo a destacar sobre los GVD es que la distribución de los puntos sobre los
 generadores generalizados no es un tema trivial. Volviendo al caso en el se
@@ -298,7 +299,8 @@ convexos junto al GVD generado en el interior de la habitación.
   \caption[Distribución de generadores.]{Distribución de generadores. Los generadores se indican con polígonos de interior gris delimitados con aristas negras mientras que el GVD se indica con azul.}\label{fig:distriGen}
 \end{figure}
 
-En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD que es posible obtener usando generadores conexos y convexos.
+En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD que es posible obtener utilizando 
+conjuntos conexos y convexos de puntos obstaculizados como generadores
 %y convexos o generadores unitarios.  
 
 \begin{figure}[H]
@@ -316,16 +318,16 @@ En la figura \ref{fig:ejemploGVD} se muestra un ejemplo de un GVD que es posible
 % Para referirse a la segunda forma, más compacta, de representar el GVD con un grafo se utilizará el termino grafo colapsado, y para la primera forma, el termino utilizado es grafo descolapsado. 
 % Los GVD suelen ser representados con un grafo en el cual los vértices son los puntos $p$ pertenecientes al GVD que son adyacentes a obstáculos o que cumplen con $|\mli{GBP}_p|\geq 3$, mientras que las aristas\todo{muy entreverado. en un grafo las aristas conectan vértices. de hecho, ahora que lo observo, lo de la fig.1.5b no es un grafo. las aristas no son curvas ya que no modelan dicha información.} se encuentran entre los vértices que se encuentran conectados por caminos disjuntos formados por puntos pertenecientes al GVD. En la figura \ref{fig:ejemploGVDgrafo} se muestra el grafo asociado al GVD de la figura \ref{fig:ejemploGVD}, donde los círculos rojos son los vértices del grafo y las líneas negras las aristas. %(aunque no son visibles existen aristas entre los vértices correspondientes a puntos que son tan cercanos que se solapan)\todo{no creo que este paréntesis aporte}.
 
-En \cite{choset2005principles} se demuestra que los GVD que utilizan los
+En \cite{choset2005principles} se demuestra que los GVD que utilizan
 conjuntos conexos y convexos de puntos obstaculizados como generadores cumplen
 con las 3 propiedades necesarias para ser \emph{roadmaps} (sección
-\ref{subsec:mapacarr}), lo cual justifica su uso para la navegación. Esto junto
-a la capacidad de generar caminos seguros ya mencionada y a otras
-características como su utilidad para la coordinación y para generar mapas
-topológicos basados en regiones que se tratarán más adelante, hacen que los GVD
-que utilizan obstáculos como generadores, sean estructuras de gran útilidad en
-el contexto de la navegación robótica. De ahora en adelante al hablar de GVD se
-hace referencia a GVD generado considerando a los conjuntos conexos y convexos
+\ref{subsec:mapacarr}), lo cual justifica su uso para la planificación de caminos. Esto junto
+a su capacidad de generar caminos seguros ya mencionada y a otras
+características como su utilidad para generar mapas
+topológicos basados en regiones que se tratará más adelante, hacen que estos GVD
+sean estructuras de útilidad en
+el contexto de la robótica. De ahora en adelante al hablar de GVD se
+hace referencia a GVD generado usando los conjuntos conexos y convexos
 de puntos obstaculizados como generadores.
 
 % Otra definición alternativa de GVD se muestra en \eqref{eq:GVDalt}, esta definición es más restrictiva que la anterior en tanto no permite que un punto pertenezca si tiene más de dos puntos bases pero estos pertenecen a un mismo generador. Esta definición trae problemas ya que distintas formas de separar a los obstáculos en generadores puede causar distintos GVD. Por ejemplo si se considera u generador como un conjunto conexo de puntos ocupados se tiene que en el interior de las habitaciones con una entrada no se generara GVD, ya que sus paredes por estar conectadas serán un solo generador, y por lo tanto los puntos $p$ interiores a la habitación aunque pueden cumplir con $|GBP_p| \geq 2$ no cumplirán con $|GBS_p| \geq 2$.
@@ -345,9 +347,10 @@ de puntos obstaculizados como generadores.
 \subsection{Construcción de un GVD}\label{subsec:constGVD}
 % Existen dos tipos principales de métodos para la construcción de un GVD\cite{choset2005principles} los basados en sensores y los basados en grillas\todo{colocaría una cita al lado de cada una. también, discutiría un poco sus diferencias, bondades y debilidades. como para fundamentar un poco la elección.}. En el contexto del trabajo desarrollado serán relevantes los métodos de construcción basados en grillas.
 
-Una idea intuitiva para construir un GVD en un espacio representado con una grilla es la de definir un criterio que determine la pertenencia de una celda al GVD y luego aplicarlo celda a celda. Un criterio posible consiste en que una celda debe pertenecer al GVD si tiene dos o más celdas ocupadas a una misma distancia, siendo la distancia entre celdas la distancia entre sus centros. Sin embargo, esta técnica genera resultados erróneos al no considerar los efectos causados por la discretización. Por ejemplo, en corredores cuya discretización resulta en una cantidad par de celdas entre sus paredes, según este método ninguna celda debería pertenecer al GVD dado que ninguna  tendría una misma distancia a dos celdas ocupadas (paredes del corredor). Esto se considera incorrecto porque el GVD construido en un espacio discretizado debe corresponder al GVD que se construiría en el mismo espacio si fuera continuo y  en el caso continuo los puntos del centro de un corredor siempre pertenecen al GVD. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
+% Una idea intuitiva para construir un GVD en un espacio representado con una grilla de ocupación es la de definir un criterio que determine la pertenencia de una celda al GVD y luego aplicarlo celda a celda. Un criterio posible consiste en que una celda pertenece al GVD si tiene dos o más celdas ocupadas a una misma mínima distancia, siendo la distancia entre celdas la distancia entre sus centros. Sin embargo, esta técnica genera resultados erróneos al no considerar los efectos causados por la discretización del espacio continuo a una grilla discreta. Por ejemplo, en corredores cuya discretización resulta en una cantidad par de celdas entre sus paredes, según este criterio ninguna celda interior al corredor pertenece al GVD ya que ninguna tiene una misma distancia a dos celdas ocupadas (paredes del corredor). Esto se considera incorrecto porque el GVD construido en un espacio discretizado debe aproximarse al GVD que se construiría en el mismo espacio si fuera continuo, y en el caso continuo los puntos en el centro de un corredor pertenecen al GVD. %El método de \cite{wurm2008coordinated} soluciona este tipo de problemas porque la esqueletización asegura la generación de puntos pertenecientes al GVD en las 
 
-En \cite{wurm2008coordinated} se propone un método que logra construir un GVD evitando los problemas de discretización mencionados. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a una mapa métrico representado con una grilla donde cada celda está ocupada o libre, resultando en un mapa que contiene para cada celda la distancia al obstáculo más cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. Finalmente GVD se obtiene aplicando un algoritmo de esqueletización \cite{zhang1984fast} al mapa de distancia construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}. En esta propuesta es clave el uso del algoritmo de esqueletización, que retrae el mapa de distancias a un esqueleto discreto que se aproxima al GVD que se generaría en el espacio continuo.   
+% En \cite{wurm2008coordinated} se propone un método que logra construir un GVD evitando los problemas de discretización mencionados.
+En \cite{wurm2008coordinated} se propone un método para construir un GVD a partir de una grilla donde cada celda está ocupada o libre, que es posible obtener a partir de una grilla de ocupación. El método comienza aplicando una transformación de distancia Euclidiana \cite{meijster2002general} a dicha grilla, resultando en una grilla que contiene para cada celda la distancia al obstáculo más cercano, este tipo de mapa se denomina \emph{mapa de distancia} a los obstáculos. Finalmente el GVD se obtiene aplicando un algoritmo de esqueletización \cite{zhang1984fast} al mapa de distancia construido. Un ejemplo de este proceso se puede ver en la figura \ref{fig:wurmGVD}. En esta propuesta es clave el uso del algoritmo de esqueletización, que retrae el mapa de distancias a un esqueleto discreto que se aproxima al GVD que se generaría en el espacio continuo.   
 
 % que consiste en erosionar las celdas más cercanas a los obstáculos hasta llegar a las celdas más distantes a estos siendo estas últimas las celdas que se asignan al GVD construido. Un ejemplo de este proceso se puede ver en la figur
 \begin{figure}[H]
@@ -380,9 +383,9 @@ la cola de prioridad.
   \mli{dt}_{c'} = d_c+||c'-c||_2
 \end{equation}
 
-Una vez que la cola de prioridad queda vacía, el valor de distancia de las celdas converge al valor de la mínima distancia hacia un obstáculo. 
+Una vez que la cola de prioridad queda vacía, el valor de distancia de las celdas converge al valor de su mínima distancia hacia un obstáculo, obteniéndose así el mapa de distancia a los obstáculos. 
 
-El nombre de este algoritmo proviene de como este determina las distancias comenzando desde cada obstáculo y extendiéndose desde las celdas más cercanas a las más lejanas asemejándose a un incendio de maleza (traducido al ingles como brushfire). Adicionalmente el algoritmo también puede interpretarse como ondas que parten desde cada obstáculo, y a medida de que avanzan le asignan la distancia recorrida a las celdas que atraviesan. Un ejemplo de ejecución se muestra en la figura \ref{fig:wavesBrush}.  
+El nombre de este algoritmo proviene de como este determina las distancias comenzando desde cada obstáculo y extendiéndose desde las celdas más cercanas a las más lejanas asemejándose a un incendio de maleza (traducido al inglés como brushfire). Adicionalmente el algoritmo también puede interpretarse como ondas que parten desde cada obstáculo, y a medida de que avanzan le asignan la distancia recorrida a las celdas que atraviesan. Un ejemplo de ejecución se muestra en la figura \ref{fig:wavesBrush}.  
 % a cada celda por la que pasan mientras avanzan
 
 \begin{figure}[H]
@@ -400,12 +403,12 @@ brushfire como ondas, las ondas provenientes de celdas ocupadas con
 identificadores distintos colisionan en las celdas que deben pertenecer
 al GVD. Una colisión de ondas involucra dos celdas $c$ y $c'$, y ocurre cuando
 una celda $c$ recién extraída de la cola de prioridad no reemplaza la distancia
-$d_{c'}$ de una celda adyacente $c'$, con distancia tentativa $\mli{dt}_{c'}$
-calculada según \ref{ec:dtBrushFire}, por ser la  $\mli{dt}_{c'}\geq d_{c'}$.
+$d_{c'}$ de una celda $c'$ adyacente a $c$, con la distancia tentativa $\mli{dt}_{c'}$
+calculada según \eqref{ec:dtBrushFire}, por ser $\mli{dt}_{c'}\geq d_{c'}$.
 Notar que dos ondas pueden generar multiples choques de ondas.  
 
-La asignación de identificadores presentada causa los problemas asociados a
-generadores cóncavos comentados en la sección \ref{subsec:GVD}, en la sección
+Esta asignación de identificadores causa los problemas asociados a
+generadores cóncavos comentados en la sección \ref{subsec:GVD}. En la sección
 \ref{subsec:constGVDInc} se describe una solución. 
 
 \subsection{Construcción incremental de un GVD}\label{subsec:constGVDInc}
@@ -421,9 +424,9 @@ La idea se basa en que, como se mencionó anteriormente, las actualizaciones son
  % hecho de que las actualizaciones solo modificaron una  que e 
 
 % Los algoritmos que requieren recomputarse completamente al cambiar parte de la entrada son conocidos como \emph{algoritmos no incrementales}, por otro lado los algoritmos que actualizan la salida anterior a partir de los cambios experimentados desde la última entrada son llamados \emph{algoritmos incrementales}.
-Los algoritmos que actualizan el resultado anterior a partir de los cambios experimentados son llamados \emph{algoritmos incrementales}, en consecuencia los algoritmos que al cambiar parte de la entrada descartan el último resultado y recomputan el nuevo resultado desde cero se denominan como \emph{algoritmos no incrementales}.
+Los algoritmos que actualizan el resultado anterior a partir de los cambios experimentados son llamados \emph{algoritmos incrementales}, por otro lado los algoritmos que al cambiar parte de la entrada descartan el último resultado y recomputan el nuevo resultado desde cero se denominan como \emph{algoritmos no incrementales}.
 
-El uso de algoritmos no incrementales como los presentados en la sección \ref{subsec:constGVD} no es adecuado cuando se desea mantener GVD asociado a un entorno que es actualizado en tiempo real mientras es explorado, para esto lo ideal es utilizar algoritmos incrementales. A continuación se describe el algoritmo incremental introducido en \cite{kalra2009incremental} denominado \emph{brushfire dinámico}, que como su nombre lo indica se basa en el algoritmo no incremental brushfire comentado en \ref{subsec:constGVD}.
+El uso de algoritmos no incrementales como los presentados en la sección \ref{subsec:constGVD} no es adecuado cuando se desea mantener un GVD consistente con un entorno que es actualizado en tiempo real mientras es explorado, para esto lo ideal es utilizar algoritmos incrementales. A continuación se describe el algoritmo incremental introducido en \cite{kalra2009incremental} denominado \emph{brushfire dinámico}, que como su nombre lo indica se basa en el algoritmo no incremental brushfire comentado en la sección \ref{subsec:constGVD}.
 % Los algoritmos de generación de GVD, y de segmentación a partir de un GVD presentados anteriormente no son incrementales, dado el problema de eficiencia que esto implica son de interés las variantes incrementales que se explicarán a continuación.
 
 % , y por lo tanto su uso resulta ineficiente, por esto fueron desarrolladas variantes incrementales para los mismos.
@@ -467,7 +470,7 @@ dinámico.
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesBrushDinClean2Rows.png}
-  \caption[Algoritmo brushfire dinámico.]{Algoritmo brushfire dinámico. (A) Último mapa de distancias calculado. (B) Un obstáculo es eliminado (contorno rojo) lo cual causa ondas inconsistentes que comienza a reiniciar los valores de distancia inválidos, a su vez un obstáculo es insertado (contorno azul) y generando ondas consistentes que propagan las nuevas distancias. (C) Cuando las ondas inconsistentes chocan contra celdas con un obstáculo más cercano válido estas se detienen y en ese mismo lugar inicia una onda consistente para restaurar los valores de distancia reiniciados. (D) Después que todas las ondas se detienen, la actualización se completa. Extraído de \cite{Lau2013}.}\label{fig:wavesBrushDyn}
+  \caption[Algoritmo brushfire dinámico.]{Algoritmo brushfire dinámico. (A) Último mapa de distancias calculado. (B) Un obstáculo es eliminado (contorno rojo) lo que causa ondas inconsistentes que comienzan a reiniciar los valores de distancia inválidos, a su vez un obstáculo es insertado (contorno azul) generando ondas consistentes que propagan las nuevas distancias mínimas. (C) Cuando las ondas inconsistentes chocan contra celdas que tienen un obstáculo valido a mínima distancia estas se detienen y en ese mismo lugar inicia una onda consistente para restaurar los valores de distancia reiniciados. (D) Después que todas las ondas se detienen, la actualización se completa. Extraído de \cite{Lau2013}.}\label{fig:wavesBrushDyn}
 \end{figure} 
 % \todo[inline]{ídem fig anterior, recortar y colocar en el texto.}
 
@@ -475,7 +478,7 @@ dinámico.
 Al igual que en el algoritmo brushfire original, en brushfire dinámico la
 construcción de un GVD se hace a partir de identificadores asignados a
 conjuntos conexos de celdas ocupadas.
-Las ondas consistentes en su expansion remueven las celdas del GVD, y al
+Las ondas consistentes en su expansión remueven las celdas del GVD, y al
 chocar agregan al GVD tanto las celdas en donde se detienen, como también
 las celdas que causaron el choque, siempre y cuando dichas celdas tengan
 identificadores distintos entre sí. Por otro lado las ondas inconsistentes remueven del
@@ -486,26 +489,26 @@ obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}.
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/wavesKalra.png}
-  \caption[Ondas de brushfire dinámico.]{Una secuencia que ejemplifica las ondas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una onda consistente (en negro) que al chocar genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una onda inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre mientras que al llegar a cedas con una distancia mínima generar ondas inconsistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
+  \caption[Ondas de brushfire dinámico.]{Una secuencia que ejemplifica las ondas generadas cuando se agregan obstáculos (1-5) y se eliminan obstáculos (6-10). (1-5) Se agrega nueva celda ocupada en el centro del entorno (en rojo) lo cual produce una onda consistente (en negro) que al chocar genera celdas pertenecientes al GVD (en gris). (6-10) La celda central deja de ser un obstáculo produciéndose una onda inconsistente (en azul) que remueve las celdas del GVD que involucran a la celda ocupada que paso a ser libre y al llegar a celdas con un obstáculo valido a mínima distancia generan ondas consistentes (en negro) que reparan el GVD. Extraído de \cite{kalra2009incremental}.}\label{fig:ejWavesIncKarlra}
 \end{figure} 
 
 
-De esta forma se logra la construcción incremental de un GVD. Sin embargo en \cite{Lau2013} se destaca algunas problemáticas de brushfire dinámico, principalmente que el GVD generado tiene líneas de dos celdas de ancho y que no genera pertenencia al GVD en el interior de obstáculos cóncavos como lo son habitaciones con una sola entrada, lo cual es crítico en entornos estructurados. Los problemas mencionados se pueden ver a la izquierda de la figura \ref{fig:lauPalo}.
+De esta forma se logra la construcción incremental de un GVD. Sin embargo en \cite{Lau2013} se destacan algunas problemáticas de brushfire dinámico, principalmente que el GVD generado tiene líneas de dos celdas de ancho y que no se genera GVD en el interior de obstáculos cóncavos como lo son habitaciones con una sola entrada, lo cual es crítico en entornos estructurados. Los problemas mencionados se pueden ver a la izquierda de la figura \ref{fig:lauPalo}.
 
 Para solucionar las problemáticas planteadas Lau \textit{et al.}
 proponen cambios al algoritmo de brushfire dinámico. El problema de
-generación de GVD en obstáculos cóncavos se relaciona con el uso de
+generación de GVD dentro de obstáculos cóncavos se relaciona con el uso de
 conjuntos conexos de obstáculos para determinar la pertenencia de celdas
 al GVD (sección \ref{subsec:GVD}). Dado esto la solución propuesta
 consiste en dejar de utilizar identificadores para los conjuntos conexos
-de obstáculos, en su lugar utilizar un identificador para cada celda
-ocupada. Y al chocar dos ondas, las celdas en donde se da el choque
+de obstáculos y en su lugar utilizar un identificador para cada celda
+ocupada. Al chocar dos ondas, las celdas en donde se da el choque
 pertenecen al GVD si sus identificadores de obstáculo a mínima distancia
 son distintos y las celdas ocupadas correspondientes a dichos
 identificadores no son adyacentes en la grilla. Este cambio soluciona la
 generación del GVD en obstáculos cóncavos. Con respecto a las líneas de
 dos celdas de ancho la propuesta consiste en aplicar técnicas que
-permitan eliminar las celdas redundantes, estas son la celdas del GVD
+permitan eliminar las celdas redundantes, estas son las celdas del GVD
 que son adyacentes a más de una celda perteneciente al GVD (no son
 hojas) y que su remoción no desconecta al GVD. A la derecha de la figura
 \ref{fig:lauPalo} se muestra el resultado de aplicar estos cambios.
@@ -538,58 +541,71 @@ hojas) y que su remoción no desconecta al GVD. A la derecha de la figura
 % \end{figure}
 
 \subsection{Generación de mapas topológicos basados en regiones a partir de un GVD}\label{subsec:mapaTopGVD}
-En \cite{Thrun1998} se propone un método que permite, a partir de un GVD
-generado a través de una grilla de ocupación, segmentar el entorno en
-habitaciones y corredores, con el objetivo de generar un mapa topológico cuyas
-regiones de interés serán los segmentos reconocidos. La idea principal del
-algoritmo de segmentación es que las entradas y salidas entre los segmentos son
+En \cite{Thrun1998} se propone un método que a partir de un GVD permite
+segmentar el entorno en
+habitaciones y corredores, que se corresponden con las 
+regiones de interés de un mapa topológico basado en regiones. La idea principal del
+algoritmo de segmentación es que las transiciones entre los segmentos son
 pasajes estrechos, y por lo tanto encontrar estos pasajes estrechos permite
-delimitar segmentos.
+delimitar dichos segmentos.
 
-Para describir el método de segmentación es necesario introducir tres nuevos conceptos asociados al $\mli{GVD}$, el primero es el concepto de \emph{despeje} (del ingles clearance) $D : W \rightarrow \mathds{R}$ de un punto $p \in W$, que corresponde a la distancia del punto $p$ al punto ocupado más cercano. De ser $p \in \mli{GVD}$ el despeje equivale a la distancia entre $p$ y alguno de sus generadores base generalizados $\mli{GBG}_p$ (recordar que todos están a una misma mínima distancia de $p$ \eqref{eq:GBG}). El segundo es el concepto de \emph{puntos críticos} $Cr \subseteq \mli{GVD}$, que son los puntos pertenecientes al GVD que son mínimos locales estrictos según el despeje en el GVD, esta definición se formaliza en \eqref{eq:crit}, donde $d_p(p')$ es la distancia entre $p$ y $p'$. 
+ % De ser $p \in \mli{GVD}$ el despeje equivale a la distancia entre $p$ y alguno de sus generadores base generalizados $\mli{GBG}_p$ (recordar que todos están a una misma mínima distancia de $p$ \eqref{eq:GBG}).asociados al $\mli{GVD}$
+
+Para describir el método de segmentación es necesario introducir tres nuevos conceptos, el primero es el concepto de \emph{despeje} (del inglés clearance) $D : W \rightarrow \mathds{R}$ de un punto $p \in W$, que corresponde a la distancia del punto $p$ a su punto ocupado más cercano. El segundo es el concepto de \emph{puntos críticos} $Cr \subseteq \mli{GVD}$, que son los puntos pertenecientes al GVD que son mínimos locales estrictos según el despeje en el GVD, esta definición se formaliza en \eqref{eq:crit}, donde $d_p(p')$ es la distancia entre $p$ y $p'$. 
 \begin{equation}
   % p\ \in C \iff p \in \mli{GVD}\ \land \ D(p) < D(p')\ \forall p' \in Ady(p) 
-  Cr = \{p\ \in \mli{GVD} : \exists \upvarepsilon > 0, \forall p' \in \mli{GVD}, d_p(p') \leq \upvarepsilon, D(p) < D(p') \} \label{eq:crit}
+  Cr = \{p\ \in \mli{GVD} : \exists \upvarepsilon > 0, \forall p' \in \mli{GVD}, d_p(p') \leq \upvarepsilon, p' \neq p ,  D(p) < D(p') \} \label{eq:crit}
 \end{equation}
+% , que se corresponden con sus generadores base generalizados
+% $\mli{GBG}_p$ (sección \ref{subsec:GVD})
 El tercer y último concepto es el de \emph{líneas críticas}, que son las líneas
-que se encuentran entre un punto crítico $p \in Cr$ y los puntos más cercanos de
-sus generadores base generalizados $\mli{GBG}_p$. La figura \ref{fig:crits}
-ilustra estos conceptos.
+que se encuentran entre un punto crítico $p \in Cr$ y sus puntos ocupados más
+cercanos. La figura \ref{fig:crits} ilustra
+estos conceptos.
 
 \begin{figure}[H]
   \center
   \centering
-  \subfloat[Entorno]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/crits/a.png}\label{fig:crits:a}}
+  \subfloat[Entorno]{\includegraphics[clip=true, width=0.325\linewidth]{imagenes/crits/a.png}\label{fig:crits:a}}
   \qquad
-  \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/crits/b.png}\label{fig:crits:b}}
+  \subfloat[GVD]{\includegraphics[clip=true, width=0.325\linewidth]{imagenes/crits/b.png}\label{fig:crits:b}}
   \qquad
-  \subfloat[Puntos críticos]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/crits/c.png}\label{fig:crits:c}}
+  \subfloat[Puntos críticos]{\includegraphics[clip=true, width=0.325\linewidth]{imagenes/crits/c.png}\label{fig:crits:c}}
   \qquad
-  \subfloat[Líneas críticas]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/crits/d.png}\label{fig:crits:d}}
+  \subfloat[Líneas críticas]{\includegraphics[clip=true, width=0.325\linewidth]{imagenes/crits/d.png}\label{fig:crits:d}}
   % \includegraphics[width=0.75\linewidth]{imagenes/CritsSharpMono.png}
   % \includegraphics[width=0.75\linewidth]{imagenes/crits/unica.png}
-  \caption[Puntos críticos y líneas críticas.]{Puntos críticos y líneas críticas. Notar que el despeje en puntos críticos se corresponde con el largo sus líneas críticas asociadas. Extraído de \cite{Thrun1998}.}\label{fig:crits}
+  \caption[Puntos críticos y líneas críticas.]{Puntos críticos y líneas críticas. Notar que el despeje en puntos críticos se corresponde con el largo de sus líneas críticas asociadas. Extraído de \cite{Thrun1998}.}\label{fig:crits}
   % Los puntos críticos se indican con círculos y las líneas críticas con líneas grises. 
 \end{figure} 
 
 
 
-El algoritmo comienza determinando el estado (ocupado o libre) para cada celda de la grilla de ocupación, para esto se define previamente un umbral de probabilidades, y si la probabilidad de ocupación de una celda supera dicho umbral se considera como ocupada y de lo contrario sera considerada como libre. Con la nueva grilla de estados determinados se procede a construir su  GVD. Luego se encuentran los puntos críticos asociados al GVD construido para luego obtener las líneas críticas para cada punto crítico encontrado. Finalmente los segmentos serán las regiones de espacio libre delimitadas por las líneas críticas y los obstáculos. En la figura \ref{fig:ejThrunTop} se muestra un ejemplo de algunas etapas del algoritmo aplicado a un mismo entorno.
+% El algoritmo comienza determinando el estado (libre u ocupado) para cada celda
+% de la grilla de ocupación, para esto se define previamente un umbral de
+% probabilidades, y si la probabilidad de ocupación de una celda supera dicho
+% umbral se considera como ocupada y de lo contrario sera considerada como libre.
+% Con la nueva grilla de estados determinados se procede a construir su  GVD.
+El algoritmo consiste en determinar los puntos críticos y sus líneas críticas
+asociadas. Para luego identificar los segmentos como las regiones de espacio
+libre delimitadas por las líneas críticas y los obstáculos. En la figura
+\ref{fig:ejThrunTop} se muestra un ejemplo de algunas etapas del algoritmo
+aplicado a un mismo entorno y el mapa topológico construido a partir de los segmentos identificados.
 
 \begin{figure}[H]
   \centering
-  \subfloat[GVD]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/a.png}\label{fig:ejThrunTopA}}
+  \subfloat[GVD]{\includegraphics[clip=true, width=0.41\linewidth]{imagenes/thrunTop/a.png}\label{fig:ejThrunTopA}}
   \qquad
-  \subfloat[líneas críticas]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/b.png}\label{fig:ejThrunTopB}}
+  \subfloat[líneas críticas]{\includegraphics[clip=true, width=0.41\linewidth]{imagenes/thrunTop/b.png}\label{fig:ejThrunTopB}}
   \qquad
-  \subfloat[Regiones]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/c.png}\label{fig:ejThrunTopC}}
+  \subfloat[Segmentos]{\includegraphics[clip=true, width=0.41\linewidth]{imagenes/thrunTop/c.png}\label{fig:ejThrunTopC}}
   \qquad
-  \subfloat[Mapa topologico]{\includegraphics[clip=true, width=0.45\linewidth]{imagenes/thrunTop/d.png}\label{fig:ejThrunTopD}}
+  \subfloat[Mapa topologico]{\includegraphics[clip=true, width=0.41\linewidth]{imagenes/thrunTop/d.png}\label{fig:ejThrunTopD}}
   \caption[Método de construcción de un mapa topológico basado en regiones a partir de un GVD.]{Método de construcción de un mapa topológico basado en regiones a partir de un GVD. Los números de las figuras (c) y (d) son identificadores arbitrarios de regiones. Extraído de \cite{Thrun1998}.}\label{fig:ejThrunTop}
 \end{figure}
 % \todo[inline]{sacar 'Ejemplo de', además hay que editar estas imgs limpiando los fondos blancos. a y b seguro, la c capaz se puede dejar}
 
-La idea subyacente de este algoritmo es que, por definición, los puntos críticos se encuentran presentes en el centro de todo pasaje estrecho siendo los puntos obstaculizados más cercanos los extremos de dicho pasaje. Por lo tanto las líneas críticas estarán ubicadas a lo largo de cada pasaje estrecho y dada la consideración que las transiciones entre los segmentos se dan en los pasajes estrechos, las líneas críticas actúan naturalmente como limites entre cada segmento.
+La idea subyacente de este algoritmo es que por definición los puntos críticos se encuentran presentes en el centro de todo pasaje estrecho, siendo sus puntos obstaculizados más cercanos los extremos de dicho pasaje. Por lo tanto las líneas críticas estarán ubicadas a lo largo de cada pasaje estrecho y dado que las transiciones entre los segmentos se dan en los pasajes estrechos, las líneas críticas actúan naturalmente como limites entre cada segmento.
 
 % TODO describir bien el algoritmo no incremental de Liu ming (capaz despues)
 
@@ -691,7 +707,7 @@ En \cite{bormann2016room} se propone que la calidad de una segmentación
 corresponde a su semejanza a la segmentación humana y se proporciona un método
 para medirla.  
 
-En el contexto del articulo la segmentación humana se aproxima como la
+En el contexto del artículo la segmentación humana se aproxima como la
 segmentación que un humano genera para dicho entorno. Luego para cuantificar la
 semejanza se definen dos indicadores, exhaustividad y precision. 
 
@@ -724,7 +740,7 @@ obtiene mejores resultados en general.
 % Según \cite{Liu2015} un mapa topológico basado en regiones se considera útil si representa la estructura del entorno de manera correcta y eficiente. Para ello, consideran dos criterios principales, la calidad asociada a cada region y la topología la segmentación. Los criterios propuestos se basan principalmente en intuiciones geométricas. 
 
 % \subsubsection{Calidad de una region}
-% Los autores determinan que existen dos aspectos que intervienen en la calidad de una region, la convexidad $c_i$ y la compacidad $s_i$, específicamente, definiendo la calidad de una region como $q_i = c_i - s_i$. Adicionalmente se menciona que tanto $c_i$ como $s_i$ pueden ser multiplicados por pesos en el calculo de $q_i$ para  para hacer énfasis en una u otra característica.
+% Los autores determinan que existen dos aspectos que intervienen en la calidad de una region, la convexidad $c_i$ y la compacidad $g_i$, específicamente, definiendo la calidad de una region como $q_i = c_i - g_i$. Adicionalmente se menciona que tanto $c_i$ como $g_i$ pueden ser multiplicados por pesos en el calculo de $q_i$ para  para hacer énfasis en una u otra característica.
 
 % \paragraph{Convexidad}
 % Esta se puede representar como el cociente entre el área de la region y el área de su envolvente convexa. La envolvente convexa de una region se define como el polígono convexo de menor área que contiene a la region. Un polígono convexo cumple que para cualquier par de puntos que pertenecen a la frontera del polígono, el segmento de recta que los conecta estará contenido en dicho polígono. Entonces sea $A_i$ el área de la region $R_i$ y $H_i$ el área de su envolvente convexa, la convexidad para esta region sera:
@@ -744,12 +760,12 @@ obtiene mejores resultados en general.
 
 % \paragraph{Compacidad}
 % % Cuanto más cercanos son los puntos que componen una region a su centro más compacta sera la region.
-% La compacidad de una region mide la distribución una region con respecto a su centro de masa. La compacidad $s_i$\todo{$s_i$ ya se usaba para los generadores de V} de una region $R_i$ se calcula a partir de una discretization de dicha region en celdas de dimensiones y peso uniforme, llamadas elementos de masa. En \eqref{ec:compacidad} se define la compacidad $s_i$ para un region $R_i$, donde $x_j$ e $y_j$ son las coordenadas $x$ e $y$ de los elementos de masa\todo{qué sería un elemento de masa? una molécula? un átomo?} de $R_i$, $M_i$ es igual a la cantidad de dichos elementos de masa y $x_0$ e $y_0$ son las coordenadas del centro de gravedad\todo{de masa?} de $R_i$.
+% La compacidad de una region mide la distribución una region con respecto a su centro de masa. La compacidad $g_i$\todo{$g_i$ ya se usaba para los generadores de V} de una region $R_i$ se calcula a partir de una discretization de dicha region en celdas de dimensiones y peso uniforme, llamadas elementos de masa. En \eqref{ec:compacidad} se define la compacidad $g_i$ para un region $R_i$, donde $x_j$ e $y_j$ son las coordenadas $x$ e $y$ de los elementos de masa\todo{qué sería un elemento de masa? una molécula? un átomo?} de $R_i$, $M_i$ es igual a la cantidad de dichos elementos de masa y $x_0$ e $y_0$ son las coordenadas del centro de gravedad\todo{de masa?} de $R_i$.
 % \begin{equation}
-%   s_i=\frac{1}{M_iA_i}\sum_j \frac{(x_j-x_0)^2 + (y_j-y_0)^2}{A_i} \label{ec:compacidad}
+%   g_i=\frac{1}{M_iA_i}\sum_j \frac{(x_j-x_0)^2 + (y_j-y_0)^2}{A_i} \label{ec:compacidad}
 % \end{equation}
 % \todo[inline]{si $M_i$ es igual a la suma de esos elementos, los elementos tienen masa elemental/unitaria. pero eso es menos genérico que considerar que cada elemento podría tener masa $m_i$ distinta y que $M_i=\sum m_i$. en ese caso, la masa $m_i$ debería multiplicar a cada término de la sumatoria. lo que nos lleva a una definición muy alineada con la de centro de masa. por otro lado, $A_i$ ya está dividiendo afuera, no creo que vaya también en la sumatoria. además, unidades no cierran. asumo que la compacidad no tiene unidad y para ello falta que aparezca la masa en el numerardor. finalmente, me parece raro que no aparezca el volumen. o en realidad, no se para qué aparece la masa.}
-% Notar que cuanto más compacta sea una region menor sera su valor $s_i$ (si se entiende por region compacta una region en la cual sus puntos interiores son cercanos al centro de masa).
+% Notar que cuanto más compacta sea una region menor sera su valor $g_i$ (si se entiende por region compacta una region en la cual sus puntos interiores son cercanos al centro de masa).
 
 % \subsubsection{Calidad de segmentación}
 % Para determinar la calidad general de la segmentación, sera necesaria, además de la calidad de cada region, la calidad de las características globales de la segmentación. Para lograr determinar dichas características se definen varios indicadores que se mencionarán a continuación.
@@ -790,113 +806,127 @@ obtiene mejores resultados en general.
 % % Otra criterio de evaluación es el utilizado en \cite{Fermin-Leon2017} el cual compara la segmentación a evaluar $R_{seg}$ contra segmentaciones realizadas por humanos $R_{human}$. La comparación consiste en para cada pixel comprobar si este esta asignado a una misma region en ambas segmentaciones, lo cual se considera como un verdadero positivo $vp$, los falsos positivos $fp$ son los pixeles que están en la segmentación a evaluar pero no en la humana, o no, que se considera  
 
 \section{Coordinación en la exploración multi-robot}\label{sec:coord}
+% , por lo tanto a lo
+% largo del tiempo fueron desarrolladas varias propuestas para lograr coordinar la exploración
+% multi-robot
+
 Como fue mencionado en la sección \ref{subsec:expmutirob}, la coordinación es
-un aspecto crítico en problema de exploración multi-robot, por lo tanto a lo
-largo del tiempo fuero desarrolladas varias propuestas para una exploración
-multi-robot coordinada. A continuación se describen técnicas de coordinación que
-consisten en segmentar el espacio, asignar segmentos a los robots, para
+un aspecto crítico en el problema de exploración multi-robot. A continuación se describen estrategias de coordinación que
+consisten en segmentar el espacio, asignar segmentos a los robots y
 finalmente distribuir los objetivos de exploración de cada segmento entre los
 robots asignados a él. Las propuestas se dividen en las que segmentan el
-espacio considerando la topología del mismo los que segmentan según criterios
+espacio considerando la topología del mismo y las que segmentan según criterios
 no topológicos.
 
-\subsection{Coordinación a partir de mapas topológicos} \label{subsec:wurmCoord}
+\subsection{Coordinación a partir de segmentaciones topológicas} \label{subsec:wurmCoord}
 % En \cite{wurm2008coordinated} se describe y analiza un enfoque de coordinación que se basa en la distribución eficiente de los robots durante la exploración, teniendo en cuenta la estructura del entorno a partir del uso de mapas topológicos.
 
 En \cite{wurm2008coordinated} se describe y analiza una estrategia de
 coordinación que tiene en cuenta la estructura del entorno a partir del uso de
-mapas topológicos. La estrategia de coordinación consiste en explorar
+una segmentación topológica. La estrategia de coordinación consiste en explorar
 maximizando la distribución de los robots sobre los segmentos (habitaciones y
-corredores), que componen a un entorno estructurado. Esto se basa, en primera
-instancia, en que asignar más de un robot a un mismo segmento en muchos casos
-puede ser una desventaja ya que este podría ser demasiado pequeño para que un
-segundo robot acelere su exploración aunque exista más de un objetivo de
-exploración en el mismo, e incluso al terminar la exploración de un segmento
-los robots pueden bloquearse entre sí mientras intentan abandonarlo. Por otro
-lado los objetivos de exploración de segmentos diferentes suelen ser
-independientes entre sí. Considerando esto, distribuir los robots sobre los
-segmentos a explorar debería lograr una reducción del trabajo redundante y de
-las interferencias entre los mismos, llevando a una reducción del tiempo de
+corredores), que componen a un entorno estructurado. Esto se basa en
+que asignar más de un robot a un mismo segmento en muchos casos puede ser una
+desventaja ya que este podría ser demasiado pequeño para que un segundo robot
+acelere su exploración, aunque exista más de un objetivo de exploración en el
+mismo. Adicionalmente al terminar la exploración de un segmento los robots
+pueden bloquearse entre sí mientras intentan abandonarlo. Por otro lado los
+objetivos de exploración de segmentos diferentes suelen ser independientes
+entre sí. Considerando esto, distribuir los robots sobre los segmentos a
+explorar debería lograr una reducción del trabajo redundante y de las
+interferencias entre los mismos, llevando a una reducción del tiempo de
 exploración.
 
-Implementar esta técnica de coordinación requiere la construcción de un mapa topológico ya que con este se obtiene la información sobre los segmentos del entorno. Para la construcción de el mapa topológico los autores utilizan la técnica descrita en \ref{subsec:mapaTopGVD}, que consiste en la construcción del mapa topológico a partir de un GVD y el método de construcción del GVD utilizado es el explicado en \ref{subsec:constGVD}.
+Implementar esta estrategia de coordinación requiere una segmentación topológica
+del entorno para determinar los segmentos sobre los cuales distribuir a los
+robots. Para lograr esto los autores utilizan el método descrito en la sección
+\ref{subsec:mapaTopGVD} que requiere de un GVD y para construir el GVD se hace
+uso del método explicado en la sección \ref{subsec:constGVD} que aplica una
+esqueletización de un mapa de distancia a los obstáculos.
 
-La idea es que al asignar un robot a un segmento este deberá completar los objetivos de exploración que estén dentro de dicho segmento, siendo los objetivos, como es usual, las fronteras (sección \ref{sec:exploracion}) entre las partes desconocidas y conocidas del mapa. 
+% La idea es que al asignar un robot a un segmento este deberá completar los
+% objetivos de exploración que estén dentro de dicho segmento, siendo los
+% objetivos, como es usual, las fronteras (sección \ref{sec:exploracion}) entre
+% las partes desconocidas y conocidas del mapa. 
+Para maximizar la distribución de los robots sobre los segmentos la idea es
+asignar los objetivos de exploración a los robots asegurando maximizar la
+distribución de los objetivos asignados sobre los segmentos. Siendo los
+objetivos, como es usual, las fronteras (sección \ref{sec:exploracion}) entre
+las partes desconocidas y conocidas del mapa. 
 
 % Los entornos interiores son en general estructurados, por ejemplo, los edificios generalmente se dividen en habitaciones a las que se puede llegar por pasillos.
-Para asignar los objetivos a los robots primero estos son asignados a los
-segmentos a explorar, de forma de maximizar la distribución de los robots sobre
+Para asignar los objetivos a los robots, primero los robots son asignados a los
+segmentos a explorar maximizando la distribución de los robots sobre
 los segmentos, por ejemplo evitando asignar más de un robot por segmento si la
-cantidad de segmentos a explorar es mayor que la cantidad de robots. Dicha
+cantidad de segmentos a explorar es mayor que la cantidad de robots. Específicamente, dicha
 maximización se obtiene cuando los robots están distribuidos de forma uniforme
-en los segmentos, cosa que se obtiene si se cumple lo planteado en
-\eqref{ec:uniform} donde $S$ es el conjunto de todos los segmentos del mapa
-topológico que contienen objetivos, y $\#Robots : S \rightarrow \mathds{N}$ es
-una función que dado un segmento devuelve el número de robots asignados al
-mismo. 
+sobre los segmentos, lo que se obtiene si se cumple lo planteado en
+\eqref{ec:uniform} donde $S$ es el conjunto de todos los segmentos que
+contienen objetivos, y $\#Robots : S \rightarrow \mathds{N}$ es una función que
+dado un segmento devuelve el número de robots asignados al mismo. 
 
 \begin{equation}\label{ec:uniform}
   \forall s,s' \in S, |\#Robots(s) - \#Robots(s')| <= 1
 \end{equation}
 
-Para resolver la asignación a segmentos se propone el uso del método húngaro
+Para resolver la asignación de robots a segmentos se propone el uso del método húngaro
 \cite{kuhn1955hungarian} de una forma particular que permite cumplir con la
 restricción \eqref{ec:uniform}. Para ejecutar el método húngaro es necesario
 calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la
 celda frontera más cercana del segmento $s \in S$ con el robot $i$ y
-descontando un valor constante en caso de que el robot ya se encuentre en el
+descontar un valor constante en caso de que el robot ya se encuentre en el
 segmento. Luego de haber asignado los robots a los segmentos, se ejecuta
-nuevamente el método húngaro para cada segmento $s$ con el propósito distribuir
-los objetivos que se encuentra dentro de $s$ sobre los robots asignados a $s$.
+nuevamente el método húngaro para cada segmento $s$ con el propósito de distribuir
+los objetivos que se encuentran dentro de $s$ sobre los robots asignados a $s$.
 
 La técnica de coordinación explicada en esta sección se resume en el algoritmo \ref{alg:asignacionobjetivos}.
 
 \begin{algorithm}[H]
 \SetAlgoLined
-    Determinar segmentos $S = \{s_{1} , ..., s_{n} \}$ del mapa\\
-    Determinar el conjunto de fronteras objetivo para cada segmento\\
-    \For{cada robot $i$}{
-        \For{cada segmento $s \in S$}{
+    Determinar segmentos con objetivos $S = \{s_{1} , ..., s_{n} \}$ \\
+    Determinar el conjunto de objetivos para cada segmento\\
+    \ForEach{robot $i$}{
+        \ForEach{segmento $s \in S$}{
                 Computar el costo $C_{s}^{i}$\\
                 Descontar al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
             }
     }
-    Asignar robots a los segmentos usando el método húngaro\\
-    \For{cada segmento $s \in S$}{
-        Asignar los robots a las fronteras en $s$ utilizando el resultado del método húngaro\\
+    Usando el método húngaro asignar robots a los segmentos \\
+    \ForEach{segmento $s \in S$}{
+         Usando el método húngaro asignar los objetivos de $s$ a los robots asignados a $s$\\
     }
     \caption{Asignación de objetivos}
     \label{alg:asignacionobjetivos}
 \end{algorithm}
 
 \subsection{Coordinación a partir de segmentaciones no topológicas}\label{subsec:coordNoTop}
-Existen métodos de coordinación que se basan en segmentar el espacio sin considerar su topología, uno de estos es el propuesto en \cite{Solanas2004}. En este la segmentación se basa en agrupar el espacio desconocido en tantos grupos como robots se utilizan para explorar. Las agrupaciones se determinan utilizando el algoritmo K-Means\cite{hartigan1979ak}. En la figura \ref{fig:ejemploCoodGrill} se muestra un ejemplo de esta segmentación con K = 8.  %\todo{típicamente, la codificación de colores se coloca en el caption de la figura}.
+Existen estrategias de coordinación que se basan en segmentar el espacio sin considerar su topología, una de estas se propone en \cite{Solanas2004}. En esta estrategia la segmentación consiste en agrupar el espacio desconocido en tantos grupos como robots se utilizan para explorar. Las agrupaciones se determinan utilizando el algoritmo K-Means \cite{hartigan1979ak}. En la figura \ref{fig:ejemploCoodGrill} se muestra un ejemplo de esta segmentación con K = 8.  %\todo{típicamente, la codificación de colores se coloca en el caption de la figura}.
 \begin{figure}[H]
   \center
-  \includegraphics[width=5.5cm]{imagenes/coordGrillCM.png}
-  \caption[Segmentación propuesta en \cite{Solanas2004}.]{Segmentación propuesta en \cite{Solanas2004}. En blanco se indica el espacio libre, con negro el espacio ocupado, y con colores se indica el espacio desconocido, donde cada color indica un segmento diferente dentro de los cuales se indica con tonalidades más oscuras los obstáculos todavía no explorados y con amarillo su centro de masa. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
+  \includegraphics[width=5.0cm]{imagenes/coordGrillCM.png}
+  \caption[Segmentación propuesta en \cite{Solanas2004}.]{Segmentación propuesta en \cite{Solanas2004}. En blanco se indica el espacio libre, con negro el espacio ocupado, y con colores se indica el espacio desconocido, donde cada color indica un segmento diferente dentro de los cuales se indica con tonalidades más oscuras los obstáculos todavía no explorados y con amarillo su centroide. Extraída de \cite{wu2007voronoi}.}\label{fig:ejemploCoodGrill}
 \end{figure} 
 
-Cada robot está asignado al segmento cuyo centro de masa sea más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$.
-Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $\Delta$ es una constante que representa la distancia maxima entre dos puntos del mapa (longitud de la diagonal del mapa) $||\ ||_2$ es norma euclídea, $d$ es la distancia del camino no ocupado más corto entre dos celdas y $o_ij$ es una penalización acumulada que aumenta cuando $F_j$ está en el rango de sensado de algún robot.
+La estrategia de coordinación comienza asignando a cada robot el segmento con el centroide más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$.
+Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $C_i$ es el centroide de $\zeta_i$, $\Delta$ es una constante que representa la distancia máxima entre dos puntos del mapa (longitud de la diagonal del mapa), $||\ ||_2$ es la norma euclídea, $d(c_1,c_2)$ es la distancia del camino más corto sobre el espacio libre entre dos celdas $c_1$, $c_2$. Y $o_{ij}$ es una penalización acumulada que aumenta cuando $F_j$ está en el rango de sensado de otro robot.
 
 \begin{equation}\label{ec:costsolanas}
 costo_{ij} = 
 \begin{dcases}
   \Delta + || F_j - C_i ||_2 + o_{ij} & F_j \notin \zeta_i \\
-  d(F_j, C_i) + o_{ij}                & F_j \in    \zeta_i
+  d(F_j, R_i) + o_{ij}                & F_j \in    \zeta_i
 \end{dcases}
 \end{equation}
 
-Dado un robot $R_i$ la función de costo, a partir del valor $\Delta$, penaliza fuertemente a los objetivos que no pertenecen al segmento $\zeta_i$ asignado a $R_i$, por lo tanto los objetivos pertenecientes al segmento asignado al robot tendrán prioridad frente a los pertenecen a otro segmento, asegurando que los robots se mantendrán explorado sus segmentos asignados. Los objetivos pertenecientes a otros segmentos son considerados para permitir que un robot pueda continuar tomando objetivos aunque su segmento no tenga ningún objetivo restante. La penalización $o_ij$ evita el solapamiento del los rangos de sensado de los robots, evitando así el trabajo redundante.\medbreak
+Dado un robot $R_i$ la función de $costo_{ij}$, a partir del valor $\Delta$ penaliza fuertemente a los objetivos $F_j$ que no pertenecen al segmento $\zeta_i$ asignado a $R_i$. Por lo tanto los objetivos pertenecientes al segmento asignado al robot tendrán prioridad frente a los que pertenecen a otro segmento, incentivando que los robots se mantengan explorando sus segmentos asignados. Los objetivos pertenecientes a otros segmentos son considerados para permitir que un robot pueda continuar tomando objetivos aunque su segmento no tenga ningún objetivo disponible. Por otro lado la penalización $o_{ij}$ evita el solapamiento del los rangos de sensado de los robots, evitando así el trabajo redundante.\medbreak
 
-Otro método es el que se describe en \cite{Lopez-Perez2018}, en este caso la segmentación consiste en asignar cada punto del espacio desconocido a el robot más cercano de la flota, por lo tanto el entorno se particiona en tantos segmentos $S_i$ como robots $R_i$ componen la flota de exploración. La definición exacta de los segmentos se encuentra en \eqref{ec:segmentsLopez} donde $U_i \subseteq M_i$ son los puntos desconocidos del espacio, $C_i$ es la posición del robot $R_i$ y la distancia $d$ se define de la misma manera que la distancia homónima del método anterior.
+Otro método es el que se describe en \cite{Lopez-Perez2018}, en este caso la segmentación consiste en asignar cada punto del espacio desconocido a el robot más cercano de la flota, por lo tanto el entorno se particiona en tantos segmentos $S_i$ como robots $R_i$ componen la flota de exploración. La definición de los segmentos se encuentra en \eqref{ec:segmentsLopez} donde $U$ son los puntos desconocidos del espacio, y la distancia $d$ se define de la misma manera que la distancia homónima del método anterior.
 \begin{equation}\label{ec:segmentsLopez}
-  S_i=\{c_j:d_g(C_i,c_j)\leq d(V_i(k),c_j) \forall i \neq k , c_j \in U_i\}
+  S_i=\{c_j \in U : d(R_i,c_j)\leq d(R_k,c_j) \forall k \neq i \}
 \end{equation}
 
 
-Un ejemplo de esta segmentación se muestra en la figura \ref{fig:ejemploCoordCenter} para un entorno completamente desconocido, donde se puede visualizar las posiciones de los robots y con colores se indican los distintos segmentos. Notar que por la definición de segmento cada robot $R_i$ se encuentra dentro del segmento $S_i$ que fue definido a partir de su ubicación $C_i$. %Otra cosa a notar sobre esta técnica de segmentacion es que en este caso, donde todo el espacio es desconocido, los segmentos se corresponden directamente a las regiones de un diagrama de Voronoi generado con las posiciones de los robots como generadores y para los casos en donde el espacio no es completamente desconocido se deberá excluir los puntos conocidos de las regiones de Voronoi para obtener la segmentacion propuesta.
+Un ejemplo de esta segmentación se muestra en la figura \ref{fig:ejemploCoordCenter} para un entorno completamente desconocido, donde se puede visualizar las posiciones de los robots y con colores se indican los distintos segmentos. Notar que por la definición de segmento \eqref{ec:segmentsLopez} cada robot $R_i$ se encuentra dentro del segmento $S_i$ que fue definido a partir de su ubicación. %Otra cosa a notar sobre esta técnica de segmentacion es que en este caso, donde todo el espacio es desconocido, los segmentos se corresponden directamente a las regiones de un diagrama de Voronoi generado con las posiciones de los robots como generadores y para los casos en donde el espacio no es completamente desconocido se deberá excluir los puntos conocidos de las regiones de Voronoi para obtener la segmentacion propuesta.
 
 \begin{figure}[H]
   \center
@@ -904,11 +934,11 @@ Un ejemplo de esta segmentación se muestra en la figura \ref{fig:ejemploCoordCe
   \caption[Segmentación propuesta en \cite{Lopez-Perez2018}]{Segmentación propuesta en \cite{Lopez-Perez2018}, extraído de la misma fuente.}\label{fig:ejemploCoordCenter}
 \end{figure} 
 
-Una vez calculados, cada segmento $S_i$ es asignado al robot $R_i$. En este método todo punto que perteneciente a algún segmento sera un posible objetivo de exploración, por lo que en este caso sera una excepción a la norma y los objetivos no serán las fronteras sino que será todo el espacio desconocido. Los robots solo pueden ser enviados a objetivos perecientes su segmento asignado, siendo el objetivo asignado el que alcanza el menor valor para la función de peso $f_p$ que se encuera definida en \eqref{ec:weightLopez}.
+En este método los objetivos no son fronteras sino que son todo el espacio desconocido. Cada robot $R_i$ solo puede ser asignado a objetivos pertenecientes a su segmento $S_i$, siendo el objetivo asignado el que alcanza el menor valor en la función de peso $f_p$ que se encuentra definida en \eqref{ec:weightLopez}.
 \begin{equation}\label{ec:weightLopez}
-  f_p(c_j) = k_d.d(C_i,c_j) + k_a.\phi_i(c_j)
+  f_p(c_j) = k_d.d(R_i,c_j) + k_a.\phi_i(c_j)
 \end{equation}
-Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada sumando de la ecuación, la distancia $d$ es la definida en el método anterior, $\phi_i(c_j)$ es el angulo que queda definido entre la orientación del robot y el vector con origen en la posiciones del robot $C_i$, y fin en el centro de celda $c_j$. 
+Donde $k_d$ y $k_a$ son dos constantes positivas que determinan el peso de cada sumando de la ecuación, $\phi_i(c_j)$ es el ángulo que queda definido entre la orientación del robot y el vector que se origina en $R_i$ y apunta hacia la celda $c_j$. 
 
 \section{Simuladores}\label{sec:sim}
 
