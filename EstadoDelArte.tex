@@ -956,13 +956,13 @@ sensores, actuadores y transductores.
 
 La utilidad principal de los simuladores es que permiten realizar pruebas sin
 necesidad de robots, ni de entornos reales. Esto permite validar de forma
-rápida y económica soluciones a problemas complejos. Pero no es un remplazo
+rápida y económica soluciones a problemas complejos. Pero no es un reemplazo
 para  pruebas en la realidad, ya que los modelos utilizados realizan
 simplificaciones que pueden causar cambios con respecto al comportamiento
 real.
 
 Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
-cuatro como candidatos para utilizar en el proyecto, Gazebo\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/gazebo_benchmark}},
+cuatro como candidatos para utilizar en el proyecto, Gazebo\footnote{\url{http://gazebosim.org}},
 CoppeliaSim\footnote{\url{http://www.coppeliarobotics.com}} (antes conocido como V-Rep), ARGoS\footnote{\url{http://www.argos-sim.info}}
 y Webots\footnote{\url{http://cyberbotics.com}}.
 % Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
@@ -984,7 +984,7 @@ ramli2015overview, Pitonakova2018}.
 %Con el propósito de conocer más acerca de cada uno y de poder determinar cual es una buena elección para el proyecto se
 Se analizó dichos artículos y se estudió la información que se encuentra pública
 en las páginas oficiales en busca de características consideradas de utilidad, los resultados se resumen en la  
-en la tabla \ref{tab:sims}. 
+tabla \ref{tab:sims}. 
 
 \begin{table}[H]
 \hbadness = 10000
@@ -1029,7 +1029,7 @@ mientras que Gazebo y CoppeliaSim disponen de varias alternativas entre las
 cuales se incluyen ODE y Bullet \footnote{\url{http://pybullet.org}}. Tanto ODE como Bullet son conocidos
 motores de físicas cuyas capacidades han sido estudiadas en diversos artículos
 \cite{bzhikhatlov2017research,erez2015simulation,ronnau2013evaluation}.
-ARGoS por su parte dispone de un simuladores 2D y 3D personalizados que según
+ARGoS por su parte dispone de simuladores 2D y 3D personalizados que según
 \cite{Pitonakova2018} son mucho más simples que los utilizados por Gazebo y
 CoppeliaSim. Esta simplicidad se comenta que está asociada con capacidades
 limitadas, pero también es posible que sea un factor que influye positivamente
@@ -1054,8 +1054,8 @@ encuentra inactiva. %hace cinco años.
 
 La posibilidad de acelerar el tiempo se encuentra presente en todos los
 simuladores, lo cual es deseable para reducir el tiempo real que lleva ejecutar
-una simulación, siempre y cuando el hardware que corra la simulaciones sea lo
-suficientemente potente para permitirlo. 
+una simulación, siempre y cuando el hardware que corra las simulaciones sea lo
+suficientemente potente como para permitirlo. 
 
 Ejecutar en modo \emph{headless} es ejecutar sin una interfaz gráfica, esto es
 útil porque permite dedicar más recursos computacionales a la simulación.
@@ -1085,8 +1085,8 @@ integración con \gls{ROS}. Por su licenciamiento propietario, bajo rendimiento 
 utilización de recursos, se descarta a CoppeliaSim como posibilidad. Entre los
 restantes Gazebo y Webots la información disponible dificulta tomar una
 decisión. Se busco sin éxito estudios de rendimiento y/o uso de recursos sobre
-Webots. Dado esto se decidió realizar un pequeño estudio comparativo propio
-entre Webots y Gazebo, cuyo objetivo sea evaluar el rendimiento y usabilidad de
+Webots. Dado esto se decidió realizar un estudio comparativo propio
+entre Webots y Gazebo, cuyo objetivo es evaluar el rendimiento y usabilidad de
 ambos.
 
 \subsection{Experimentación}
@@ -1094,7 +1094,7 @@ ambos.
 
 % Quizás puedo resumir los resultados y poner el resto en un anexo, o no, ver.
 \subsubsection{Método}
-El experimento se basa en replicar un mismo escenario en Gazebo y Webots una
+El experimento se basa en replicar un mismo escenario en Gazebo y Webots que 
 consiste en dos paredes de $20m$ paralelas que están a $10m$ una de la otra.
 Entremedio de estas se ubican 3 robots diferenciales Pioneer 3-DX \cite{p3dx} uno alineado
 con el centro de las paredes, uno a la izquierda y otro a la derecha ambos a
@@ -1109,16 +1109,17 @@ muestra el escenario de simulación implementado en los simuladores a evaluar.
   \caption{Implementaciones del escenario de simulación.}\label{fig:impsim}
 \end{figure}
 
-Al ejecutarse la simulación los robots deben avanzar hasta una de las paredes
-cuando se encuentran a un metro de esta (información obtenida usando un \gls{LiDAR}) %\footnote{Dispositivo que permite determinar la distancia desde un emisor láser a una superficie.}
-estos cambian de dirección repitiendo el comportamiento por cinco minutos.
+%\footnote{Dispositivo que permite determinar la distancia desde un emisor láser a una superficie.}
+La simulación consiste en que los robots avancen hacia una de las paredes
+hasta que se encuentran a un metro de esta (información obtenida usando un \gls{LiDAR}), momento en el que 
+estos cambian de dirección. El comportamiento se repite por cinco minutos.
 
 El proceso de replicar el escenario en cada simulador utilizando \gls{ROS} será el
 insumo para evaluar su usabilidad, mientras que para evaluar el rendimiento y
 comportamiento se ejecutará una vez ambas simulaciones acelerando el tiempo
-tanto como sea posible, siendo $R_{sim}$ (\ref{ec:R}) el indicador de
-rendimiento resultado de dividir el tiempo dentro de simulación $ts$ entre el
-tiempo real que tome ejecutarla $tr$. A mayor $R_{sim}$ mayor rendimiento.
+tanto como sea posible. El valor $R_{sim}$ (\ref{ec:R}) es usado como indicador de
+rendimiento, este es el resultado de dividir el tiempo $ts$ dentro de la simulación entre el
+tiempo $tr$ real que toma ejecutarla. A mayor $R_{sim}$ mayor rendimiento.
 \begin{equation}\label{ec:R} R_{sim} = \frac{ts}{tr} \end{equation}
 
 El software utilizado fue Ubuntu \emph{20.04}, \gls{ROS} \emph{Noetic}, Gazebo \emph{11.4.0} y Webots \emph{R2021a}. 
@@ -1137,7 +1138,7 @@ más cómoda en Webots ya que este dispone por defecto del modelo de robot a
 utilizar, por otro lado en Gazebo fue necesario usar un modelo creado por un
 tercero.
 
-En términos de integración con \gls{ROS}, en Gazebo se logró sin inconvenientes,
+En términos de integración con \gls{ROS}, en Gazebo se logró sin inconvenientes, mientras que
 Webots requirió más trabajo en tanto no integra facilidades para el control de
 robots. Por ejemplo, Webots no soporta el uso del paquete de \gls{ROS}
 \emph{diff\_drive\_controller} \cite{diff_drive_controller} que simplifica el
@@ -1160,18 +1161,18 @@ cambios como rotar los elementos del entorno manualmente.
 
 Al ejecutar las simulaciones en Gazebo el comportamiento fue el esperado, en
 Webots los robots se balanceaban notoriamente de adelante hacia atrás al
-moverse, mientras que las medidas provistas por el \gls{LiDAR} no se corresponden con
+moverse y a su vez las medidas provistas por el \gls{LiDAR} no se corresponden con
 las ubicaciones de la pared.
 
-Los resultados de rendimiento fueron para Webots $R_{sim}=2.20$, para Gazebo $R_{sim}=3.58$
+Los resultados de rendimiento fueron, para Webots $R_{sim}=2.20$, para Gazebo $R_{sim}=3.58$
 en su modo normal y $R_{sim}=4.70$ haciendo uso del modo \emph{headless} que Webots no dispone.
 
 \subsection{Conclusiones}
 
 Con respecto a la usabilidad, Webots presenta la ventaja de tener
-disponible el modelo deseado, pero esto queda opacado por los inconvenientes
+disponible el modelo del robot a utilizar, pero esto queda opacado por los inconvenientes
 experimentados al integrar con \gls{ROS}\footnote{La versión R2021b de
-Webots agrega soporte para \emph{diff\_drive\_controller}}. Gazebo resulto tener una mejor usabilidad al no presentar dichos
+Webots agrega soporte para \emph{diff\_drive\_controller}}. Gazebo resultó tener una mejor usabilidad al no presentar dichos
 inconvenientes.
 
 La simulación en Gazebo no presenta diferencias visibles al comportamiento
