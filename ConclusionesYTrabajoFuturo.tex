@@ -153,10 +153,10 @@ simulados. Esto no es una tarea trivial ya que, además de requerirse hardware y
 un entorno en donde hacer las pruebas, también se deben remover las hipótesis de
 comunicación ideal y de localización trivial de los robots, dado que estas
 no son viables en la realidad. Esto hace necesario alterar la
-asignación de objetivos de forma que los potenciales problemas de comunicación
-sean considerados y evitados durante la exploración. Y por otro lado requiere
+implementación de forma que los potenciales problemas de comunicación
+sean considerados y evitados durante la exploración \cite{amigoni2017multirobot}. Y por otro lado requiere
 integrar una solución de localización que permita estimar la ubicación de los
-robots.% en un escenario real.
+robots \cite{slam}. % en un escenario real.
 
 \subsection{Identificación de objetivos}
 % esta relacionada al
@@ -211,7 +211,7 @@ información necesaria y que se tiene disponible relacionada al mapa topológico
 Por lo que una dirección de trabajo posible sería la de desarrollar un método
 para procesar dicha información con el propósito obtener un mapa topológico
 completo, como por ejemplo un grafo que contenga un vértice por segmento y las
-conexiones entre dichos vertices implique la existencia de puertas entre los segmentos.
+aristas entre dichos vertices implique la adyacencia entre los segmentos.
 
 Evaluar los mapas topológicos generados a partir de la solución desarrollada
 con las ideas presentadas en la sección \ref{sec:evalTop} también se presenta
