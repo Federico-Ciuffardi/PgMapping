@@ -216,6 +216,9 @@
 
 \makenoidxglossaries
 
+% = DOCUMENT =
+\begin{document}
+
 % = Cover =
 
 \title{%
@@ -245,11 +248,11 @@ Tutor: Facundo Benavides%
 
 % \setcounter{secnumdepth}{6}
 
-% = DOCUMENT =
-\begin{document}
 \pagenumbering{roman}
 
 \maketitle
+
+\todo[inline]{en el eva de pg hay unas guidelines. en las mismas hay un texto sugerido para colocar en la carátula}
 
 % == RESET PAGE NUMBER ==
 \thispagestyle{empty}
@@ -269,10 +272,12 @@ Tutor: Facundo Benavides%
 % \addcontentsline{toc}{chapter}{Índice de figuras}
 \listoffigures  % facundo
 \mtcaddchapter[Índice de figuras]
+\todo[inline]{hay figuras con captions muy largos. en esos casos hay que utilizar la opción [] para que en el índice los nombres de las figuras no ocupen todo un renglón o más. sacar el prefijo 'gráfica'}
 
 % \addcontentsline{toc}{chapter}{Índice de cuadros}
 \listoftables   % facundo
 \mtcaddchapter[Índice de cuadros]
+\todo[inline]{ídem índice de figuras. sacar el prefijo 'Resultados'}
 
 % \addcontentsline{toc}{chapter}{Índice de algoritmos}
 \listofalgorithms % facundo
@@ -287,6 +292,7 @@ Tutor: Facundo Benavides%
 \hfuzz=10pt 
 \minitoc
 \hfuzz=0pt 
+\todo[inline]{sacaría este minitoc}
 \include{Introduccion}
 
 \chapter{Marco de trabajo}\label{cha:marco}

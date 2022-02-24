@@ -21,7 +21,7 @@ o que estos interfieran entre sí causando perdidas de tiempo en desvíos para
 evitar colisiones.
 
 Los entornos estructurados como edificios, hogares y otras construcciones
-humanas son entornos que pueden dividirse en segmentos, como como habitaciones
+humanas son entornos que pueden dividirse en segmentos, como como\todo{se repite como} habitaciones
 y corredores. En \cite{wurm2008coordinated} se introduce una estrategia de
 coordinación para la exploración multi-robot en entornos estructurados que
 consiste en llevar a cabo la exploración maximizando la distribución de los
@@ -50,7 +50,7 @@ los segmentos deben mantenerse actualizados durante la exploración, el GVD
 también debe mantenerse actualizado. En la propuesta original el GVD se
 mantiene actualizado aplicando un algoritmo no incremental que
 reconstruye completamente el GVD en cada actualización. Dado que gran parte del GVD se
-mantiene igual con respecto a su ultima actualización, la reconstrucción
+mantiene igual con respecto a su ultima\todo{última} actualización, la reconstrucción
 completa se considera ineficiente. Visto esto la \textbf{primera contribución}
 consiste en adaptar e integrar a la propuesta original un algoritmo incremental
 que optimice la actualización del GVD solo cambiando las partes necesarias para
@@ -79,7 +79,7 @@ exploración, para luego distribuir los objetivos identificados entre los
 robots.
 
 Respecto a la identificación de objetivos de exploración, identificar grandes
-cantidades de objetivos puede ser computacionalmente restrictivo. La
+cantidades de objetivos puede ser computacionalmente restrictivo\todo{no queda claro que tener muchos objetivos hace más lenta y potencialmente menos eficiente la distribución. le dedicaría una oración a esto para aclarar.}. La
 \textbf{tercera contribución} es un método novedoso que busca reducir la
 cantidad de objetivos identificados eliminado objetivos redundantes basándose
 en las capacidades sensoriales de los robots. 
@@ -92,10 +92,10 @@ objetivos de cada segmento sobre sus robots asignados. El problema es que
 durante la asignación de los robots sobre los segmentos no se considera el
 número de objetivos que hay en cada segmento, y por lo tanto es posible
 asignar más robots a un segmento que los objetivos que hay disponibles en este,
-dejando robots ociosos. La \textbf{cuarta contribución} consiste en un
+dejando robots ociosos\todo{reforzaría la idea agregando que además, los ociosos en un segmento podrían ser necesarios en otro(s)} La \textbf{cuarta contribución} consiste en un
 algoritmo de asignación de objetivos que logra maximizar la distribución de los
 robots sobre los segmentos considerando los objetivos que existen en cada
-segmento para evitar robot ociosos.
+segmento para evitar robot\todo{robots} ociosos.
 
 Luego de que un robot recibe un objetivo de exploración este debe moverse hacia
 él, esto introduce la necesidad de planificar caminos hacia los objetivos. En el

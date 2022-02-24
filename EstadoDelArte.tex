@@ -27,7 +27,7 @@ obtener información del entorno es uno de los principales problemas de la
 exploración conocido como el problema de asignación objetivos de exploración,
 donde por \say{objetivo de exploración} se entiende uno de estos lugares
 convenientes. El problema suele separarse en dos partes, (i) identificar
-objetivos de exploración, y (ii) distribuir uno de dichos objetivos al robot
+objetivos de exploración, y (ii) distribuir uno de dichos objetivos al robot\todo{está rara la redacción. digamos que si hablamos de distribuir es entre todos no a uno. por ahí me pareció rara.}
 \cite{wurm2008coordinated}. Para identificar objetivos de exploración, un
 método popular es el propuesto en \cite{yamauchi1998frontier} en el que se
 identifican como objetivos a las fronteras entre el espacio conocido y
@@ -167,6 +167,7 @@ Un \emph{mapa de carreteras} (del inglés \emph{roadmap}) \cite{choset2005princi
   \includegraphics[width=0.9\linewidth]{imagenes/uruguayvialMarcado.png}
   \caption[Red de carreteras de Uruguay.]{Red de carreteras de Uruguay. Con amarillo se resalta un camino entre ubicaciones de Montevideo y Paysandú. Extraído de \cite{googlemaps}.}\label{fig:ejemplovial}
 \end{figure} 
+\todo[inline]{fig2.3: destacar más la ruta en cuestión! rojo? ensanchar la línea?}
 
 Para ser un \emph{roadmap}, un mapa topológico debe estar representado con un
 grafo $\mli{RM}=(V_{RM},E_{RM})$ en el cual sus vértices $V_{RM}$ corresponden
@@ -189,7 +190,7 @@ Estas propiedades aseguran que es posible planificar un camino entre dos puntos 
 % \begin{equation}
 %   R_i = \{p \in W : d_p(g_i) \leq d_p(g_j), g_i,g_j\in G,g_j \neq g_i\}\label{eq:regV}
 % \end{equation}
-Dado un espacio euclídeo $W \subseteq \mathds{R}^2$, un conjunto de puntos $G \subseteq W$ llamados \emph{generadores} y la función $d_p : W \rightarrow \mathds{R}$ qué computa la distancia desde $p\in W$ a otro punto en $W$. 
+Dado un espacio euclídeo $W \subseteq \mathds{R}^2$, un conjunto de puntos $G \subseteq W$ llamados \emph{generadores} y la función $d_p : W \rightarrow \mathds{R}$ qué\todo[]{sin tilde} computa la distancia desde $p\in W$ a otro punto en $W$. 
 
 Los \emph{puntos base} de $p$ son el conjunto $BP_p \subseteq G$ de los generadores más cercanos a un punto $p \in W$ :
 \begin{equation}
@@ -964,7 +965,7 @@ real.
 Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
 cuatro como candidatos para utilizar en el proyecto, Gazebo\footnote{\url{http://gazebosim.org}},
 CoppeliaSim\footnote{\url{http://www.coppeliarobotics.com}} (antes conocido como V-Rep), ARGoS\footnote{\url{http://www.argos-sim.info}}
-y Webots\footnote{\url{http://cyberbotics.com}}.
+y Webots\footnote{\url{http://cyberbotics.com}}\todo{colocaría la info al pié como referencias a sitios web con fecha de última visita}.
 % Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
 % cuatro como candidatos para utilizar en el proyecto, Gazebo \cite{gazebo},
 % CoppeliaSim \cite{coppeliasim} (antes conocido como V-Rep), ARGoS \cite{argos}
@@ -1043,7 +1044,7 @@ a los aspectos principales de un proyecto.
 %puede facilitar la migración de la implementación desarrollado en el
 %simulador para en la realidad.
 De los simuladores candidatos
-todos menos ARGoS proveen de soporte oficial para \gls{ROS}. Para ARGoS existe una
+todos menos ARGoS proveen de\todo{sacar 'de'} soporte oficial para \gls{ROS}. Para ARGoS existe una
 extension \cite{argos_bridge} que permite conectar a \gls{ROS} con ARGoS que se
 encuentra inactiva. %hace cinco años.
 % \todoremark{La introducción a \gls{ROS}, no se si deberia estar aca. La parte de migrar se entiende? deberia fundamentar más? sacarla?}
