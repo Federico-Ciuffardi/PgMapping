@@ -140,6 +140,19 @@
 \par
 }
 
+\newenvironment{wide}{%
+  \begin{list}{}{%
+      \setlength{\topsep}{0pt}%
+      \addtolength{\leftmargin}{-2cm}%
+      \addtolength{\rightmargin}{-2cm}%
+      \setlength{\listparindent}{\parindent}%
+      \setlength{\itemindent}{\parindent}%
+      \setlength{\parsep}{\parskip}}%
+  \item[]%
+}{%
+  \end{list}%
+}
+
 \definecolor{mBlack}{rgb}{0,0,0}
 \definecolor{mGreen}{rgb}{0,0.6,0}
 \definecolor{mGray}{rgb}{0.5,0.5,0.5}
@@ -237,14 +250,22 @@ Exploración multi-robot basada en grillas de ocupación probabilística y diagr
 }
 
 \author{%
+\vspace{7.0cm}\\
 \Large
-\vspace{0.5cm}\\
 Estudiante: Federico Ciuffardi\\
+\vspace{0.25cm}\\
+\Large
+Supervisor: Facundo Benavides\\
 \vspace{0.5cm}\\
-Tutor: Facundo Benavides%
+Informe de Proyecto de Grado presentado al Tribunal Evaluador\\
+como requisito de graduación de la carrera Ingeniería\\
+en Computación\\
+\vspace{0.5cm}\\
+Montevideo, Uruguay%
 }
+% \todo[inline]{en el eva de pg hay unas guidelines. en las mismas hay un texto sugerido para colocar en la carátula}
 
-\date{}
+% \date{}
 
 % \setcounter{secnumdepth}{6}
 
@@ -252,7 +273,6 @@ Tutor: Facundo Benavides%
 
 \maketitle
 
-\todo[inline]{en el eva de pg hay unas guidelines. en las mismas hay un texto sugerido para colocar en la carátula}
 
 % == RESET PAGE NUMBER ==
 \thispagestyle{empty}
@@ -270,14 +290,15 @@ Tutor: Facundo Benavides%
 
 % \addstarredchapter{List of Tables}
 % \addcontentsline{toc}{chapter}{Índice de figuras}
+% \begin{wide}
 \listoffigures  % facundo
 \mtcaddchapter[Índice de figuras]
-\todo[inline]{hay figuras con captions muy largos. en esos casos hay que utilizar la opción [] para que en el índice los nombres de las figuras no ocupen todo un renglón o más. sacar el prefijo 'gráfica'}
 
 % \addcontentsline{toc}{chapter}{Índice de cuadros}
 \listoftables   % facundo
 \mtcaddchapter[Índice de cuadros]
 \todo[inline]{ídem índice de figuras. sacar el prefijo 'Resultados'}
+% \end{wide}
 
 % \addcontentsline{toc}{chapter}{Índice de algoritmos}
 \listofalgorithms % facundo
@@ -289,10 +310,10 @@ Tutor: Facundo Benavides%
 % == CONTENTS == 
 \chapter{Introducción}\label{cha:Intro}
 \pagenumbering{arabic}
-\hfuzz=10pt 
-\minitoc
-\hfuzz=0pt 
-\todo[inline]{sacaría este minitoc}
+% \hfuzz=10pt 
+% \minitoc
+% \hfuzz=0pt 
+% \todo[inline]{sacaría este minitoc}
 \include{Introduccion}
 
 \chapter{Marco de trabajo}\label{cha:marco}

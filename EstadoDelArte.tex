@@ -24,20 +24,18 @@ entorno a explorar.
 
 Determinar el siguiente lugar al que es conveniente enviar a un robot para
 obtener información del entorno es uno de los principales problemas de la
-exploración conocido como el problema de asignación objetivos de exploración,
-donde por \say{objetivo de exploración} se entiende uno de estos lugares
-convenientes. El problema suele separarse en dos partes, (i) identificar
-objetivos de exploración, y (ii) distribuir uno de dichos objetivos al robot\todo{está rara la redacción. digamos que si hablamos de distribuir es entre todos no a uno. por ahí me pareció rara.}
-\cite{wurm2008coordinated}. Para identificar objetivos de exploración, un
-método popular es el propuesto en \cite{yamauchi1998frontier} en el que se
-identifican como objetivos a las fronteras entre el espacio conocido y
-desconocido. Por otro lado para establecer que objetivo distribuir al robot se
-suele decidir cual de estos es el más conveniente, donde la conveniencia de un
-objetivo puede calcularse como un balance entre el costo y el beneficio de
-completarlo. El costo normalmente involucra aspectos como la distancia del
-recorrido que el robot debe hacer para llegar al objetivo, el tiempo que lleva recorrerlo y el costo energético que implica. Por
-otro lado el beneficio usualmente se asocia al tamaño de la porción explorada
-al completar el objetivo. 
+exploración. Este problema suele separarse en dos partes, (i) identificar
+dichos lugares, conocidos como objetivos de exploración, y (ii) asignar uno de
+dichos objetivos al robot. Para identificar objetivos de exploración, un método
+popular es el propuesto en \cite{yamauchi1998frontier} en el que se identifican
+como objetivos a las fronteras entre el espacio conocido y desconocido. Por
+otro lado para establecer que objetivo asignar al robot se suele decidir
+cual de estos es el más conveniente, donde la conveniencia de un objetivo puede
+calcularse como un balance entre el costo y el beneficio de completarlo. El
+costo normalmente involucra aspectos como la distancia del recorrido que el
+robot debe hacer para llegar al objetivo, el tiempo que lleva recorrerlo y el
+costo energético que implica. Por otro lado el beneficio usualmente se asocia
+al tamaño de la porción explorada al completar el objetivo. 
 
 %\todowarn{la importancia/prioridad de la tarea si la tuvieran}.
 
@@ -165,9 +163,9 @@ Un \emph{mapa de carreteras} (del inglés \emph{roadmap}) \cite{choset2005princi
 \begin{figure}[H]
   \center
   \includegraphics[width=0.9\linewidth]{imagenes/uruguayvialMarcado.png}
-  \caption[Red de carreteras de Uruguay.]{Red de carreteras de Uruguay. Con amarillo se resalta un camino entre ubicaciones de Montevideo y Paysandú. Extraído de \cite{googlemaps}.}\label{fig:ejemplovial}
+  \caption[Red de carreteras de Uruguay.]{Red de carreteras de Uruguay. Con rojo se resalta un camino entre ubicaciones de Montevideo y Paysandú. Extraído de \cite{googlemaps}.}\label{fig:ejemplovial}
 \end{figure} 
-\todo[inline]{fig2.3: destacar más la ruta en cuestión! rojo? ensanchar la línea?}
+% \todo[inline]{fig2.3: destacar más la ruta en cuestión! rojo? ensanchar la línea?}
 
 Para ser un \emph{roadmap}, un mapa topológico debe estar representado con un
 grafo $\mli{RM}=(V_{RM},E_{RM})$ en el cual sus vértices $V_{RM}$ corresponden
@@ -190,7 +188,7 @@ Estas propiedades aseguran que es posible planificar un camino entre dos puntos 
 % \begin{equation}
 %   R_i = \{p \in W : d_p(g_i) \leq d_p(g_j), g_i,g_j\in G,g_j \neq g_i\}\label{eq:regV}
 % \end{equation}
-Dado un espacio euclídeo $W \subseteq \mathds{R}^2$, un conjunto de puntos $G \subseteq W$ llamados \emph{generadores} y la función $d_p : W \rightarrow \mathds{R}$ qué\todo[]{sin tilde} computa la distancia desde $p\in W$ a otro punto en $W$. 
+Dado un espacio euclídeo $W \subseteq \mathds{R}^2$, un conjunto de puntos $G \subseteq W$ llamados \emph{generadores} y la función $d_p : W \rightarrow \mathds{R}$ que computa la distancia desde $p\in W$ a otro punto en $W$. 
 
 Los \emph{puntos base} de $p$ son el conjunto $BP_p \subseteq G$ de los generadores más cercanos a un punto $p \in W$ :
 \begin{equation}
@@ -814,7 +812,7 @@ obtiene mejores resultados en general.
 Como fue mencionado en la sección \ref{subsec:expmutirob}, la coordinación es
 un aspecto crítico en el problema de exploración multi-robot. A continuación se describen estrategias de coordinación que
 consisten en segmentar el espacio, asignar segmentos a los robots y
-finalmente distribuir los objetivos de exploración de cada segmento entre los
+finalmente distribuir los objetivos de exploración de cada segmento a los
 robots asignados a él. Las propuestas se dividen en las que segmentan el
 espacio considerando la topología del mismo y las que segmentan según criterios
 no topológicos.
@@ -877,10 +875,10 @@ calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la
 celda frontera más cercana del segmento $s \in S$ con el robot $i$ y
 descontar un valor constante en caso de que el robot ya se encuentre en el
 segmento. Luego de haber asignado los robots a los segmentos, se ejecuta
-nuevamente el método húngaro para cada segmento $s$ con el propósito de distribuir
-los objetivos que se encuentran dentro de $s$ sobre los robots asignados a $s$.
+nuevamente el método húngaro para cada segmento $s$ con el propósito de asignar
+los objetivos que se encuentran dentro de $s$ a los robots asignados a $s$.
 
-La técnica de coordinación explicada en esta sección se resume en el algoritmo \ref{alg:asignacionobjetivos}.
+La estrategia de coordinación explicada en esta sección se resume en el algoritmo \ref{alg:asignacionobjetivos}.
 
 \begin{algorithm}[H]
 \SetAlgoLined
@@ -896,7 +894,7 @@ La técnica de coordinación explicada en esta sección se resume en el algoritm
     \ForEach{segmento $s \in S$}{
          Usando el método húngaro asignar los objetivos de $s$ a los robots asignados a $s$\\
     }
-    \caption{Asignación de objetivos}
+    \caption{Estrategia Coordinación \cite{wurm2008coordinated}}
     \label{alg:asignacionobjetivos}
 \end{algorithm}
 
@@ -962,10 +960,11 @@ para  pruebas en la realidad, ya que los modelos utilizados realizan
 simplificaciones que pueden causar cambios con respecto al comportamiento
 real.
 
+%\todo{colocaría la info al pié como referencias a sitios web con fecha de última visita}.
 Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
-cuatro como candidatos para utilizar en el proyecto, Gazebo\footnote{\url{http://gazebosim.org}},
-CoppeliaSim\footnote{\url{http://www.coppeliarobotics.com}} (antes conocido como V-Rep), ARGoS\footnote{\url{http://www.argos-sim.info}}
-y Webots\footnote{\url{http://cyberbotics.com}}\todo{colocaría la info al pié como referencias a sitios web con fecha de última visita}.
+cuatro como candidatos para utilizar en el proyecto, Gazebo\footnote{\url{http://gazebosim.org}. Accedido por última vez: 25/02/2022.},
+CoppeliaSim\footnote{\url{http://www.coppeliarobotics.com}. Accedido por última vez: 25/02/2022.} (antes conocido como V-Rep), ARGoS\footnote{\url{http://www.argos-sim.info}. Accedido por última vez: 25/02/2022.}
+y Webots\footnote{\url{http://cyberbotics.com}. Accedido por última vez: 25/02/2022.}.
 % Actualmente existe una gran variedad de simuladores robóticos, de los cuales se consideraron
 % cuatro como candidatos para utilizar en el proyecto, Gazebo \cite{gazebo},
 % CoppeliaSim \cite{coppeliasim} (antes conocido como V-Rep), ARGoS \cite{argos}
@@ -1025,9 +1024,9 @@ Todos los simuladores candidatos permiten simular varios robots simultáneamente
 lo cual es esencial en el marco del proyecto. 
 
 % \cite{ode} \cite{bullet}
-Webots solo dispone de ODE \footnote{\url{http://www.ode.org}} para la simulación física,
+Webots solo dispone de ODE\footnote{\url{http://www.ode.org}. Accedido por última vez: 25/02/2022.} para la simulación física,
 mientras que Gazebo y CoppeliaSim disponen de varias alternativas entre las
-cuales se incluyen ODE y Bullet \footnote{\url{http://pybullet.org}}. Tanto ODE como Bullet son conocidos
+cuales se incluyen ODE y Bullet\footnote{\url{http://pybullet.org}. Accedido por última vez: 25/02/2022.}. Tanto ODE como Bullet son conocidos
 motores de físicas cuyas capacidades han sido estudiadas en diversos artículos
 \cite{bzhikhatlov2017research,erez2015simulation,ronnau2013evaluation}.
 ARGoS por su parte dispone de simuladores 2D y 3D personalizados que según
@@ -1044,7 +1043,7 @@ a los aspectos principales de un proyecto.
 %puede facilitar la migración de la implementación desarrollado en el
 %simulador para en la realidad.
 De los simuladores candidatos
-todos menos ARGoS proveen de\todo{sacar 'de'} soporte oficial para \gls{ROS}. Para ARGoS existe una
+todos menos ARGoS proveen soporte oficial para \gls{ROS}. Para ARGoS existe una
 extension \cite{argos_bridge} que permite conectar a \gls{ROS} con ARGoS que se
 encuentra inactiva. %hace cinco años.
 % \todoremark{La introducción a \gls{ROS}, no se si deberia estar aca. La parte de migrar se entiende? deberia fundamentar más? sacarla?}
@@ -1131,8 +1130,8 @@ gráfico GeForce GTX 660 y 16GB de memoria RAM.
 \subsubsection{Resultados}
 %\cite{gazebo_benchmark}
 Las implementaciones del escenario de prueba en Gazebo y Webots se encuentran
-disponible en línea\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/gazebo_benchmark}}
-\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/webots_benchmark}}. 
+disponible en línea\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/gazebo_benchmark}.\\ Accedido por última vez: 25/02/2022.}
+\footnote{\url{http://gitlab.fing.edu.uy/federico.ciuffardi/webots_benchmark}.\\ Accedido por última vez: 25/02/2022.}. 
 
 La construcción del entorno fue similar en ambos simuladores siendo
 más cómoda en Webots ya que este dispone por defecto del modelo de robot a

@@ -5,23 +5,25 @@ represente. Por motivos de eficiencia y robustez la exploración suele llevarse
 a cabo con más de un robot, en este caso el problema se conoce como el de
 exploración multi-robot.
 
-Uno de los principales problemas de la exploración es determinar los lugares a
-los cuales los robot\todo{robots} deben moverse para obtener información del entorno. Esto
-se conoce como el problema de asignación \todo{de }objetivos de exploración, donde por
-\say{objetivo de exploración} se entiende uno de estos lugares. Cuando se
-utiliza más de un robot es deseable que la asignación de objetivos se lleve
-a cabo siguiendo una estrategia de coordinación para evitar que los robots
-exploren los mismos lugares o que se obstaculicen entre sí.
+Uno de los principales aspectos de la exploración es determinar a que lugares
+los robots deben moverse para obtener información del entorno. Para esto se
+suele primero identificar dichos lugares, conocidos como objetivos de
+exploración, para luego asignar los objetivos identificados a los robots.
+Cuando se utiliza más de un robot es deseable que la asignación de objetivos se
+lleve a cabo siguiendo una estrategia de coordinación para evitar que los
+robots exploren los mismos lugares o que se obstaculicen entre sí.
 
 Los entornos estructurados como edificios, hogares y otras construcciones
-humanas son entornos que pueden dividirse en segmentos, como\todo{sobra un como} como habitaciones
-y corredores. En este tipo de entornos una posible estrategia de coordinación
+humanas son entornos que pueden dividirse en segmentos, como habitaciones
+y corredores. En este tipo de entornos una posible estrategia de coordinación 
 es la de llevar a cabo la exploración maximizando la distribución de los
 robots sobre los segmentos. 
 
-El proyecto se planteó como objetivo mejorar dicha\todo{se pierde un poco a qué se refiere 'dicha'. quizás agregar info diciendo que lo que se pretenden mejorar son implementaciones previas} estrategia coordinación,
-resultando en cinco propuestas que buscan mejorar\todo{se repite mejorar} aspectos específicos de la
-estrategia y del problema de exploración multi-robot en general.
+ 
+El proyecto se planteó como objetivo mejorar la implementación original de dicha\todo{1. | se pierde un poco a qué se refiere 'dicha'. quizás agregar info diciendo que lo que se pretenden mejorar son implementaciones previas}
+estrategia de coordinación, resultando en cinco propuestas
+sobre aspectos específicos de la estrategia y del problema de exploración
+multi-robot en general.
 
 Dos de las propuestas se concentran en acelerar la construcción de una
 estructura llamada Diagrama Generalizado de Voronoi (GVD por sus siglas en
@@ -32,11 +34,11 @@ de la última versión del GVD. La segunda reduce la construcción del GVD a las
 partes conocidas del entorno, ahorrando el tiempo de construir sobre las
 partes desconocidas.
 
-La tercera propuesta consiste en \todo{una} forma novedosa de identificar los objetivos de exploración
+La tercera propuesta consiste en una forma novedosa de identificar los objetivos de exploración
 que se basa en las capacidades sensoriales de los robots para evitar
 identificar objetivos redundantes.
 
-La cuarta propuesta es\todo{no se si el verbo es 'ser' o debería ser 'introduce'} un algoritmo de asignación de objetivos de exploración
+La cuarta propuesta introduce un algoritmo de asignación de objetivos de exploración
 que logra maximizar la distribución de los robots sobre los segmentos evitando
 asignar más robots a un segmento que los objetivos que contenidos en él.
 
@@ -46,10 +48,11 @@ en la identificación de segmentos) para reducir los tiempos de planificación
 pero a su vez permite que los caminos no sean completamente sobre el GVD evitando
 planificar caminos innecesariamente largos.
 
-Las propuestas se implementaron como parte de una solución al problema de
-exploración multi-robot completa con la cual se realizaron pruebas dentro de un
+Se implemento una solución al problema de exploración multi-robot que incluye
+las cinco propuestas antes mencionadas. Esta solución se puso a prueba dentro de un
 simulador. Los resultados de las pruebas en general indican que las propuestas
-logran su objetivo de mejorar los resultados\todo{se repite resultados!}, siendo las propuestas asociadas a
-la aceleración de la construcción del GVD las de mayor impacto.
-\todo[inline]{la última oración, a modo de síntesis de conclusiones, me dejó gusto a poco.}
-\todo[inline]{a modo de resumen y para que verifiques en el resto del doc, noté temas con la redacción, y en mucho menor mendida cosas de contenido. revisar ortografía, repetición de palabras, plural/singular, género}
+logran su objetivo de mejorar la implementación original, siendo las propuestas
+asociadas a la aceleración de la construcción del GVD las de mayor impacto.
+
+\todo[inline]{2. | la última oración, a modo de síntesis de conclusiones, me dejó gusto a poco.}
+% \todo[inline]{a modo de resumen y para que verifiques en el resto del doc, noté temas con la redacción, y en mucho menor mendida cosas de contenido. revisar ortografía, repetición de palabras, plural/singular, género}

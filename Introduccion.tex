@@ -21,7 +21,7 @@ o que estos interfieran entre sí causando perdidas de tiempo en desvíos para
 evitar colisiones.
 
 Los entornos estructurados como edificios, hogares y otras construcciones
-humanas son entornos que pueden dividirse en segmentos, como como\todo{se repite como} habitaciones
+humanas son entornos que pueden dividirse en segmentos, como habitaciones
 y corredores. En \cite{wurm2008coordinated} se introduce una estrategia de
 coordinación para la exploración multi-robot en entornos estructurados que
 consiste en llevar a cabo la exploración maximizando la distribución de los
@@ -50,11 +50,11 @@ los segmentos deben mantenerse actualizados durante la exploración, el GVD
 también debe mantenerse actualizado. En la propuesta original el GVD se
 mantiene actualizado aplicando un algoritmo no incremental que
 reconstruye completamente el GVD en cada actualización. Dado que gran parte del GVD se
-mantiene igual con respecto a su ultima\todo{última} actualización, la reconstrucción
+mantiene igual con respecto a su última actualización, la reconstrucción
 completa se considera ineficiente. Visto esto la \textbf{primera contribución}
 consiste en adaptar e integrar a la propuesta original un algoritmo incremental
 que optimice la actualización del GVD solo cambiando las partes necesarias para
-que la ultima versión disponible del GVD quede actualizada. 
+que la última versión disponible del GVD quede actualizada. 
 
 % Por otro la definicion de GVD no establece como tratar las porciones
 % desconocidas de un entorno parcialmente explorado. Por lo tanto la segunda
@@ -75,16 +75,17 @@ como se hace usualmente.
 Uno de los principales aspectos de la exploración multi-robot es el de
 determinar a que lugares se debe enviar a los robots a explorar. Para esto se
 suele primero identificar dichos lugares, conocidos como objetivos de
-exploración, para luego distribuir los objetivos identificados entre los
+exploración, para luego asignar los objetivos identificados a los
 robots.
 
 Respecto a la identificación de objetivos de exploración, identificar grandes
-cantidades de objetivos puede ser computacionalmente restrictivo\todo{no queda claro que tener muchos objetivos hace más lenta y potencialmente menos eficiente la distribución. le dedicaría una oración a esto para aclarar.}. La
-\textbf{tercera contribución} es un método novedoso que busca reducir la
-cantidad de objetivos identificados eliminado objetivos redundantes basándose
-en las capacidades sensoriales de los robots. 
+cantidades de objetivos no es deseable en tanto complejiza la posterior tarea de
+asignarlos a los robots. La \textbf{tercera contribución} es un
+método novedoso que busca reducir la cantidad de objetivos identificados
+eliminado objetivos redundantes basándose en las capacidades sensoriales de los
+robots. 
 
-Respecto a la distribución de objetivos de exploración, en el contexto de la
+Respecto a la asgnación de objetivos de exploración, en el contexto de la
 estrategia de coordinación de \cite{wurm2008coordinated}, se debe maximizar la
 distribución de los robots sobre los segmentos. Para lograr esto la propuesta
 original primero asigna robots a los segmentos, y luego distribuye los
@@ -92,10 +93,10 @@ objetivos de cada segmento sobre sus robots asignados. El problema es que
 durante la asignación de los robots sobre los segmentos no se considera el
 número de objetivos que hay en cada segmento, y por lo tanto es posible
 asignar más robots a un segmento que los objetivos que hay disponibles en este,
-dejando robots ociosos\todo{reforzaría la idea agregando que además, los ociosos en un segmento podrían ser necesarios en otro(s)} La \textbf{cuarta contribución} consiste en un
+dejando robots ociosos que podrían ser necesarios en otro segmento. La \textbf{cuarta contribución} consiste en un
 algoritmo de asignación de objetivos que logra maximizar la distribución de los
 robots sobre los segmentos considerando los objetivos que existen en cada
-segmento para evitar robot\todo{robots} ociosos.
+segmento para evitar robots ociosos.
 
 Luego de que un robot recibe un objetivo de exploración este debe moverse hacia
 él, esto introduce la necesidad de planificar caminos hacia los objetivos. En el
@@ -134,7 +135,7 @@ solución al problema de exploración multi-robot. Esta solución fue utilizada 
 realizar pruebas dentro de un simulador con el propósito de validar y estudiar
 la utilidad las contribuciones. La solución implementada es la \textbf{sexta
 contribución} del proyecto y se encuentra disponible en
-línea\footnote{\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}}.
+línea\footnote{\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}\\Accedido por última vez: 25/02/2022.}.
 
 \section{Organización del documento}
 El resto del documento se organiza de la siguiente manera. El capitulo

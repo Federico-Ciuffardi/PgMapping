@@ -198,7 +198,7 @@ reducir el área a explorar y que sea cerrado (sin salidas al exterior).
 
 \subsection{Robots}
 Los robots simulados\footnote{Especificación disponible en línea:\\
-\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pioneer_p3dx_model}} utilizados en las
+\url{https://gitlab.fing.edu.uy/federico.ciuffardi/pioneer_p3dx_model}.\\ Accedido por última vez: 25/02/2022.} utilizados en las
 pruebas modelan al robot diferencial Pioneer 3-DX \cite{p3dx} (figura
 \ref{fig:p3dx}). Cada robot está equipado con un sensor \gls{LiDAR} basado en el
 modelo URG-04LX-UG01 \cite{hokuyo}, que permite tomar medidas de distancia de
@@ -366,7 +366,7 @@ situaciones son despreciables.
   \qquad
   \subfloat[Mapa generado.]{\includegraphics[clip=true, width=0.33\textwidth]{imagenes/faltaDeCub/faltaCubRed}}
 
-  \caption{Esquina superior izquierda del mapa referencia y de uno de los mapas
+  \caption[Celda explorable que no se reconoce como tal.]{Esquina superior izquierda del mapa referencia y de uno de los mapas
   obtenidos en las pruebas que presenta una celda explorable que no se reconoce
 como tal. Ambos mapas corresponden a una granularidad de una celda por metro cuadrado.}\label{fig:faltaCub}
    % A la izquierda se muestra el robot real, y a la derecha su versión simulada.
@@ -485,7 +485,7 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_time.png}
 
-  \caption{Gráfica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:inc:et}
+  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:inc:et}
 
 \end{figure}
 
@@ -494,7 +494,7 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_cost.png}
 
-  \caption{Gráfica de distancia total recorrida por la flota  en función de celdas por metro cuadrado.}\label{fig:gra:inc:ec}
+  \caption{Distancia total recorrida por la flota  en función de celdas por metro cuadrado.}\label{fig:gra:inc:ec}
 
 \end{figure}
 
@@ -503,7 +503,7 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_mean.png}
 
-  \caption{Gráfica del tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
+  \caption{Tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
 
 \end{figure}
 
@@ -587,7 +587,7 @@ rendimiento superior.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_time.png}
 
-  \caption{Gráfica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
+  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
 
 \end{figure}
 
@@ -596,7 +596,7 @@ rendimiento superior.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_cost.png}
 
-  \caption{Gráfica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
+  \caption{Distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
 
 \end{figure}
 
@@ -605,7 +605,7 @@ rendimiento superior.
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/obj_id_time_mean.png}
 
-  \caption{Gráfica del tiempo promedio en obtención de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
+  \caption{Tiempo promedio en obtención de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
 
 \end{figure}
 
@@ -695,7 +695,7 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_time.png}
 
-  \caption{Gráfica de tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
+  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
 
 \end{figure}
 
@@ -704,7 +704,7 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_cost.png}
 
-  \caption{Gráfica de distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
+  \caption{Distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
 
 \end{figure}
 
@@ -713,7 +713,7 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_mean.png}
 
-  \caption{Gráfica del tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
+  \caption{Tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
 
 \end{figure}
 
