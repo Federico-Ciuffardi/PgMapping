@@ -19,37 +19,39 @@ y corredores. En este tipo de entornos una posible estrategia de coordinación
 es la de llevar a cabo la exploración maximizando la distribución de los
 robots sobre los segmentos. 
 
- 
-El proyecto se planteó como objetivo mejorar la implementación original de dicha estrategia de coordinación, resultando en cinco propuestas sobre aspectos específicos de la estrategia y del problema de exploración multi-robot en general\todo{alternativamente, El presente proyecto de grado se planteó realizar aportes en cinco aspectos que mejoran una propuesta relevada en el estado del arte. luego, habría que sustituir propuesta(s) por aporte y acomodar un poquito el texto}.
+El presente proyecto de grado se planteó como objetivo mejorar la propuesta
+original de la estrategia de coordinación antes mencionada, resultando en cinco
+aportes sobre aspectos específicos de la estrategia y del problema de
+exploración multi-robot en general.
 
-Dos de las propuestas se concentran en acelerar la construcción de una
+Dos de los aportes se concentran en acelerar la construcción de una
 estructura llamada Diagrama Generalizado de Voronoi (GVD por sus siglas en
 inglés), que es esencial mantener actualizada para reconocer los segmentos
-sobre los cuales distribuir a los robots durante la exploración. La primera
-propuesta optimiza la actualización solo modificando las partes desactualizadas 
-de la última versión del GVD. La segunda reduce la construcción del GVD a las
+sobre los cuales distribuir a los robots durante la exploración. El primer
+aporte optimiza la actualización solo modificando las partes desactualizadas 
+de la última versión del GVD. El segundo reduce la construcción del GVD a las
 partes conocidas del entorno, ahorrando el tiempo de construir sobre las
 partes desconocidas.
 
-La tercera propuesta consiste en una forma novedosa de identificar los objetivos de exploración
+El tercer aporte consiste en una forma novedosa de identificar los objetivos de exploración
 que se basa en las capacidades sensoriales de los robots para evitar
 identificar objetivos redundantes.
 
-La cuarta propuesta introduce un algoritmo de asignación de objetivos de exploración
+El cuarto aporte introduce un algoritmo de asignación de objetivos de exploración
 que logra maximizar la distribución de los robots sobre los segmentos evitando
 asignar más robots a un segmento que los objetivos que contenidos en él.
 
-La quinta y última propuesta consiste en un método de planificar caminos hacia
+El quinto y último aporte consiste en un método de planificar caminos hacia
 los objetivos de exploración que hace uso del GVD (ya disponible por ser usando
 en la identificación de segmentos) para reducir los tiempos de planificación
 pero a su vez permite que los caminos no sean completamente sobre el GVD evitando
 planificar caminos innecesariamente largos.
 
 Se implemento una solución al problema de exploración multi-robot que incluye
-las cinco propuestas antes mencionadas. Esta solución se puso a prueba dentro de un
-simulador. Los resultados de las pruebas en general indican que las propuestas
-logran su objetivo de mejorar la implementación original, siendo las propuestas
-asociadas a la aceleración de la construcción del GVD las de mayor impacto.
+los cinco aportes antes mencionados. Esta solución se puso a prueba dentro de un
+simulador. Los resultados de las pruebas en general confirman que los aportes
+logran su objetivo de mejorar la propuesta original, siendo los aportes 
+asociados a la aceleración de la construcción del GVD los de mayor impacto.
 
 \todo[inline]{2. | la última oración, a modo de síntesis de conclusiones, me dejó gusto a poco.}
 % \todo[inline]{a modo de resumen y para que verifiques en el resto del doc, noté temas con la redacción, y en mucho menor mendida cosas de contenido. revisar ortografía, repetición de palabras, plural/singular, género}
