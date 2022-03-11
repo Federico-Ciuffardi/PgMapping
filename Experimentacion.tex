@@ -399,11 +399,11 @@ solución propuesta que construye el GVD de forma incremental, contra los de la
 variante que solo difiere en que la construcción del GVD es no incremental. Las
 métricas analizadas en esta sección se encuentran en la tabla \ref{tab:inc1}
 y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
-\ref{fig:gra:inc:gvdt}.
+\ref{fig:gra:inc:gvdt}\todo{referenciaría cada figura al final del párrafo que analiza el contenido asociado a ellas}.
 
-En cada nivel de granularidad la variante incremental reduce en un
+En cada nivel de granularidad\todo{de qué?} la variante incremental reduce en un
 ${\smallsim}94\%$ el tiempo promedio construcción del GVD con respecto a la
-variante no incremental. Esto valida la idea de que la construcción incremental
+variante no incremental\todo{(Ver figura 4.7.)}. Esto valida la idea de que la construcción incremental
 del GVD es más eficiente que su contraparte no incremental.
 
 % El tiempo de construcción de GVD impacta directamente al tiempo que ocurre
@@ -429,9 +429,9 @@ del GVD es más eficiente que su contraparte no incremental.
 
 Con respecto a los tiempos de exploración, estos también son reducidos al
 construir el GVD de forma incremental. La reducción comienza siendo de
-${\smallsim}8\%$ en el nivel de granularidad más bajo, y mediante se aumenta el
+${\smallsim}8\%$ en el nivel de granularidad más bajo, y mediante\todo{conforme?} se aumenta el
 nivel de granularidad las reducciones también aumentan hasta llegar a una
-reducción de ${\smallsim}63\%$ en el nivel más alto. Esto se explica porque el
+reducción de ${\smallsim}63\%$ en el nivel más alto\todo{(Ver figura 4.5.)}. Esto se explica porque el
 tiempo de construcción de GVD impacta directamente al tiempo que ocurre desde
 que un robot pide un objetivo y uno le es asignado, por ser una parte necesaria y
 no paralelizada de la etapa de obtención de información (sección
@@ -456,7 +456,7 @@ quedando ociosos.
 Construir el GVD de forma incremental también parece reducir las distancias
 totales recorridas por la flota en todas las granularidades, aunque en este
 caso las reducciones están comprendidas entre $2\%$ y $7\%$, fluctuando al
-aumentar los niveles de granularidad. Esto puede deberse a que tiempos más
+aumentar los niveles de granularidad\todo{(Ver figura 4.6)}. Esto puede deberse a que tiempos más
 rápidos de asignación de objetivos hacen más probable que los robots cambien su
 trayectoria a un nuevo objetivo antes de llegar a la ubicación exacta del
 objetivo previamente completado. Esto puede reducir la distancia recorrida por
@@ -512,13 +512,13 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 En esta sección se realiza un análisis comparativo de los resultados obtenidos
 en pruebas realizadas con tres soluciones distintas que difieren únicamente en
 el método usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
-métodos son: la simplificación de fronteras basada en cubrimiento propuesta en
+métodos son: la simplificación\todo{debo confesar que no me termina gustando el término. creo que no es del todo correcto porque no transmite realmente lo que se hace. es decir, lo que no se termina de hacer evidente es que una cosa son los puntos de frontera (celdas) y otro son las fronteras (conjuntos de celdas). entonces, no es que las fronteras son más simples sino que concibo los objetivos de forma atómica (puntos de frontera) o en agrupamientos (fronteras). ergo, intentaría aclarar el punto e iría por algo más del estilo: fronteras mediante máximo cubrimiento, fronteras mediante K-Means o puntos de frontera.} de fronteras basada en cubrimiento propuesta en
 este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
 \cite{Amorin2019} y la identificación de fronteras (sin simplificar)
 introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas
 analizadas en esta sección se presentan en la tabla \ref{tab:ident_obj1} y se encuentran graficadas en
 las figuras \ref{fig:gra:idobj:et}, \ref{fig:gra:idobj:ec} y
-\ref{fig:gra:idobj:iobt}.
+\ref{fig:gra:idobj:iobt}\todo{ídem sec anterior}.
 
 Es posible apreciar que los métodos que identifican los objetivos simplificando
 las fronteras reducen los tiempos de exploración con respecto al método que
@@ -572,7 +572,7 @@ promedio en simplificación de fronteras, la simplificación basada en
 cubrimiento en todo nivel de granularidad es entre $2$ y
 $4$ veces más lenta que la basada en K-Means. Estos resultados
 parecen indicar que la simplificación basada en cubrimiento toma más tiempo
-pero logra mejores reducciones de objetivos que la basada en K-Means. En el
+pero logra mejores reducciones de objetivos que la basada en K-Means\todo{mmmm no. los resultados muestran que k-means es más rápido y que supera a la nuestra cuando aumenta la granularidad considerando distancia y tiempo medio de exp. para decir que las reducciones son mejores, habría que p.e. contar la cantidad de objetivos que se generan a lo largo de la exp con una u otra estrategia. eso daría una pista certera sobre el impacto de seguir una u otra y de allí se le podría atribuir que la nuestra distribuye mejor o hace mejores reducciones.}. En el
 nivel de granularidad más bajo el aumento de tiempo de simplificación no es tan
 relevante como la reducción de objetivos, por lo tanto la simplificación basada
 en cubrimiento obtiene un mejor rendimiento. A medida la granularidad crece el
@@ -622,7 +622,7 @@ adyacentes a celdas libres pertenecen a generadores ($\mli{UF} \subseteq
 \mli{CGen}$). Ambas formas son descritas en la sección \ref{subsec:espDesc}. Los
 resultados obtenidos en estas pruebas se presentan en la tabla \ref{tab:desconocido1} y sus
 gráficas en las figuras \ref{fig:gra:des:et}, \ref{fig:gra:des:ec} y
-\ref{fig:gra:des:gvdt}.
+\ref{fig:gra:des:gvdt}\todo{ídem sec anterior}.
 
 Considerar que las celdas desconocidas no propagan ondas y que $\mli{UF}
 \subseteq \mli{CGen}$ logra una reducción de ${\smallsim}61\%$ en el tiempo

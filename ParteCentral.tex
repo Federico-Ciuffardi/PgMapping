@@ -1,4 +1,4 @@
-En este capitulo se describen los principales aspectos de la solución al
+En este capitulo\todo{revisar ortografía!} se describen los principales aspectos de la solución al
 problema de exploración multi-robot desarrollada\footnote{Disponible en
 línea:\\
 \url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}.\\ Accedido por última vez: 25/02/2022.},
@@ -63,13 +63,13 @@ La solución se desarrolla con las siguientes hipótesis de trabajo.
   \item Se conocen las dimensiones del entorno a explorar.
 \end{enumerate}
 
-Estas hipótesis tienen el motivo de simplificar algunos aspectos del
+Estas hipótesis tienen el motivo de\todo{procuran/tienen por objeto?} simplificar algunos aspectos del
 problema de exploración permitiendo que el trabajo se pueda enfocar en otros.
 
 La hipótesis (I) resuelve trivialmente el problema de localización \cite{slam}. 
 
 Las hipótesis (II) y (III) simplifican la coordinación. La (II) por no tener
-que hacer consideraciones especiales para cada robot. La (III) por no tener que
+que hacer consideraciones especiales para cada robot. La (III)\todo{parece que II y III quedaron cambiadas} por no tener que
 considerarse los posibles problemas de comunicación que pueden haber de asignar
 robots a objetivos muy distantes o con obstrucciones entre sí. 
 
@@ -94,7 +94,7 @@ Los componentes a su vez están compuestos por módulos los cuales cuales se enc
 de tareas específicas. 
 
 En la figura \ref{fig:arquitectura} se resume la arquitectura en un diagrama en
-el cual es posible ver los componentes, sus módulos y como estos se distribuyen
+el cual es posible ver los componentes, sus módulos y como\todo{cómo} estos se distribuyen
 sobre los componentes. Adicionalmente es posible apreciar una simplificación de las
 comunicaciones que ocurren entre dichos módulos.
 
@@ -105,6 +105,7 @@ comunicaciones que ocurren entre dichos módulos.
   \caption[Arquitectura de la solucion propuesta.]{Arquitectura de la solución propuesta. Los módulos no coloreados fueron implementados en esta propuesta.}
   \label{fig:arquitectura}
 \end{figure} 
+\todo[inline]{fig3.1: en el caption solución. colorear lo hecho con otro color}
 
 En lo que resta de esta sección se comentará de cada módulo tanto sus tareas,
 como sus interacciones con el resto de los módulos.
@@ -136,7 +137,7 @@ componen al stack de navegación de \gls{ROS} y sus interacciones.
 Cuando se establece un objetivo de navegación este se trasmite al nodo
 \emph{global\_planner} que se encarga de generar un plan de alto nivel
 conocido como plan global, que consiste en un número de subobjetivos que de
-seguirse en secuencia llevan al objetivo .
+seguirse en secuencia\todo{que al seguirse?} llevan al objetivo .
 
 Los subobjetivos generados por el \emph{global\_planner} son enviados al nodo
 \emph{local\_planner} que se encarga de generar secuencias de velocidades
@@ -187,7 +188,7 @@ La subasta se puede resumir de la siguiente manera, los objetivos de
 exploración identificados son transmitidos desde la central hacia los robots
 los cuales valúan a dichos objetivos según que tan conveniente les es llegar a
 ellos. Luego los robots envían sus valuaciones a la central y esta aplica un
-algoritmo para determinar que objetivo le corresponde a cada robot. Finalmente
+algoritmo para determinar que\todo{qué} objetivo le corresponde a cada robot. Finalmente
 la central le informa a cada robot el objetivo que le corresponde.
 % algoritmo para determinar que objetivo asignar a cada robot. Finalmente
 % la central le informa a cada robot su objetivo asignado.
@@ -208,7 +209,7 @@ debe enviar al módulo \emph{Move Base} para seguir el camino de forma rápida,
 evitando maniobras innecesarias. También lleva a cabo una capa superior de
 comportamientos de recuperación extendiendo los provistos por el módulo
 \emph{Move Base}. Y finalmente se encarga de indicar al \emph{Controlador del
-robot} si se completo el camino con éxito, o si existe algún problema.
+robot} si se completo\todo{completó} el camino con éxito, o si existe algún problema.
 % El módulo \emph{Controlador de movimiento} es como su nombre lo indica el
 % módulo que se encarga de controlar el movimiento del robot. Este recibe caminos
 % desde el módulo \emph{Controlador del robot} y se encarga de determinar cuales
@@ -221,7 +222,7 @@ robot} si se completo el camino con éxito, o si existe algún problema.
 
 \section{Definiciones} \label{sec:def}
 Esta sección está dedicada a formalizar conceptos que serán utilizados en lo
-que resta del capitulo.
+que resta del capitulo\todo{capítulo}.
 
 \subsection{Grillas de ocupación}\label{subsec:Grilla}
 La grillas de ocupación fueron introducidas en la sección \ref{subsec:mapas}.
@@ -233,7 +234,7 @@ celda de la grilla de ocupación. Una celda se asocia a un único centro y
 viceversa, por lo tanto en lo que resta de este informe se usaran ambos
 términos de forma indistinta.
 
-Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|x_{1:t},z_{1:t})$
+Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|x_{1:t},z_{1:t})$\todo{$c_{t+1}$ ? explicitaría que t es el tiempo y que $1:t$ representa el conjunto de instantes de tiempo considerados}
 de estar ocupada, donde $z_{1:t}$ es la secuencia de medidas obtenidas de los
 sensores desde las posiciones $x_{1:t}$.
 
@@ -253,6 +254,7 @@ función $e$ se define según
   \right .
   \label{eq:estado}
 \end{equation}
+\todo[inline]{habría que definir un $\epsilon$ de modo que $|P-0,5|<\epsilon$ para desconocido y lo propio para las demás. sino, pareciera que en la práctica nunca serían desconocidas, no?}
 
 La función $ady_4 : \mli{CG} \rightarrow P(\mli{CG})$ dada una celda $c$ devuelve el conjunto
 de celdas horizontalmente adyacentes y la función $ady_8 : \mli{CG} \rightarrow P(\mli{CG})$
@@ -293,7 +295,7 @@ $i\in[1,N]$ tales que:
 \begin{itemize}
   \item $\bigcup_{i=1}^{N}C_i = C$ 
   \item Para todo $i,j \in [1,N]$ con $i\neq j$ se cumple que  $C_i\cap C_j = \emptyset$
-  \item Para todo $i \in [1,N]$, para todo $c_1,c_2 \in C_i$ con $c_1 \neq c_2$
+  \item Para todo $i \in [1,N]$, para todo $c_1,c_2 \in C_i$ con $c_1 \neq c_2$\todo{no tienen por qué ser distintas}
     se cumple que existe un camino compuesto de celdas en $C_i$ que llevan
     desde $c_1$ a $c_2$.
   \item No existen $i,j \in [1,N]$ con $i\neq j$ tales que existan $c_1 \in C_i$ y $c_2 \in C_j$ que cumplan con $c_1 \in ady(c_2)$ 
@@ -355,7 +357,7 @@ componente conexa (línea 6) y aplicar un \emph{depth-first search} (DFS) desde
 $c$, agregado todas las celdas recorridas a una misma componente conexa (líneas
 7-19). Esto se repite hasta que todas las celdas pertenezcan a alguna
 componente conexa (línea 5). Este algoritmo es análogo al que está presente en
-\cite{hopcroft1973algorithm}.
+\cite{hopcroft1973algorithm}\todo{daría una pista sobre cuál sea la función del alg en el diseño de la solución.}.
 
 \section{Identificación de objetivos}\label{sec:pc:idobj}
 El problema de identificación de objetivos consiste en determinar puntos
@@ -433,6 +435,7 @@ logre el cubrimiento.
     cubrimiento. Basado en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
   % \caption[Proceso de simplificación de fronteras según K-Means.]{Proceso de simplificación de fronteras según K-Means. Cada figura corresponde a un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Basada en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
 \end{figure}
+\todo[inline]{fig3.5: ... fronteras utilizando K-Means.? otra, ... tienen radio=4 celdas, indicando el cubrimiento de un sensor de rango equivalente. ?}
 
 % En la seccion anterior se presento un método que soluciona el siguiente
 % problema. Dado un conjunto de  la descomposición en componentes conexas de
@@ -445,7 +448,7 @@ fronteras $F$, obtener un conjunto de fronteras significativas $\mli{FS}$ que
 cumplen con la restricción de que $\mli{FS}$ cubre a $F$. Recordando que el
 propósito de usar $\mli{FS}$ como objetivos de exploración en lugar de usar $F$
 es reducir los objetivos de exploración, entonces es natural pensar que la
-soluciones optimas reducen al mínimo el $\mli{FS}$ resultante, mientras
+soluciones optimas\todo{óptimas} reducen al mínimo el $\mli{FS}$ resultante, mientras
 mantienen la restricción de cubrimiento.
 
 % Analizando la restriccion de cubrimiento, se puede ver que un indicador de que
@@ -455,7 +458,7 @@ mantienen la restricción de cubrimiento.
 
 Dado esto es posible ver que en el ejemplo presentado en la figura
 \ref{fig:ejemploFSKMMal} el resultado obtenido por el método presentado en esta
-sección no es optimo ya que existen fronteras significativas innecesarias para
+sección no es optimo\todo{óptimo} ya que existen fronteras significativas innecesarias para
 el cubrimiento. 
 
 \begin{figure}[H]
@@ -468,6 +471,7 @@ el cubrimiento.
     circunferencias rojas centradas en estas tienen radio $rango=5.6$ (largos de celda) indicando su
     cubrimiento.}\label{fig:ejemploFSKMMal}
 \end{figure}
+\todo[inline]{fig3.6: ídem comentario fig.3.5}
 % \footnotetext{Podria indicar el bag y el }
 %al aplicarse la simplificación 
 Resultados subóptimos similares se experimentan de forma consistente sobre
@@ -496,10 +500,10 @@ fronteras son más extensas y sus curvas son más pronunciadas.
 % (casi a $rango$ de distancia una de la otra, el maximo). Esto lleva a pensar que K-Means se tiende a ubicar concentrar los centroides en una zona,
 
 Esto se presume que se debe principalmente a dos factores relacionados a
-K-Means. (i) K-Means no considera la restricción de cubrimiento para generar
+K-Means.\todo{:} (i) K-Means no considera la restricción de cubrimiento para generar
 sus resultados, sino que la restricción se fuerza obteniendo a través de prueba
 y error al mínimo $k$ con el que las fronteras significativas resultantes
-logran el cubrimiento. (ii) Los centroides resultantes de K-Means no son
+logran el cubrimiento\todo{no está claro y es algo contradictorio el pto. tal vez señalar que k-means opera minimizando el error cuadrático medio de las distancias de las celdas a los centroides para conformar los clusters. esa operativa lleva a que los centroides no pertenezcan necesariamente al conjunto de celdas y también hace que aumentando el k se corrija ese aspecto.}. (ii) Los centroides resultantes de K-Means no son
 necesariamente fronteras y deben ser traducidos a fronteras posteriormente.
 
 % Esto se presume que se debe principalmente a dos factores relacionados a
@@ -699,7 +703,7 @@ objetivos que se describe a lo largo de esta sección.
 La asignación de objetivos se basa en la estrategia de coordinación presentada
 en \ref{subsec:wurmCoord}, que sostiene que es conveniente que los robots se
 asignen a los objetivos maximizando la distribución de los robots
-sobre los segmentos (habitaciones y corredores) que componen a un entorno
+sobre los segmentos (habitaciones y corredores) que componen a\todo{sacar a} un entorno
 estructurado.
 % , que
 % se corresponden las regiones de un mapa topológico (sección
@@ -709,7 +713,7 @@ La asignación de objetivos consiste una subasta donde lo subastado son los
 objetivos de exploración, el subastador es la estación central y los postores
 son los robots. La subasta se puede separar en tres partes, \emph{obtención de
   información}, \emph{valuación} y \emph{resolución}. La \emph{obtención de
-información} es la etapa inicial donde central obtiene información necesaria
+información} es la etapa inicial donde \todo{la central obtiene la información ...}central obtiene información necesaria
 para llevar adelante la subasta, por ejemplo los objetivos de exploración. La
 \emph{valuación} abarca la distribución de la información obtenida desde la
 central hacia los robots, la valuación que cada robot hace para cada objetivo
@@ -1604,7 +1608,7 @@ consideran como pertenecientes a generadores.
   % \caption[Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}.]{Consideración del espacio desconocido presente en \cite{kalra2009incremental} y \cite{Lau2013}. En la parte superior se muestra la grilla de ocupación actual. En la inferior su GVD correspondiente, indicándose con rojo los obstáculos. Extraída de \cite{kalra2009incremental}.}\label{fig:kalraOG}
 \end{figure}
 
-Que las las celdas desconocidas se consideren iguales a las celdas libres
+Que las las\todo{sacar un las} celdas desconocidas se consideren iguales a las celdas libres
 implica que las ondas utilizadas para construir el GVD pueden propagarse por el
 espacio desconocido y generar la pertenecía de celdas desconocidas al GVD.
 % ambas cosas tienen asociado un costo computacional.
@@ -1758,13 +1762,13 @@ exploración.
 \subsection{Criterios de compleción}
 
 El \emph{controlador de movimiento} tiene dos criterios para determinar que un
-punto del camino fue completado, el criterio de compleción normal y criterio de
+punto del camino fue completado\todo{alcanzado?}, el criterio de compleción normal y criterio de
 compleción forzosa.
 
 La compleción forzosa ocurre cuando el robot está a una distancia menor a
 $\mli{DistF}$ del punto en cuestión. Este criterio de compleción tiene como
 propósito determinar cuando un robot está lo suficientemente cerca de un punto
-del camino como para considerarlo completo, a pesar de que no se dio aún la
+del camino como para considerarlo completo\todo{que se ha alcanzado el objetivo?}, a pesar de que no se dio aún la
 compleción normal. Se recomienda que el valor $\mli{DistF}$ sea similar a las
 dimensiones del robot.
 
@@ -1807,7 +1811,7 @@ generados. A pesar de esto los GVD son \emph{roadmaps} (sección
 par de puntos del espacio, al igual que las grillas de ocupación. 
 
 La diferencia de tamaños entre las estructuras implica que generar caminos
-sobre el GVD es más computacionalmente eficiente que generarlos sobre la grilla
+sobre el GVD es más computacionalmente\todo{computacionalmente más?} eficiente que generarlos sobre la grilla
 de ocupación. Pero a su vez, los caminos generados sobre el GVD se mantienen lo
 más alejado posible de los obstáculos (sección \ref{subsec:GVD}), lo que lleva
 a caminos que aunque son seguros, pueden resultar innecesariamente largos.
@@ -1917,7 +1921,7 @@ valores: $0.5$ si no aporta evidencia, $0.55$ si la evidencia indica que la
 celda está ocupada y $0.45$ si la evidencia indica que la celda está libre.
 Estos valores de probabilidad son los que se encuentran presentes en la
 solución desarrollada, pero pueden variar dependiendo de los sensores que sean
-usados. 
+usados\todo{justificaría un poco más el uso de esos valores. por qué no 0.0 y 1.0, p.e.}. 
 
 % Cuando la grilla de ocupación del nodo \emph{global\_costmap} de un robot
 
