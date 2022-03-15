@@ -1,19 +1,19 @@
-En este proyecto de grado se planteo\todo{Este ... se planteó ...} el objetivo de mejorar la solución del
+Este proyecto de grado se planteó el objetivo de mejorar la solución del
 problema de exploración multi-robot propuesta en \cite{wurm2008coordinated},
-donde se propone una estrategia de coordinación para  entornos estructurados
-que consiste en explorar\todo{ el entorno} maximizando la distribución de los robots sobre los
-segmentos (habitaciones y corredores)\todo{invertiría pasaría segmentos al paréntesis y sacaría habitaciones  y corredores}, los cuales se identifican a partir de un
+donde se propone una estrategia de coordinación para entornos estructurados
+que consiste en explorar el entorno maximizando la distribución de los robots sobre las
+habitaciones y corredores (segmentos) que se identifican a partir de un
 GVD. Para esto se evaluaron varios aspectos de la propuesta en cuestión y del
 problema de exploración multi-robot en general relevando una serie de
 potenciales mejoras. Estas fueron implementadas como parte de una solución al
 problema de exploración multi-robot\footnote{Disponible en línea:\\
 \url{https://gitlab.fing.edu.uy/federico.ciuffardi/pgmappingcooperativo}.\\Accedido por última vez: 25/02/2022.} con
-la cual se experimento\todo{experimentó} dentro de un simulador con el propósito de validar su
+la cual se experimentó dentro de un simulador con el propósito de validar su
 impacto.
 
-En este ultimó capitulo\todo{capítulo} se plantean las conclusiones derivadas del trabajo
+En este ultimó capítulo se plantean las conclusiones derivadas del trabajo
 realizado en el proyecto de grado y se establecen líneas de trabajo que pueden ser
-retomadas\todo{continuadas} en el futuro.
+continuadas en el futuro.
 
 \section{Conclusiones}
 
@@ -76,7 +76,7 @@ simplificación basada en K-Means que se encuentra presente en el estado del
 arte, y la simplificación basada en cubrimiento que es propuesta en este proyecto como
 mejora de la anterior. Los resultados experimentales permiten concluir que la
 simplificación basada en cubrimiento logra una mayor reducción de objetivos\todo{ya comenté al respecto, ojo!} que
-la simplificación basada en K-Means, pero lleva más tiempo\todo{chavacano! es menos eficiente?}.
+la simplificación basada en K-Means, pero es menos eficiente.\todoremark[inline]{Me quedaba la duda si por eficiencia se daba a entender solo que es mas lento y/o se podia entender que implicaba algo sobre la calidad del resultado | chavacano! es menos eficiente?}
 % pero tiene un rendimiento inferior en términos de costo computacional.
 
 Adicionalmente existen dos mejoras potenciales sobre las cuales únicamente se
@@ -147,11 +147,11 @@ realizado y pueden ser retomadas a futuro.
 
 \subsection{Experimentación en la realidad}
 
-Una de estas líneas de trabajo es la de realizar experimentos en la realidad\todo{con una flota de robots reales?}
+Una de estas líneas de trabajo es la de realizar experimentos en la realidad \todoerror[inline]{No se entiende que se quiere decir con experimentos en la realidad? O es para hacerlo explicito? Digo porque el titulo de la subsection es así y en la presentación lo tengo así también | con una flota de robots reales?}
 con el propósito de validar los resultados obtenidos en los experimentos
 simulados. Esto no es una tarea trivial ya que, además de requerirse hardware y
 un entorno en donde hacer las pruebas, también se deben remover las hipótesis de
-comunicación ideal y de localización trivial\todo{comunicación y localización ideales?} de los robots\todo{sacar lo que sigue.}, dado que estas
+comunicación y localización ideales de los robots\todoerror[inline]{Era para fundamentar el porque se relaciona con experimentar en la realidad, lo saco igual? | sacar lo que sigue.}, dado que estas
 no son viables en la realidad. Esto hace necesario alterar la
 implementación de forma que los potenciales problemas de comunicación
 sean considerados y evitados durante la exploración \cite{amigoni2017multirobot}. Y por otro lado requiere
@@ -211,13 +211,13 @@ información necesaria y que se tiene disponible relacionada al mapa topológico
 Por lo que una dirección de trabajo posible sería la de desarrollar un método
 para procesar dicha información con el propósito obtener un mapa topológico
 completo, como por ejemplo un grafo que contenga un vértice por segmento y las
-aristas entre dichos vertices\todo{vértices} implique la adyacencia entre los segmentos.
+aristas entre dichos vértices implique la adyacencia entre los segmentos.
 
 Evaluar los mapas topológicos generados a partir de la solución desarrollada
 con las ideas presentadas en la sección \ref{sec:evalTop} también se presenta
 como una línea de trabajo interesante. Al igual que el estudio, implementación
 y validación de técnicas que proponen mejorar la segmentación como las que se
-describen en \cite{Thrun1998,Liu2015,wurm2008coordinated}\todo{colocar las refs en orden cronológico}.
+describen en \cite{Thrun1998,wurm2008coordinated,Liu2015}.
 
 % * Mejorar la segmentación, por ejemplo con:
 %   * Trun y su mergo de segmentos 
