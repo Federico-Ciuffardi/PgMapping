@@ -333,7 +333,7 @@ sección. Las tablas que se encuentran a lo largo de la sección indican los
 promedios y desviaciones estándar de las métricas obtenidas en las 20
 repeticiones que se hacen debido al no determinismo del simulador.
 
-\subsection{Cubrimiento y calidad de los mapas} \label{sec:exp:cubcal}
+\subsection{Completitud y calidad de los mapas} \label{sec:exp:cubcal}
 % Capaz aca puedo mencionar lo que pasa con los errores
 
 % el cubrimiento y la completitud: completitud mayor a 0.999 para todas combinaciones de granularidades y soluciones probadas
@@ -390,10 +390,23 @@ exploración multi-robot en términos de los mapas construidos. Las
 siguientes secciones se dedican a discutir el impacto de las diferentes
 variantes en términos de tiempo y costo de exploración.
 
+Como un comentario adicional se puede observar que ambas métricas tienen una
+tendencia a mejorar al aumentar la granularidad de la grilla. En el caso de la
+completitud una explicación posible es que cuanto mayor es la granularidad
+más pequeñas son las celdas, esto incluye a las celdas ubicadas en las esquinas de
+paredes que impactan negativamente en el completitud, y por lo tanto como estas celdas son
+más pequeñas su impacto negativo en el completitud es menor. En el caso de la
+calidad en primer lugar se tiene el impacto de la completitud en la calidad, y en
+segundo lugar que detectar un robot como obstáculo solo genera un efecto
+negativo para la calidad en las celdas que se corresponden a la su superficie
+de ese robot que es observada por los sensores de otro robot, entonces como
+celdas más pequeñas representan una superficie con un area menor entonces una
+granularidad mayor lleva a una mayor calidad.
+
+\todoerror[inline]{Vi la tendencia preferí no comentarlo porque no es muy relevante, y para lo relevante que es parece que es complicado de explicar. Trate de hacerlo pero si no quedo bien no creo que valga mucho la pena gastar más tiempo en esto | sobre el análisis de datos, algo que llama la atención -es una tendencia, es cómo incide positivamente tanto en calidad como en completitud, la granularidad de la grilla. desarrollaría un poco eso.}
 
 \input{tablas/todo3}
-\todo[inline]{consideraría, para ayudar a visualizar mejor los datos, presentarlos además en una gráfica de barras con std donde cada variante tiene un color. además, se puede graficar juntos la completitud y calidad agrupando horizontalmente las barras de completitud y calidad. \\
-sobre el análisis de datos, algo que llama la atención -es una tendencia, es cómo incide positivamente tanto en calidad como en completitud, la granularidad de la grilla. desarrollaría un poco eso.}
+\todo{mio: esta tabla tambien para arriba (luego de la ref)?}
 
 \subsection{Incrementalidad}\label{sec:exp:inc}
 En esta sección se comparan los resultados de las pruebas realizadas con la
@@ -514,13 +527,19 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 En esta sección se realiza un análisis comparativo de los resultados obtenidos
 en pruebas realizadas con tres soluciones distintas que difieren únicamente en
 el método usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
-métodos son: la simplificación\todo[inline]{debo confesar que no me termina gustando el término. creo que no es del todo correcto porque no transmite realmente lo que se hace. es decir, lo que no se termina de hacer evidente es que una cosa son los puntos de frontera (celdas) y otro son las fronteras (conjuntos de celdas). entonces, no es que las fronteras son más simples sino que concibo los objetivos de forma atómica (puntos de frontera) o en agrupamientos (fronteras). ergo, intentaría aclarar el punto e iría por algo más del estilo: fronteras mediante máximo cubrimiento, fronteras mediante K-Means o puntos de frontera.} de fronteras basada en cubrimiento propuesta en
+métodos son: la simplificación\todoerror[inline]{ Lo que entendí de que decís (y estoy de acuerdo) es las fronteras como concepto no son más simples (no lo van a ser a no ser que cambie el mapa). La simplificación que digo yo va por el lado de la representación de ese concepto. 
+
+  Nunca me refiero a las fronteras como el concepto si no que siempre hablo de una representación. A las fronteras las defino como el conjunto $F$ de todas las celdas frontera $(3.4)$ (creo que seria la forma atómica que decís), y las fronteras significativas $FS\subseteq F$ seria entonces una simplificación de $F$ que continua considerándose representativa de $F$ por cumplir la restricción de cubrimiento (creo que se mapa a los agrupamientos que decís). Por esto se me ocurrió el termino de -simplificación de fronteras-, por representar a las fronteras ($F$) de manera más simple (menos cantidad). 
+
+  Para mi referirme a esto como -simplificación- da una mejor idea y queda más fácil de leer. De última podría cambiarlo simplemente por -fronteras significativas basadas en...-.
+
+  | debo confesar que no me termina gustando el término. creo que no es del todo correcto porque no transmite realmente lo que se hace. es decir, lo que no se termina de hacer evidente es que una cosa son los puntos de frontera (celdas) y otro son las fronteras (conjuntos de celdas). entonces, no es que las fronteras son más simples sino que concibo los objetivos de forma atómica (puntos de frontera) o en agrupamientos (fronteras). ergo, intentaría aclarar el punto e iría por algo más del estilo: fronteras mediante máximo cubrimiento, fronteras mediante K-Means o puntos de frontera.} de fronteras basada en cubrimiento propuesta en
 este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
 \cite{Amorin2019} y la identificación de fronteras (sin simplificar)
 introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas
 analizadas en esta sección se presentan en la tabla \ref{tab:ident_obj1} y se encuentran graficadas en
 las figuras \ref{fig:gra:idobj:et}, \ref{fig:gra:idobj:ec} y
-\ref{fig:gra:idobj:iobt}\todo{ídem sec anterior}.
+\ref{fig:gra:idobj:iobt}\todo[inline]{ídem sec anterior}.
 
 Es posible apreciar que los métodos que identifican los objetivos simplificando
 las fronteras reducen los tiempos de exploración con respecto al método que
@@ -574,7 +593,7 @@ promedio en simplificación de fronteras, la simplificación basada en
 cubrimiento en todo nivel de granularidad es entre $2$ y
 $4$ veces más lenta que la basada en K-Means. Estos resultados
 parecen indicar que la simplificación basada en cubrimiento toma más tiempo
-pero logra mejores reducciones de objetivos que la basada en K-Means\todo[inline]{mmmm no. los resultados muestran que k-means es más rápido y que supera a la nuestra cuando aumenta la granularidad considerando distancia y tiempo medio de exp. para decir que las reducciones son mejores, habría que p.e. contar la cantidad de objetivos que se generan a lo largo de la exp con una u otra estrategia. eso daría una pista certera sobre el impacto de seguir una u otra y de allí se le podría atribuir que la nuestra distribuye mejor o hace mejores reducciones.}. En el
+pero logra mejores reducciones de objetivos que la basada en K-Means\todoerror[inline]{Entiendo y estoy de acuerdo que la pista que hay en los datos actuales no da para asegurarlo. Pero la pista que hace en estos datos me parece que algo vale. De ser así como puedo manejarlo? Acá trate de hacerlo con el -parecen indicar- quizás hay una expresión mejor que permita hacer énfasis en que es solo una posible explicación para esos resultados (la que hago en el siguiente párrafo).  | mmmm no. los resultados muestran que k-means es más rápido y que supera a la nuestra cuando aumenta la granularidad considerando distancia y tiempo medio de exp. para decir que las reducciones son mejores, habría que p.e. contar la cantidad de objetivos que se generan a lo largo de la exp con una u otra estrategia. eso daría una pista certera sobre el impacto de seguir una u otra y de allí se le podría atribuir que la nuestra distribuye mejor o hace mejores reducciones.}. En el
 nivel de granularidad más bajo el aumento de tiempo de simplificación no es tan
 relevante como la reducción de objetivos, por lo tanto la simplificación basada
 en cubrimiento obtiene un mejor rendimiento. A medida la granularidad crece el
