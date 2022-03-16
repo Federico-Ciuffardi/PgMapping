@@ -1935,7 +1935,7 @@ valores: $0.5$ si no aporta evidencia, $0.55$ si la evidencia indica que la
 celda está ocupada y $0.45$ si la evidencia indica que la celda está libre.
 Estos valores de probabilidad son los que se encuentran presentes en la
 solución desarrollada, pero pueden variar dependiendo de los sensores que sean
-usados\todo{justificaría un poco más el uso de esos valores. por qué no 0.0 y 1.0, p.e.}. 
+usados.\todoerror[inline]{El libro de Stachniss no especifica más que $0 \leq pfree < pprior < pocc \leq 1$ y que $pprior$ suele usar como $0.5$. Y mismo los $\leq$ son cuestionables, pro ejemplo si $pfree = 0$ en la regla de update queda una division entre $0$. La verdad es que los valores principalmente los determine de forma experimental (mi respuesta a esas preguntas sería que 0 y 1 no funcionaron bien). La intuición que me quedo de las pruebas que hice para determinar esos valores es que valores de $pfree$ y $pocc$ más cercanos al $0.5$ logran que la historia de evidencia tenga más peso y los más alejados de $0.5$ que la evidencia reciente sea la que tenga más peso. Poner la intuición sin fundamento real no creo que este bueno, y buscar más por alguna fuente con una expedición o probar la intuición matemáticamente no creo que valga la pena. De última puedo aclarar que los valores se determinaron de forma experimental. | justificaría un poco más el uso de esos valores. por qué no 0.0 y 1.0, p.e.}
 
 % Cuando la grilla de ocupación del nodo \emph{global\_costmap} de un robot
 
