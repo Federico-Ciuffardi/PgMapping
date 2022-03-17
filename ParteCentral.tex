@@ -256,12 +256,18 @@ función $e$ se define según
   \right .
   \label{eq:estado}
 \end{equation}
-\todoerror[inline]{Todas las celdas arrancan en 0.5 | Creo que no usar el epsilon es lo que más se ajusta a la
-  implementación, donde las celdas empiezan siendo desconocidas y luego de una
-  observación nunca pueden volver a ese estado. Quizás debería aclarar que
-  $0.5$ es el valor de probabilidad inicial | habría que definir un $\epsilon$ de modo
-que $|P-0,5|<\epsilon$ para desconocido y lo propio para las demás. sino,
-pareciera que en la práctica nunca serían desconocidas, no?}
+Otra decisión tomada en el contexto del proyecto es que la probabilidad de
+ocupación inicial $P(c)$ de cada celda $c$ se establece como $0.5$ indicando
+que a priori es equiprobable que $c$ se encuentre libre u ocupada. Esto implica
+que según la función $e$ el estado inicial de todas las celdas es $desconocido$.
+\todohint{Desde -Otra decision- hasta acá, quedo bien?}
+
+% \todoerror[inline]{Todas las celdas arrancan en 0.5 | Creo que no usar el epsilon es lo que más se ajusta a la
+%   implementación, donde las celdas empiezan siendo desconocidas y luego de una
+%   observación nunca pueden volver a ese estado. Quizás debería aclarar que
+%   $0.5$ es el valor de probabilidad inicial | habría que definir un $\epsilon$ de modo
+%   que $|P-0,5|<\epsilon$ para desconocido y lo propio para las demás. sino,
+%   pareciera que en la práctica nunca serían desconocidas, no?}
 
 La función $ady_4 : \mli{CG} \rightarrow P(\mli{CG})$ dada una celda $c$ devuelve el conjunto
 de celdas horizontalmente adyacentes y la función $ady_8 : \mli{CG} \rightarrow P(\mli{CG})$
