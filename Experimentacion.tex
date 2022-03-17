@@ -343,9 +343,18 @@ repeticiones que se hacen debido al no determinismo del simulador.
 En la tabla \ref{tab:todo3} se muestra la completitud y calidad de los mapas
 obtenidos en todas las pruebas realizadas. 
 
+\input{tablas/todo3}
+% \todo{si  | esta tabla tambien para arriba (luego de la ref)?}
+
 Con respecto a la completitud es posible apreciar que no existen diferencias
 mayores entre las variantes de la implementación, teniendo todos los mapas
-generados una completitud alta. Dado que el criterio de parada es que no se
+generados una completitud alta (ver figura \ref{fig:gra:todo:compl}).
+\begin{figure}[!h]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas_nuevas/graficas_histo_num/completeness_9995/map_completeness.png}
+  \caption{Completitud del mapa en función de celdas por metro cuadrado.}\label{fig:gra:todo:compl}
+\end{figure}
+Dado que el criterio de parada es que no se
 detecte más espacio por explorar, estos valores hablan principalmente de la
 capacidad de detectar el espacio desconocido explorable que tienen las
 soluciones. Todas las soluciones detectan espacio desconocido explorable
@@ -375,7 +384,7 @@ como tal. Ambos mapas corresponden a una granularidad de una celda por metro cua
 
 Los resultados de calidad de los mapas obtenidos son similares a los de
 completitud, los mapas construidos tienen una calidad alta, sin existir
-diferencias significativas entre las variantes. Esto es esperable ya que
+diferencias significativas entre las variantes (ver figura \ref{fig:gra:todo:cal}). Esto es esperable ya que
 los sensores simulados fueron configurados para proporcionar medidas perfectas.
 Aunque a pesar de esto la calidad de los mapas no perfecta, esto puede explicarse en primer
 lugar por el impacto de la completitud del mapa en su calidad. En segundo lugar
@@ -383,6 +392,12 @@ por la existencia de varios robots que pueden detectase como obstáculos entre
 sí, generado celdas obstaculizadas que no se encuentran en el mapa de
 referencia. Y en tercer lugar porque a pesar de la configuración de los
 sensores, estos proporcionan medidas con un ruido pequeño.
+
+\begin{figure}[H]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas_nuevas/graficas_histo_num/quality_9986/map_quality.png}
+  \caption{Calidad del mapa en función de celdas por metro cuadrado.}\label{fig:gra:todo:cal}
+\end{figure}
 
 Estos resultados de completitud y calidad del mapa permiten concluir que todas
 las variantes logran resolver de manera satisfactoria el problema de
@@ -405,16 +420,12 @@ granularidad mayor lleva a un menor impacto negativo sobre la calidad.
 
 % \todoerror[inline]{Vi la tendencia preferí no comentarlo porque no es muy relevante y parece que es complicado de explicar. Trate de hacerlo pero no creo que valga mucho la pena invertir más tiempo en esto. Quizás mejor no comentarlo. | sobre el análisis de datos, algo que llama la atención -es una tendencia, es cómo incide positivamente tanto en calidad como en completitud, la granularidad de la grilla. Desarrollaría un poco eso.}
 
-\input{tablas/todo3}
-\todo{si  | esta tabla tambien para arriba (luego de la ref)?}
-
 \subsection{Incrementalidad}\label{sec:exp:inc}
 En esta sección se comparan los resultados de las pruebas realizadas con la
 solución propuesta que construye el GVD de forma incremental, contra los de la 
 variante que solo difiere en que la construcción del GVD es no incremental. Las
-métricas analizadas en esta sección se encuentran en la tabla \ref{tab:inc1}
-y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
-\ref{fig:gra:inc:gvdt}.\todoremark[inline]{1: si, 2: poner figura luego del párrafo si es corto, y en el medio del párrafo si no referencia  | 1: Saco las referencias a las gráficas de acá? 2: Quedo bien? Sobre todo la de sección de identificación de objetivos | referenciaría cada figura al final del párrafo que analiza el contenido asociado a ellas}
+métricas analizadas en esta sección se encuentran en la tabla \ref{tab:inc1}.
+% \todoremark[inline]{1: si, 2: poner figura luego del párrafo si es corto, y en el medio del párrafo si no referencia  | 1: Saco las referencias a las gráficas de acá? 2: Quedo bien? Sobre todo la de sección de identificación de objetivos | referenciaría cada figura al final del párrafo que analiza el contenido asociado a ellas}
 
 \input{tablas/incrementalidad1}
 % \todo[inline]{colocaría esta tabla inmediatamente a continuación de su referencia.}
@@ -423,6 +434,12 @@ En cada nivel de granularidad\todoerror[inline]{Aclarar la primera vez de la sec
 ${\smallsim}94\%$ el tiempo promedio en construcción del GVD con respecto a la
 variante no incremental (ver figura \ref{fig:gra:inc:gvdt}). Esto valida la idea de que la construcción incremental
 del GVD es más eficiente que su contraparte no incremental.
+
+\begin{figure}[H]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_mean.png}
+  \caption{Tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
+\end{figure}
 
 % El tiempo de construcción de GVD impacta directamente al tiempo que ocurre
 % desde que un robot pide un objetivo y una le es asignada, ya que es una parte
@@ -449,7 +466,13 @@ Con respecto a los tiempos de exploración, estos también son reducidos al
 construir el GVD de forma incremental. La reducción comienza siendo de
 ${\smallsim}8\%$ en el nivel de granularidad más bajo, y a medida que aumenta el
 nivel de granularidad las reducciones también aumentan hasta llegar a una
-reducción de ${\smallsim}63\%$ en el nivel más alto (ver figura \ref{fig:gra:inc:et}). Esto se explica porque el
+reducción de ${\smallsim}63\%$ en el nivel más alto (ver figura \ref{fig:gra:inc:et}).
+\begin{figure}[!h]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_time.png}
+  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:inc:et}
+\end{figure}
+Esto se explica porque el
 tiempo de construcción de GVD impacta directamente al tiempo que ocurre desde
 que un robot pide un objetivo y uno le es asignado, por ser una parte necesaria y
 no paralelizada de la etapa de obtención de información (sección
@@ -464,6 +487,7 @@ de objetivos más probable es que un único robot quede ocioso, mientras que si
 dicha demora aumenta, también lo hace la probabilidad de que en el transcurso de
 la asignación más robots completen sus objetivos y requieran nuevos objetivos,
 quedando ociosos. 
+
 % no son
 % monótonamente crecientes ni decrecientes respecto a la granularidad
 
@@ -480,6 +504,12 @@ trayectoria a un nuevo objetivo antes de llegar a la ubicación exacta del
 objetivo previamente completado. Esto puede reducir la distancia recorrida por
 el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 
+\begin{figure}[H]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_cost.png}
+  \caption{Distancia total recorrida por la flota  en función de celdas por metro cuadrado.}\label{fig:gra:inc:ec}
+\end{figure}
+
 % En cada nivel de granularidad el tiempo promedio en construcción del GVD de
 % variante incremental siempre es menor que el de la variante no incremental,
 % aumentando la diferencia a medida que aumentan las celdas por metro cuadrado.
@@ -495,52 +525,15 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 % al aumentar las celdas por metro cuadrado, el tiempo
 % promedio en construcción del GVD, en el caso de la construcción incremental crece de a 
 
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_time.png}
-
-  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:inc:et}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/exploration_cost.png}
-
-  \caption{Distancia total recorrida por la flota  en función de celdas por metro cuadrado.}\label{fig:gra:inc:ec}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/incrementalidad/gvd_construction_time_mean.png}
-
-  \caption{Tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:inc:gvdt}
-
-\end{figure}
-
-
 \subsection{Identificación de objetivos}\label{sec:exp:idobj}
 En esta sección se realiza un análisis comparativo de los resultados obtenidos
 en pruebas realizadas con tres soluciones distintas que difieren únicamente en
 el método usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
-métodos son: la simplificación\todoerror[inline]{ lo puedo cambiar o no | Lo que entendí de lo que decís (y estoy de acuerdo) es que las fronteras como concepto no son más simples (no lo van a ser a no ser que cambie el mapa). La simplificación que digo yo va por el lado de la representación de ese concepto. 
-
-  Nunca me refiero a las fronteras como el concepto si no que siempre hablo de una representación. A las fronteras las defino como el conjunto $F$ de todas las celdas frontera $(3.4)$ (creo que seria la forma atómica que decís), y las fronteras significativas $FS\subseteq F$ seria entonces una simplificación de $F$ que continua considerándose representativa de $F$ por cumplir la restricción de cubrimiento (creo que se mapa a los agrupamientos que decís). Por esto se me ocurrió el termino de -simplificación de fronteras-, por representar a las fronteras ($F$) de manera más simple (menos cantidad). 
-
-  Para mi referirme a esto como -simplificación- da una mejor idea y queda más fácil de leer. De última podría cambiarlo simplemente por -fronteras significativas basadas en...-.
-
-  | debo confesar que no me termina gustando el término. creo que no es del todo correcto porque no transmite realmente lo que se hace. es decir, lo que no se termina de hacer evidente es que una cosa son los puntos de frontera (celdas) y otro son las fronteras (conjuntos de celdas). entonces, no es que las fronteras son más simples sino que concibo los objetivos de forma atómica (puntos de frontera) o en agrupamientos (fronteras). ergo, intentaría aclarar el punto e iría por algo más del estilo: fronteras mediante máximo cubrimiento, fronteras mediante K-Means o puntos de frontera.} de fronteras basada en cubrimiento propuesta en
+métodos son: la simplificación de fronteras basada en cubrimiento propuesta en
 este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
 \cite{Amorin2019} y la identificación de fronteras (sin simplificar)
 introducida en \cite{yamauchi1997frontier}. Los resultados de las métricas
-analizadas en esta sección se presentan en la tabla \ref{tab:ident_obj1} y se encuentran graficadas en
-las figuras \ref{fig:gra:idobj:et}, \ref{fig:gra:idobj:ec} y
-\ref{fig:gra:idobj:iobt}.
+analizadas en esta sección se presentan en la tabla \ref{tab:ident_obj1}.
 
 \input{tablas/ident_obj1}
 
@@ -549,7 +542,13 @@ las fronteras reducen los tiempos de exploración con respecto al método que
 identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
 de granularidad más bajo las reducciones son menores a ${\smallsim}5\%$, estas crecen junto
 a la granularidad hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
-nivel más alto (ver figura \ref{fig:gra:idobj:et}). Esto puede deberse al tiempo de asignación de objetivos como se
+nivel más alto (ver figura \ref{fig:gra:idobj:et}).
+\begin{figure}[!h]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_time.png}
+  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
+\end{figure}
+Esto puede deberse al tiempo de asignación de objetivos como se
 explica en la sección \ref{sec:exp:inc}. En este caso se considera que los
 factores con mayor impacto sobre los tiempos de asignación de objetivos son dos:
 el tiempo de simplificación de fronteras y la cantidad de objetivos
@@ -583,6 +582,12 @@ Aunque la coordinación pasiva también puede estar jugando un rol al evitar que
 los robots se trasladen a objetivos que desaprovechan sus capacidades
 sensoriales o que puedan llevar a inconvenientes en la navegación.
 
+\begin{figure}[H]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_cost.png}
+  \caption{Distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
+\end{figure}
+
 Con respecto a los dos métodos que simplifican las fronteras para 
 identificar objetivos, en el nivel de granularidad más bajo, la
 simplificación basada en cubrimiento logra reducciones con respecto a la
@@ -606,29 +611,8 @@ rendimiento superior.
 
 \begin{figure}[H]
   \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_time.png}
-
-  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:idobj:et}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/exploration_cost.png}
-
-  \caption{Distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
   \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/ident_obj/obj_id_time_mean.png}
-
   \caption{Tiempo promedio en obtención de información función de celdas por metro cuadrado.}\label{fig:gra:idobj:iobt}
-
 \end{figure}
 
 \subsection{Consideración del espacio desconocido}\label{sec:exp:desco}
@@ -642,9 +626,7 @@ celdas desconocidas como libres y considerar que las celdas desconocidas no
 propagan ondas y que el conjunto $\mli{UF}$ de celdas desconocidas que son
 adyacentes a celdas libres pertenecen a generadores ($\mli{UF} \subseteq
 \mli{CGen}$). Ambas formas son descritas en la sección \ref{subsec:espDesc}. Los
-resultados obtenidos en estas pruebas se presentan en la tabla \ref{tab:desconocido1} y sus
-gráficas en las figuras \ref{fig:gra:des:et}, \ref{fig:gra:des:ec} y
-\ref{fig:gra:des:gvdt}.
+resultados obtenidos en estas pruebas se presentan en la tabla \ref{tab:desconocido1}.
 
 \input{tablas/desconocido1}
 
@@ -654,6 +636,12 @@ promedio de construcción del GVD en cada nivel de granularidad respecto a
 considerar a las celdas desconocidas como libres (ver figura \ref{fig:gra:des:gvdt}). Estos resultados validan que
 restringir la construcción del GVD al espacio conocido lleva a mejoras en los
 tiempos de construcción del GVD. 
+
+\begin{figure}[H]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_mean.png}
+  \caption{Tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
+\end{figure}
 
 
 Adicionalmente tanto el tiempo de exploración como las distancias totales
@@ -672,6 +660,18 @@ GVD son menores y por lo tanto los efectos sobre las métricas son menos
 pronunciados. A su vez, considerar el espacio desconocido de distinta manera
 cambia significativamente la forma del GVD lo cual también puede afectar a los
 caminos que los robots generan a partir del GVD y por lo tanto a las métricas en cuestión.
+
+\begin{figure}[H]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_time.png}
+  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
+\end{figure}
+
+\begin{figure}[H]
+  \centerfloat
+  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_cost.png}
+  \caption{Distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
+\end{figure}
 
 
 %% donde se compara la construcción incremental y no incremental del GVD
@@ -712,32 +712,6 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 
 
 
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_time.png}
-
-  \caption{Tiempo de exploración en función de celdas por metro cuadrado.}\label{fig:gra:des:et}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/exploration_cost.png}
-
-  \caption{Distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:des:ec}
-
-\end{figure}
-
-\begin{figure}[H]
-  \centerfloat
-
-  \includegraphics[clip=true, width=\graphlen]{imagenes/graficas_chicas/graficas_histo_num/desconocido/gvd_construction_time_mean.png}
-
-  \caption{Tiempo promedio en construcción de GVD en función de celdas por metro cuadrado.}\label{fig:gra:des:gvdt}
-
-\end{figure}
 
 %%%%%%%%%%%%%%%%% ident obj
 

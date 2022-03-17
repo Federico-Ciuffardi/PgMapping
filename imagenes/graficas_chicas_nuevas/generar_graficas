@@ -1,0 +1,19 @@
+#! /bin/env bash
+pg_root="$HOME/catkin_ws/src/pgmappingcooperativo"
+
+function plot(){
+  tipo="$1"
+  mkdir -p graficas_$tipo/ident_obj
+
+  "$pg_root"/scripts/plotter_$tipo.py graficas_$tipo/ident_obj todo celda "$pg_root"/data_wo_bags/cell_size/inc_fsm5_gcm1 \
+                                                                          "$pg_root"/data_wo_bags/cell_size/noninc_fsm5_gcm1 \
+                                                                          "$pg_root"/data_wo_bags/cell_size/inc_fsm2_gcm1 \
+                                                                          "$pg_root"/data_wo_bags/cell_size/inc_fsm0_gcm1 \
+                                                                          "$pg_root"/data_wo_bags/cell_size/inc_fsm5_gcm2
+}
+
+
+# plot histo
+plot histo_num 
+# plot line
+
