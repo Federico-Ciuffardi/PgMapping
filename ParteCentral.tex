@@ -260,7 +260,7 @@ Otra decisión tomada en el contexto del proyecto es que la probabilidad de
 ocupación inicial $P(c)$ de cada celda $c$ se establece como $0.5$ indicando
 que a priori es equiprobable que $c$ se encuentre libre u ocupada. Esto implica
 que según la función $e$ el estado inicial de todas las celdas es $desconocido$.
-\todohint{Desde -Otra decision- hasta acá, quedo bien?}
+\todohint{Este párrafo nuevo quedo bien?}
 
 % \todoerror[inline]{Todas las celdas arrancan en 0.5 | Creo que no usar el epsilon es lo que más se ajusta a la
 %   implementación, donde las celdas empiezan siendo desconocidas y luego de una
@@ -1720,6 +1720,8 @@ otros dos métodos es conexo.
 % Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el área desconocida debe ser procesado por el original mientras que el mio se reduce al área exploradoa, sientod la parte importante (la del área explorada) casi igual que la otra.
 
 \section{Planificación}\label{sec:miNav}
+\todohint{Quedo bien la sección? Lo que cambie es fue dejar de hablar de puntos y pasar a hablar de subobjetivos por el tema que quedaba raro hablar de completar puntos. En la parte de jerárquica uso un poco el termino puntos pero cuidando no hablar de completarlos}
+
 % Recordando que el camino consiste en una secuencia puntos en el espacio, en el
 % contexto de la planificación estos se denominan como subobjetivos con exepcion
 % del último punto llamado como objetivo.
@@ -1728,54 +1730,55 @@ otros dos métodos es conexo.
 % camino se denominan subobjetivos con exepcion del último punto que se denomina
 % como objetivo.
 
-Una vez que el robot recibe un objetivo de exploración desde la central
-(sección \ref{sec:asigTar}), el robot debe moverse físicamente hasta el lugar
+Una vez que un robot recibe un objetivo de exploración desde la central
+(sección \ref{sec:asigTar}), este debe moverse físicamente hasta el lugar
 indicado para completar dicho objetivo y progresar en la exploración del entorno.
 
 % de la memoria del robot
-El módulo encargado de recibir objetivos de exploración es el \emph{controlador
-del robot}. Al recibir un objetivo de exploración este se encarga de recuperar
-el camino que fue determinado durante la valuación de dicho objetivo (sección
-\ref{subsec:MiValSub}) y de transmitir este camino al módulo \emph{controlador
-de movimiento}. 
+El módulo que se encarga de recibir objetivos de exploración es el
+\emph{controlador del robot}. Al recibir un objetivo de exploración este módulo
+recupera el camino que fue determinado durante la valuación de dicho objetivo
+(sección \ref{subsec:MiValSub}) y lo envía al módulo \emph{controlador de
+movimiento}. 
 
 % Una que el caminno llega al módulo \emph{controlador de movimiento}
 % trabaja
-% junto al módulo \emph{move base} para lograr su comentido.
+% junto al módulo \emph{Move Base} para lograr su comentido.
 
  % puntos
 % del camino, son relevantes para poder llegar al objetivo.
 
 % que se
-% considera no completado al módulo \emph{move base} el cual se encarga de
+% considera no completado al módulo \emph{Move Base} el cual se encarga de
 % generar las directivas a los motores del robot para que pueda llegar de forma
 % segura a dicho objetivo/subobjetivo.
 
 % Para determinar que punto debe ser enviado a
-% \emph{move base} el \emph{controlador de moviemiento} 
+% \emph{Move Base} el \emph{controlador de moviemiento} 
 
 % Adicionalmente tiene la tarea de determinar cuando un punto
 % se considera completado
 
 % Especificamente el \emph{controlador de
 % moviemiento} comienza enviando el primer punto del camino  En algun punto de la trayectoria hacia el
-% objetivo/subobjetivo que lleva a cabo \emph{move base} este se considera
+% objetivo/subobjetivo que lleva a cabo \emph{Move Base} este se considera
 % completado, dado esto el siguiente objetivo/subobjetivo sin completar se envia
-% a \emph{move base}. El proceso se repite hasta completar el objetivo,
+% a \emph{Move Base}. El proceso se repite hasta completar el objetivo,
 % completando asi el camnino completo.
 
-El módulo \emph{controlador de movimiento} se encarga de enviar puntos del
-camino recibido al módulo \emph{move base} que genera las directivas necesarias
-para que el robot avance hacia dichos puntos. Estos puntos deben enviarse en
-una secuencia que permita que el robot pueda seguir el camino hasta el
-objetivo. Para lograr esto, asumiendo que se tiene un criterio que permite
-determinar cuando un punto del camino se considera completado, el
+El módulo \emph{controlador de movimiento} interpreta cada punto que compone
+al camino recibido como un subobjetivo y se encarga de decidir que subobjetivos
+enviar al módulo \emph{Move Base} que es el responsable de generar las
+directivas necesarias para que el robot avance hacia dichos subobjetivos. Estos
+subobjetivos deben enviarse en una secuencia que permita que el robot pueda seguir el
+camino hasta el objetivo de exploración. Para lograr esto, asumiendo que se tiene un criterio
+que permite determinar cuando un subobjetivo se considera completado, el
 funcionamiento del \emph{controlador de movimiento} consiste en determinar el
-primer punto no completado del camino, enviar dicho punto a \emph{move base} y
+primer subobjetivo no completado del camino, enviar dicho subobjetivo a \emph{Move Base} y
 esperar a que el robot avance lo suficiente para completarlo. Una vez
-completado se repite el proceso con el siguiente punto sin completar, esto
-sucede hasta que se completa el último punto del camino, el objetivo de
-exploración.
+completado se repite el proceso con el siguiente subobjetivo sin completar, esto
+sucede hasta que se completa el último subobjetivo del camino que
+es el objetivo de exploración.
 
 % Para determinar cuando un punto del camino considera completado, estos se separan  el último punto  objetivo  subobjetivos con exepcion del último punto que se denomina
 % como objetivo.
@@ -1783,26 +1786,28 @@ exploración.
 \subsection{Criterios de compleción}
 
 El \emph{controlador de movimiento} tiene dos criterios para determinar que un
-punto del camino fue completado\todoerror[inline]{con punto me refiero a tarea asociada al putno:  Dos opciones (introducir antes subobj) (mejor esta) o dejar alcanzado | Creo que es mejor el termino completado porque alcanzar me da una idea de cercanía que no es necesariamente el caso. Entiendo que quizás queda raro hablar de completar un punto del camino, pero esto se aclara a lo largo de la sección (y era el termino que se estaba manejando antes de comenzar la subsection) | alcanzado?}, el criterio de compleción normal y criterio de
+subobjetivo fue completado, el criterio de compleción normal y criterio de
 compleción forzosa.
+% \todoerror[inline]{con punto me refiero a tarea asociada al putno:  Dos opciones (introducir antes subobj) (mejor esta) o dejar alcanzado | Creo que es mejor el termino completado porque alcanzar me da una idea de cercanía que no es necesariamente el caso. Entiendo que quizás queda raro hablar de completar un punto del camino, pero esto se aclara a lo largo de la sección (y era el termino que se estaba manejando antes de comenzar la subsection) | alcanzado?}
 
 La compleción forzosa ocurre cuando el robot está a una distancia menor a
-$\mli{DistF}$ del punto en cuestión. Este criterio de compleción tiene como
-propósito determinar cuando un robot está lo suficientemente cerca de un punto
-del camino como para considerarlo completo\todoerror[inline]{similar a lo anterior|similar a lo anterior, aunque acá si esta lo de cercanía, me parece mejor completar para ser consistente | que se ha alcanzado el objetivo?}, a pesar de que no se dio aún la
+$\mli{DistF}$ del subobjetivo en cuestión. Este criterio de compleción tiene como
+propósito determinar cuando un robot está lo suficientemente cerca de un subobjetivo
+ como para considerarlo completo, a pesar de que no se dio aún la
 compleción normal. Se recomienda que el valor $\mli{DistF}$ sea similar a las
 dimensiones del robot.
+% \todoerror[inline]{similar a lo anterior|similar a lo anterior, aunque acá si esta lo de cercanía, me parece mejor completar para ser consistente | que se ha alcanzado el objetivo?}
 
 Por otro lado para la compleción normal existen dos condiciones, la primera es
-que la línea de ancho $\mli{An}$ que existe entre el robot y el punto del camino,
-al discretizarse en celdas no contenga ninguna ocupada. La segunda, en el
-caso del último punto del camino (el objetivo) es que la distancia entre este y
-el robot sea menor a $\mli{DistNo}$, y en el resto de los puntos (subobjetivos)
-es que la distancia sea menor a $\mli{DistNs}$.
+que la línea de ancho $\mli{An}$ que existe entre el robot y el subobjetivo,
+al discretizarse en celdas no contenga ninguna celda ocupada. La segunda, en el
+caso del objetivo de exploración es que la distancia entre este y
+el robot sea menor a $\mli{DistNo}$, y en el caso del resto de los subobjetivos
+es que la distancia hacia estos sea menor a $\mli{DistNs}$.
 
 El valor $\mli{DistNo}$ debe cumplir con $\mli{DistF}\leq\mli{DistNo}<\mli{rango}$, siendo
 $\mli{rango}$ el alcance de los sensores del robot. Esto se debe a que la idea
-detrás del criterio de compleción normal aplicado al último punto del camino, es
+detrás del criterio de compleción normal aplicado al objetivo de exploración, es
 considerar que este es completado cuando es seguro que fue sensado por el robot.
 Esto implica que el robot está en condiciones de recopilar la nueva información
 del entorno asociada al objetivo, siendo este el motivo por el cual el objetivo
@@ -1818,8 +1823,8 @@ el camino original cuando el espacio está despejado. Esto sucede porque en los
 espacios despejados la línea de ancho $\mli{An}$ no se solapa con obstáculos y
 por lo tanto todos los subobjetivos del camino que estén a una distancia menor
 a $\mli{DistNs}$ se consideran completados. Completar varios subobjetivos a la
-vez implica libertad de movimiento, al ser \emph{move base} el que se encarga
-de la trayectoria hasta el primer punto no completado del camino, sin ser
+vez implica libertad de movimiento, al ser \emph{Move Base} el que se encarga
+de la trayectoria hasta el primer subobjetivo no completado del camino, sin ser
 necesario pasar por los subobjetivos previamente completados.
 
 \subsection{Planificación jerárquica}
@@ -1849,25 +1854,25 @@ y corredores), finalizando con el objetivo. Luego se establecen caminos de bajo
 nivel entre el robot y el siguiente punto del camino de alto nivel, la idea de
 estos caminos es que el robot pueda navegar libremente (sin considerar el GVD)
 dentro de los segmentos, moviéndose de transición en transición. La
-planificación de los caminos de bajo nivel se delega a \emph{move base} que
+planificación de los caminos de bajo nivel se delega a \emph{Move Base} que
 genera caminos sin desvíos innecesarios.
 
-Es pertinente notar que en la implementación realizada \emph{move base} se
+Es pertinente notar que en la implementación realizada \emph{Move Base} se
 configuró con un \emph{global\_planner} (sección \ref{subsec:move_base}) que
 calcula caminos sobre la grilla de ocupación, de igual manera utilizar la
 planificación jerárquica simplifica los cálculos de los caminos sobre la grilla,
 ya que hace que sean locales al segmento que se debe transitar. %(se usa $A^*$).
 
 % (mayor a las dimensiones de los segmentos) 
-Recordando que los caminos que llevan a un objetivo, enviados desde el
+Recordando que los caminos no triviales (sección \ref{subsec:MiValSub}) que llevan a un objetivo de exploración, enviados desde el
 \emph{controlador del robot} al \emph{controlador de movimiento} son caminos
 generados sobre el GVD. Para llevar a cabo la planificación jerárquica se
 establece $\mli{DistNs}=\infty$ y $\mli{An}$ mayor al tamaño estimado de los
 portales de transición entre segmentos (puertas, pasajes abiertos). De esta
-forma asumiendo segmentos despejados, todos los subobjetivos asociados a un
+forma asumiendo segmentos despejados, exceptuando al objetivo de exploración todos los subobjetivos asociados a un
 segmento en el que se encuentra un robot son completados de forma normal. Por
-lo tanto en caminos largos que abarcan varios segmentos, los únicos
-subobjetivos enviados a \emph{move base} son los que se ubican en las
+lo tanto en caminos largos que abarcan varios segmentos, nuevamente exceptuando al objetivo de exploración, los únicos
+subobjetivos enviados a \emph{Move Base} son los que se ubican en las
 transiciones entre un segmento y el siguiente. Estos subobjetivos no son
 completados de forma normal ya que dichas transiciones consisten en portales de
 ancho menor a $\mli{An}$ que no permiten la existencia de una línea discretizada
@@ -1875,7 +1880,7 @@ de ancho $\mli{An}$ que no contenga obstáculos.
 
 En la figura \ref{fig:navjer} se muestra un ejemplo en el que se puede apreciar
 la diferencia entre el largo del camino de bajo nivel que lleva a la celda
-ubicada sobre la transición al siguiente segmento, y el largo de la porción del
+ubicada sobre la transición al siguiente segmento del camino, y el largo de la porción del
 camino original ubicado sobre el GVD que lleva a esa misma celda.
 
 
@@ -1929,7 +1934,7 @@ mapa.
 
 Cada robot está constantemente recopilando información del entorno a través de
 sus sensores y enviando dicha información al nodo \gls{ROS}
-\emph{global\_costmap} de su módulo \emph{move base} (sección
+\emph{global\_costmap} de su módulo \emph{Move Base} (sección
 \ref{subsec:move_base}). Al recibir información sensorial el nodo
 \emph{global\_costmap} envía una actualización al módulo \emph{combinador de
 mapas} que consiste en el conjunto de las celdas $c$ que están en el alcance de
@@ -2019,7 +2024,7 @@ completo del entorno explorado.
 % basura de planificación
 % Resumiendo, la planificación jerarquica cosnsiste en utlizar el camino original
 % para determinar los subobjetivos ubicados en las transicisiones entre los segmentos
-% del camino y \emph{move base} para navegar dentro de los segmentos hacia dichas
+% del camino y \emph{Move Base} para navegar dentro de los segmentos hacia dichas
 % transiciones. 
 
 % solo utilizar la información topologica contenida en
@@ -2039,14 +2044,14 @@ completo del entorno explorado.
 % los caminos , 
 
 % caminos sobre el GVD, pero los caminos resultantes pueden ser innecesariamente
-% largos, mientras que \emph{move base} con la configuracion correcta, permite
+% largos, mientras que \emph{Move Base} con la configuracion correcta, permite
 % ejecutar de forma eficiente caminos cercanos a los lineales. De esta manera se
 % aporvecha la eficiencia del calaculo de caminos sobre el GVD, y se evitan los
 % desvios que dichos camnios tienen, solo utlizando de estos los subobjetivos que
 % se ubican en portales, 
 
 
-% del camino y \emph{move base} para navegar dentro de los segmentos hacia dichas
+% del camino y \emph{Move Base} para navegar dentro de los segmentos hacia dichas
 % transiciones. La ventaja de aplicar esta tecnica es que hace posible utlizar los camnios
 % no trivales se calcula sobre las celdas pertencientes al GVD, lo cual tiene
 % menor costo computacional que considerar todo el espacio libre de la grilla de
@@ -2168,7 +2173,7 @@ completo del entorno explorado.
 % en si. El robot siempre se dirige al último subobjetivo/objetivo no competado.
 
 % De esta forma notando las condiciones de complecion si Y es grande se tiene 
-% navegacion libre (delegada a move base, el nivel bajo de la jerarquia) sobre
+% navegacion libre (delegada a Move Base, el nivel bajo de la jerarquia) sobre
 % zonas para las cuales no existen obtaculos mientras que se navega siguientdo el
 % camnino seguro (provisto por el gvd, nivel alto de la jerarquia) cuando los
 % objetivos son \say{no deseables} o \say{no seguros}.
