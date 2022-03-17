@@ -260,7 +260,7 @@ Para calcular las métricas de \emph{completitud} y \emph{calidad} de los mapas
 es necesario contar con mapas de referencia considerados como correctos. En
 este proyecto estos se representan a través de grillas de ocupación al igual
 que los generados en la exploración. Se definen cuatro mapas de
-referencia, uno por cada nivel de granularidad utilizado en las pruebas, con el
+referencia, uno por cada nivel de granularidad de la grilla utilizado en las pruebas, con el
 propósito de poder comparar cualquiera de los mapas obtenidos en pruebas con
 un mapa de referencia de igual granularidad. Los mapas de referencia se pueden
 apreciar en la figura \ref{fig:mref}. 
@@ -336,7 +336,7 @@ repeticiones que se hacen debido al no determinismo del simulador.
 \subsection{Completitud y calidad de los mapas} \label{sec:exp:cubcal}
 % Capaz aca puedo mencionar lo que pasa con los errores
 
-% el cubrimiento y la completitud: completitud mayor a 0.999 para todas combinaciones de granularidades y soluciones probadas
+% el cubrimiento y la completitud: completitud mayor a 0.999 para todas combinaciones de granularidad y soluciones probadas
 
 % el error y la calidad:
 
@@ -429,8 +429,8 @@ métricas analizadas en esta sección se encuentran en la tabla \ref{tab:inc1}.
 
 \input{tablas/incrementalidad1}
 % \todo[inline]{colocaría esta tabla inmediatamente a continuación de su referencia.}
-
-En cada nivel de granularidad\todoerror[inline]{Aclarar la primera vez de la seccion, minimo (y en otrso parrofs si estasn muy alejados) | Entiendo, pero uso mucho el concepto de granularidad, en todos debería indicar que es la granularidad de la grilla? | de qué?} la variante incremental reduce en un
+% \todoerror[inline]{Aclarar la primera vez de la seccion, minimo (y en otrso parrofs si estasn muy alejados) | Entiendo, pero uso mucho el concepto de granularidad, en todos debería indicar que es la granularidad de la grilla? | de qué?} 
+En cada nivel de granularidad de la grilla la variante incremental reduce en un
 ${\smallsim}94\%$ el tiempo promedio en construcción del GVD con respecto a la
 variante no incremental (ver figura \ref{fig:gra:inc:gvdt}). Esto valida la idea de que la construcción incremental
 del GVD es más eficiente que su contraparte no incremental.
@@ -464,7 +464,7 @@ del GVD es más eficiente que su contraparte no incremental.
 
 Con respecto a los tiempos de exploración, estos también son reducidos al
 construir el GVD de forma incremental. La reducción comienza siendo de
-${\smallsim}8\%$ en el nivel de granularidad más bajo, y a medida que aumenta el
+${\smallsim}8\%$ en el nivel de granularidad de la grilla más bajo, y a medida que aumenta el
 nivel de granularidad las reducciones también aumentan hasta llegar a una
 reducción de ${\smallsim}63\%$ en el nivel más alto (ver figura \ref{fig:gra:inc:et}).
 \begin{figure}[!h]
@@ -496,7 +496,7 @@ quedando ociosos.
 % esta metrica son similares a sus desviaciones estándar
 
 Construir el GVD de forma incremental también parece reducir las distancias
-totales recorridas por la flota en todas las granularidades, aunque en este
+totales recorridas por la flota en todos nivles de granularidad de la grilla, aunque en este
 caso las reducciones están comprendidas entre $2\%$ y $7\%$, fluctuando al
 aumentar los niveles de granularidad (ver figura \ref{fig:gra:inc:ec}). Esto puede deberse a que tiempos más
 rápidos de asignación de objetivos hacen más probable que los robots cambien su
@@ -540,7 +540,7 @@ analizadas en esta sección se presentan en la tabla \ref{tab:ident_obj1}.
 Es posible apreciar que los métodos que identifican los objetivos simplificando
 las fronteras reducen los tiempos de exploración con respecto al método que
 identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
-de granularidad más bajo las reducciones son menores a ${\smallsim}5\%$, estas crecen junto
+de granularidad de la grilla más bajo las reducciones son menores a ${\smallsim}5\%$, estas crecen junto
 a la granularidad hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
 nivel más alto (ver figura \ref{fig:gra:idobj:et}).
 \begin{figure}[!h]
@@ -589,7 +589,7 @@ sensoriales o que puedan llevar a inconvenientes en la navegación.
 \end{figure}
 
 Con respecto a los dos métodos que simplifican las fronteras para 
-identificar objetivos, en el nivel de granularidad más bajo, la
+identificar objetivos, en el nivel de granularidad de la grilla más bajo, la
 simplificación basada en cubrimiento logra reducciones con respecto a la
 basada en K-Means de ${\smallsim}3\%$ en las distancias totales recorridas por la
 flota y de ${\smallsim}5\%$ en los tiempos de exploración. Esto se invierte a
@@ -632,7 +632,7 @@ resultados obtenidos en estas pruebas se presentan en la tabla \ref{tab:desconoc
 
 Considerar que las celdas desconocidas no propagan ondas y que $\mli{UF}
 \subseteq \mli{CGen}$ logra una reducción de ${\smallsim}61\%$ en el tiempo
-promedio de construcción del GVD en cada nivel de granularidad respecto a
+promedio de construcción del GVD en cada nivel de granularidad de la grilla respecto a
 considerar a las celdas desconocidas como libres (ver figura \ref{fig:gra:des:gvdt}). Estos resultados validan que
 restringir la construcción del GVD al espacio conocido lleva a mejoras en los
 tiempos de construcción del GVD. 
@@ -701,7 +701,7 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 % esta metrica son similares a sus desviaciones estándar
 
 % Construir el GVD de forma incremental también parece reducir las distancias
-% totales recorridas por la flota en todas las granularidades, aunque en este
+% totales recorridas por la flota en todas las granularidad, aunque en este
 % caso las reducciones estan comprendidas entre $2\%$ y $7\%$, fluctuando al
 % aumentar los niveles de granularidad. Esto puede deberse a que tiempos más
 % rapidos de asignación de objetivos hacen más probable que los robots cambien su
