@@ -599,15 +599,35 @@ flota aumentan en un ${\smallsim}3\%$ y los tiempos de exploración en un
 ${\smallsim}6\%$ (ver figuras \ref{fig:gra:idobj:et} y \ref{fig:gra:idobj:ec}). Por otro lado según los tiempos
 promedio en simplificación de fronteras, la simplificación basada en
 cubrimiento en todo nivel de granularidad es entre $2$ y
-$4$ veces más lenta que la basada en K-Means (ver figura \ref{fig:gra:idobj:iobt}). Estos resultados
-parecen indicar que la simplificación basada en cubrimiento toma más tiempo
-pero logra mejores reducciones de objetivos que la basada en K-Means\todoerror[inline]{Corregir aca, en las conclusiones y en el trabajo futuro. Tengo info en las notas | Entiendo y estoy de acuerdo que la pista que hay en los datos actuales no da para asegurarlo. Pero la pista que hace en estos datos me parece que algo vale. De ser así como puedo manejarlo? Acá trate de hacerlo con el -parecen indicar- quizás hay una expresión mejor que permita hacer énfasis en que es solo una posible explicación para esos resultados (la que hago en el siguiente párrafo).  | mmmm no. los resultados muestran que k-means es más rápido y que supera a la nuestra cuando aumenta la granularidad considerando distancia y tiempo medio de exp. para decir que las reducciones son mejores, habría que p.e. contar la cantidad de objetivos que se generan a lo largo de la exp con una u otra estrategia. eso daría una pista certera sobre el impacto de seguir una u otra y de allí se le podría atribuir que la nuestra distribuye mejor o hace mejores reducciones.}. En el
-nivel de granularidad más bajo el aumento de tiempo de simplificación no es tan
-relevante como la reducción de objetivos, por lo tanto la simplificación basada
-en cubrimiento obtiene un mejor rendimiento. A medida la granularidad crece el
-aumento de tiempo de simplificación se torna más relevante que la reducción de
-objetivos, por lo que la simplificación basada en K-Means obtiene un
-rendimiento superior.  
+$4$ veces más lenta que la basada en K-Means (ver figura \ref{fig:gra:idobj:iobt}). 
+Los resultados indican que la simplificación basada en cubrimiento es menos
+eficiente que la basada en K-Means en cuanto al tiempo de simplificación, a pesar de esto no hay diferencias
+significativas en los tiempos de exploración ni en las distancias totales
+recorridas por la flota. Estos resultados no permiten deducir de forma concreta
+cual método logra mejores reducciones de objetivos. \todohint[inline]{Quedo bien?
+(desde-Los resultados-)}
+
+% \todoerror[inline]{Corregir aca, en las conclusiones y en el trabajo futuro.
+% Tengo info en las notas | Entiendo y estoy de acuerdo que la pista que hay en
+% los datos actuales no da para asegurarlo. Pero la pista que hace en estos
+% datos me parece que algo vale. De ser así como puedo manejarlo? Acá trate de
+% hacerlo con el -parecen indicar- quizás hay una expresión mejor que permita
+% hacer énfasis en que es solo una posible explicación para esos resultados (la
+% que hago en el siguiente párrafo).  | mmmm no. los resultados muestran que
+% k-means es más rápido y que supera a la nuestra cuando aumenta la
+% granularidad considerando distancia y tiempo medio de exp. para decir que las
+% reducciones son mejores, habría que p.e. contar la cantidad de objetivos que
+% se generan a lo largo de la exp con una u otra estrategia. eso daría una
+% pista certera sobre el impacto de seguir una u otra y de allí se le podría
+% atribuir que la nuestra distribuye mejor o hace mejores reducciones.}. En el
+% nivel de granularidad más bajo el aumento de tiempo de simplificación no es
+% tan relevante como la reducción de objetivos, por lo tanto la simplificación
+% basada en cubrimiento obtiene un mejor rendimiento. A medida la granularidad
+% crece el aumento de tiempo de simplificación se torna más relevante que la
+% reducción de objetivos, por lo que la simplificación basada en K-Means
+% obtiene un rendimiento superior.  
+
+
 
 \begin{figure}[H]
   \centerfloat

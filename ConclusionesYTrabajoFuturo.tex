@@ -75,9 +75,20 @@ Respecto a la simplificación de fronteras se mencionan dos métodos, la
 simplificación basada en K-Means que se encuentra presente en el estado del
 arte, y la simplificación basada en cubrimiento que es propuesta en este proyecto como
 mejora de la anterior. Los resultados experimentales permiten concluir que la
-simplificación basada en cubrimiento logra una mayor reducción de objetivos\todoerror[inline]{De vuelta se me ocurre que con las palabras indicadas capaz puedo decir que hay una pista y luego en trabajo futuro usarla como motivación para continuar refinando el método | ya comenté al respecto, ojo!} que
-la simplificación basada en K-Means, pero es menos eficiente.\todoremark[inline]{Me quedaba la duda si por eficiencia se daba a entender solo que es más lento y/o se podía entender que implicaba algo sobre la calidad del resultado | chavacano! es menos eficiente?}
-% pero tiene un rendimiento inferior en términos de costo computacional.
+simplificación basada en K-Means es la más eficiente en términos de tiempo de
+ejecución, mientras que respecto a los tiempos de exploración y la distancia total
+recorrida por la flota no existen diferencias significativas entre los métodos.
+\todohint{quedo bien? (Desde -Los resultados experimentales-)}
+
+% logra una mayor reducción de objetivos\todoerror[inline]{De vuelta se me
+% ocurre que con las palabras indicadas capaz puedo decir que hay una pista y
+% luego en trabajo futuro usarla como motivación para continuar refinando el
+% método | ya comenté al respecto, ojo!} que la simplificación basada en
+% K-Means, pero es menos eficiente.\todoremark[inline]{Me quedaba la duda si
+% por eficiencia se daba a entender solo que es más lento y/o se podía entender
+% que implicaba algo sobre la calidad del resultado | chavacano! es menos
+% eficiente?} pero tiene un rendimiento inferior en términos de costo
+% computacional.
 
 Adicionalmente existen dos mejoras potenciales sobre las cuales únicamente se
 puede concluir que funcionan correctamente por formar parte de la solución
@@ -154,6 +165,7 @@ remover las hipótesis de comunicación y localización ideales de los robots
 \cite{amigoni2017multirobot,slam}.
 
 \subsection{Identificación de objetivos}
+\todohint{Quedo bien la subsección? La reescribí para agregar que hay que comprobar cual de los métodos de simplificación es mejor}
 % esta relacionada al
 % método de identificación de objetivos que funciona simplificando fronteras
 % basándose en el cubrimiento. Como se comento en la secón de conclusiones,
@@ -161,18 +173,26 @@ remover las hipótesis de comunicación y localización ideales de los robots
 
 % posibilidad de mejorar el rendimiento computacional del 
 
-También se abren dos líneas de trabajo que profundizan en el estudio y
-desarrollo de métodos de identificación de objetivos. La primera está orientada
-al análisis del método de simplificación de fronteras basado en el cubrimiento
-en busca de posibles optimizaciones que logren mejorar su rendimiento
-computacional, que actualmente es su mayor desventaja. La segunda consiste en
-el desarrollo de variantes del método antes mencionado, que en lugar de
-determinar de forma arbitraria cual frontera es la significativa del conjunto
-de candidatas, se determine con algún criterio específico, como por ejemplo elegir la
-frontera candidata con mayor ganancia de información \cite{Amorin2019}.
+Si bien los resultados experimentales no permiten concluir que la
+simplificación de fronteras basada en cubrimiento es mejor que la basada en K-Means
+en términos de reducción de objetivos de exploración identificados, tampoco
+lo niegan. Esto motiva una línea de trabajo futuro que es la de realizar
+experimentos dedicados a comprobar cual de los dos métodos es mejor en términos
+de reducciones de objetivos. Para lograr esto los nuevos experimentos deben
+reportar una nueva métrica que sea un indicador directo de cantidad de
+objetivos identificados.
 
-% La tercera es
-% el estudio de otros métodos identificación de objetivos, como por ejemplo la simplificación.
+De comprobarse que el método de simplificación de fronteras basado en
+cubrimiento logra
+mejores reducciones de los objetivos identificados se abren dos líneas de
+trabajo que profundizan en el estudio y desarrollo de este método. La primera
+está orientada al análisis del método y su implementación en busca de posibles
+optimizaciones que logren mejorar su rendimiento computacional, que actualmente
+es su mayor desventaja. La segunda consiste en el desarrollo de variantes del
+método antes mencionado, que en lugar de determinar de forma arbitraria cual
+frontera es la significativa del conjunto de candidatas, se determine con algún
+criterio específico, como por ejemplo elegir la frontera candidata con mayor
+ganancia de información \cite{Amorin2019}.
 
 De seguir alguna de estas direcciones también sería conveniente diseñar nuevas
 pruebas que se concentren en evaluar la identificación de objetivos, ya que por
