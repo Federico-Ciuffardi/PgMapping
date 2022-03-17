@@ -392,21 +392,21 @@ variantes en términos de tiempo y costo de exploración.
 
 Como un comentario adicional se puede observar que ambas métricas tienen una
 tendencia a mejorar al aumentar la granularidad de la grilla. En el caso de la
-completitud una explicación posible es que cuanto mayor es la granularidad
+completitud, una explicación posible es que cuanto mayor es la granularidad
 más pequeñas son las celdas, esto incluye a las celdas ubicadas en las esquinas de
 paredes que impactan negativamente en el completitud, y por lo tanto como estas celdas son
-más pequeñas su impacto menor. En el caso de la
-calidad en primer lugar está la incidencia de la completitud en la calidad, y en
-segundo lugar que detectar un robot como obstáculo solo genera un efecto
-negativo para la calidad en las celdas que se corresponden a la su superficie
+más pequeñas su impacto es menor. En el caso de la
+calidad, en primer lugar está la incidencia de la completitud en la calidad, y en
+segundo lugar que detectar un robot como obstáculo sólo genera un efecto
+negativo para la calidad en las celdas que se corresponden a la superficie
 de ese robot que es percibida por los sensores de otro robot, entonces como
 celdas más pequeñas representan una superficie con un area menor se tiene que una
 granularidad mayor lleva a un menor impacto negativo sobre la calidad.
 
-\todoerror[inline]{Vi la tendencia preferí no comentarlo porque no es muy relevante y parece que es complicado de explicar. Trate de hacerlo pero no creo que valga mucho la pena invertir más tiempo en esto. Quizás mejor no comentarlo. | sobre el análisis de datos, algo que llama la atención -es una tendencia, es cómo incide positivamente tanto en calidad como en completitud, la granularidad de la grilla. Desarrollaría un poco eso.}
+% \todoerror[inline]{Vi la tendencia preferí no comentarlo porque no es muy relevante y parece que es complicado de explicar. Trate de hacerlo pero no creo que valga mucho la pena invertir más tiempo en esto. Quizás mejor no comentarlo. | sobre el análisis de datos, algo que llama la atención -es una tendencia, es cómo incide positivamente tanto en calidad como en completitud, la granularidad de la grilla. Desarrollaría un poco eso.}
 
 \input{tablas/todo3}
-\todo{esta tabla tambien para arriba (luego de la ref)?}
+\todo{si  | esta tabla tambien para arriba (luego de la ref)?}
 
 \subsection{Incrementalidad}\label{sec:exp:inc}
 En esta sección se comparan los resultados de las pruebas realizadas con la
@@ -414,12 +414,12 @@ solución propuesta que construye el GVD de forma incremental, contra los de la
 variante que solo difiere en que la construcción del GVD es no incremental. Las
 métricas analizadas en esta sección se encuentran en la tabla \ref{tab:inc1}
 y graficadas en las figuras \ref{fig:gra:inc:et}, \ref{fig:gra:inc:ec} y
-\ref{fig:gra:inc:gvdt}\todoremark[inline]{1: Saco las referencias a las gráficas de acá? 2: Quedo bien? Sobre todo la de sección de identificación de objetivos | referenciaría cada figura al final del párrafo que analiza el contenido asociado a ellas}.
+\ref{fig:gra:inc:gvdt}.\todoremark[inline]{1: si, 2: poner figura luego del párrafo si es corto, y en el medio del párrafo si no referencia  | 1: Saco las referencias a las gráficas de acá? 2: Quedo bien? Sobre todo la de sección de identificación de objetivos | referenciaría cada figura al final del párrafo que analiza el contenido asociado a ellas}
 
 \input{tablas/incrementalidad1}
 % \todo[inline]{colocaría esta tabla inmediatamente a continuación de su referencia.}
 
-En cada nivel de granularidad\todoerror[inline]{Entiendo, pero uso mucho el concepto de granularidad, en todos debería indicar que es la granularidad de la grilla? | de qué?} la variante incremental reduce en un
+En cada nivel de granularidad\todoerror[inline]{Aclarar la primera vez de la seccion, minimo (y en otrso parrofs si estasn muy alejados) | Entiendo, pero uso mucho el concepto de granularidad, en todos debería indicar que es la granularidad de la grilla? | de qué?} la variante incremental reduce en un
 ${\smallsim}94\%$ el tiempo promedio en construcción del GVD con respecto a la
 variante no incremental (ver figura \ref{fig:gra:inc:gvdt}). Esto valida la idea de que la construcción incremental
 del GVD es más eficiente que su contraparte no incremental.
@@ -528,7 +528,7 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 En esta sección se realiza un análisis comparativo de los resultados obtenidos
 en pruebas realizadas con tres soluciones distintas que difieren únicamente en
 el método usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
-métodos son: la simplificación\todoerror[inline]{ Lo que entendí de lo que decís (y estoy de acuerdo) es que las fronteras como concepto no son más simples (no lo van a ser a no ser que cambie el mapa). La simplificación que digo yo va por el lado de la representación de ese concepto. 
+métodos son: la simplificación\todoerror[inline]{ lo puedo cambiar o no | Lo que entendí de lo que decís (y estoy de acuerdo) es que las fronteras como concepto no son más simples (no lo van a ser a no ser que cambie el mapa). La simplificación que digo yo va por el lado de la representación de ese concepto. 
 
   Nunca me refiero a las fronteras como el concepto si no que siempre hablo de una representación. A las fronteras las defino como el conjunto $F$ de todas las celdas frontera $(3.4)$ (creo que seria la forma atómica que decís), y las fronteras significativas $FS\subseteq F$ seria entonces una simplificación de $F$ que continua considerándose representativa de $F$ por cumplir la restricción de cubrimiento (creo que se mapa a los agrupamientos que decís). Por esto se me ocurrió el termino de -simplificación de fronteras-, por representar a las fronteras ($F$) de manera más simple (menos cantidad). 
 
@@ -537,7 +537,7 @@ métodos son: la simplificación\todoerror[inline]{ Lo que entendí de lo que de
   | debo confesar que no me termina gustando el término. creo que no es del todo correcto porque no transmite realmente lo que se hace. es decir, lo que no se termina de hacer evidente es que una cosa son los puntos de frontera (celdas) y otro son las fronteras (conjuntos de celdas). entonces, no es que las fronteras son más simples sino que concibo los objetivos de forma atómica (puntos de frontera) o en agrupamientos (fronteras). ergo, intentaría aclarar el punto e iría por algo más del estilo: fronteras mediante máximo cubrimiento, fronteras mediante K-Means o puntos de frontera.} de fronteras basada en cubrimiento propuesta en
 este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
 \cite{Amorin2019} y la identificación de fronteras (sin simplificar)
-introducida en \cite{yamauchi1998frontier}. Los resultados de las métricas
+introducida en \cite{yamauchi1997frontier}. Los resultados de las métricas
 analizadas en esta sección se presentan en la tabla \ref{tab:ident_obj1} y se encuentran graficadas en
 las figuras \ref{fig:gra:idobj:et}, \ref{fig:gra:idobj:ec} y
 \ref{fig:gra:idobj:iobt}.
@@ -596,7 +596,7 @@ promedio en simplificación de fronteras, la simplificación basada en
 cubrimiento en todo nivel de granularidad es entre $2$ y
 $4$ veces más lenta que la basada en K-Means (ver figura \ref{fig:gra:idobj:iobt}). Estos resultados
 parecen indicar que la simplificación basada en cubrimiento toma más tiempo
-pero logra mejores reducciones de objetivos que la basada en K-Means\todoerror[inline]{Entiendo y estoy de acuerdo que la pista que hay en los datos actuales no da para asegurarlo. Pero la pista que hace en estos datos me parece que algo vale. De ser así como puedo manejarlo? Acá trate de hacerlo con el -parecen indicar- quizás hay una expresión mejor que permita hacer énfasis en que es solo una posible explicación para esos resultados (la que hago en el siguiente párrafo).  | mmmm no. los resultados muestran que k-means es más rápido y que supera a la nuestra cuando aumenta la granularidad considerando distancia y tiempo medio de exp. para decir que las reducciones son mejores, habría que p.e. contar la cantidad de objetivos que se generan a lo largo de la exp con una u otra estrategia. eso daría una pista certera sobre el impacto de seguir una u otra y de allí se le podría atribuir que la nuestra distribuye mejor o hace mejores reducciones.}. En el
+pero logra mejores reducciones de objetivos que la basada en K-Means\todoerror[inline]{Corregir aca, en las conclusiones y en el trabajo futuro. Tengo info en las notas | Entiendo y estoy de acuerdo que la pista que hay en los datos actuales no da para asegurarlo. Pero la pista que hace en estos datos me parece que algo vale. De ser así como puedo manejarlo? Acá trate de hacerlo con el -parecen indicar- quizás hay una expresión mejor que permita hacer énfasis en que es solo una posible explicación para esos resultados (la que hago en el siguiente párrafo).  | mmmm no. los resultados muestran que k-means es más rápido y que supera a la nuestra cuando aumenta la granularidad considerando distancia y tiempo medio de exp. para decir que las reducciones son mejores, habría que p.e. contar la cantidad de objetivos que se generan a lo largo de la exp con una u otra estrategia. eso daría una pista certera sobre el impacto de seguir una u otra y de allí se le podría atribuir que la nuestra distribuye mejor o hace mejores reducciones.}. En el
 nivel de granularidad más bajo el aumento de tiempo de simplificación no es tan
 relevante como la reducción de objetivos, por lo tanto la simplificación basada
 en cubrimiento obtiene un mejor rendimiento. A medida la granularidad crece el
@@ -644,7 +644,7 @@ adyacentes a celdas libres pertenecen a generadores ($\mli{UF} \subseteq
 \mli{CGen}$). Ambas formas son descritas en la sección \ref{subsec:espDesc}. Los
 resultados obtenidos en estas pruebas se presentan en la tabla \ref{tab:desconocido1} y sus
 gráficas en las figuras \ref{fig:gra:des:et}, \ref{fig:gra:des:ec} y
-\ref{fig:gra:des:gvdt}
+\ref{fig:gra:des:gvdt}.
 
 \input{tablas/desconocido1}
 

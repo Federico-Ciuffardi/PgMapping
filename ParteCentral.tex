@@ -63,8 +63,8 @@ La solución se desarrolla con las siguientes hipótesis de trabajo.
   \item Se conocen las dimensiones del entorno a explorar.
 \end{enumerate}
 
-Estas hipótesis tienen el propósito\todoremark{o capaz: se hacen con el motivo? |
-procuran / tienen por objeto?} de simplificar algunos aspectos del problema de
+% \todoremark{o capaz: se hacen con el motivo? | procuran / tienen por objeto?}
+Estas hipótesis tienen el propósito de simplificar algunos aspectos del problema de
 exploración permitiendo que el trabajo se pueda enfocar en otros.
 
 La hipótesis (I) resuelve trivialmente el problema de localización \cite{slam}. 
@@ -103,10 +103,10 @@ comunicaciones que ocurren entre dichos módulos.
 \begin{figure}[H]
   \center
   \includegraphics[width=1\linewidth]{imagenes/arquitectura.png}
-  \caption[Arquitectura de la solucion propuesta.]{Arquitectura de la solución propuesta. Los módulos coloreados en azul fueron implementados en este proyecto.}
+  \caption[Arquitectura de la solución propuesta.]{Arquitectura de la solución propuesta. Los módulos coloreados en azul fueron implementados en este proyecto.}
   \label{fig:arquitectura}
 \end{figure} 
-\todoerror[inline]{lo primero no lo entienda, lo segundo quedo?  | fig3.1: en el caption solución. colorear lo hecho con otro color}
+% \todoerror[inline]{lo primero no lo entienda, lo segundo quedo?  | fig3.1: en el caption solución. colorear lo hecho con otro color}
 
 En lo que resta de esta sección se comentará de cada módulo tanto sus tareas,
 como sus interacciones con el resto de los módulos.
@@ -235,7 +235,7 @@ celda de la grilla de ocupación. Una celda se asocia a un único centro y
 viceversa, por lo tanto en lo que resta de este informe se usaran ambos
 términos de forma indistinta.
 
-Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|x_{1:t},z_{1:t})$\todoerror[inline]{Me parece que lo mejor es dejarlo así, es de esta manera como se usa en el libro de Stachniss | $c_{t+1}$ ? explicitaría que t es el tiempo y que $1:t$ representa el conjunto de instantes de tiempo considerados}
+Se dice que cada celda $c\in \mli{CG}$ tiene asociada una probabilidad $P(c|x_{1:t},z_{1:t})$\todoerror[inline]{aclar que t es tiempo (secuencia pasada | Me parece que lo mejor es dejarlo así, es de esta manera como se usa en el libro de Stachniss | $c_{t+1}$ ? explicitaría que t es el tiempo y que $1:t$ representa el conjunto de instantes de tiempo considerados}
 de estar ocupada, donde $z_{1:t}$ es la secuencia de medidas obtenidas de los
 sensores desde las posiciones $x_{1:t}$.
 
@@ -255,7 +255,7 @@ función $e$ se define según
   \right .
   \label{eq:estado}
 \end{equation}
-\todoerror[inline]{Creo que no usar el epsilon es lo que más se ajusta a la
+\todoerror[inline]{Todas las celdas arrancan en 0.5 | Creo que no usar el epsilon es lo que más se ajusta a la
   implementación, donde las celdas empiezan siendo desconocidas y luego de una
   observación nunca pueden volver a ese estado. Quizás debería aclarar que
   $0.5$ es el valor de probabilidad inicial | habría que definir un $\epsilon$ de modo
@@ -377,7 +377,7 @@ información sobre el entorno explorado. Estos puntos son los llamados objetivos
 de exploración (sección \ref{sec:exploracion}). 
 
 \subsection{Fronteras}\label{subsec:todasFront}
-En \cite{yamauchi1998frontier} se propone que los lugares que permiten
+En \cite{yamauchi1997frontier} se propone que los lugares que permiten
 recolectar mayor cantidad de nueva información sobre el entorno son las
 fronteras entre el espacio conocido y desconocido. Por lo tanto se establece que dichas
 fronteras deben ser los objetivos de exploración.
@@ -391,7 +391,7 @@ fronteras $F$ según se definen en (\ref{eq:fronteras}).
   \label{eq:fronteras}
 \end{equation}
 
-\subsection{Simplificación de Fronteras basada en K-Means}\label{subsec:simpKM}
+\subsection{Simplificación de fronteras basada en K-Means}\label{subsec:simpKM}
 En \cite{Amorin2019} se argumenta que tratar todas las celdas fronteras como
 objetivos de exploración diferentes podría ser computacionalmente prohibitivo.
 Por lo tanto, para reducir el costo computacional, se reducen los objetivos de
@@ -448,7 +448,7 @@ logre el cubrimiento.
 \end{figure}
 % indicando su cubrimiento con un sensor de rango equivalente
 % al usar un sensor de rango equivalente
-\todoremark[inline]{1: Lo cambie por basado en para ser consistente. 2: cambie largo de celda por lado de celda, quedo? | fig3.5: ... fronteras utilizando K-Means.? otra, ... tienen radio=4 celdas, indicando el cubrimiento de un sensor de rango equivalente. ?}
+% \todoremark[inline]{1: Lo cambie por basado en para ser consistente. 2: cambie largo de celda por lado de celda, quedo? | fig3.5: ... fronteras utilizando K-Means.? otra, ... tienen radio=4 celdas, indicando el cubrimiento de un sensor de rango equivalente. ?}
 
 % En la seccion anterior se presento un método que soluciona el siguiente
 % problema. Dado un conjunto de  la descomposición en componentes conexas de
@@ -510,12 +510,12 @@ fronteras son más extensas y sus curvas son más pronunciadas.
 % Algo que se repite en estas situaciones es que suele haber zonas, en donde las
 % fornteras significativas se acumulan, y zonas en las que estan muy dispersas
 % (casi a $rango$ de distancia una de la otra, el maximo). Esto lleva a pensar que K-Means se tiende a ubicar concentrar los centroides en una zona,
-
+% \todoerror[inline]{Creo que no se me entendió. A lo que me quiero referir acá es a que K-Means (no el método de simplificación entero, si no el algoritmo) no esta generando resultados pensando en cumplan la restricción de cubrimiento, si no que esto se comprueba luego (algo así como una fuerza bruta en un espacio de búsqueda muy reducido). El basado en cubrimiento lo soluciona porque su resultado por construcción cumple con la restricción de cubrimiento. Lo de que los resultados no pertenecen es el punto (ii) y el porque se explica antes | no está claro y es algo contradictorio el pto. tal vez señalar que k-means opera minimizando el error cuadrático medio de las distancias de las celdas a los centroides para conformar los clusters. esa operativa lleva a que los centroides no pertenezcan necesariamente al conjunto de celdas y también hace que aumentando el k se corrija ese aspecto.}
 Esto se presume que se debe principalmente a dos factores relacionados a
 K-Means: (i) K-Means no considera la restricción de cubrimiento para generar
 sus resultados, sino que la restricción se fuerza obteniendo a través de prueba
 y error al mínimo $k$ con el que las fronteras significativas resultantes
-logran el cubrimiento\todoerror[inline]{Creo que no se me entendió. A lo que me quiero referir acá es a que K-Means (no el método de simplificación entero, si no el algoritmo) no esta generando resultados pensando en cumplan la restricción de cubrimiento, si no que esto se comprueba luego (algo así como una fuerza bruta en un espacio de búsqueda muy reducido). El basado en cubrimiento lo soluciona porque su resultado por construcción cumple con la restricción de cubrimiento. Lo de que los resultados no pertenecen es el punto (ii) y el porque se explica antes | no está claro y es algo contradictorio el pto. tal vez señalar que k-means opera minimizando el error cuadrático medio de las distancias de las celdas a los centroides para conformar los clusters. esa operativa lleva a que los centroides no pertenezcan necesariamente al conjunto de celdas y también hace que aumentando el k se corrija ese aspecto.}. (ii) Los centroides resultantes de K-Means no son
+logran el cubrimiento. (ii) Los centroides resultantes de K-Means no son
 necesariamente fronteras y deben ser traducidos a fronteras posteriormente.
 
 % Esto se presume que se debe principalmente a dos factores relacionados a
@@ -1776,13 +1776,13 @@ exploración.
 \subsection{Criterios de compleción}
 
 El \emph{controlador de movimiento} tiene dos criterios para determinar que un
-punto del camino fue completado\todoerror[inline]{Creo que es mejor el termino completado porque alcanzar me da una idea de cercanía que no es necesariamente el caso. Entiendo que quizás queda raro hablar de completar un punto del camino, pero esto se aclara a lo largo de la sección (y era el termino que se estaba manejando antes de comenzar la subsection) | alcanzado?}, el criterio de compleción normal y criterio de
+punto del camino fue completado\todoerror[inline]{con punto me refiero a tarea asociada al putno:  Dos opciones (introducir antes subobj) (mejor esta) o dejar alcanzado | Creo que es mejor el termino completado porque alcanzar me da una idea de cercanía que no es necesariamente el caso. Entiendo que quizás queda raro hablar de completar un punto del camino, pero esto se aclara a lo largo de la sección (y era el termino que se estaba manejando antes de comenzar la subsection) | alcanzado?}, el criterio de compleción normal y criterio de
 compleción forzosa.
 
 La compleción forzosa ocurre cuando el robot está a una distancia menor a
 $\mli{DistF}$ del punto en cuestión. Este criterio de compleción tiene como
 propósito determinar cuando un robot está lo suficientemente cerca de un punto
-del camino como para considerarlo completo\todoerror[inline]{similar a lo anterior, aunque acá si esta lo de cercanía, me parece mejor completar para ser consistente | que se ha alcanzado el objetivo?}, a pesar de que no se dio aún la
+del camino como para considerarlo completo\todoerror[inline]{similar a lo anterior|similar a lo anterior, aunque acá si esta lo de cercanía, me parece mejor completar para ser consistente | que se ha alcanzado el objetivo?}, a pesar de que no se dio aún la
 compleción normal. Se recomienda que el valor $\mli{DistF}$ sea similar a las
 dimensiones del robot.
 
@@ -1935,7 +1935,7 @@ valores: $0.5$ si no aporta evidencia, $0.55$ si la evidencia indica que la
 celda está ocupada y $0.45$ si la evidencia indica que la celda está libre.
 Estos valores de probabilidad son los que se encuentran presentes en la
 solución desarrollada, pero pueden variar dependiendo de los sensores que sean
-usados.\todoerror[inline]{El libro de Stachniss no especifica más que $0 \leq pfree < pprior < pocc \leq 1$ y que $pprior$ suele usar como $0.5$. Y mismo los $\leq$ son cuestionables, pro ejemplo si $pfree = 0$ en la regla de update queda una division entre $0$. La verdad es que los valores principalmente los determine de forma experimental (mi respuesta a esas preguntas sería que 0 y 1 no funcionaron bien). La intuición que me quedo de las pruebas que hice para determinar esos valores es que valores de $pfree$ y $pocc$ más cercanos al $0.5$ logran que la historia de evidencia tenga más peso y los más alejados de $0.5$ que la evidencia reciente sea la que tenga más peso. Poner la intuición sin fundamento real no creo que este bueno, y buscar más por alguna fuente con una expedición o probar la intuición matemáticamente no creo que valga la pena. De última puedo aclarar que los valores se determinaron de forma experimental. | justificaría un poco más el uso de esos valores. por qué no 0.0 y 1.0, p.e.}
+usados.\todoerror[inline]{Acarar que los determine de forma experimental y que me base en lo de stanchis | El libro de Stachniss no especifica más que $0 \leq pfree < pprior < pocc \leq 1$ y que $pprior$ suele usar como $0.5$. Y mismo los $\leq$ son cuestionables, pro ejemplo si $pfree = 0$ en la regla de update queda una division entre $0$. La verdad es que los valores principalmente los determine de forma experimental (mi respuesta a esas preguntas sería que 0 y 1 no funcionaron bien). La intuición que me quedo de las pruebas que hice para determinar esos valores es que valores de $pfree$ y $pocc$ más cercanos al $0.5$ logran que la historia de evidencia tenga más peso y los más alejados de $0.5$ que la evidencia reciente sea la que tenga más peso. Poner la intuición sin fundamento real no creo que este bueno, y buscar más por alguna fuente con una expedición o probar la intuición matemáticamente no creo que valga la pena. De última puedo aclarar que los valores se determinaron de forma experimental. | justificaría un poco más el uso de esos valores. por qué no 0.0 y 1.0, p.e.}
 
 % Cuando la grilla de ocupación del nodo \emph{global\_costmap} de un robot
 
