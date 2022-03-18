@@ -392,21 +392,25 @@ Al utilizar una grilla de ocupación como mapa, las fronteras se definen como la
 celdas cuyo estado asociado es $libre$ y son adyacentes a una celda cuyo estado
 asociado es $desconocido$ (figura \ref{fig:fronteras}).
 Por lo tanto según Yamauchi los objetivos de exploración serán las celdas
-fronteras $F$ según se definen en (\ref{eq:fronteras}).
+frontera $F$ según se definen en (\ref{eq:fronteras}).
 \begin{equation} 
   F = \{ c \in \mli{CG} : e(c) = libre, \exists \mli{cA} \in ady(c), e(\mli{cA}) = desconocido  \}
   \label{eq:fronteras}
 \end{equation}
 
-\subsection{Fronteras significativas basadas en K-Means}\label{subsec:simpKM}
-En \cite{Amorin2019} se argumenta que tratar todas las celdas fronteras como
+En \cite{Amorin2019} se argumenta que tratar todas las celdas frontera como
 objetivos de exploración diferentes podría ser computacionalmente prohibitivo.
 Por lo tanto, para reducir el costo computacional, se reducen los objetivos de
 exploración a las celdas frontera más representativas, las cuales se
 denominan como fronteras significativas.
 
-Para determinar las fronteras significativas, primero, las celdas fronteras $F$
-se descomponen en sus componentes conexas $\mli{FC}=\{F_1,F_2,...F_N\}$
+\subsection{Fronteras significativas basadas en K-Means}\label{subsec:simpKM}
+
+En \cite{Amorin2019} se propone un método para obtener las fronteras
+significativas que se basa en el algoritmo K-Means.
+
+El método comienza descomponiendo al conjunto de celdas frontera $F$
+en sus componentes conexas $\mli{FC}=\{F_1,F_2,...F_N\}$
 (sección \ref{subsec:CompComp}), un ejemplo de este tipo de descomposición se
 puede ver en la figura \ref{fig:fronterasCompCon}.
 
