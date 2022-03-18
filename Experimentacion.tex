@@ -98,7 +98,7 @@ A lo largo de esta se sección se especifican las pruebas realizadas en este pro
 
 % de objetivos que
 % utiliza directamente las fronteras como objetivos, con las que se basan en
-% simplicar dichas fronteras, tanto la simplificación basada en K-Means, como la
+% simplicar dichas fronteras, tanto la obtención de fronteras significativas basada en K-Means, como la
 % basada en cubrimiento. 
 
 % Dado que se quiere comparar la utilidad entre las variantes para ciertas partes de
@@ -125,7 +125,7 @@ aspecto por separado se ejecutan pruebas tanto con la solución como fue
 propuesta originalmente, como con variantes de la misma que cambian únicamente
 el aspecto a evaluar. Los aspectos de la solución original a evaluar son: la construcción incremental
 del GVD (sección \ref{sec:MiConstGVD}). La identificación de objetivos que
-simplifica las fronteras basándose en el cubrimiento (sección
+obtiene fronteras significativas basándose en el cubrimiento (sección
 \ref{subsec:MiSimp}). Y la consideración del espacio desconocido al construir
 el GVD presentada en la sección \ref{subsec:espDesc}, donde las celdas
 desconocidas no propagan ondas y el conjunto $\mli{UF}$ de celdas desconocidas
@@ -149,8 +149,8 @@ que son adyacentes a celdas libres pertenecen a generadores ($\mli{UF}
 Para evaluar la construcción incremental del GVD se compara contra el método de 
 construcción no incremental brushfire (sección \ref{subsec:constGVD}). En el caso de la
 identificación de objetivos se compara contra identificar todas las fronteras
-como objetivos (sección \ref{subsec:todasFront}), y la técnica que identifica
-objetivos simplificando dichas fronteras a partir K-Means (sección
+como objetivos (sección \ref{subsec:todasFront}), y solo identificar como objetivos a las
+fronteras significativas obtenidas basandose en K-Means (sección
 \ref{subsec:simpKM}). Por último, la consideración del espacio desconocido en
 la construcción del GVD se compara contra considerar que el espacio
 desconocido es libre (sección \ref{subsec:espDesc}). 
@@ -313,15 +313,15 @@ calidad\ del\ mapa = \frac{M_{exp}-E_{exp}}{M_{ref}}
 
 El resto de las métricas fueron diseñadas específicamente para este proyecto,
 estas son: \emph{tiempo promedio en construcción de GVD} y \emph{tiempo
-promedio en simplificación de fronteras}.
+promedio en obtención de fronteras significativas}.
 
 El \emph{tiempo promedio en construcción de GVD} es el tiempo promedio que toma
 construir el GVD en la etapa de obtención de información de cada asignación
 de objetivos (sección \ref{sec:asigTar}).
 
-El \emph{tiempo promedio en simplificación de fronteras} es el tiempo promedio
-que se demora en simplificar las fronteras para identificar los objetivos en
-la etapa de obtención de información de cada asignación de objetivos.
+El \emph{tiempo promedio en obtención de fronteras significativas} es el tiempo promedio
+que se demora en obtener las fronteras significativas en la etapa de obtención
+de información de cada asignación de objetivos.
 
 \section{Resultados}
 \newlength{\graphlen}
@@ -496,7 +496,7 @@ quedando ociosos.
 % esta metrica son similares a sus desviaciones estándar
 
 Construir el GVD de forma incremental también parece reducir las distancias
-totales recorridas por la flota en todos nivles de granularidad de la grilla, aunque en este
+totales recorridas por la flota en todos niveles de granularidad de la grilla, aunque en este
 caso las reducciones están comprendidas entre $2\%$ y $7\%$, fluctuando al
 aumentar los niveles de granularidad (ver figura \ref{fig:gra:inc:ec}). Esto puede deberse a que tiempos más
 rápidos de asignación de objetivos hacen más probable que los robots cambien su
@@ -529,17 +529,17 @@ el robot si los caminos hacia el objetivo anterior y el actual no se solapan.
 En esta sección se realiza un análisis comparativo de los resultados obtenidos
 en pruebas realizadas con tres soluciones distintas que difieren únicamente en
 el método usado para identificar objetivos (sección \ref{sec:pc:idobj}). Estos
-métodos son: la simplificación de fronteras basada en cubrimiento propuesta en
-este proyecto, simplificación de fronteras basada en K-Means como es utilizada en
-\cite{Amorin2019} y la identificación de fronteras (sin simplificar)
+métodos son: la obtención de fronteras significativas basada en cubrimiento propuesta en
+este proyecto, la obtención de fronteras significativas basada en K-Means como es utilizada en
+\cite{Amorin2019} y la identificación de todas las fronteras como objetivos
 introducida en \cite{yamauchi1997frontier}. Los resultados de las métricas
 analizadas en esta sección se presentan en la tabla \ref{tab:ident_obj1}.
 
 \input{tablas/ident_obj1}
 
-Es posible apreciar que los métodos que identifican los objetivos simplificando
-las fronteras reducen los tiempos de exploración con respecto al método que
-identifica a las fronteras sin simplificar como objetivos. Aunque en el nivel
+Es posible apreciar que los métodos que solo identifican a las fronteras significativas como objetivos 
+reducen los tiempos de exploración con respecto al método que
+identifica a todas las fronteras como objetivos. Aunque en el nivel
 de granularidad de la grilla más bajo las reducciones son menores a ${\smallsim}5\%$, estas crecen junto
 a la granularidad hasta alcanzarse una reducción de ${\smallsim}29\%$ en el
 nivel más alto (ver figura \ref{fig:gra:idobj:et}).
@@ -551,31 +551,31 @@ nivel más alto (ver figura \ref{fig:gra:idobj:et}).
 Esto puede deberse al tiempo de asignación de objetivos como se
 explica en la sección \ref{sec:exp:inc}. En este caso se considera que los
 factores con mayor impacto sobre los tiempos de asignación de objetivos son dos:
-el tiempo de simplificación de fronteras y la cantidad de objetivos
-identificados. Mayores tiempos de simplificación de fronteras retrasan la
+el tiempo de obtención de fronteras significativas y la cantidad de objetivos
+identificados. Mayores tiempos de obtención de fronteras significativas retrasan la
 identificación de objetivos, parte necesaria y no paralelizada de la etapa de
 obtención de información (sección \ref{subsec:obtInfo}) en la asignación de
 objetivos. Mientras que disminuir la cantidad de objetivos identificados implica
 reducciones en la duración de las etapas de valuación (sección
 \ref{subsec:MiValSub}) y de resolución (sección \ref{subsec:MiResSub}) al ser
 menor la cantidad de objetivos a valuar y a considerar en la resolución. Entonces lo que se evidencia
-en los resultados obtenidos, es que invertir tiempo en disminuir los objetivos
-identificados simplificando las fronteras lleva a una reducción total de los
+en los resultados, es que invertir tiempo en disminuir los objetivos
+identificados obteniendo las fronteras significativas lleva a una reducción total de los
 tiempos de asignación de objetivos, y en consecuencia de los tiempos de exploración
-frente a no invertir dicho tiempo y utilizar todas las fronteras sin
-simplificar. Otra razón posible para las reducciones del tiempo de exploración
-es que simplificar las fronteras puede aportar a la coordinación de los robots.
-Por ejemplo de no simplificarse las fronteras se permite que un robot sea
+frente a no invertir dicho tiempo y utilizar todas las fronteras como objetivos. Otra razón posible para las reducciones del tiempo de exploración
+es que usar solo las fronteras significativas como objetivos puede aportar a la coordinación de los robots.
+Por ejemplo de usarse todas las fronteras como objetivos se permite que un robot sea
 asignado a un objetivo adyacente a una pared o que dos robots sean asignados a
 objetivos adyacentes entre sí, situaciones en las cuales se desaprovecha
-capacidad de sensado, y se complejiza la navegación. Al simplificarse las
-fronteras, especialmente cuando se logra el cubrimiento minimizando los
-objetivos resultantes, se evitan situaciones como las descritas lo cual puede
+capacidad de sensado, y se complejiza la navegación. Al usarse solo las
+fronteras significativas como objetivos, especialmente cuando se logra el cubrimiento
+con la menor cantidad de fronteras significativas posible, se evitan
+situaciones como las descritas lo cual puede
 verse como una coordinación pasiva. %\todo{o implicita?}
 
-De acuerdo con los resultados simplificar las fronteras en la identificación de
+De acuerdo con los resultados usar solo las fronteras significativas como
 objetivos también reduce las distancias totales recorridas por la flota frente
-a no simplificarlas. Estas reducciones son en general de ${\smallsim}10\%$ (ver figura \ref{fig:gra:idobj:ec}), y
+a usar a todas las fronteras. Estas reducciones son en general de ${\smallsim}10\%$ (ver figura \ref{fig:gra:idobj:ec}), y
 pueden ser causadas por la disminución del tiempo de asignación de objetivos,
 debido a las mismas razones que se explican en la sección \ref{sec:exp:inc}.
 Aunque la coordinación pasiva también puede estar jugando un rol al evitar que
@@ -588,24 +588,24 @@ sensoriales o que puedan llevar a inconvenientes en la navegación.
   \caption{Distancia total recorrida por la flota en función de celdas por metro cuadrado.}\label{fig:gra:idobj:ec}
 \end{figure}
 
-Con respecto a los dos métodos que simplifican las fronteras para 
-identificar objetivos, en el nivel de granularidad de la grilla más bajo, la
-simplificación basada en cubrimiento logra reducciones con respecto a la
-basada en K-Means de ${\smallsim}3\%$ en las distancias totales recorridas por la
-flota y de ${\smallsim}5\%$ en los tiempos de exploración. Esto se invierte a
-medida que aumenta el nivel de granularidad, hasta que en el nivel más alto en
-lugar de reducirse, las métricas aumentan. Las distancias totales recorridas por la
-flota aumentan en un ${\smallsim}3\%$ y los tiempos de exploración en un
-${\smallsim}6\%$ (ver figuras \ref{fig:gra:idobj:et} y \ref{fig:gra:idobj:ec}). Por otro lado según los tiempos
-promedio en simplificación de fronteras, la simplificación basada en
-cubrimiento en todo nivel de granularidad es entre $2$ y
-$4$ veces más lenta que la basada en K-Means (ver figura \ref{fig:gra:idobj:iobt}). 
-Los resultados indican que la simplificación basada en cubrimiento es menos
-eficiente que la basada en K-Means en cuanto al tiempo de simplificación, a pesar de esto no hay diferencias
-significativas en los tiempos de exploración ni en las distancias totales
-recorridas por la flota. Estos resultados no permiten deducir de forma concreta
-cual método logra mejores reducciones de objetivos. \todohint[inline]{Quedo bien?
-(desde-Los resultados-)}
+Con relación a los dos métodos de obtención de fronteras significativas, en el
+nivel de granularidad de la grilla más bajo, el método basado en cubrimiento
+logra reducciones con respecto al basado en K-Means de ${\smallsim}3\%$ en las
+distancias totales recorridas por la flota y de ${\smallsim}5\%$ en los tiempos
+de exploración. Esto se invierte a medida que aumenta el nivel de granularidad,
+hasta que en el nivel más alto en lugar de reducirse, las métricas aumentan.
+Las distancias totales recorridas por la flota aumentan en un ${\smallsim}3\%$
+y los tiempos de exploración en un ${\smallsim}6\%$ (ver figuras
+\ref{fig:gra:idobj:et} y \ref{fig:gra:idobj:ec}). Por otro lado según los
+tiempos promedio en obtención de fronteras significativas, el método basado en
+cubrimiento en todo nivel de granularidad es entre $2$ y $4$ veces más lento
+que el basado en K-Means (ver figura \ref{fig:gra:idobj:iobt}). Estos resultados
+indican que la obtención de fronteras significativas basada en cubrimiento es
+menos eficiente que la basada en K-Means en cuanto al tiempo de ejecución, a
+pesar de esto no hay diferencias estadísticamente relevantes en los tiempos de
+exploración ni en las distancias totales recorridas por la flota. Estos
+resultados no permiten deducir de forma concreta cual método logra mejores
+reducciones de objetivos. \todohint[inline]{Quedo bien el párrafo?}
 
 % \todoerror[inline]{Corregir aca, en las conclusiones y en el trabajo futuro.
 % Tengo info en las notas | Entiendo y estoy de acuerdo que la pista que hay en
@@ -620,11 +620,11 @@ cual método logra mejores reducciones de objetivos. \todohint[inline]{Quedo bie
 % se generan a lo largo de la exp con una u otra estrategia. eso daría una
 % pista certera sobre el impacto de seguir una u otra y de allí se le podría
 % atribuir que la nuestra distribuye mejor o hace mejores reducciones.}. En el
-% nivel de granularidad más bajo el aumento de tiempo de simplificación no es
-% tan relevante como la reducción de objetivos, por lo tanto la simplificación
+% nivel de granularidad más bajo el aumento de tiempo de obtención de fronteras significativas no es
+% tan relevante como la reducción de objetivos, por lo tanto la obtención de fronteras significativas
 % basada en cubrimiento obtiene un mejor rendimiento. A medida la granularidad
-% crece el aumento de tiempo de simplificación se torna más relevante que la
-% reducción de objetivos, por lo que la simplificación basada en K-Means
+% crece el aumento de tiempo de obtención de fronteras significativas se torna más relevante que la
+% reducción de objetivos, por lo que la obtención de fronteras significativas basada en K-Means
 % obtiene un rendimiento superior.  
 
 
@@ -799,11 +799,11 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 % Los metodos que simplifican las fronteras invierten tiempo en simplificar para disminuir dicha la cantidad de objetivos
 
 % costo computacional vs  
-%%, cuando los tiempos de simplificación son los más cortos,
+%%, cuando los tiempos de obtención de fronteras significativas son los más cortos,
 %%
 
   % Dado que la
-% simplificación basada en cubrimiento tiene siempre un mayor costo temporal que
+% obtención de fronteras significativas basada en cubrimiento tiene siempre un mayor costo temporal que
 % la basada en K-Means pero logra obtener
 
 % Lo cual implica que el método que simplifica basadose en el cubrimiento tiene
@@ -811,14 +811,14 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 % En este caso ambos metodos invierten tiempo en disminuir los
 % objetivos identificados a partir de simplificar las fronteras.
 
-% Con respecto a las dos tecnicas de simplificación estas tienen comportamientos
+% Con respecto a las dos tecnicas de obtención de fronteras significativas estas tienen comportamientos
 % similares tanto en el tiempo de exploración como en distancia total recorrida
-% por la flota. En el nivel de granularidad más bajo, la simplificación basada en
+% por la flota. En el nivel de granularidad más bajo, la obtención de fronteras significativas basada en
 % cubrimiento logra una reducción con respecto a la basada en K-Means, de
 % ${\smallsim}3\%$ de la distancia total recorrida por la flota y de
 
   % Esto concuerda con lo
-% que ocurre en los niveles de granularidad más altos, donde la simplificación
+% que ocurre en los niveles de granularidad más altos, donde la obtención de fronteras significativas
 % basada en cubrimiento obtiene peores resultados que la basada en K-Means. Con
 % respecto al nivel de granularidad más bajo, lo que puede estar sucediendo es
 % que al ser el nivel con menos costo computacional y por lo tanto 
@@ -829,7 +829,7 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 % menos significativas repecto a identificar todas las fronteras como objetivos.
 % Dado esto para los metodos que simplifican las fronteras se pasa a considerar
 % otro factor de impacto de los tiempos de asignación, el tiempo que demora dicha
-% simplificación. 
+% obtención de fronteras significativas. 
 
 % En este caso ambos
 % metodos reducen la cantidad de objetivos identificados simplificando las
@@ -838,15 +838,15 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 % todas las fronteras como objetivos, y en consecuencia este aspecto tiene menor
 % impacto sobre el tiempo de la asignación de objetivos. Dado esto se pasa a
 % considerar otro factor de impacto de los tiempos de asignación: el tiempo que
-% demora la simplificación de fronteras. 
+% demora la obtención de fronteras significativas. 
 
 % Dado esto se pasa a
 % considerar otro factor de impacto de los tiempos de asignación: el tiempo que
-% demora la simplificación de fronteras. Según los resultados el tiemp
+% demora la obtención de fronteras significativas. Según los resultados el tiemp
 
 % Dado que estos metodos
-% solo difieren en como realizan la simplificación de fronteras, la demora de
-% dicha simplificación es uno de los principales factores a tener en cuenta.
+% solo difieren en como realizan la obtención de fronteras significativas, la demora de
+% dicha obtención de fronteras significativas es uno de los principales factores a tener en cuenta.
 
 
 
@@ -873,29 +873,29 @@ caminos que los robots generan a partir del GVD y por lo tanto a las métricas e
 % A simple vista este factor parece contradecir los resultados obtenidos, ya
 % que el método que obtiene los peores resultados es el menos impactado por
 % este factor ya que no simplifica las fronteras. Lo que sucede es que el
-% tiempo de simplificación es en realidad una inversión de tiempo que se hace
+% tiempo de obtención de fronteras significativas es en realidad una inversión de tiempo que se hace
 % para reducir la cantidad de objetivos
 
 % las simplificaciones que minimizan el número de fronteras significativas
 % mientras mantienendo el cubrimiento minimizan el solapamiento de sensado de
 % los robots, aumentado la nueva información que se obiente dele entorno. es la
 % principal razon por la cual se introducen los metodos basados en
-% simplificación, ya que estos la cantidad de objetivos para disminuir el
+% obtención de fronteras significativas, ya que estos la cantidad de objetivos para disminuir el
 % tiempo total de la asignación de objetivos.
 
 % se mantienen entre un ${\smallsim}9\%$ y ${\smallsim}11\%$, exceptuando la
-% granularidad de una celda por metro cuadrado en la simplificación basada en
+% granularidad de una celda por metro cuadrado en la obtención de fronteras significativas basada en
 % K-Means, en la que se obtiene una reduccion del ${\smallsim}7\%$
 
-% Con respecto a las dos tecnicas de simplificación los comportamientos en las
+% Con respecto a las dos tecnicas de obtención de fronteras significativas los comportamientos en las
 % metricas de tiempo de exploración y distancia total recorrida por la flota son
 % similares.
 % , tienen comportamientos similares tanto en el
 % tiempo de exploración como en distancia total recorrida por la flota. 
 % omo los niveles de granularidad tienen el proposito
 % variar la carga computacional, los resutados mencionados parecen indicar que la
-% simplificación basada en el cubrimiento es la mejor cuando la carga
-% computacional es baja, siendo superada por la simplificación basada en K-Means cuando
+% obtención de fronteras significativas basada en el cubrimiento es la mejor cuando la carga
+% computacional es baja, siendo superada por la obtención de fronteras significativas basada en K-Means cuando
 % la carga computacional es alta. 
 
 %%%%%%%%% cub y cal

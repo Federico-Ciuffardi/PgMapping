@@ -14,6 +14,6 @@ function plot(){
 
 
 # plot histo
-plot histo_num 
+plot todos 
 # plot line
 

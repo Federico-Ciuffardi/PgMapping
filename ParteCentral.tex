@@ -13,7 +13,7 @@ detallan y formalizan conceptos que son fundamentales en la solución propuesta.
 Lo que resta del capítulo se dedica a profundizar en diversos aspectos de la
 solución. A continuación se destacan las secciones donde se tratan las
 contribuciones del proyecto. En la sección \ref{subsec:MiSimp} se describe el
-método de simplificación de fronteras propuesto. En la sección
+método de identificación de objetivos propuesto. En la sección
 \ref{subsec:MiResSub} se introduce el algoritmo de asignación de objetivos. La sección
 \ref{sec:MiConstGVD} se comenta el algoritmo de
 construcción incremental del GVD y la forma novedosa de tratar
@@ -398,7 +398,7 @@ fronteras $F$ según se definen en (\ref{eq:fronteras}).
   \label{eq:fronteras}
 \end{equation}
 
-\subsection{Simplificación de fronteras basada en K-Means}\label{subsec:simpKM}
+\subsection{Fronteras significativas basadas en K-Means}\label{subsec:simpKM}
 En \cite{Amorin2019} se argumenta que tratar todas las celdas fronteras como
 objetivos de exploración diferentes podría ser computacionalmente prohibitivo.
 Por lo tanto, para reducir el costo computacional, se reducen los objetivos de
@@ -447,11 +447,11 @@ logre el cubrimiento.
   \subfloat[Se logra el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasSig/d.png}\label{fig:fronterasSigCub}}
   
 
-  \caption[Proceso de simplificación de fronteras basado en K-Means.]{Proceso de
-    simplificación de fronteras basado en K-Means. Las circunferencias rojas
+  \caption[Proceso de obtención de fronteras significativas basado en K-Means.]{Proceso de
+    obtención de fronteras significativas basado en K-Means. Las circunferencias rojas
     centradas en las fronteras significativas tienen un radio de $4\ lados\ de\ celda$ indicando su cubrimiento
     al usar sensores de rango equivalente. Basado en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
-  % \caption[Proceso de simplificación de fronteras según K-Means.]{Proceso de simplificación de fronteras según K-Means. Cada figura corresponde a un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Basada en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
+  % \caption[Proceso de obtención de fronteras significativas según K-Means.]{Proceso de obtención de fronteras significativas según K-Means. Cada figura corresponde a un mismo entorno parcialmente explorado, representado con una grilla, donde las celdas blancas son libres, las negras ocupadas, y para las grises se desconoce su estado. Basada en figuras de \cite{Amorin2019}.}\label{fig:ejemploFrontSig}
 \end{figure}
 % indicando su cubrimiento con un sensor de rango equivalente
 % al usar un sensor de rango equivalente
@@ -487,7 +487,7 @@ el cubrimiento.
   \qquad
   \subfloat[Dos de las fronteras significativas de la parte inferior derecha de (a) no son necesarias para lograr el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/b.png}}
 
-  \caption[Simplificación de fronteras subóptima resultante del método basado en K-Means.]{simplificación de fronteras subóptima resultante del método basado en K-Means. Las fronteras de $F_i$ se marcan con azul. Las fronteras significativas se indican con verde y las
+  \caption[Resultado subóptimo del método de obtención de fronteras significativas basado en K-Means.]{Resultado subóptimo del método de obtención de fronteras significativas basado en K-Means. Las fronteras de $F_i$ se marcan con azul. Las fronteras significativas se indican con verde y las
     circunferencias rojas centradas en estas tienen un radio de $4\ lados\ de\ celda$ indicando su cubrimiento
     al usar sensores de rango equivalente.}\label{fig:ejemploFSKMMal}
 \end{figure}
@@ -546,16 +546,16 @@ necesariamente fronteras y deben ser traducidos a fronteras posteriormente.
 % experimentalmente es que en ciertos casos el resultado  la discribucion de las
 % fronteras significativas es mala, se concentran mucho en ciertas porciones y se alejan 
 
-\subsection{Simplificación de fronteras basada en cubrimiento}\label{subsec:MiSimp}
-En esta sección se detalla un método de simplificación de fronteras novedoso,
+\subsection{Fronteras significativas basadas en cubrimiento}\label{subsec:MiSimp}
+En esta sección se detalla un método de obtención de fronteras significativas novedoso,
 que fue diseñado considerando los dos factores problemáticos relacionados al
-método de simplificación de fronteras basado en K-Means, comentados
+método de obtención de fronteras significativas basado en K-Means, comentados
 al final de la sección anterior. El factor (i) se toma en cuenta basando el
 nuevo método en el concepto del cubrimiento, y el factor (ii) directamente
 generado fronteras como resultado.
 
  % y su optimización
-El método de simplificación que se describe en esta sección, al igual que el
+El método de obtención de fronteras significativas que se describe en esta sección, al igual que el
 descrito en la sección anterior, comienza descomponiendo las fronteras $F$ en
 sus componentes conexas $\mli{FC}=\{F_1,F_2,...F_N\}$, para luego obtener las
 fronteras significativas $\mli{FS}_i$ de cada componente $F_i$. Siendo
@@ -599,7 +599,7 @@ se indica en el algoritmo \ref{alg:IdObjGeo}.
   }
   \Return $\mli{FS}_i$ 
 
-  \caption{simplificación de fronteras basada en cubrimiento}
+  \caption{obtención de fronteras significativas basada en cubrimiento}
   \label{alg:IdObjGeo}
 \end{algorithm}
 
@@ -705,8 +705,8 @@ detalle.
   \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
   \subfloat[Se logra el cubrimiento.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal2.png}}
 
-  \caption[Proceso de simplificación de fronteras basado en cubrimiento.]{Proceso
-    de simplificación de fronteras basado en cubrimiento. Las fronteras de
+  \caption[Proceso de obtención de fronteras significativas basado en cubrimiento.]{Proceso
+    de obtención de fronteras significativas basado en cubrimiento. Las fronteras de
     $F_i$ se indican con azul si pertenecen a $\mli{UF}$ y con amarillo de lo
     contrario. Con magenta se indican las celdas en $\mli{FP}$ siendo la
     numeración su orden en la cola, y $\mli{fp}$ la última desencolada. Las fronteras significativas se indican con
@@ -2436,7 +2436,7 @@ completo del entorno explorado.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5
 
-% basura de: \subsection{simplificación de fronteras basada en cubrimiento}
+% basura de: \subsection{obtención de fronteras significativas basada en cubrimiento}
 
  %  \item Actualizar $\mli{FS_i}$ agregando $\mli{fs}$:
 
