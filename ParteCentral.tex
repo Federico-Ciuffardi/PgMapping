@@ -260,7 +260,6 @@ Otra decisión tomada en el contexto del proyecto es que la probabilidad de
 ocupación inicial $P(c)$ de cada celda $c$ se establece como $0.5$ indicando
 que a priori es equiprobable que $c$ se encuentre libre u ocupada. Esto implica
 que según la función $e$ el estado inicial de todas las celdas es $desconocido$.
-\todohint{Este párrafo nuevo quedo bien?}
 
 % \todoerror[inline]{Todas las celdas arrancan en 0.5 | Creo que no usar el epsilon es lo que más se ajusta a la
 %   implementación, donde las celdas empiezan siendo desconocidas y luego de una
@@ -492,7 +491,7 @@ el cubrimiento.
   \subfloat[Dos de las fronteras significativas de la parte inferior derecha de (a) no son necesarias para lograr el cubrimiento.]{\includegraphics[clip=true, width=0.40\linewidth]{imagenes/fronterasigKMMal/caso1/b.png}}
 
   \caption[Resultado subóptimo del método de obtención de fronteras significativas basado en K-Means.]{Resultado subóptimo del método de obtención de fronteras significativas basado en K-Means. Las fronteras de $F_i$ se marcan con azul. Las fronteras significativas se indican con verde y las
-    circunferencias rojas centradas en estas tienen un radio de $4\ lados\ de\ celda$ indicando su cubrimiento
+    circunferencias rojas centradas en estas tienen un radio de $6\ lados\ de\ celda$ indicando su cubrimiento
     al usar sensores de rango equivalente.}\label{fig:ejemploFSKMMal}
 \end{figure}
 % \footnotetext{Podria indicar el bag y el }
@@ -714,7 +713,7 @@ detalle.
     $F_i$ se indican con azul si pertenecen a $\mli{UF}$ y con amarillo de lo
     contrario. Con magenta se indican las celdas en $\mli{FP}$ siendo la
     numeración su orden en la cola, y $\mli{fp}$ la última desencolada. Las fronteras significativas se indican con
-    verde y las circunferencias rojas centradas en estas tienen un radio de $4\
+    verde y las circunferencias rojas centradas en estas tienen un radio de $6\
   lados\ de\ celda$ indicando su cubrimiento
     al usar sensores de rango equivalente.}\label{fig:ejemploFSCub}
 \end{figure}
@@ -1724,7 +1723,6 @@ otros dos métodos es conexo.
 % Mostrar gvd resultantes de mapas parcialemnte explorados (muy poco explorados) y comentar como toda el área desconocida debe ser procesado por el original mientras que el mio se reduce al área exploradoa, sientod la parte importante (la del área explorada) casi igual que la otra.
 
 \section{Planificación}\label{sec:miNav}
-\todohint{Quedo bien la sección? Lo que cambie es fue dejar de hablar de puntos y pasar a hablar de subobjetivos por el tema que quedaba raro hablar de completar puntos. En la parte de jerárquica uso un poco el termino puntos pero cuidando no hablar de completarlos}
 
 % Recordando que el camino consiste en una secuencia puntos en el espacio, en el
 % contexto de la planificación estos se denominan como subobjetivos con exepcion
@@ -1952,7 +1950,7 @@ evidencia indica que la celda está ocupada y $p_{free} = 0.45$ si la evidencia
 indica que la celda está libre. Estos valores de probabilidad son los que se
 encuentran presentes en la solución desarrollada y se determinaron de forma
 experimental asegurando que cumplen con \eqref{eq:probs} según se establece en
-\cite{stachniss2009robotic}.\todohint{quedo bien? (desde -Dependiendo de la evidencia-)}
+\cite{stachniss2009robotic}.
 
 \begin{equation}\label{eq:probs}
   0 < p_{free} < p_{prior} < p_{occ} < 1
