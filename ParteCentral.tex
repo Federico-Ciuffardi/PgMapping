@@ -70,7 +70,7 @@ exploración permitiendo que el trabajo se pueda enfocar en otros.
 La hipótesis (I) resuelve trivialmente el problema de localización \cite{slam}. 
 
 Las hipótesis (II) y (III) simplifican la coordinación. La (II) por no tener
-que hacer consideraciones especiales para cada robot. La (III) por no tener que
+que hacer consideraciones especiales para cada robot, y la (III) por no tener que
 considerarse los posibles problemas de comunicación que pueden haber de asignar
 robots a objetivos muy distantes o con obstrucciones entre sí. 
 
@@ -85,7 +85,7 @@ Finalmente la hipótesis (VI) permite establecer una grilla de ocupación con la
 dimensiones suficientes para representar todo el entorno a explorar. 
 
 \section{Arquitectura}\label{sec:arqui}
-La arquitectura se divide en dos tipos de componentes robots y unidad central.
+La arquitectura se divide en dos tipos de componentes: robots y unidad central.
 Existe una única unidad central que se encarga de centralizar la información
 del entorno explorado y de coordinar a los multiples robots que pueden existir.
 Cada componente está asociado a un hardware específico, siendo los robots móviles
@@ -550,7 +550,7 @@ necesariamente fronteras y deben ser traducidos a fronteras posteriormente.
 % fronteras significativas es mala, se concentran mucho en ciertas porciones y se alejan 
 
 \subsection{Fronteras significativas basadas en cubrimiento}\label{subsec:MiSimp}
-En esta sección se detalla un método de obtención de fronteras significativas novedoso,
+En esta sección se detalla un método novedoso de obtención de fronteras significativas,
 que fue diseñado considerando los dos factores problemáticos relacionados al
 método de obtención de fronteras significativas basado en K-Means, comentados
 al final de la sección anterior. El factor (i) se toma en cuenta basando el
@@ -733,7 +733,7 @@ estructurado.
 % se corresponden las regiones de un mapa topológico (sección
 % \ref{subsec:mapas}).
 
-La asignación de objetivos consiste una subasta donde lo subastado son los
+La asignación de objetivos consiste en una subasta donde lo subastado son los
 objetivos de exploración, el subastador es la estación central y los postores
 son los robots. La subasta se puede separar en tres partes, \emph{obtención de
   información}, \emph{valuación} y \emph{resolución}. La \emph{obtención de
@@ -759,7 +759,7 @@ robot y la notificación a cada robot del objetivo que le fue asignado.
 %, esto desencadena una nueva subasta de no encontrarse una en curso.
 % Notar que si existe una subasta en curso el robot va recibir un objetivo cuando
 % esta termine, por lo que puede no ser necesario iniciar otra.
-Como se menciono anteriormente cuando un robot ocioso solicita un objetivo a la
+Como se mencionó anteriormente, cuando un robot ocioso solicita un objetivo a la
 central se da comienzo a una nueva subasta. La etapa de \emph{obtención
 información} es la primera etapa de la subasta. La información que se obtiene
 en esta etapa son los objetivos de exploración, los segmentos del entorno
@@ -896,7 +896,7 @@ robots. Y por último las asignaciones realizadas son comunicadas a los robots.
 % de exploración a los
 % robots. 
 \subsubsection{Recepción de valuaciones}
-Como se menciono anteriormente luego de recibida la primera valuación existe
+Como se mencionó anteriormente luego de recibida la primera valuación existe
 una ventana de tiempo en la que la central continuará recibiendo nuevas
 valuaciones.%, luego de la cual se da por concluida la recepción de valuaciones. 
 
@@ -982,7 +982,7 @@ se mantengan explorando un mismo segmento, lo que lleva a comportamientos
 deseables como que un robot continue explorando un mismo corredor, revelando
 rápidamente la estructura del entorno.
 
-Con los costos $c_{i,j}$ determinados se ejecuta un algoritmo que resulta
+Con los costos $c_{i,j}$ determinados, se ejecuta un algoritmo que resulta
 en la asignación de objetivos a robots considerando tanto los costos, como la
 estrategia de coordinación aplicada, maximizando la
 distribución de los objetivos asignados sobre los segmentos del entorno. Este
@@ -1024,7 +1024,7 @@ devuelve el número de objetivos que existen en un segmento.
   \SetKwInOut{Input}{Entrada}
   \Input{$R, O, S, Costos$} % O_1, O_2,...,O_{|S|}$}
 %   // PARTE 1
-    $segObjs :=$ Multiconjunto vació 
+    $segObjs :=$ Multiconjunto vacío 
 
   
 %   /// recorrida de todos los elementos del diccionario, con el propósito de construir segFrontColaPrio
@@ -1445,7 +1445,7 @@ otro lado de la línea, cosa que no sucede con $ady_4$.}\label{fig:probDiagSeg}
 
 
 
-\section{Grafo generalizado de Voronoi}\label{sec:MiConstGVD}
+\section{Diagrama generalizado de Voronoi}\label{sec:MiConstGVD}
 
 Considerando los problemas de eficiencia del algoritmo no incremental de
 construcción del GVD llamado \emph{brushfire} (sección \ref{subsec:constGVD}), y los
@@ -1472,13 +1472,13 @@ en el criterio con el cual se determina la pertenencia de las celdas candidatas
 al GVD y en como se considera el espacio desconocido al construir el GVD
 durante la exploración. Estos se tratan en las siguientes secciones.
 
-\subsection{Criterio de pertenecía}\label{subsec:critPer}
+\subsection{Criterio de pertenencia}\label{subsec:critPer}
 
-En el \emph{brushfire dinámico} original la pertenecía de las celdas al GVD se
+En el \emph{brushfire dinámico} original la pertenencia de las celdas al GVD se
 determina en los choques de ondas consistentes. Dada la función $\mli{gen} :
 \mli{CG} \rightarrow \mli{CGen}$ que para cada celda $c$ de la grilla devuelve
 una de las celdas que pertenecen a un generador que están a mínima distancia de $c$, el
-criterio de pertenecía original esencialmente consiste en que, sean $c_1$ y $c_2$ las celdas
+criterio de pertenencia original esencialmente consiste en que, sean $c_1$ y $c_2$ las celdas
 involucradas en un choque de ondas consistentes, estas pertenecen al GVD si
 $\mli{gen}(c_1) \neq \mli{gen}(c_2)$ y $\mli{gen}(c_1) \notin
 ady(\mli{gen}(c_2))$, es decir si $\mli{gen}(c_1)$ y $\mli{gen}(c_2)$ no son
@@ -1587,7 +1587,7 @@ base necesarias para segmentar.
 % generadores, y adicionalmente se obtienen las celdas base que son necesarias
 % para segmentar.
 
-% , de forma similar al criterio de pertenecía del \emph{brushfire dinámico} original
+% , de forma similar al criterio de pertenencia del \emph{brushfire dinámico} original
 % para obtener las celdas base
 Es pertinente aclarar que el algoritmo \ref{alg:celdasBase} es una versión
 simplificada del que está presente en la implementación del proyecto. Las
@@ -1609,7 +1609,7 @@ que puede ser explorado, este se representa con celdas de estado desconocido en
 la grilla de ocupación (sección \ref{subsec:Grilla}) usada como mapa del
 entorno. Dado que la definición del GVD (sección \ref{subsec:GVD}) no contempla
 el espacio desconocido, para poder construir un GVD sobre una grilla de
-ocupación durante la exploración, es necesario decidir como considerar las
+ocupación durante la exploración, es necesario decidir cómo considerar las
 celdas de estado desconocido.
 Sin embargo, este no es un tema que se trate de forma explicita en los trabajos
 estudiados sobre la construcción incremental del GVD (sección \ref{subsec:constGVDInc}). 
@@ -1634,7 +1634,7 @@ consideran como pertenecientes a generadores.
 
 Que las celdas desconocidas se consideren iguales a las celdas libres
 implica que las ondas utilizadas para construir el GVD pueden propagarse por el
-espacio desconocido y generar la pertenecía de celdas desconocidas al GVD.
+espacio desconocido y generar la pertenencia de celdas desconocidas al GVD.
 % ambas cosas tienen asociado un costo computacional.
 En la figura \ref{fig:desconocidoKalra} se puede observar que considerar las
 celdas desconocidas como celdas libres lleva a un GVD que abarca
@@ -1645,7 +1645,7 @@ conocida.
 % (por motivos que se seran comentados a continuacion)
 
 Dado que en el contexto del proyecto no es necesario construir el GVD fuera del
-área conocida, se desarrollo un método que solo construye el GVD en las celdas
+área conocida, se desarrolló un método que solo construye el GVD en las celdas
 libres, evitando el costo computacional de construir el GVD en el espacio
 desconocido. Sea $\mli{UF}$ el conjunto de celdas desconocidas que tienen al menos una
 celda adyacente de estado libre, el método consiste en considerar que las
@@ -1794,7 +1794,7 @@ compleción forzosa.
 
 La compleción forzosa ocurre cuando el robot está a una distancia menor a
 $\mli{DistF}$ del subobjetivo en cuestión. Este criterio de compleción tiene como
-propósito determinar cuando un robot está lo suficientemente cerca de un subobjetivo
+propósito determinar cuándo un robot está lo suficientemente cerca de un subobjetivo
  como para considerarlo completo, a pesar de que no se dio aún la
 compleción normal. Se recomienda que el valor $\mli{DistF}$ sea similar a las
 dimensiones del robot.
@@ -1816,7 +1816,7 @@ del entorno asociada al objetivo, siendo este el motivo por el cual el objetivo
 fue asignado en un primer lugar.
 
 El valor $\mli{DistNs}$ debe cumplir con $\mli{DistF}\leq\mli{DistNs}$, y
-establece que tan estrictamente se sigue el camino original en espacios
+establece qué tan estrictamente se sigue el camino original en espacios
 despejados de obstáculos. Valores pequeños de $\mli{DistNs}$ hacen que el robot
 siga el camino original de forma estricta aunque esté en espacios despejados,
 ya que se fuerza que el robot se acerque a los subobjetivos para completarlos.

@@ -26,11 +26,11 @@ Determinar el siguiente lugar al que es conveniente enviar a un robot para
 obtener información del entorno es uno de los principales problemas de la
 exploración. Este problema suele separarse en dos partes, (i) identificar
 dichos lugares, conocidos como objetivos de exploración, y (ii) asignar uno de
-dichos objetivos al robot. Para identificar objetivos de exploración, un método
+los objetivos identificados al robot. Para identificar objetivos de exploración, un método
 popular es el propuesto en \cite{yamauchi1997frontier} en el que se identifican
 como objetivos a las fronteras entre el espacio conocido y desconocido. Por
-otro lado para establecer que objetivo asignar al robot se suele decidir
-cual de estos es el más conveniente, donde la conveniencia de un objetivo puede
+otro lado para establecer qué objetivo asignar al robot se suele decidir
+cual de los objetivos identificados es el más conveniente, donde la conveniencia de un objetivo puede
 calcularse como un balance entre el costo y el beneficio de completarlo. El
 costo normalmente involucra aspectos como la distancia del recorrido que el
 robot debe hacer para llegar al objetivo, el tiempo que lleva recorrerlo y el
@@ -41,7 +41,7 @@ al tamaño de la porción explorada al completar el objetivo.
 
 Otro aspecto fundamental es el denominado criterio de parada según el cual se
 determina cuando la exploración se considera finalizada. Uno de los criterios
-de parada tomados usualmente es detener la exploración cuando el mapa
+de parada tomados usualmente, es detener la exploración cuando el mapa
 construido alcanza cierto porcentaje de cubrimiento del entorno
 \cite{Yan2015}. Aunque este es utilizado usualmente para evaluaciones de
 rendimiento no es útil en la práctica cuando se desconocen las dimensiones del
@@ -55,7 +55,7 @@ exploración exhaustiva del entorno, lo cual puede ser indeseable por cuestiones
 de costos, tanto temporales como de recursos (por ejemplo energía de los robots o
 su desgaste). En \cite{Amorin2019} se propone un criterio de parada aplicable en la exploración de entornos cerrados, que logra 
 evitar una exploración exhaustiva. La idea de este criterio es
-que es posible determinar cuando los robots recopilan suficiente información de
+que es posible determinar cuándo los robots recopilan suficiente información de
 un entorno como para estimar el resto de forma precisa, y es en ese momento cuando la
 exploración se puede detener.
 
@@ -73,7 +73,7 @@ Una de las ventajas del uso de varios robots es la introducción de redundancia 
 aumento de tolerancia a fallos que esto implica. A su vez la exploración suele
 ser una tarea altamente paralelizable, al ser usual que en un mismo instante de
 tiempo existan varios lugares de los cuales un robot puede obtener información,
-por lo tanto que es esperable que al aumentar la cantidad de recursos robóticos
+por lo tanto es esperable que al aumentar la cantidad de recursos robóticos
 se experimente una reducción de los tiempos de exploración
 \cite{cao1997cooperative,dudek1996taxonomy,guzzoni1997many}. 
 
@@ -158,7 +158,7 @@ Los tres trabajos antes mencionados utilizan una misma estrategia para lograr co
 
 \subsection{Mapa de carreteras}\label{subsec:mapacarr}
 % Un \emph{mapa de carreteras} (del inglés road map) \cite{choset2005principles} es clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un mapa de carreteras asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea detrás de esta categoría esta inspirada por como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos ubicaciónes distantes, por ejemplo dos depatamentos distintos, en lugar de considerar cada camino posible, normalemte planificamos primero un camino hacia una red de carreteras, luego a lo largo de la red de carreteras y, finalmente, desde la red de carreteras hacia el destino. %(ver figura \ref{fig:ejemplovial}). 
-Un \emph{mapa de carreteras} (del inglés \emph{roadmap}) \cite{choset2005principles} es una clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un \emph{roadmap} asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea de \emph{roadmap} está inspirada en como los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos distintos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente planificar un camino desde la red de carreteras (Ruta 3) hacia el destino (ver figura \ref{fig:ejemplovial}). 
+Un \emph{mapa de carreteras} (del inglés \emph{roadmap}) \cite{choset2005principles} es una clase particular de mapas topológicos. Que un mapa topológico cumpla con las condiciones necesarias para ser un \emph{roadmap} asegura que a partir de este es posible planificar un camino entre dos puntos cualquiera del espacio libre. La idea de \emph{roadmap} está inspirada en cómo los humanos utilizamos las redes de carreteras. Al planificar un camino entre dos puntos distantes, por ejemplo ubicados en dos departamentos distintos de Uruguay: Montevideo y Paysandú, en lugar de considerar cada camino posible, normalmente planificamos primero un camino hacia una red de carreteras (Ruta 1), luego a lo largo de la red de carreteras (a través de ruta 1 y ruta 3), para finalmente planificar un camino desde la red de carreteras (Ruta 3) hacia el destino (ver figura \ref{fig:ejemplovial}). 
 
 \begin{figure}[H]
   \center
@@ -494,7 +494,7 @@ obstáculo altera al GVD se encuentra en la figura \ref{fig:ejWavesIncKarlra}.
 
 De esta forma se logra la construcción incremental de un GVD. Sin embargo en \cite{Lau2013} se destacan algunas problemáticas de brushfire dinámico, principalmente que el GVD generado tiene líneas de dos celdas de ancho y que no se genera GVD en el interior de obstáculos cóncavos como lo son habitaciones con una sola entrada, lo cual es crítico en entornos estructurados. Los problemas mencionados se pueden ver a la izquierda de la figura \ref{fig:lauPalo}.
 
-Para solucionar las problemáticas planteadas Lau \textit{et al.}
+Para solucionar las problemáticas planteadas, Lau \textit{et al.}
 proponen cambios al algoritmo de brushfire dinámico. El problema de
 generación de GVD dentro de obstáculos cóncavos se relaciona con el uso de
 conjuntos conexos de obstáculos para determinar la pertenencia de celdas
@@ -872,9 +872,9 @@ Para resolver la asignación de robots a segmentos se propone el uso del método
 \cite{kuhn1955hungarian} de una forma particular que permite cumplir con la
 restricción \eqref{ec:uniform}. Para ejecutar el método húngaro es necesario
 calcular los costos $C_{s}^{i}$ que se definen como el costo de llegar a la
-celda frontera más cercana del segmento $s \in S$ con el robot $i$ y
-descontar un valor constante en caso de que el robot ya se encuentre en el
-segmento. Luego de haber asignado los robots a los segmentos, se ejecuta
+celda frontera más cercana del segmento $s \in S$ con el robot $i$. A dichos costos se le 
+descuenta un valor constante en caso de que el robot $i$ ya se encuentre en el
+segmento $s$. Luego de haber asignado los robots a los segmentos, se ejecuta
 nuevamente el método húngaro para cada segmento $s$ con el propósito de asignar
 los objetivos que se encuentran dentro de $s$ a los robots asignados a $s$.
 
@@ -887,7 +887,7 @@ La estrategia de coordinación explicada en esta sección se resume en el algori
     \ForEach{robot $i$}{
         \ForEach{segmento $s \in S$}{
                 Computar el costo $C_{s}^{i}$\\
-                Descontar al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
+                Descontar un valor constante al costo $C_{s}^{i}$ si el robot $i$ ya se encontraba en $s$\\
             }
     }
     Usando el método húngaro asignar robots a los segmentos \\
@@ -907,7 +907,7 @@ Existen estrategias de coordinación que se basan en segmentar el espacio sin co
 \end{figure} 
 
 La estrategia de coordinación comienza asignando a cada robot el segmento con el centroide más cercano según la distancia euclidiana. El segmento asignado al robot $R_i$ se identifica como $\zeta_i$.
-Los objetivos de exploración nuevamente serán las fronteras, la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $C_i$ es el centroide de $\zeta_i$, $\Delta$ es una constante que representa la distancia máxima entre dos puntos del mapa (longitud de la diagonal del mapa), $||\ ||_2$ es la norma euclídea, $d(c_1,c_2)$ es la distancia del camino más corto sobre el espacio libre entre dos celdas $c_1$, $c_2$. Y $o_{ij}$ es una penalización acumulada que aumenta cuando $F_j$ está en el rango de sensado de otro robot.
+Los objetivos de exploración nuevamente serán las fronteras (sección \ref{sec:exploracion}), la frontera $F_j$ que se asigna al robot $R_i$ es la que minimiza el $costo_{ij}$ definido en \eqref{ec:costsolanas} donde $C_i$ es el centroide de $\zeta_i$, $\Delta$ es una constante que representa la distancia máxima entre dos puntos del mapa (longitud de la diagonal del mapa), $||\ ||_2$ es la norma euclídea, $d(c_1,c_2)$ es la distancia del camino más corto sobre el espacio libre entre dos celdas $c_1$, $c_2$. Y $o_{ij}$ es una penalización acumulada que aumenta cuando $F_j$ está en el rango de sensado de otro robot.
 
 \begin{equation}\label{ec:costsolanas}
 costo_{ij} = 
@@ -917,7 +917,7 @@ costo_{ij} =
 \end{dcases}
 \end{equation}
 
-Dado un robot $R_i$ la función de $costo_{ij}$, a partir del valor $\Delta$ penaliza fuertemente a los objetivos $F_j$ que no pertenecen al segmento $\zeta_i$ asignado a $R_i$. Por lo tanto los objetivos pertenecientes al segmento asignado al robot tendrán prioridad frente a los que pertenecen a otro segmento, incentivando que los robots se mantengan explorando sus segmentos asignados. Los objetivos pertenecientes a otros segmentos son considerados para permitir que un robot pueda continuar tomando objetivos aunque su segmento no tenga ningún objetivo disponible. Por otro lado la penalización $o_{ij}$ evita el solapamiento del los rangos de sensado de los robots, evitando así el trabajo redundante.\medbreak
+Dado un robot $R_i$ la función de $costo_{ij}$, a partir del valor $\Delta$ penaliza fuertemente a los objetivos $F_j$ que no pertenecen al segmento $\zeta_i$ asignado a $R_i$. Por lo tanto los objetivos pertenecientes al segmento asignado al robot tendrán prioridad frente a los que pertenecen a otro segmento, incentivando que los robots se mantengan explorando sus segmentos asignados. Los objetivos pertenecientes a otros segmentos son considerados para permitir que un robot pueda continuar tomando objetivos aunque su segmento no tenga ningún objetivo disponible. Por otro lado la penalización $o_{ij}$ evita el solapamiento de los rangos de sensado de los robots, evitando así el trabajo redundante.\medbreak
 
 Otro método es el que se describe en \cite{Lopez-Perez2018}, en este caso la segmentación consiste en asignar cada punto del espacio desconocido a el robot más cercano de la flota, por lo tanto el entorno se particiona en tantos segmentos $S_i$ como robots $R_i$ componen la flota de exploración. La definición de los segmentos se encuentra en \eqref{ec:segmentsLopez} donde $U$ son los puntos desconocidos del espacio, y la distancia $d$ se define de la misma manera que la distancia homónima del método anterior.
 \begin{equation}\label{ec:segmentsLopez}

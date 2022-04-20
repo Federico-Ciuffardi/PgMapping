@@ -28,7 +28,7 @@ consiste en llevar a cabo la exploración maximizando la distribución de los
 robots sobre los segmentos. La estrategia se fundamenta en que las
 exploraciones de segmentos diferentes suelen ser independientes entre sí, por
 lo cual asignar robots a diferentes segmentos ayuda a evitar redundancia en la
-exploración. Como también en que los segmentos pueden ser demasiado pequeños
+exploración. También en que los segmentos pueden ser demasiado pequeños
 para que un segundo robot acelere su exploración. Y adicionalmente en que de
 haber más de un robot explorando un mismo segmento estos pueden bloquearse
 entre sí mientras intentan abandonarlo a la vez al finalizar su exploración.
@@ -65,7 +65,7 @@ que la última versión disponible del GVD quede actualizada.
 % sobre todo el entorno (conocido y desconocido) como se hace en el resto de
 % trabajos.
 
-Por otro lado la definición de GVD no establece como tratar las porciones
+Por otro lado la definición de GVD no establece cómo tratar las porciones
 desconocidas de un entorno parcialmente explorado. La \textbf{segunda contribución}
 consiste en una forma novedosa de tratar con dichas porciones durante la
 construcción del GVD, que logra optimizar la construcción reduciéndola a las porciones 
@@ -73,7 +73,7 @@ conocidas en lugar de construir sobre todo el entorno (conocido y desconocido)
 como se hace usualmente.
 
 Uno de los principales aspectos de la exploración multi-robot es el de
-determinar a que lugares se debe enviar a los robots a explorar. Para esto se
+determinar a qué lugares se debe enviar a los robots a explorar. Para esto se
 suele primero identificar dichos lugares, conocidos como objetivos de
 exploración, para luego asignar los objetivos identificados a los
 robots.
@@ -82,10 +82,10 @@ Respecto a la identificación de objetivos de exploración, identificar grandes
 cantidades de objetivos no es deseable en tanto complejiza la posterior tarea de
 asignarlos a los robots. La \textbf{tercera contribución} es un
 método novedoso que busca reducir la cantidad de objetivos identificados
-eliminado objetivos redundantes basándose en las capacidades sensoriales de los
+eliminando objetivos redundantes basándose en las capacidades sensoriales de los
 robots. 
 
-Respecto a la asgnación de objetivos de exploración, en el contexto de la
+Respecto a la asignación de objetivos de exploración, en el contexto de la
 estrategia de coordinación de \cite{wurm2008coordinated}, se debe maximizar la
 distribución de los robots sobre los segmentos. Para lograr esto la propuesta
 original primero asigna robots a los segmentos, y luego distribuye los
@@ -98,7 +98,7 @@ algoritmo de asignación de objetivos que logra maximizar la distribución de lo
 robots sobre los segmentos considerando los objetivos que existen en cada
 segmento para evitar robots ociosos.
 
-Luego de que un robot recibe un objetivo de exploración este debe moverse hacia
+Luego de que un robot recibe un objetivo de exploración, este debe moverse hacia
 él, esto introduce la necesidad de planificar caminos hacia los objetivos. En el
 contexto del trabajo desarrollado hay dos métodos de planificar que son de
 especial interés: planificar sobre el GVD, y planificar sobre todo el espacio
