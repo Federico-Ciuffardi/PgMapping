@@ -691,6 +691,7 @@ detalle.
 
 \begin{figure}[H]
   \centerfloat
+  \captionsetup{justification=centering}
   \subfloat[Incializacion de $\mli{FP}$, $\mli{UF}$ y $\mli{FS_i}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/a2.png}}
   \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/b5.png}}
   \subfloat[Se elige un nuevo $\mli{fs}$ y se actualizan $\mli{UF}$, $\mli{FS_i}$ y $\mli{FP}$.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/c5.png}}
@@ -704,10 +705,12 @@ detalle.
 
 \begin{figure}[H]
   \centerfloat
+  \captionsetup{justification=centering}
   \setcounter{subfigure}{6}
   \subfloat[$\mli{UF}=\emptyset$ por lo que el algorimo finaliza.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal1.png}}
   \subfloat[Se logra el cubrimiento.]{\includegraphics[clip=true, width=0.40\textwidth]{imagenes/ejemploSimpCub/zfinal2.png}}
 
+  \captionsetup{justification=justified}
   \caption[Proceso de obtención de fronteras significativas basado en cubrimiento.]{Proceso
     de obtención de fronteras significativas basado en cubrimiento. Las fronteras de
     $F_i$ se indican con azul si pertenecen a $\mli{UF}$ y con amarillo de lo
@@ -1690,12 +1693,14 @@ otros dos métodos es conexo.
 
 \begin{figure}[H]
   \centerfloat
+  \captionsetup{justification=centering}
 
   \subfloat[Celdas desconocidas se consideran como libres.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/kalra.png}}
   \quad
   \subfloat[Celdas desconocidas no propagan ondas y $\mli{UF}\subseteq \mli{CGen}$.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/mio.png}}
   \quad
   \subfloat[Celdas desconocidas no propagan ondas.]{\includegraphics[clip=true, width=0.32\textwidth]{imagenes/desconocidoCons/noHacerNada.png} \label{fig:desconocidoEj2_naive}}
+  \captionsetup{justification=justified}
 
   \caption[Conectividad del GVD en diferentes formas de considerar el espacio desconocido.]{Conectividad del GVD en diferentes formas de considerar el espacio desconocido. El GVD generado se indica en azul.}\label{fig:desconocidoEj2}
 \end{figure}
