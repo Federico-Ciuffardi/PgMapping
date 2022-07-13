@@ -33,7 +33,7 @@
 
 % == FONTS ==
 \usepackage[T1]{fontenc}
-\usepackage[spanish]{babel}
+\usepackage[english,spanish]{babel}
 \usepackage[utf8]{inputenc}
 
 % == CAPTION AND QUOTES ==
@@ -282,6 +282,12 @@ Montevideo, Uruguay%
 \begin{abstract} % facundo
 \input{abstract.tex}
 \end{abstract}
+
+\selectlanguage{english}
+\begin{abstract} % facundo
+\input{resumen.tex}
+\end{abstract}
+\selectlanguage{spanish}
 
 % == TOC ==
 \hfuzz=10pt 

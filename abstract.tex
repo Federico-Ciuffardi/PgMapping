@@ -21,37 +21,38 @@ robots sobre los segmentos.
 
 El presente proyecto de grado se planteó como objetivo mejorar la propuesta
 original de la estrategia de coordinación antes mencionada, resultando en cinco
-aportes sobre aspectos específicos de la estrategia y del problema de
+contribuciones sobre aspectos específicos de la estrategia y del problema de
 exploración multi-robot en general.
 
-Dos de los aportes se concentran en acelerar la construcción de una
+Dos de las contribuciones se concentran en acelerar la construcción de una
 estructura llamada Diagrama Generalizado de Voronoi (GVD por sus siglas en
 inglés), que es esencial mantener actualizada para reconocer los segmentos
-sobre los cuales distribuir a los robots durante la exploración. El primer
-aporte optimiza la actualización solo modificando las partes desactualizadas 
-de la última versión del GVD. El segundo reduce la construcción del GVD a las
+sobre los cuales distribuir a los robots durante la exploración. La primer
+contribución optimiza la actualización solo modificando las partes desactualizadas 
+de la última versión del GVD. La segunda reduce la construcción del GVD a las
 partes conocidas del entorno, ahorrando el tiempo de construir sobre las
 partes desconocidas.
 
-El tercer aporte consiste en una forma novedosa de identificar los objetivos de exploración
+La tercer contribución consiste en una forma novedosa de identificar los objetivos de exploración
 que se basa en las capacidades sensoriales de los robots para evitar
 identificar objetivos redundantes.
 
-El cuarto aporte introduce un algoritmo de asignación de objetivos de exploración
-que logra maximizar la distribución de los robots sobre los segmentos evitando
+La cuarta contribución introduce un algoritmo de asignación de objetivos de exploración
+que logra maximizar la distribución de los robots sobre los segmentos a la vez que evita
 asignar más robots a un segmento que los objetivos que contenidos en él.
 
-El quinto y último aporte consiste en un método para planificar caminos hacia
+La quita contribución consiste en un método para planificar caminos hacia
 los objetivos de exploración que hace uso del GVD (ya disponible por ser usado
 en la identificación de segmentos) para reducir los tiempos de planificación,
-pero a su vez permite que los caminos no sean completamente sobre el GVD evitando
+pero que a su vez permite que los caminos no sean completamente sobre el GVD evitando
 planificar caminos innecesariamente largos.
 
 Se implementó una solución al problema de exploración multi-robot que incluye
-los cinco aportes antes mencionados. Esta solución se puso a prueba dentro de un
-simulador. Los resultados de las pruebas en general confirman que los aportes
-logran su objetivo de mejorar la propuesta original, siendo los aportes 
-asociados a la aceleración de la construcción del GVD los de mayor impacto.
+las cinco contribuciones antes mencionadas, siendo esta implementación una sexta
+contribución. La solución desarrollada se puso a prueba dentro de un simulador. Los
+resultados de las pruebas en general confirman que las contribuciones logran su
+objetivo de mejorar la propuesta original, siendo las contribuciones asociadas
+a la aceleración de la construcción del GVD las de mayor impacto.
 
 % \todoerror[inline]{Como lo puedo mejorar? | la última oración, a modo de síntesis de conclusiones, me dejó gusto a poco.}
 % \todo[inline]{a modo de resumen y para que verifiques en el resto del doc, noté temas con la redacción, y en mucho menor mendida cosas de contenido. revisar ortografía, repetición de palabras, plural/singular, género}

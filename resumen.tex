@@ -1,0 +1,17 @@
+Exploration is a fundamental problem of autonomous mobile robotics that deals with using a robot to obtain information from an unknown environment, through its sensors, with the objetive of generating a map that represents it. For reasons of efficiency and robustness, the exploration is usually carried out with more than one robot, in this case the problem is known as the multi-robot exploration problem.
+
+One of the main aspects of the exploration is to determine to which places the robots should move to obtain information from the environment. Usually these places, known as exploration tasks, are first identified and then assigned to the robots. When more than one robot is used, it is desirable that the assignment of tasks is carried out following a coordination strategy to avoid the robots exploring the same places or hindering each other.
+
+Structured environments such as buildings, homes, and other human constructions, are environments that can be divided into segments such as rooms and corridors. In this type of environment, a possible coordination strategy is to carry out the exploration by maximizing the distribution of the robots on the segments.
+
+The objective of this project was to improve the original proposal of the aforementioned coordination strategy, resulting in five contributions on specific aspects of the strategy and the multi-robot exploration problem in general.
+
+Two of the contributions focus on speeding up the construction of a structure called the Generalized Voronoi Diagram (GVD), which is essential to keep updated to recognize the segments on which to distribute the robots during exploration. The first contribution optimizes the update by only modifying the outdated parts of the latest version of the GVD. The second reduces the construction of the GVD to the known parts of the environment, saving the time of building the GVD on the unknown parts.
+
+The third contribution consists of a novel way of identifying exploration tasks that relies on the sensory capabilities of the robots to avoid identifying redundant tasks.
+
+The fourth contribution introduces an exploration task assignment algorithm that manages to maximize the distribution of robots over the segments while avoiding assigning more robots to a segment than the tasks contained in it.
+
+The fifth contribution consists of a method for planning paths to exploration tasks that makes use of GVD (already available due to its use in segment recognition) to reduce planning times, while allowing paths not be completely on the GVD avoiding planning unnecessarily long paths.
+
+A solution to the multi-robot exploration problem that includes the five contributions mentioned above has been implemented, and this implementation is the sixth contribution. This solution was tested inside a simulator. The results of the tests confirm that the contributions achieve their objective of improving the original proposal, with the contributions associated with speeding up the construction of the GVD having the greatest impact.
